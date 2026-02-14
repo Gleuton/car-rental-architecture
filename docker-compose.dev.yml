@@ -1,0 +1,44 @@
+services:
+  locadora-app:
+    build:
+      context: .
+      dockerfile: .docker/dev/php/Dockerfile
+      args:
+        UID: ${UID:-1000}
+        GID: ${GID:-1000}
+    container_name: locadora_app
+    volumes:
+      - ./:/var/www
+    depends_on:
+      - locadora-db
+      - locadora-redis
+
+  locadora-nginx:
+    image: nginx:alpine
+    container_name: locadora_nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www
+      - ./.docker/dev/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - locadora-app
+
+  locadora-db:
+    image: postgres:16
+    container_name: locadora_db
+    environment:
+      POSTGRES_DB: locadora_carros
+      POSTGRES_USER: locadora_carros
+      POSTGRES_PASSWORD: locadora_carros
+    ports:
+      - "5432:5432"
+    volumes:
+      - locadora_db_data:/var/lib/postgresql/data
+
+  locadora-redis:
+    image: redis:alpine
+    container_name: locadora_redis
+
+volumes:
+  locadora_db_data:
