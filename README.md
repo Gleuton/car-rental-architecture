@@ -70,12 +70,6 @@ docker compose -f docker-compose.dev.yml exec locadora-app php artisan key:gener
 docker compose -f docker-compose.dev.yml exec locadora-app php artisan migrate
 ```
 
-7. Instale as dependências do frontend e inicie o servidor de desenvolvimento:
-```bash
-docker compose -f docker-compose.dev.yml exec locadora-app npm install
-docker compose -f docker-compose.dev.yml exec locadora-app npm run dev
-```
-
 ## 🧪 Testes
 
 Para rodar os testes com Pest:
