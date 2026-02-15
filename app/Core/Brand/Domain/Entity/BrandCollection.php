@@ -24,7 +24,7 @@ class BrandCollection extends Collection
 
     private function validateBrand(mixed $brand): void
     {
-        if (! $brand instanceof Brand) {
+        if (!$brand instanceof Brand) {
             throw new InvalidArgumentException(
                 sprintf('A BrandCollection só aceita instâncias de %s.', Brand::class)
             );

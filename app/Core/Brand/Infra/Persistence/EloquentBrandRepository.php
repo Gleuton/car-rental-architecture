@@ -6,6 +6,7 @@ use App\Core\Brand\Application\DTOs\UpdateBrandDto;
 use App\Core\Brand\Domain\Entity\Brand as DomainBrand;
 use App\Core\Brand\Domain\Entity\BrandCollection;
 use App\Core\Brand\Domain\Entity\BrandFilter;
+use App\Core\Brand\Domain\Exceptions\BrandDomainException;
 use App\Core\Brand\Domain\Repositories\BrandRepositoryInterface;
 use App\Models\Brand as EloquentBrand;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -39,6 +40,9 @@ class EloquentBrandRepository implements BrandRepositoryInterface
         return $paginator->setCollection(new BrandCollection($items->all()));
     }
 
+    /**
+     * @throws BrandDomainException
+     */
     public function save(DomainBrand $brand): DomainBrand
     {
         $model = EloquentBrand::create([
@@ -53,6 +57,9 @@ class EloquentBrandRepository implements BrandRepositoryInterface
         );
     }
 
+    /**
+     * @throws BrandDomainException
+     */
     public function findById(int $id): DomainBrand
     {
         $model = EloquentBrand::findOrFail($id);
@@ -64,6 +71,9 @@ class EloquentBrandRepository implements BrandRepositoryInterface
         );
     }
 
+    /**
+     * @throws BrandDomainException
+     */
     public function update(UpdateBrandDto $brandDto): DomainBrand
     {
         $model = EloquentBrand::findOrFail($brandDto->id);
