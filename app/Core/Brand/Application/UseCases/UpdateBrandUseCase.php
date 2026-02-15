@@ -2,7 +2,7 @@
 
 namespace App\Core\Brand\Application\UseCases;
 
-use App\Core\Brand\Application\DTOs\UpdateBrandDto;
+use App\Core\Brand\Application\DTOs\UpdateBrandDTO;
 use App\Core\Brand\Domain\Entity\Brand;
 use App\Core\Brand\Domain\Repositories\BrandRepositoryInterface;
 use App\Core\Shared\Domain\Storage\FileStorageInterface;
@@ -14,7 +14,7 @@ readonly class UpdateBrandUseCase
         private FileStorageInterface $storage
     ) {}
 
-    public function execute(UpdateBrandDto $brandDto): Brand
+    public function execute(UpdateBrandDTO $brandDto): Brand
     {
         $brand = $this->repository->findById($brandDto->id);
 

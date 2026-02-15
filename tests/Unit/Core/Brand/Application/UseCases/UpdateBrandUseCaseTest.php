@@ -1,6 +1,6 @@
 <?php
 
-use App\Core\Brand\Application\DTOs\UpdateBrandDto;
+use App\Core\Brand\Application\DTOs\UpdateBrandDTO;
 use App\Core\Brand\Application\UseCases\UpdateBrandUseCase;
 use App\Core\Brand\Domain\Entity\Brand;
 use App\Core\Brand\Domain\Repositories\BrandRepositoryInterface;
@@ -14,7 +14,7 @@ it('deve atualizar uma marca com sucesso', function () {
     $requestMock->name = 'Fiat Updated';
     $requestMock->shouldReceive('file')->with('image')->andReturn($file);
 
-    $dto = UpdateBrandDto::fromRequestId($requestMock, 1);
+    $dto = UpdateBrandDTO::fromRequestId($requestMock, 1);
 
     $oldBrand = Brand::restore(1, 'Fiat', 'brands/fiat.png');
 

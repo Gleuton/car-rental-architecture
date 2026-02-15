@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Core\Brand\Application\DTOs\BrandIdDTO;
 use App\Core\Brand\Application\DTOs\CreateBrandDTO;
 use App\Core\Brand\Application\DTOs\FilterBrandDTO;
-use App\Core\Brand\Application\DTOs\UpdateBrandDto;
+use App\Core\Brand\Application\DTOs\UpdateBrandDTO;
 use App\Core\Brand\Application\UseCases\CreateBrandUseCase;
 use App\Core\Brand\Application\UseCases\FindBrandByIdUseCase;
 use App\Core\Brand\Application\UseCases\ListBrandsUseCase;
@@ -73,7 +73,7 @@ class BrandController extends Controller
      */
     public function update(UpdateBrandRequest $request, int $brandId): JsonResponse
     {
-        $brandDto = UpdateBrandDto::fromRequestId($request, $brandId);
+        $brandDto = UpdateBrandDTO::fromRequestId($request, $brandId);
 
         $brand = $this->updateBrandUseCase->execute($brandDto);
 

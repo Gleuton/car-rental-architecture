@@ -5,7 +5,7 @@ namespace App\Core\Brand\Application\DTOs;
 use App\Http\Requests\Brand\UpdateBrandRequest;
 use Illuminate\Http\UploadedFile;
 
-readonly class UpdateBrandDto
+readonly class UpdateBrandDTO
 {
     private function __construct(
         public int $id,
