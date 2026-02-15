@@ -15,7 +15,7 @@ it('valida com sucesso quando o nome da marca é único', function () {
     
     $rule->validate('Fiat');
     
-    expect(true)->toBeTrue(); // Se não lançou exceção, passou
+    expect(true)->toBeTrue();
 });
 
 it('lança exceção quando o nome da marca já existe', function () {
