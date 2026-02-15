@@ -19,7 +19,7 @@ class UpdateBrandRequest extends FormRequest
     {
         return [
             'name' => 'nullable|string|max:120',
-            'image' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ];
     }
 }

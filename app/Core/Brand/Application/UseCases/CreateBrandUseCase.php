@@ -7,12 +7,14 @@ use App\Core\Brand\Domain\Entity\Brand as DomainBrand;
 use App\Core\Brand\Domain\Exceptions\BrandDomainException;
 use App\Core\Brand\Domain\Repositories\BrandRepositoryInterface;
 use App\Core\Brand\Domain\Roles\UniqueBrandNameRule;
+use App\Core\Shared\Domain\Storage\FileStorageInterface;
 
 readonly class CreateBrandUseCase
 {
     public function __construct(
         private BrandRepositoryInterface $repository,
-        private UniqueBrandNameRule $uniqueBrandNameRule
+        private UniqueBrandNameRule $uniqueBrandNameRule,
+        private FileStorageInterface $storage
     ) {}
 
     /**
@@ -22,9 +24,11 @@ readonly class CreateBrandUseCase
     {
         $this->uniqueBrandNameRule->validate($dto->name);
 
+        $imagePath = $this->storage->upload($dto->image, 'brands');
+
         $brand = DomainBrand::new(
             $dto->name,
-            $dto->image
+            $imagePath
         );
 
         return $this->repository->save($brand);

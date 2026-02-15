@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Core\Brand\Domain\Repositories\BrandRepositoryInterface;
 use App\Core\Brand\Infra\Persistence\EloquentBrandRepository;
+use App\Core\Shared\Domain\Storage\FileStorageInterface;
+use App\Core\Shared\Infra\Storage\LocalStorage;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -16,6 +18,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             BrandRepositoryInterface::class,
             EloquentBrandRepository::class
+        );
+
+        $this->app->bind(
+            FileStorageInterface::class,
+            LocalStorage::class
         );
     }
 

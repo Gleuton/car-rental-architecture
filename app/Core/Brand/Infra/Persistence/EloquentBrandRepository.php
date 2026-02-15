@@ -2,7 +2,6 @@
 
 namespace App\Core\Brand\Infra\Persistence;
 
-use App\Core\Brand\Application\DTOs\UpdateBrandDto;
 use App\Core\Brand\Domain\Entity\Brand as DomainBrand;
 use App\Core\Brand\Domain\Entity\BrandCollection;
 use App\Core\Brand\Domain\Entity\BrandFilter;
@@ -26,12 +25,12 @@ class EloquentBrandRepository implements BrandRepositoryInterface
         $paginator = EloquentBrand::query()
             ->when(
                 $filters->search,
-                fn($q) => $q->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($filters->search) . '%'])
+                fn ($q) => $q->whereRaw('LOWER(name) LIKE ?', ['%'.strtolower($filters->search).'%'])
             )
             ->orderBy($filters->orderBy, $filters->direction)
             ->paginate($filters->perPage);
 
-        $items = $paginator->getCollection()->map(fn(EloquentBrand $model) => DomainBrand::restore(
+        $items = $paginator->getCollection()->map(fn (EloquentBrand $model) => DomainBrand::restore(
             $model->id,
             $model->name,
             $model->image
@@ -74,13 +73,13 @@ class EloquentBrandRepository implements BrandRepositoryInterface
     /**
      * @throws BrandDomainException
      */
-    public function update(UpdateBrandDto $brandDto): DomainBrand
+    public function update(DomainBrand $brand): DomainBrand
     {
-        $model = EloquentBrand::findOrFail($brandDto->id);
+        $model = EloquentBrand::findOrFail($brand->id);
 
         $model->update([
-            'name' => $brandDto->name ?? $model->name,
-            'image' => $brandDto->image ?? $model->image,
+            'name' => $brand->name,
+            'image' => $brand->image,
         ]);
 
         return DomainBrand::restore(

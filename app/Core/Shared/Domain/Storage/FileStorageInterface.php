@@ -1,0 +1,15 @@
+<?php
+
+namespace App\Core\Shared\Domain\Storage;
+
+use Illuminate\Http\File;
+use Illuminate\Http\UploadedFile;
+
+interface FileStorageInterface
+{
+    public function upload(UploadedFile|File $file, string $path): string;
+
+    public function delete(string $path): bool;
+
+    public function getUrl(string $path): string;
+}

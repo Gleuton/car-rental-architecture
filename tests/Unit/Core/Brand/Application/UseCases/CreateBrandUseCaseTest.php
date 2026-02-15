@@ -1,41 +1,49 @@
 <?php
-use App\Core\Brand\Application\UseCases\CreateBrandUseCase;
+
 use App\Core\Brand\Application\DTOs\CreateBrandDTO;
-use App\Core\Brand\Domain\Repositories\BrandRepositoryInterface;
-use App\Core\Brand\Domain\Roles\UniqueBrandNameRule;
+use App\Core\Brand\Application\UseCases\CreateBrandUseCase;
 use App\Core\Brand\Domain\Entity\Brand as DomainBrand;
 use App\Core\Brand\Domain\Exceptions\BrandDomainException;
+use App\Core\Brand\Domain\Repositories\BrandRepositoryInterface;
+use App\Core\Brand\Domain\Roles\UniqueBrandNameRule;
+use App\Core\Shared\Domain\Storage\FileStorageInterface;
 use App\Http\Requests\Brand\StoreBrandRequest;
+use Illuminate\Http\UploadedFile;
 
 beforeEach(function () {
     $this->repository = Mockery::mock(BrandRepositoryInterface::class);
     $this->uniqueRule = new UniqueBrandNameRule($this->repository);
-    $this->useCase = new CreateBrandUseCase($this->repository, $this->uniqueRule);
+    $this->storage = Mockery::mock(FileStorageInterface::class);
+    $this->useCase = new CreateBrandUseCase($this->repository, $this->uniqueRule, $this->storage);
 });
 
 it('creates a brand successfully when name is unique', function () {
+    $file = UploadedFile::fake()->create('fiat.png', 100);
     $request = Mockery::mock(StoreBrandRequest::class);
     $request->name = 'Fiat';
-    $request->image = 'fiat.png';
+    $request->shouldReceive('file')->with('image')->andReturn($file);
 
     $dto = CreateBrandDTO::fromRequest($request);
 
     $this->repository->shouldReceive('existsByName')->with('Fiat')->once()->andReturn(false);
 
-    $expectedBrand = DomainBrand::restore(1, 'Fiat', 'fiat.png');
+    $this->storage->shouldReceive('upload')->with($file, 'brands')->once()->andReturn('brands/fiat_stored.png');
+
+    $expectedBrand = DomainBrand::restore(1, 'Fiat', 'brands/fiat_stored.png');
     $this->repository->shouldReceive('save')->once()->andReturn($expectedBrand);
 
     $result = $this->useCase->execute($dto);
 
     expect($result->id)->toBe(1)
         ->and($result->name)->toBe('Fiat')
-        ->and($result->image)->toBe('fiat.png');
+        ->and($result->image)->toBe('brands/fiat_stored.png');
 });
 
 it('throws exception when brand name already exists', function () {
+    $file = UploadedFile::fake()->create('fiat.png', 100);
     $request = Mockery::mock(StoreBrandRequest::class);
     $request->name = 'Fiat';
-    $request->image = 'fiat.png';
+    $request->shouldReceive('file')->with('image')->andReturn($file);
     $dto = CreateBrandDTO::fromRequest($request);
 
     $this->repository->shouldReceive('existsByName')->with('Fiat')->once()->andReturn(true);

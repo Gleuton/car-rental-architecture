@@ -2,7 +2,6 @@
 
 namespace App\Core\Brand\Domain\Repositories;
 
-use App\Core\Brand\Application\DTOs\UpdateBrandDto;
 use App\Core\Brand\Domain\Entity\Brand;
 use App\Core\Brand\Domain\Entity\BrandCollection;
 use App\Core\Brand\Domain\Entity\BrandFilter;
@@ -21,7 +20,7 @@ interface BrandRepositoryInterface
 
     public function findById(int $id): Brand;
 
-    public function update(UpdateBrandDto $brandDto): Brand;
+    public function update(Brand $brand): Brand;
 
     public function delete(int $id): void;
 }
