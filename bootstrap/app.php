@@ -1,7 +1,6 @@
 <?php
 
 use App\Core\Shared\Domain\DomainException;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
