@@ -41,8 +41,8 @@ A aplicação segue uma estrutura inspirada em camadas (Layered Architecture/Cle
 
 1. Clone o repositório:
 ```bash
-git clone https://github.com/seu-usuario/app_locadora_carros.git
-cd app_locadora_carros
+git clone git@github.com:Gleuton/car-rental-architecture.git
+cd car-rental-architecture
 ```
 
 2. Crie o arquivo `.env`:
