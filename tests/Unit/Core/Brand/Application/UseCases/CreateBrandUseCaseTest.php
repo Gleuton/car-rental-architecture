@@ -22,7 +22,7 @@ it('creates a brand successfully when name is unique', function () {
 
     $this->repository->shouldReceive('existsByName')->with('Fiat')->once()->andReturn(false);
 
-    $expectedBrand = DomainBrand::createWithId(1, 'Fiat', 'fiat.png');
+    $expectedBrand = DomainBrand::restore(1, 'Fiat', 'fiat.png');
     $this->repository->shouldReceive('save')->once()->andReturn($expectedBrand);
 
     $result = $this->useCase->execute($dto);

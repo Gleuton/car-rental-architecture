@@ -22,7 +22,7 @@ readonly class CreateBrandUseCase
     {
         $this->uniqueBrandNameRule->validate($dto->name);
 
-        $brand = DomainBrand::create(
+        $brand = DomainBrand::new(
             $dto->name,
             $dto->image
         );

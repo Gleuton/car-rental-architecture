@@ -10,7 +10,7 @@ it('deve encontrar uma marca pelo ID com sucesso', function () {
     
     $repository = Mockery::mock(BrandRepositoryInterface::class);
     
-    $expectedBrand = Brand::createWithId(1, 'Fiat', 'fiat.png');
+    $expectedBrand = Brand::restore(1, 'Fiat', 'fiat.png');
     $repository->shouldReceive('findById')
         ->with(1)
         ->once()

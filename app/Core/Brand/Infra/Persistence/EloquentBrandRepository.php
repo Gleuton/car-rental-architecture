@@ -30,7 +30,7 @@ class EloquentBrandRepository implements BrandRepositoryInterface
             ->orderBy($filters->orderBy, $filters->direction)
             ->paginate($filters->perPage);
 
-        $items = $paginator->getCollection()->map(fn(EloquentBrand $model) => DomainBrand::createWithId(
+        $items = $paginator->getCollection()->map(fn(EloquentBrand $model) => DomainBrand::restore(
             $model->id,
             $model->name,
             $model->image
@@ -46,7 +46,7 @@ class EloquentBrandRepository implements BrandRepositoryInterface
             'image' => $brand->image,
         ]);
 
-        return DomainBrand::createWithId(
+        return DomainBrand::restore(
             $model->id,
             $model->name,
             $model->image
@@ -57,7 +57,7 @@ class EloquentBrandRepository implements BrandRepositoryInterface
     {
         $model = EloquentBrand::findOrFail($id);
 
-        return DomainBrand::createWithId(
+        return DomainBrand::restore(
             $model->id,
             $model->name,
             $model->image
@@ -73,7 +73,7 @@ class EloquentBrandRepository implements BrandRepositoryInterface
             'image' => $brandDto->image ?? $model->image,
         ]);
 
-        return DomainBrand::createWithId(
+        return DomainBrand::restore(
             $model->id,
             $model->name,
             $model->image

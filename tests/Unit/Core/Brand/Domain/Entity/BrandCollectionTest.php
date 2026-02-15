@@ -5,8 +5,8 @@ use App\Core\Brand\Domain\Entity\BrandCollection;
 
 it('pode criar uma BrandCollection com itens válidos', function () {
     $brands = [
-        Brand::create('Fiat', 'fiat.png'),
-        Brand::create('VW', 'vw.png'),
+        Brand::new('Fiat', 'fiat.png'),
+        Brand::new('BMW', 'BMW.png'),
     ];
 
     $collection = new BrandCollection($brands);

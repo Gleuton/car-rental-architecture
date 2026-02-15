@@ -18,7 +18,7 @@ class UpdateBrandRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'nullable|string|max:255',
+            'name' => 'nullable|string|max:120',
             'image' => 'nullable|string',
         ];
     }

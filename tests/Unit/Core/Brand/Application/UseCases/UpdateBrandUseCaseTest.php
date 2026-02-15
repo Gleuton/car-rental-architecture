@@ -15,7 +15,7 @@ it('deve atualizar uma marca com sucesso', function () {
     
     $repository = Mockery::mock(BrandRepositoryInterface::class);
     
-    $expectedBrand = Brand::createWithId(1, 'Fiat Updated', 'fiat_updated.png');
+    $expectedBrand = Brand::restore(1, 'Fiat Updated', 'fiat_updated.png');
     $repository->shouldReceive('update')
         ->with($dto)
         ->once()
