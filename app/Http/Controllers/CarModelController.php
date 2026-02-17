@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Core\CarModel\Application\DTOs\CreateCarModelDTO;
@@ -13,17 +15,12 @@ class CarModelController extends Controller
 {
     public function __construct(
         private readonly CreateCarModelUseCase $createCarModel
-    )
-    {
-    }
+    ) {}
 
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-
-    }
+    public function index() {}
 
     /**
      * Store a newly created resource in storage.

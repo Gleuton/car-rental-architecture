@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Core\Shared\Infra\Adapters;
 
+use App\Core\Shared\Application\Pagination\PaginatedResult;
 use App\Models\Brand as EloquentBrand;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use App\Core\Shared\Application\Pagination\PaginatedResult;
 
 final class LaravelPaginatorAdapter
 {
@@ -14,7 +16,6 @@ final class LaravelPaginatorAdapter
      *
      * @param LengthAwarePaginator<int, EloquentBrand> $paginator
      * @param callable(TIn):TOut $mapper
-     * @return PaginatedResult
      */
     public static function adapt(
         LengthAwarePaginator $paginator,

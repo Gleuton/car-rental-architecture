@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Core\Brand\Domain\Entity\BrandFilter;
 
 it('pode criar um BrandFilter', function () {

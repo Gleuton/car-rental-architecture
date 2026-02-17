@@ -1,10 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Core\Brand\Infra\Persistence;
 
-use App\Core\Brand\Domain\Entity\Brand;
 use App\Core\Brand\Domain\Entity\Brand as DomainBrand;
-use App\Core\Brand\Domain\Entity\BrandCollection;
 use App\Core\Brand\Domain\Entity\BrandFilter;
 use App\Core\Brand\Domain\Exceptions\BrandDomainException;
 use App\Core\Brand\Domain\Repositories\BrandRepositoryInterface;
@@ -30,7 +30,7 @@ class EloquentBrandRepository implements BrandRepositoryInterface
         return EloquentBrand::query()
             ->when(
                 $filters->search,
-                fn($q) => $q->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($filters->search) . '%'])
+                fn ($q) => $q->whereRaw('LOWER(name) LIKE ?', ['%'.strtolower($filters->search).'%'])
             )
             ->orderBy($filters->orderBy, $filters->direction)
             ->paginate($filters->perPage);

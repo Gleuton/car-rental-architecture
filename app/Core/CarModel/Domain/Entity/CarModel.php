@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Core\CarModel\Domain\Entity;
 
 class CarModel
@@ -13,8 +15,7 @@ class CarModel
         public int $seatsNumber,
         public bool $airbags,
         public bool $abs,
-    ) {
-    }
+    ) {}
 
     public static function new(
         int $brandId,

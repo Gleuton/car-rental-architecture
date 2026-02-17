@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Core\Shared\Application\Pagination;
 
 class PaginatedResult
 {
     /**
      * @template T
+     *
      * @param T $items
      */
     public function __construct(

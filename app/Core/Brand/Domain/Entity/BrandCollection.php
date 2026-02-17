@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Core\Brand\Domain\Entity;
 
 use Illuminate\Support\Collection;
@@ -24,7 +26,7 @@ class BrandCollection extends Collection
 
     private function validateBrand(mixed $brand): void
     {
-        if (!$brand instanceof Brand) {
+        if (! $brand instanceof Brand) {
             throw new InvalidArgumentException(
                 sprintf('A BrandCollection só aceita instâncias de %s.', Brand::class)
             );
@@ -39,7 +41,6 @@ class BrandCollection extends Collection
 
     /**
      * @param  mixed  ...$values
-     * @return BrandCollection
      */
     public function push(...$values): self
     {
@@ -51,9 +52,7 @@ class BrandCollection extends Collection
     }
 
     /**
-     * @param $value
      * @param ?int $key
-     * @return BrandCollection
      */
     public function prepend($value, $key = null): self
     {

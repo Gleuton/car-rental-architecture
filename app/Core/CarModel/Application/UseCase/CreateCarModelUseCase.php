@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Core\CarModel\Application\UseCase;
 
 use App\Core\CarModel\Application\DTOs\CreateCarModelDTO;
@@ -12,9 +14,7 @@ readonly class CreateCarModelUseCase
     public function __construct(
         private FileStorageInterface $storage,
         private CarModelRepositoryInterface $repository
-    )
-    {
-    }
+    ) {}
 
     public function execute(CreateCarModelDTO $dto): CarModel
     {

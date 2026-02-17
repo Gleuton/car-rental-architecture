@@ -1,14 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Core\CarModel\Infra;
 
 use App\Core\CarModel\Domain\Entity\CarModel as DomainCarModel;
-use App\Models\CarModel as EloquentCarModel;
 use App\Core\CarModel\Domain\Repositories\CarModelRepositoryInterface;
+use App\Models\CarModel as EloquentCarModel;
 
 class EloquentCarModelRepository implements CarModelRepositoryInterface
 {
-
     public function save(DomainCarModel $carModel): DomainCarModel
     {
         $model = EloquentCarModel::create([
@@ -18,7 +19,7 @@ class EloquentCarModelRepository implements CarModelRepositoryInterface
             'doors' => $carModel->doorsNumber,
             'seats' => $carModel->seatsNumber,
             'airbags' => $carModel->airbags,
-            'abs' => $carModel->abs
+            'abs' => $carModel->abs,
         ]);
 
         return DomainCarModel::restore(

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Core\Brand\Domain\Entity;
 
 readonly class BrandFilter

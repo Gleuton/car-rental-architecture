@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Core\Brand\Application\DTOs\BrandIdDTO;
@@ -7,10 +9,10 @@ use App\Core\Brand\Application\DTOs\CreateBrandDTO;
 use App\Core\Brand\Application\DTOs\FilterBrandDTO;
 use App\Core\Brand\Application\DTOs\UpdateBrandDTO;
 use App\Core\Brand\Application\UseCases\CreateBrandUseCase;
+use App\Core\Brand\Application\UseCases\DeleteBrandUseCase;
 use App\Core\Brand\Application\UseCases\FindBrandByIdUseCase;
 use App\Core\Brand\Application\UseCases\ListBrandsUseCase;
 use App\Core\Brand\Application\UseCases\UpdateBrandUseCase;
-use App\Core\Brand\Application\UseCases\DeleteBrandUseCase;
 use App\Core\Brand\Domain\Exceptions\BrandDomainException;
 use App\Http\Requests\Brand\IndexBrandRequest;
 use App\Http\Requests\Brand\StoreBrandRequest;
@@ -25,8 +27,7 @@ class BrandController extends Controller
         private readonly FindBrandByIdUseCase $findBrandByIdUseCase,
         private readonly UpdateBrandUseCase $updateBrandUseCase,
         private readonly DeleteBrandUseCase $deleteBrandUseCase
-    ) {
-    }
+    ) {}
 
     /**
      * Display a listing of the resource.
@@ -44,7 +45,7 @@ class BrandController extends Controller
                 'per_page' => $brands->perPage,
                 'total' => $brands->total,
                 'last_page' => $brands->lastPage,
-            ]
+            ],
         ]);
     }
 
@@ -64,8 +65,6 @@ class BrandController extends Controller
 
     /**
      * Display the specified resource.
-     * @param int $brandId
-     * @return JsonResponse
      */
     public function show(int $brandId): JsonResponse
     {

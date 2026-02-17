@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Core\Brand\Domain\Entity\Brand;
 use App\Core\Brand\Domain\Entity\BrandCollection;
 
@@ -20,11 +22,11 @@ it('lança exceção ao adicionar item inválido na BrandCollection no construto
 })->throws(InvalidArgumentException::class, 'A BrandCollection só aceita instâncias de App\Core\Brand\Domain\Entity\Brand.');
 
 it('lança exceção ao usar push com item inválido', function () {
-    $collection = new BrandCollection();
+    $collection = new BrandCollection;
     $collection->push('invalid');
 })->throws(InvalidArgumentException::class, 'A BrandCollection só aceita instâncias de App\Core\Brand\Domain\Entity\Brand.');
 
 it('lança exceção ao usar add com item inválido', function () {
-    $collection = new BrandCollection();
+    $collection = new BrandCollection;
     $collection->add('invalid');
 })->throws(InvalidArgumentException::class, 'A BrandCollection só aceita instâncias de App\Core\Brand\Domain\Entity\Brand.');

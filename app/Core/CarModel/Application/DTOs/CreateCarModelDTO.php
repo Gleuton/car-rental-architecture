@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Core\CarModel\Application\DTOs;
 
 use App\Http\Requests\CarModel\StoreCarModelRequest;
@@ -15,9 +17,7 @@ class CreateCarModelDTO
         public int $seatsNumber,
         public bool $airbags,
         public bool $abs,
-    )
-    {
-    }
+    ) {}
 
     public static function fromRequest(StoreCarModelRequest $request): self
     {

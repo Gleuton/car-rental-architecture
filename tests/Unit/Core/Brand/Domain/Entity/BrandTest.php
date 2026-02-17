@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Core\Brand\Domain\Entity\Brand;
 use App\Core\Brand\Domain\Exceptions\BrandDomainException;
 
@@ -26,7 +28,6 @@ it('lança exceção ao criar uma instância de Brand com nome vazio', function 
 it('lança exceção ao criar uma instância de Brand com nome menor que 3 caracteres', function () {
     Brand::new('Fi', 'fiat.png');
 })->throws(BrandDomainException::class, 'Brand name must have at least 3 characters');
-
 
 it('lança exceção ao criar uma instância de Brand com nome maior que 120 caracteres', function () {
     Brand::new(str_repeat('x', 121), 'fiat.png');

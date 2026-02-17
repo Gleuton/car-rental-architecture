@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Core\Shared\Infra\Storage;
 
 use App\Core\Shared\Domain\Storage\FileStorageInterface;
@@ -32,6 +34,7 @@ class LocalStorage implements FileStorageInterface
          * @var Cloud $storage
          */
         $storage = Storage::disk($this->disk);
+
         return $storage->url($path);
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Core\Brand\Domain\Exceptions;
 
 use App\Core\Brand\Domain\Errors\BrandError;

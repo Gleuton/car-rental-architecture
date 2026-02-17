@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Core\Brand\Domain\Repositories;
 
 use App\Core\Brand\Domain\Entity\Brand;
-use App\Models\Brand as EloquentBrand;
 use App\Core\Brand\Domain\Entity\BrandFilter;
+use App\Models\Brand as EloquentBrand;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 interface BrandRepositoryInterface

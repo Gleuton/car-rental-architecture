@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Core\Brand\Infra\Mappers;
 
+use App\Core\Brand\Domain\Entity\Brand as DomainBrand;
 use App\Core\Brand\Domain\Exceptions\BrandDomainException;
 use App\Models\Brand as EloquentBrand;
-use App\Core\Brand\Domain\Entity\Brand as DomainBrand;
 
 final class EloquentBrandMapper
 {

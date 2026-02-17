@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests\CarModel;
 
 use Illuminate\Contracts\Validation\ValidationRule;
@@ -29,7 +31,7 @@ class StoreCarModelRequest extends FormRequest
             'doors_number' => 'required|integer|digits_between:1,5',
             'seats_number' => 'required|integer|digits_between:1,20',
             'airbags' => 'required|boolean',
-            'abs' => 'required|boolean'
+            'abs' => 'required|boolean',
         ];
     }
 }
