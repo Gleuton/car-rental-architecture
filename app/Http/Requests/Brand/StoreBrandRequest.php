@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Brand;
 
+use App\Core\Brand\Application\DTOs\CreateBrandDTO;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 

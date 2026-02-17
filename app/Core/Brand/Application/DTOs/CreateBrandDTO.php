@@ -15,7 +15,7 @@ readonly class CreateBrandDTO
     public static function fromRequest(StoreBrandRequest $request): self
     {
         return new self(
-            $request->name,
+            $request->input('name'),
             $request->file('image')
         );
     }

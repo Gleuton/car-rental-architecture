@@ -3,6 +3,7 @@
 namespace App\Core\Shared\Infra\Storage;
 
 use App\Core\Shared\Domain\Storage\FileStorageInterface;
+use Illuminate\Contracts\Filesystem\Cloud;
 use Illuminate\Http\File;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -11,7 +12,7 @@ class LocalStorage implements FileStorageInterface
 {
     private string $disk = 'public';
 
-    public function upload(UploadedFile|File $file, string $path): string
+    public function upload(UploadedFile|File $file, string $path): string|bool
     {
         return Storage::disk($this->disk)->put($path, $file);
     }
@@ -27,6 +28,10 @@ class LocalStorage implements FileStorageInterface
 
     public function getUrl(string $path): string
     {
-        return Storage::disk($this->disk)->url($path);
+        /**
+         * @var Cloud $storage
+         */
+        $storage = Storage::disk($this->disk);
+        return $storage->url($path);
     }
 }

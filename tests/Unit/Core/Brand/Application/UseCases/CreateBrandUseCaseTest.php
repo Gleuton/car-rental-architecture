@@ -20,8 +20,9 @@ beforeEach(function () {
 it('creates a brand successfully when name is unique', function () {
     $file = UploadedFile::fake()->create('fiat.png', 100);
     $request = Mockery::mock(StoreBrandRequest::class);
-    $request->name = 'Fiat';
+
     $request->shouldReceive('file')->with('image')->andReturn($file);
+    $request->shouldReceive('input')->with('name')->andReturn('Fiat');
 
     $dto = CreateBrandDTO::fromRequest($request);
 
@@ -42,8 +43,9 @@ it('creates a brand successfully when name is unique', function () {
 it('throws exception when brand name already exists', function () {
     $file = UploadedFile::fake()->create('fiat.png', 100);
     $request = Mockery::mock(StoreBrandRequest::class);
-    $request->name = 'Fiat';
+
     $request->shouldReceive('file')->with('image')->andReturn($file);
+    $request->shouldReceive('input')->with('name')->andReturn('Fiat');
     $dto = CreateBrandDTO::fromRequest($request);
 
     $this->repository->shouldReceive('existsByName')->with('Fiat')->once()->andReturn(true);

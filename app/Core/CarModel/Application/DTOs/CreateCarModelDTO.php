@@ -22,13 +22,13 @@ class CreateCarModelDTO
     public static function fromRequest(StoreCarModelRequest $request): self
     {
         return new self(
-            $request->brand_id,
-            $request->name,
+            $request->input('brand_id'),
+            $request->input('name'),
             $request->file('image'),
-            $request->doors_number,
-            $request->seats_number,
-            $request->airbags,
-            $request->abs
+            $request->input('doors_number'),
+            $request->input('seats_number'),
+            $request->input('airbags'),
+            $request->input('abs')
         );
     }
 }

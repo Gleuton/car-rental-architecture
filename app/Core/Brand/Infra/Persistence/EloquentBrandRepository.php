@@ -2,11 +2,13 @@
 
 namespace App\Core\Brand\Infra\Persistence;
 
+use App\Core\Brand\Domain\Entity\Brand;
 use App\Core\Brand\Domain\Entity\Brand as DomainBrand;
 use App\Core\Brand\Domain\Entity\BrandCollection;
 use App\Core\Brand\Domain\Entity\BrandFilter;
 use App\Core\Brand\Domain\Exceptions\BrandDomainException;
 use App\Core\Brand\Domain\Repositories\BrandRepositoryInterface;
+use App\Core\Brand\Infra\Mappers\EloquentBrandMapper;
 use App\Models\Brand as EloquentBrand;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
@@ -20,23 +22,18 @@ class EloquentBrandRepository implements BrandRepositoryInterface
         )->exists();
     }
 
+    /**
+     * @return LengthAwarePaginator<int, EloquentBrand>
+     */
     public function findByFilters(BrandFilter $filters): LengthAwarePaginator
     {
-        $paginator = EloquentBrand::query()
+        return EloquentBrand::query()
             ->when(
                 $filters->search,
-                fn ($q) => $q->whereRaw('LOWER(name) LIKE ?', ['%'.strtolower($filters->search).'%'])
+                fn($q) => $q->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($filters->search) . '%'])
             )
             ->orderBy($filters->orderBy, $filters->direction)
             ->paginate($filters->perPage);
-
-        $items = $paginator->getCollection()->map(fn (EloquentBrand $model) => DomainBrand::restore(
-            $model->id,
-            $model->name,
-            $model->image
-        ));
-
-        return $paginator->setCollection(new BrandCollection($items->all()));
     }
 
     /**
@@ -49,11 +46,7 @@ class EloquentBrandRepository implements BrandRepositoryInterface
             'image' => $brand->image,
         ]);
 
-        return DomainBrand::restore(
-            $model->id,
-            $model->name,
-            $model->image
-        );
+        return EloquentBrandMapper::toDomain($model);
     }
 
     /**
@@ -63,11 +56,7 @@ class EloquentBrandRepository implements BrandRepositoryInterface
     {
         $model = EloquentBrand::findOrFail($id);
 
-        return DomainBrand::restore(
-            $model->id,
-            $model->name,
-            $model->image
-        );
+        return EloquentBrandMapper::toDomain($model);
     }
 
     /**
@@ -82,11 +71,7 @@ class EloquentBrandRepository implements BrandRepositoryInterface
             'image' => $brand->image,
         ]);
 
-        return DomainBrand::restore(
-            $model->id,
-            $model->name,
-            $model->image
-        );
+        return EloquentBrandMapper::toDomain($model);
     }
 
     public function delete(int $id): void

@@ -17,11 +17,11 @@ class FilterBrandDTO
     public static function fromRequest(IndexBrandRequest $request): self
     {
         return new self(
-            search: $request->search,
-            orderBy: $request->order_by,
-            direction: $request->direction,
-            perPage: (int) $request->per_page,
-            page: (int) ($request->page ?? 1),
+            search: $request->input('search'),
+            orderBy: $request->input('order_by'),
+            direction: $request->input('direction'),
+            perPage: (int) $request->input('per_page'),
+            page: (int) ($request->input('page') ?? 1),
         );
     }
 }

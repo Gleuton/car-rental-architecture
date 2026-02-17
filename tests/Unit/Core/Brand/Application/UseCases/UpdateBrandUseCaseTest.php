@@ -11,8 +11,9 @@ use Illuminate\Http\UploadedFile;
 it('deve atualizar uma marca com sucesso', function () {
     $file = UploadedFile::fake()->create('fiat_updated.png', 100);
     $requestMock = Mockery::mock(UpdateBrandRequest::class);
-    $requestMock->name = 'Fiat Updated';
+
     $requestMock->shouldReceive('file')->with('image')->andReturn($file);
+    $requestMock->shouldReceive('input')->with('name')->andReturn('Fiat Updated');
 
     $dto = UpdateBrandDTO::fromRequestId($requestMock, 1);
 

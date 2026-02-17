@@ -15,15 +15,18 @@ it('can list brands', function () {
     Brand::factory()->count(3)->create();
 
     $response = $this->getJson('/api/brand');
-
+    $responseArray = $response->json();
     $response->assertStatus(200)
         ->assertJsonStructure([
             'data' => [
                 '*' => ['name', 'image'],
             ],
-            'current_page',
-            'last_page',
-            'total',
+            'meta' => [
+                'current_page',
+                'last_page',
+                'per_page',
+                'total',
+            ]
         ])
         ->assertJsonCount(3, 'data');
 });
@@ -118,7 +121,7 @@ it('can update all data in brand', function () {
         'image' => $file,
     ];
 
-    $response = $this->putJson('/api/brand/'.$factoryBrand->id, $data);
+    $response = $this->putJson('/api/brand/' . $factoryBrand->id, $data);
 
     $response->assertStatus(200)
         ->assertJsonPath('data.name', 'Toyota');
@@ -141,7 +144,7 @@ it('can update name only in brand', function () {
         'name' => 'Toyota',
     ];
 
-    $response = $this->putJson('/api/brand/'.$factoryBrand->id, $data);
+    $response = $this->putJson('/api/brand/' . $factoryBrand->id, $data);
 
     $response->assertStatus(200)
         ->assertJsonPath('data.name', 'Toyota')
@@ -164,7 +167,7 @@ it('can update image only in brand', function () {
         'image' => $file,
     ];
 
-    $response = $this->putJson('/api/brand/'.$factoryBrand->id, $data);
+    $response = $this->putJson('/api/brand/' . $factoryBrand->id, $data);
 
     $response->assertStatus(200)
         ->assertJsonPath('data.name', 'Toyota_old');
@@ -180,7 +183,7 @@ it('can delete brand', function () {
     $factoryBrand = Brand::factory()->create(['name' => 'Toyota', 'image' => 'brands/toyota.png']);
     Storage::disk('public')->put('brands/toyota.png', 'fake content');
 
-    $response = $this->deleteJson('/api/brand/'.$factoryBrand->id);
+    $response = $this->deleteJson('/api/brand/' . $factoryBrand->id);
 
     $response->assertStatus(200);
 

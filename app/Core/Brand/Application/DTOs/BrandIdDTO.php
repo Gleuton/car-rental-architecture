@@ -5,7 +5,7 @@ namespace App\Core\Brand\Application\DTOs;
 class BrandIdDTO
 {
     private function __construct(
-        public string $id
+        public int $id
     ) {
     }
 

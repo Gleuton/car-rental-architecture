@@ -17,7 +17,7 @@ readonly class UpdateBrandDTO
     {
         return new self(
             id: $brandId,
-            name: $request->name,
+            name: $request->input('name'),
             imageFile: $request->file('image')
         );
     }
