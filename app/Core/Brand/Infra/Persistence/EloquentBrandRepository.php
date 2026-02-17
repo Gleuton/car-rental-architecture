@@ -12,7 +12,6 @@ use App\Core\Brand\Infra\Mappers\EloquentBrandMapper;
 use App\Core\Shared\Application\Pagination\PaginatedResult;
 use App\Core\Shared\Infra\Adapters\LaravelPaginatorAdapter;
 use App\Models\Brand as EloquentBrand;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class EloquentBrandRepository implements BrandRepositoryInterface
 {

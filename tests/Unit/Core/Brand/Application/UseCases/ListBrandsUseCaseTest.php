@@ -8,7 +8,6 @@ use App\Core\Brand\Domain\Entity\BrandFilter;
 use App\Core\Brand\Domain\Repositories\BrandRepositoryInterface;
 use App\Core\Shared\Application\Pagination\PaginatedResult;
 use App\Http\Requests\Brand\IndexBrandRequest;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 it('deve listar marcas com sucesso', function () {
 
