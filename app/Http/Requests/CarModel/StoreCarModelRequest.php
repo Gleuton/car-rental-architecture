@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\CarModel;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
@@ -12,7 +12,7 @@ class StoreCarModelRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,7 +23,13 @@ class StoreCarModelRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'brand_id' => 'required|integer',
+            'name' => 'required|min:3',
+            'image' => 'required|file|mimes:png,jpeg,jpg',
+            'doors_number' => 'required|integer|digits_between:1,5',
+            'seats_number' => 'required|integer|digits_between:1,20',
+            'airbags' => 'required|boolean',
+            'abs' => 'required|boolean'
         ];
     }
 }
