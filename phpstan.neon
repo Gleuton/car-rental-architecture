@@ -24,3 +24,8 @@ parameters:
         - node_modules/*
 
     reportUnmatchedIgnoredErrors: true
+services:
+    -
+        class: App\Support\PHPStan\Rules\NoFrameworkInDomainRule
+        tags:
+            - phpstan.rules.rule
