@@ -18,7 +18,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3'   # ajuste se quiser 8.4/8.5 quando estabilizar
+          php-version: '8.5'
           tools: composer
           coverage: none
 
