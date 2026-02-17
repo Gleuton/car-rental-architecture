@@ -18,6 +18,5 @@ class PaginatedResult
         public int $perPage,
         public int $total,
         public int $lastPage,
-    ) {
-    }
+    ) {}
 }

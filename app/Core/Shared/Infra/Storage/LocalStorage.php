@@ -4,19 +4,26 @@ declare(strict_types=1);
 
 namespace App\Core\Shared\Infra\Storage;
 
+use App\Core\Shared\Domain\Storage\DomainFile;
 use App\Core\Shared\Domain\Storage\FileStorageInterface;
+use App\Core\Shared\Domain\Storage\StoredFile;
 use Illuminate\Contracts\Filesystem\Cloud;
-use Illuminate\Http\File;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 class LocalStorage implements FileStorageInterface
 {
     private string $disk = 'public';
 
-    public function upload(UploadedFile|File $file, string $path): string|bool
+    public function upload(DomainFile $file, string $path): StoredFile
     {
-        return Storage::disk($this->disk)->put($path, $file);
+        $fullPath = trim($path, '/').'/'.$file->name;
+
+        Storage::disk($this->disk)->put($fullPath, $file->content);
+
+        return new StoredFile(
+            path: $fullPath,
+            url: Storage::url($fullPath)
+        );
     }
 
     public function delete(string $path): bool

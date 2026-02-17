@@ -10,6 +10,7 @@ use App\Core\Brand\Domain\Exceptions\BrandDomainException;
 use App\Core\Brand\Domain\Repositories\BrandRepositoryInterface;
 use App\Core\Brand\Domain\Roles\UniqueBrandNameRule;
 use App\Core\Shared\Domain\Storage\FileStorageInterface;
+use App\Core\Shared\Infra\Adapters\LaravelUploadedFileAdapter;
 
 readonly class CreateBrandUseCase
 {
@@ -25,12 +26,13 @@ readonly class CreateBrandUseCase
     public function execute(CreateBrandDTO $dto): DomainBrand
     {
         $this->uniqueBrandNameRule->validate($dto->name);
+        $image = LaravelUploadedFileAdapter::adapt($dto->image);
 
-        $imagePath = $this->storage->upload($dto->image, 'brands');
+        $imagePath = $this->storage->upload($image, 'brands');
 
         $brand = DomainBrand::new(
             $dto->name,
-            $imagePath
+            $imagePath->path
         );
 
         return $this->repository->save($brand);

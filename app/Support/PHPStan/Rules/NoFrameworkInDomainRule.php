@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Support\PHPStan\Rules;
 
 use PhpParser\Node;
@@ -21,8 +23,8 @@ class NoFrameworkInDomainRule implements Rule
 
         // Só aplica no domínio
         if (
-            !str_contains($file, '/app/Core/')
-            || !str_contains($file, '/Domain/')
+            ! str_contains($file, '/app/Core/')
+            || ! str_contains($file, '/Domain/')
         ) {
             return [];
         }

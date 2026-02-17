@@ -14,11 +14,9 @@ readonly class ListBrandsUseCase
 {
     public function __construct(
         private BrandRepositoryInterface $repository,
-    ) {
-    }
+    ) {}
 
     /**
-     * @param FilterBrandDTO $filters
      * @return PaginatedResult<Brand>
      */
     public function execute(FilterBrandDTO $filters): PaginatedResult

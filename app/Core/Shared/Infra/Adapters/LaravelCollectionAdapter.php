@@ -10,6 +10,7 @@ use Traversable;
 
 /**
  * @template T
+ *
  * @implements DomainCollectionInterface<T>
  */
 class LaravelCollectionAdapter implements DomainCollectionInterface
@@ -29,6 +30,7 @@ class LaravelCollectionAdapter implements DomainCollectionInterface
 
     /**
      * @param T $item
+     *
      * @return DomainCollectionInterface<T>
      */
     public function add(mixed $item): DomainCollectionInterface

@@ -9,12 +9,14 @@ use IteratorAggregate;
 
 /**
  * @template T
+ *
  * @extends IteratorAggregate<int, T>
  */
 interface DomainCollectionInterface extends Countable, IteratorAggregate
 {
     /**
      * @param T $item
+     *
      * @return DomainCollectionInterface<T>
      */
     public function add(mixed $item): DomainCollectionInterface;

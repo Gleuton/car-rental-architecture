@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Core\Brand\Domain\Entity;
 
 use App\Core\Shared\Domain\Collection\DomainCollectionInterface;
-use InvalidArgumentException;
 use ArrayIterator;
+use InvalidArgumentException;
 
 /**
  * @implements DomainCollectionInterface<Brand>
@@ -31,6 +31,7 @@ final class BrandCollection implements DomainCollectionInterface
     {
         $this->validateBrand($item);
         $this->items[] = $item;
+
         return $this;
     }
 

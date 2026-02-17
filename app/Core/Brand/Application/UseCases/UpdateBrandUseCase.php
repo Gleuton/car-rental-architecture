@@ -8,6 +8,7 @@ use App\Core\Brand\Application\DTOs\UpdateBrandDTO;
 use App\Core\Brand\Domain\Entity\Brand;
 use App\Core\Brand\Domain\Repositories\BrandRepositoryInterface;
 use App\Core\Shared\Domain\Storage\FileStorageInterface;
+use App\Core\Shared\Infra\Adapters\LaravelUploadedFileAdapter;
 
 readonly class UpdateBrandUseCase
 {
@@ -23,7 +24,8 @@ readonly class UpdateBrandUseCase
         $imagePath = $brand->image;
         if ($brandDto->imageFile) {
             $this->storage->delete($brand->image);
-            $imagePath = $this->storage->upload($brandDto->imageFile, 'brands');
+            $image = LaravelUploadedFileAdapter::adapt($brandDto->imageFile);
+            $imagePath = $this->storage->upload($image, 'brands')->path;
         }
 
         $updatedBrand = $brand->update(

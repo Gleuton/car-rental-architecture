@@ -8,6 +8,7 @@ use App\Core\CarModel\Application\DTOs\CreateCarModelDTO;
 use App\Core\CarModel\Domain\Entity\CarModel;
 use App\Core\CarModel\Domain\Repositories\CarModelRepositoryInterface;
 use App\Core\Shared\Domain\Storage\FileStorageInterface;
+use App\Core\Shared\Infra\Adapters\LaravelUploadedFileAdapter;
 
 readonly class CreateCarModelUseCase
 {
@@ -18,7 +19,8 @@ readonly class CreateCarModelUseCase
 
     public function execute(CreateCarModelDTO $dto): CarModel
     {
-        $imagePath = $this->storage->upload($dto->image, 'car_models');
+        $image = LaravelUploadedFileAdapter::adapt($dto->image);
+        $imagePath = $this->storage->upload($image, 'car_models')->path;
 
         $carModel = CarModel::new(
             $dto->brandId,
