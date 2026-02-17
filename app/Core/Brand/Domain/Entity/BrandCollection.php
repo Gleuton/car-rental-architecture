@@ -41,7 +41,7 @@ class BrandCollection extends Collection
      * @param  mixed  ...$values
      * @return BrandCollection
      */
-    public function push(...$values): static
+    public function push(...$values): self
     {
         foreach ($values as $value) {
             $this->validateBrand($value);
@@ -52,10 +52,10 @@ class BrandCollection extends Collection
 
     /**
      * @param $value
-     * @param null $key
+     * @param ?int $key
      * @return BrandCollection
      */
-    public function prepend($value, $key = null): static
+    public function prepend($value, $key = null): self
     {
         $this->validateBrand($value);
 
@@ -65,7 +65,7 @@ class BrandCollection extends Collection
     /**
      * @param  Brand  $item
      */
-    public function add($item): static
+    public function add($item): self
     {
         $this->validateBrand($item);
 

@@ -3,7 +3,7 @@
 namespace App\Core\Brand\Domain\Repositories;
 
 use App\Core\Brand\Domain\Entity\Brand;
-use App\Core\Brand\Domain\Entity\BrandCollection;
+use App\Models\Brand as EloquentBrand;
 use App\Core\Brand\Domain\Entity\BrandFilter;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
@@ -14,7 +14,7 @@ interface BrandRepositoryInterface
     public function save(Brand $brand): Brand;
 
     /**
-     * @return LengthAwarePaginator<BrandCollection>
+     * @return LengthAwarePaginator<int, EloquentBrand>
      */
     public function findByFilters(BrandFilter $filters): LengthAwarePaginator;
 
