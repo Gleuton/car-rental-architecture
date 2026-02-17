@@ -8,9 +8,7 @@ use App\Core\Brand\Application\DTOs\FilterBrandDTO;
 use App\Core\Brand\Domain\Entity\Brand;
 use App\Core\Brand\Domain\Entity\BrandFilter;
 use App\Core\Brand\Domain\Repositories\BrandRepositoryInterface;
-use App\Core\Brand\Infra\Mappers\EloquentBrandMapper;
 use App\Core\Shared\Application\Pagination\PaginatedResult;
-use App\Core\Shared\Infra\Adapters\LaravelPaginatorAdapter;
 
 readonly class ListBrandsUseCase
 {
