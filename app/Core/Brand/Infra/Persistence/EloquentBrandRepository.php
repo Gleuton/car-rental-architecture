@@ -9,6 +9,8 @@ use App\Core\Brand\Domain\Entity\BrandFilter;
 use App\Core\Brand\Domain\Exceptions\BrandDomainException;
 use App\Core\Brand\Domain\Repositories\BrandRepositoryInterface;
 use App\Core\Brand\Infra\Mappers\EloquentBrandMapper;
+use App\Core\Shared\Application\Pagination\PaginatedResult;
+use App\Core\Shared\Infra\Adapters\LaravelPaginatorAdapter;
 use App\Models\Brand as EloquentBrand;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
@@ -23,17 +25,22 @@ class EloquentBrandRepository implements BrandRepositoryInterface
     }
 
     /**
-     * @return LengthAwarePaginator<int, EloquentBrand>
+     * @return PaginatedResult<DomainBrand>
      */
-    public function findByFilters(BrandFilter $filters): LengthAwarePaginator
+    public function findByFilters(BrandFilter $filters): PaginatedResult
     {
-        return EloquentBrand::query()
+        $paginator = EloquentBrand::query()
             ->when(
                 $filters->search,
-                fn ($q) => $q->whereRaw('LOWER(name) LIKE ?', ['%'.strtolower($filters->search).'%'])
+                fn($q) => $q->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($filters->search) . '%'])
             )
             ->orderBy($filters->orderBy, $filters->direction)
             ->paginate($filters->perPage);
+
+        return LaravelPaginatorAdapter::adapt(
+            $paginator,
+            static fn(EloquentBrand $model) => EloquentBrandMapper::toDomain($model)
+        );
     }
 
     /**

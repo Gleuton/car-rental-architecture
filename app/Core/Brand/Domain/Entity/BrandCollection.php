@@ -4,24 +4,57 @@ declare(strict_types=1);
 
 namespace App\Core\Brand\Domain\Entity;
 
-use Illuminate\Support\Collection;
+use App\Core\Shared\Domain\Collection\DomainCollectionInterface;
 use InvalidArgumentException;
+use ArrayIterator;
 
 /**
- * @extends Collection<int, Brand>
+ * @implements DomainCollectionInterface<Brand>
  */
-class BrandCollection extends Collection
+final class BrandCollection implements DomainCollectionInterface
 {
+    /** @var list<Brand> */
+    private array $items = [];
+
     /**
-     * @param  array<int, Brand>  $items
+     * @param list<Brand> $items
      */
-    public function __construct($items = [])
+    public function __construct(array $items = [])
     {
         foreach ($items as $item) {
             $this->validateBrand($item);
+            $this->items[] = $item;
         }
+    }
 
-        parent::__construct($items);
+    public function add(mixed $item): self
+    {
+        $this->validateBrand($item);
+        $this->items[] = $item;
+        return $this;
+    }
+
+    /**
+     * @return list<Brand>
+     */
+    public function all(): array
+    {
+        return $this->items;
+    }
+
+    public function isEmpty(): bool
+    {
+        return $this->items === [];
+    }
+
+    public function count(): int
+    {
+        return count($this->items);
+    }
+
+    public function getIterator(): \Traversable
+    {
+        return new ArrayIterator($this->items);
     }
 
     private function validateBrand(mixed $brand): void
@@ -31,43 +64,5 @@ class BrandCollection extends Collection
                 sprintf('A BrandCollection só aceita instâncias de %s.', Brand::class)
             );
         }
-    }
-
-    public function offsetSet($key, $value): void
-    {
-        $this->validateBrand($value);
-        parent::offsetSet($key, $value);
-    }
-
-    /**
-     * @param  mixed  ...$values
-     */
-    public function push(...$values): self
-    {
-        foreach ($values as $value) {
-            $this->validateBrand($value);
-        }
-
-        return parent::push(...$values);
-    }
-
-    /**
-     * @param ?int $key
-     */
-    public function prepend($value, $key = null): self
-    {
-        $this->validateBrand($value);
-
-        return parent::prepend($value, $key);
-    }
-
-    /**
-     * @param  Brand  $item
-     */
-    public function add($item): self
-    {
-        $this->validateBrand($item);
-
-        return parent::add($item);
     }
 }

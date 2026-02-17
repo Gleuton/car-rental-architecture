@@ -17,7 +17,7 @@ it('can list brands', function () {
     Brand::factory()->count(3)->create();
 
     $response = $this->getJson('/api/brand');
-    $responseArray = $response->json();
+
     $response->assertStatus(200)
         ->assertJsonStructure([
             'data' => [
@@ -25,9 +25,9 @@ it('can list brands', function () {
             ],
             'meta' => [
                 'current_page',
-                'last_page',
                 'per_page',
                 'total',
+                'last_page',
             ],
         ])
         ->assertJsonCount(3, 'data');

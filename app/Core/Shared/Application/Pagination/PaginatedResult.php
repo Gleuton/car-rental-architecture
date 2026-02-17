@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace App\Core\Shared\Application\Pagination;
 
+/**
+ * @template T
+ */
 class PaginatedResult
 {
     /**
-     * @template T
-     *
-     * @param T $items
+     * @param list<T> $items
      */
     public function __construct(
         public mixed $items,
@@ -17,5 +18,6 @@ class PaginatedResult
         public int $perPage,
         public int $total,
         public int $lastPage,
-    ) {}
+    ) {
+    }
 }

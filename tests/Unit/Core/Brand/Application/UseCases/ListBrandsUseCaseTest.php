@@ -23,13 +23,12 @@ it('deve listar marcas com sucesso', function () {
     $dto = FilterBrandDTO::fromRequest($request);
 
     $repository = Mockery::mock(BrandRepositoryInterface::class);
-    $paginator = Mockery::mock(LengthAwarePaginator::class);
-
-    $paginator->shouldReceive('items')->andReturn([]);
-    $paginator->shouldReceive('total')->andReturn(0);
-    $paginator->shouldReceive('currentPage')->andReturn(1);
-    $paginator->shouldReceive('lastPage')->andReturn(1);
-    $paginator->shouldReceive('perPage')->andReturn(15);
+    $paginatedResult = Mockery::mock(PaginatedResult::class);
+    $paginatedResult->items = [];
+    $paginatedResult->perPage = 15;
+    $paginatedResult->total = 0;
+    $paginatedResult->page = 1;
+    $paginatedResult->lastPage = 1;
 
     $repository->shouldReceive('findByFilters')
         ->once()
@@ -39,7 +38,7 @@ it('deve listar marcas com sucesso', function () {
                    $filter->direction === 'asc' &&
                    $filter->perPage === 15;
         }))
-        ->andReturn($paginator);
+        ->andReturn($paginatedResult);
 
     $useCase = new ListBrandsUseCase($repository);
     $result = $useCase->execute($dto);

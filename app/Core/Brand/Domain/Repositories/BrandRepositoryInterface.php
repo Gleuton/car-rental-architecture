@@ -6,8 +6,7 @@ namespace App\Core\Brand\Domain\Repositories;
 
 use App\Core\Brand\Domain\Entity\Brand;
 use App\Core\Brand\Domain\Entity\BrandFilter;
-use App\Models\Brand as EloquentBrand;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use App\Core\Shared\Application\Pagination\PaginatedResult;
 
 interface BrandRepositoryInterface
 {
@@ -16,9 +15,9 @@ interface BrandRepositoryInterface
     public function save(Brand $brand): Brand;
 
     /**
-     * @return LengthAwarePaginator<int, EloquentBrand>
+     * @return PaginatedResult<Brand>
      */
-    public function findByFilters(BrandFilter $filters): LengthAwarePaginator;
+    public function findByFilters(BrandFilter $filters): PaginatedResult;
 
     public function findById(int $id): Brand;
 
