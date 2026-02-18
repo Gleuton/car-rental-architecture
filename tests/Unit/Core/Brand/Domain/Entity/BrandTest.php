@@ -5,7 +5,7 @@ declare(strict_types=1);
 use App\Core\Brand\Domain\Entity\Brand;
 use App\Core\Brand\Domain\Exceptions\BrandDomainException;
 
-it('pode criar uma instância de Brand', function () {
+it('can create a Brand instance', function () {
     $brand = Brand::new('Fiat', 'fiat.png');
 
     expect($brand->name)->toBe('Fiat')
@@ -13,7 +13,7 @@ it('pode criar uma instância de Brand', function () {
         ->and($brand->id)->toBeNull();
 });
 
-it('pode criar uma instância de Brand com ID', function () {
+it('can create a Brand instance with ID', function () {
     $brand = Brand::restore(1, 'Fiat', 'fiat.png');
 
     expect($brand->id)->toBe(1)
@@ -21,14 +21,14 @@ it('pode criar uma instância de Brand com ID', function () {
         ->and($brand->image)->toBe('fiat.png');
 });
 
-it('lança exceção ao criar uma instância de Brand com nome vazio', function () {
+it('throws exception when creating a Brand instance with empty name', function () {
     Brand::new('', 'fiat.png');
 })->throws(BrandDomainException::class, 'Brand name cannot be empty');
 
-it('lança exceção ao criar uma instância de Brand com nome menor que 3 caracteres', function () {
+it('throws exception when creating a Brand instance with name shorter than 3 characters', function () {
     Brand::new('Fi', 'fiat.png');
 })->throws(BrandDomainException::class, 'Brand name must have at least 3 characters');
 
-it('lança exceção ao criar uma instância de Brand com nome maior que 120 caracteres', function () {
+it('throws exception when creating a Brand instance with name longer than 120 characters', function () {
     Brand::new(str_repeat('x', 121), 'fiat.png');
 })->throws(BrandDomainException::class, 'Brand name too long');

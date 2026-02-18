@@ -6,7 +6,7 @@ use App\Core\Brand\Domain\Exceptions\BrandDomainException;
 use App\Core\Brand\Domain\Repositories\BrandRepositoryInterface;
 use App\Core\Brand\Domain\Roles\UniqueBrandNameRule;
 
-it('valida com sucesso quando o nome da marca é único', function () {
+it('validates successfully when the brand name is unique', function () {
     $repository = Mockery::mock(BrandRepositoryInterface::class);
     $repository->shouldReceive('existsByName')
         ->with('Fiat')
@@ -20,7 +20,7 @@ it('valida com sucesso quando o nome da marca é único', function () {
     expect(true)->toBeTrue();
 });
 
-it('lança exceção quando o nome da marca já existe', function () {
+it('throws exception when the brand name already exists', function () {
     $repository = Mockery::mock(BrandRepositoryInterface::class);
     $repository->shouldReceive('existsByName')
         ->with('Fiat')

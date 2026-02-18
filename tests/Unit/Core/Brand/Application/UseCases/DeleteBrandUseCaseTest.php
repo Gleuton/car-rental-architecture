@@ -8,7 +8,7 @@ use App\Core\Brand\Domain\Entity\Brand;
 use App\Core\Brand\Domain\Repositories\BrandRepositoryInterface;
 use App\Core\Shared\Domain\Storage\FileStorageInterface;
 
-it('deve deletar uma marca com sucesso', function () {
+it('deletes a brand successfully', function () {
     $dto = BrandIdDTO::fromId(1);
 
     $brand = Brand::restore(1, 'Fiat', 'brands/fiat.png');

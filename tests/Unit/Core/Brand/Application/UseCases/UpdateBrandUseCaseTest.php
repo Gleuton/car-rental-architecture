@@ -12,7 +12,7 @@ use App\Core\Shared\Domain\Storage\StoredFile;
 use App\Http\Requests\Brand\UpdateBrandRequest;
 use Illuminate\Http\UploadedFile;
 
-it('deve atualizar uma marca com sucesso', function () {
+it('updates a brand successfully', function () {
 
     $file = UploadedFile::fake()->create('fiat_updated.png', 100);
     $requestMock = Mockery::mock(UpdateBrandRequest::class);

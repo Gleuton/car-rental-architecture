@@ -5,7 +5,7 @@ declare(strict_types=1);
 use App\Core\Brand\Domain\Entity\Brand;
 use App\Core\Brand\Domain\Entity\BrandCollection;
 
-it('pode criar uma BrandCollection com itens válidos', function () {
+it('can create a BrandCollection with valid items', function () {
     $brands = [
         Brand::new('Fiat', 'fiat.png'),
         Brand::new('BMW', 'BMW.png'),
@@ -17,11 +17,11 @@ it('pode criar uma BrandCollection com itens válidos', function () {
         ->and($collection->all()[0])->toBe($brands[0]);
 });
 
-it('lança exceção ao adicionar item inválido na BrandCollection no construtor', function () {
+it('throws exception when adding invalid item to BrandCollection in constructor', function () {
     new BrandCollection(['not a brand']);
-})->throws(InvalidArgumentException::class, 'A BrandCollection só aceita instâncias de App\Core\Brand\Domain\Entity\Brand.');
+})->throws(InvalidArgumentException::class, 'A BrandCollection só aceita instâncias de App\\Core\\Brand\\Domain\\Entity\\Brand.');
 
-it('lança exceção ao usar add com item inválido', function () {
+it('throws exception when using add with invalid item', function () {
     $collection = new BrandCollection;
     $collection->add('invalid');
-})->throws(InvalidArgumentException::class, 'A BrandCollection só aceita instâncias de App\Core\Brand\Domain\Entity\Brand.');
+})->throws(InvalidArgumentException::class, 'A BrandCollection só aceita instâncias de App\\Core\\Brand\\Domain\\Entity\\Brand.');

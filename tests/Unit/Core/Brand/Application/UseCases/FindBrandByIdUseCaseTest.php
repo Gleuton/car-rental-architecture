@@ -7,7 +7,7 @@ use App\Core\Brand\Application\UseCases\FindBrandByIdUseCase;
 use App\Core\Brand\Domain\Entity\Brand;
 use App\Core\Brand\Domain\Repositories\BrandRepositoryInterface;
 
-it('deve encontrar uma marca pelo ID com sucesso', function () {
+it('finds a brand by ID successfully', function () {
     $dto = BrandIdDTO::fromId(1);
 
     $repository = Mockery::mock(BrandRepositoryInterface::class);
