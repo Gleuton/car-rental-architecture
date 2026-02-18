@@ -33,4 +33,11 @@ class EloquentCarModelRepository implements CarModelRepositoryInterface
             $model->abs
         );
     }
+
+    public function existsByNameAndBrandId(string $name, int $brandId): bool
+    {
+        return EloquentCarModel::where('name', $name)
+            ->where('brand_id', $brandId)
+            ->exists();
+    }
 }

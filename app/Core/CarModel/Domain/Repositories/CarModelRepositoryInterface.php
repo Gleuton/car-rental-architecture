@@ -9,4 +9,6 @@ use App\Core\CarModel\Domain\Entity\CarModel;
 interface CarModelRepositoryInterface
 {
     public function save(CarModel $carModel): CarModel;
+
+    public function existsByNameAndBrandId(string $name, int $brandId);
 }

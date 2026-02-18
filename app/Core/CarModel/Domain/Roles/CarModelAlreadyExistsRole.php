@@ -1,0 +1,26 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Core\CarModel\Domain\Roles;
+
+use App\Core\CarModel\Domain\Errors\CarModelError;
+use App\Core\CarModel\Domain\Exceptions\CarModelDomainException;
+use App\Core\CarModel\Domain\Repositories\CarModelRepositoryInterface;
+
+class CarModelAlreadyExistsRole
+{
+    public function __construct(
+        private CarModelRepositoryInterface $repository
+    ) {}
+
+    /**
+     * @throws CarModelDomainException
+     */
+    public function validate(string $name, int $brandId): void
+    {
+        if ($this->repository->existsByNameAndBrandId($name, $brandId)) {
+            throw new CarModelDomainException(CarModelError::ALREADY_EXISTS);
+        }
+    }
+}
