@@ -161,7 +161,7 @@ it('creates a car model when car model already exists', function () {
     5001
 );
 
-it('creates a car model with a wrong seats number', function () {
+it('creates a car model with a wrong seats number', function (int $seatsNumber) {
     $file = UploadedFile::fake()->create('civic.png', 120);
     $request = Mockery::mock(StoreCarModelRequest::class);
     $brandId = 1;
@@ -174,7 +174,7 @@ it('creates a car model with a wrong seats number', function () {
     $request->shouldReceive('input')->with('brand_id')->andReturn($brandId);
     $request->shouldReceive('input')->with('name')->andReturn($name);
     $request->shouldReceive('input')->with('doors_number')->andReturn(4);
-    $request->shouldReceive('input')->with('seats_number')->andReturn(8);
+    $request->shouldReceive('input')->with('seats_number')->andReturn($seatsNumber);
     $request->shouldReceive('input')->with('airbags')->andReturn(true);
     $request->shouldReceive('input')->with('abs')->andReturn(true);
 
@@ -211,7 +211,10 @@ it('creates a car model with a wrong seats number', function () {
     CarModelDomainException::class,
     'Seats number must be between 2 and 7',
     5002
-);
+)->with([
+    'more_than_7' => 8,
+    'less_than_2' => 1,
+]);
 
 it('creates a car model with a wrong doors number', function (int $doorsNumber) {
     $file = UploadedFile::fake()->create('civic.png', 120);
