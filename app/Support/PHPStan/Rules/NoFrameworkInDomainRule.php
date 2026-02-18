@@ -35,7 +35,7 @@ final class NoFrameworkInDomainRule implements Rule
     {
         $file = str_replace('\\', '/', $scope->getFile());
 
-        if (!str_contains($file, '/app/Core/Domain/')) {
+        if (! str_contains($file, '/app/Core/Domain/')) {
             return [];
         }
 
@@ -57,4 +57,3 @@ final class NoFrameworkInDomainRule implements Rule
         return $errors;
     }
 }
-
