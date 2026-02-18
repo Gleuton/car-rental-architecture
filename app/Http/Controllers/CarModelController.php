@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Core\CarModel\Application\DTOs\CreateCarModelDTO;
-use App\Core\CarModel\Application\UseCase\CreateCarModelUseCase;
+use App\Core\CarModel\Application\UseCases\CreateCarModelUseCase;
 use App\Http\Requests\CarModel\StoreCarModelRequest;
 use App\Models\CarModel;
 use Illuminate\Http\JsonResponse;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Core\CarModel\Application\UseCase;
+namespace App\Core\CarModel\Application\UseCases;
 
 use App\Core\CarModel\Application\DTOs\CreateCarModelDTO;
 use App\Core\CarModel\Domain\Entity\CarModel;
