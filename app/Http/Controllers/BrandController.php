@@ -77,6 +77,7 @@ class BrandController extends Controller
 
     /**
      * Update the specified resource in storage.
+     *
      * @throws BrandDomainException
      */
     public function update(UpdateBrandRequest $request, int $brandId): JsonResponse
