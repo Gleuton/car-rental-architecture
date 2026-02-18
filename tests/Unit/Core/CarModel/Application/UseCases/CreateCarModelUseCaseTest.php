@@ -213,7 +213,7 @@ it('creates a car model with a wrong seats number', function () {
     5002
 );
 
-it('creates a car model with a wrong doors number', function () {
+it('creates a car model with a wrong doors number', function (int $doorsNumber) {
     $file = UploadedFile::fake()->create('civic.png', 120);
     $request = Mockery::mock(StoreCarModelRequest::class);
     $brandId = 1;
@@ -225,7 +225,7 @@ it('creates a car model with a wrong doors number', function () {
 
     $request->shouldReceive('input')->with('brand_id')->andReturn($brandId);
     $request->shouldReceive('input')->with('name')->andReturn($name);
-    $request->shouldReceive('input')->with('doors_number')->andReturn(7);
+    $request->shouldReceive('input')->with('doors_number')->andReturn($doorsNumber);
     $request->shouldReceive('input')->with('seats_number')->andReturn(7);
     $request->shouldReceive('input')->with('airbags')->andReturn(true);
     $request->shouldReceive('input')->with('abs')->andReturn(true);
@@ -263,4 +263,7 @@ it('creates a car model with a wrong doors number', function () {
     CarModelDomainException::class,
     'Doors number must be between 2 and 5',
     5003
-);
+)->with([
+    'more_than_5' => 6,
+    'less_than_2' => 1,
+]);
