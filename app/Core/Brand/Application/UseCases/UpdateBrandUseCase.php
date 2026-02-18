@@ -6,6 +6,7 @@ namespace App\Core\Brand\Application\UseCases;
 
 use App\Core\Brand\Application\DTOs\UpdateBrandDTO;
 use App\Core\Brand\Domain\Entity\Brand;
+use App\Core\Brand\Domain\Exceptions\BrandDomainException;
 use App\Core\Brand\Domain\Repositories\BrandRepositoryInterface;
 use App\Core\Shared\Domain\Storage\FileStorageInterface;
 use App\Core\Shared\Infra\Adapters\LaravelUploadedFileAdapter;
@@ -17,12 +18,15 @@ readonly class UpdateBrandUseCase
         private FileStorageInterface $storage
     ) {}
 
+    /**
+     * @throws BrandDomainException
+     */
     public function execute(UpdateBrandDTO $brandDto): Brand
     {
         $brand = $this->repository->findById($brandDto->id);
 
         $imagePath = $brand->image;
-        $imagePath = $this->updateBrandImage($brandDto, $brand, $imagePath);
+        $imagePath = $this->updateImage($brandDto, $brand, $imagePath);
 
         $updatedBrand = $brand->update(
             name: $brandDto->name,
@@ -32,13 +36,7 @@ readonly class UpdateBrandUseCase
         return $this->repository->update($updatedBrand);
     }
 
-    /**
-     * @param UpdateBrandDTO $brandDto
-     * @param Brand $brand
-     * @param string $imagePath
-     * @return string
-     */
-    public function updateBrandImage(UpdateBrandDTO $brandDto, Brand $brand, string $imagePath): string
+    private function updateImage(UpdateBrandDTO $brandDto, Brand $brand, string $imagePath): string
     {
         if ($brandDto->imageFile) {
             $this->storage->delete($brand->image);

@@ -28,7 +28,7 @@ class LocalStorage implements FileStorageInterface
 
     public function delete(string $path): bool
     {
-        if (Storage::disk($this->disk)->exists($path)) {
+        if ($this->fileExists($path)) {
             return Storage::disk($this->disk)->delete($path);
         }
 
@@ -43,5 +43,10 @@ class LocalStorage implements FileStorageInterface
         $storage = Storage::disk($this->disk);
 
         return $storage->url($path);
+    }
+
+    private function fileExists(string $path): bool
+    {
+        return Storage::disk($this->disk)->exists($path);
     }
 }
