@@ -22,7 +22,7 @@ class CarModel
         public bool $airbags,
         public bool $abs,
     ) {
-        $this->validateSeatsNumber($seatsNumber);
+        $this->validateSeatsNumber();
     }
 
     /**
