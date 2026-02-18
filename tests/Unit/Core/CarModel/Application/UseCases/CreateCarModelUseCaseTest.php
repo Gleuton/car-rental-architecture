@@ -112,4 +112,3 @@ it('creates a car model with invalid brand', function () {
 
     $this->useCase->execute($dto);
 })->throws(BrandDomainException::class);
-

@@ -7,7 +7,6 @@ namespace App\Core\Brand\Domain\Repositories;
 use App\Core\Brand\Domain\Entity\Brand;
 use App\Core\Brand\Domain\Entity\BrandFilter;
 use App\Core\Shared\Application\Pagination\PaginatedResult;
-use phpDocumentor\Reflection\Types\Boolean;
 
 interface BrandRepositoryInterface
 {
