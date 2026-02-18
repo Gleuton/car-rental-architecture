@@ -13,7 +13,6 @@ use App\Core\CarModel\Domain\Roles\CarModelAlreadyExistsRole;
 use App\Core\CarModel\Domain\Roles\ExistsBrandRole;
 use App\Core\Shared\Domain\Storage\FileStorageInterface;
 use App\Core\Shared\Infra\Adapters\LaravelUploadedFileAdapter;
-use Illuminate\Support\Facades\Log;
 
 readonly class CreateCarModelUseCase
 {
@@ -22,8 +21,7 @@ readonly class CreateCarModelUseCase
         private CarModelRepositoryInterface $repository,
         private ExistsBrandRole $existeBrandRole,
         private CarModelAlreadyExistsRole $carModelAlreadyRole
-    ) {
-    }
+    ) {}
 
     /**
      * @throws BrandDomainException|CarModelDomainException
