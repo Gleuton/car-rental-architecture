@@ -7,6 +7,7 @@ namespace App\Core\Brand\Domain\Repositories;
 use App\Core\Brand\Domain\Entity\Brand;
 use App\Core\Brand\Domain\Entity\BrandFilter;
 use App\Core\Shared\Application\Pagination\PaginatedResult;
+use phpDocumentor\Reflection\Types\Boolean;
 
 interface BrandRepositoryInterface
 {
@@ -24,4 +25,6 @@ interface BrandRepositoryInterface
     public function update(Brand $brand): Brand;
 
     public function delete(int $id): void;
+
+    public function exists(int $brandId): bool;
 }

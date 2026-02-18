@@ -10,6 +10,7 @@ enum BrandError: int
     case INVALID_NAME = 4002;
     case NAME_TOO_SHORT = 4003;
     case NAME_TOO_LONG = 4004;
+    case NOT_FOUND = 4005;
 
     public function message(): string
     {
@@ -18,6 +19,7 @@ enum BrandError: int
             self::INVALID_NAME => 'Brand name cannot be empty',
             self::NAME_TOO_SHORT => 'Brand name must have at least 3 characters',
             self::NAME_TOO_LONG => 'Brand name too long',
+            self::NOT_FOUND => 'Brand not found',
         };
     }
 }
