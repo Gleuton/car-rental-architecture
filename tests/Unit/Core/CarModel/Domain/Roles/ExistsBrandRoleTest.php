@@ -37,4 +37,3 @@ it('throws BrandDomainException with NOT_FOUND error when brand does not exist',
     'Brand not found',
     4005
 );
-
