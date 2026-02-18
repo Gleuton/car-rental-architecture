@@ -155,4 +155,56 @@ it('creates a car model when car model already exists', function () {
     $dto = CreateCarModelDTO::fromRequest($request);
 
     $this->useCase->execute($dto);
-})->throws(CarModelDomainException::class, 'Car model already exists for this brand', 5001);
+})->throws(
+    CarModelDomainException::class,
+    'Car model already exists for this brand',
+    5001
+);
+
+it('creates a car model with a wrong seats number', function () {
+    $file = UploadedFile::fake()->create('civic.png', 120);
+    $request = Mockery::mock(StoreCarModelRequest::class);
+    $brandId = 1;
+    $name = 'Civic';
+
+    $request->shouldReceive('file')
+        ->with('image')
+        ->andReturn($file);
+
+    $request->shouldReceive('input')->with('brand_id')->andReturn($brandId);
+    $request->shouldReceive('input')->with('name')->andReturn($name);
+    $request->shouldReceive('input')->with('doors_number')->andReturn(4);
+    $request->shouldReceive('input')->with('seats_number')->andReturn(8);
+    $request->shouldReceive('input')->with('airbags')->andReturn(true);
+    $request->shouldReceive('input')->with('abs')->andReturn(true);
+
+    $this->existsBrand
+        ->shouldReceive('validate')
+        ->with($brandId)
+        ->once();
+
+    $this->carModelAlreadyRole
+        ->shouldReceive('validate')
+        ->with($name, $brandId)
+        ->once();
+
+    $dto = CreateCarModelDTO::fromRequest($request);
+
+    $storedFile = new StoredFile('car_models/civic_stored.png', '');
+
+    $this->storage->shouldReceive('upload')
+        ->with(
+            Mockery::type(DomainFile::class),
+            'car_models'
+        )
+        ->once()
+        ->andReturn($storedFile);
+
+    $this->storage->shouldReceive('delete')
+        ->with(
+            $storedFile->path
+        )
+        ->once();
+
+    $this->useCase->execute($dto);
+})->throws(CarModelDomainException::class, 'Seats number must be between 2 and 7', 5002);

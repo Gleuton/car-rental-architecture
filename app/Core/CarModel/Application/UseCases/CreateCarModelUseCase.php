@@ -7,11 +7,13 @@ namespace App\Core\CarModel\Application\UseCases;
 use App\Core\Brand\Domain\Exceptions\BrandDomainException;
 use App\Core\CarModel\Application\DTOs\CreateCarModelDTO;
 use App\Core\CarModel\Domain\Entity\CarModel;
+use App\Core\CarModel\Domain\Exceptions\CarModelDomainException;
 use App\Core\CarModel\Domain\Repositories\CarModelRepositoryInterface;
 use App\Core\CarModel\Domain\Roles\CarModelAlreadyExistsRole;
 use App\Core\CarModel\Domain\Roles\ExistsBrandRole;
 use App\Core\Shared\Domain\Storage\FileStorageInterface;
 use App\Core\Shared\Infra\Adapters\LaravelUploadedFileAdapter;
+use Illuminate\Support\Facades\Log;
 
 readonly class CreateCarModelUseCase
 {
@@ -20,10 +22,11 @@ readonly class CreateCarModelUseCase
         private CarModelRepositoryInterface $repository,
         private ExistsBrandRole $existeBrandRole,
         private CarModelAlreadyExistsRole $carModelAlreadyRole
-    ) {}
+    ) {
+    }
 
     /**
-     * @throws BrandDomainException
+     * @throws BrandDomainException|CarModelDomainException
      */
     public function execute(CreateCarModelDTO $dto): CarModel
     {
@@ -33,18 +36,23 @@ readonly class CreateCarModelUseCase
         $image = LaravelUploadedFileAdapter::adapt($dto->image);
         $imagePath = $this->storage->upload($image, 'car_models')->path;
 
-        $carModel = CarModel::new(
-            $dto->brandId,
-            $dto->name,
-            $imagePath,
-            $dto->doorsNumber,
-            $dto->seatsNumber,
-            $dto->airbags,
-            $dto->abs
-        );
+        try {
+            $carModel = CarModel::new(
+                $dto->brandId,
+                $dto->name,
+                $imagePath,
+                $dto->doorsNumber,
+                $dto->seatsNumber,
+                $dto->airbags,
+                $dto->abs
+            );
 
-        $this->repository->save($carModel);
+            $this->repository->save($carModel);
 
-        return $carModel;
+            return $carModel;
+        } catch (CarModelDomainException $e) {
+            $this->storage->delete($imagePath);
+            throw $e;
+        }
     }
 }

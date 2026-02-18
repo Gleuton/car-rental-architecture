@@ -4,8 +4,14 @@ declare(strict_types=1);
 
 namespace App\Core\CarModel\Domain\Entity;
 
+use App\Core\CarModel\Domain\Errors\CarModelError;
+use App\Core\CarModel\Domain\Exceptions\CarModelDomainException;
+
 class CarModel
 {
+    /**
+     * @throws CarModelDomainException
+     */
     private function __construct(
         public ?int $id,
         public int $brandId,
@@ -15,8 +21,13 @@ class CarModel
         public int $seatsNumber,
         public bool $airbags,
         public bool $abs,
-    ) {}
+    ) {
+        $this->validateSeatsNumber($seatsNumber);
+    }
 
+    /**
+     * @throws CarModelDomainException
+     */
     public static function new(
         int $brandId,
         string $name,
@@ -29,6 +40,9 @@ class CarModel
         return new self(null, $brandId, $name, $image, $doorsNumber, $seatsNumber, $airbags, $abs);
     }
 
+    /**
+     * @throws CarModelDomainException
+     */
     public static function restore(
         int $id,
         int $brandId,
@@ -40,5 +54,15 @@ class CarModel
         bool $abs
     ): self {
         return new self($id, $brandId, $name, $image, $doorsNumber, $seatsNumber, $airbags, $abs);
+    }
+
+    /**
+     * @throws CarModelDomainException
+     */
+    private function validateSeatsNumber(): void
+    {
+        if ($this->seatsNumber < 2 || $this->seatsNumber > 7) {
+            throw new CarModelDomainException(CarModelError::NUMBER_OF_SETS);
+        }
     }
 }
