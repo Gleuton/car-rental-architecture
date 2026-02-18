@@ -22,11 +22,7 @@ readonly class UpdateBrandUseCase
         $brand = $this->repository->findById($brandDto->id);
 
         $imagePath = $brand->image;
-        if ($brandDto->imageFile) {
-            $this->storage->delete($brand->image);
-            $image = LaravelUploadedFileAdapter::adapt($brandDto->imageFile);
-            $imagePath = $this->storage->upload($image, 'brands')->path;
-        }
+        $imagePath = $this->updateBrandImage($brandDto, $brand, $imagePath);
 
         $updatedBrand = $brand->update(
             name: $brandDto->name,
@@ -34,5 +30,22 @@ readonly class UpdateBrandUseCase
         );
 
         return $this->repository->update($updatedBrand);
+    }
+
+    /**
+     * @param UpdateBrandDTO $brandDto
+     * @param Brand $brand
+     * @param string $imagePath
+     * @return string
+     */
+    public function updateBrandImage(UpdateBrandDTO $brandDto, Brand $brand, string $imagePath): string
+    {
+        if ($brandDto->imageFile) {
+            $this->storage->delete($brand->image);
+            $image = LaravelUploadedFileAdapter::adapt($brandDto->imageFile);
+            $imagePath = $this->storage->upload($image, 'brands')->path;
+        }
+
+        return $imagePath;
     }
 }
