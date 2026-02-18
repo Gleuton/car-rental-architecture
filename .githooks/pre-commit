@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "Running Pint to fix formatting..."
+XDEBUG_MODE=off vendor/bin/pint
+
