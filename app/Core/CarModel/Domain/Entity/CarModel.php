@@ -23,6 +23,7 @@ class CarModel
         public bool $abs,
     ) {
         $this->validateSeatsNumber();
+        $this->validateDoorsNumber();
     }
 
     /**
@@ -63,6 +64,16 @@ class CarModel
     {
         if ($this->seatsNumber < 2 || $this->seatsNumber > 7) {
             throw new CarModelDomainException(CarModelError::NUMBER_OF_SETS);
+        }
+    }
+
+    /**
+     * @throws CarModelDomainException
+     */
+    private function validateDoorsNumber(): void
+    {
+        if ($this->doorsNumber < 2 || $this->doorsNumber > 5) {
+            throw new CarModelDomainException(CarModelError::DOORS_NUMBER);
         }
     }
 }
