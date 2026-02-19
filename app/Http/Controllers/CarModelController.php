@@ -30,7 +30,7 @@ class CarModelController extends Controller
         $carModelDTO = CreateCarModelDTO::fromRequest($request);
         $carModel = $this->createCarModel->execute($carModelDTO);
 
-        return response()->json($carModel);
+        return response()->json(['data' => $carModel]);
     }
 
     /**
