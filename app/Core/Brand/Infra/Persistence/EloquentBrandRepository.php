@@ -8,7 +8,6 @@ use App\Core\Brand\Domain\Entity\Brand as DomainBrand;
 use App\Core\Brand\Domain\Entity\BrandFilter;
 use App\Core\Brand\Domain\Exceptions\BrandDomainException;
 use App\Core\Brand\Domain\Repositories\BrandRepositoryInterface;
-use App\Core\Brand\Infra\Mappers\EloquentBrandMapper;
 use App\Core\Shared\Application\Pagination\PaginatedResult;
 use App\Core\Shared\Infra\Adapters\LaravelPaginatorAdapter;
 use App\Models\Brand as EloquentBrand;
@@ -38,7 +37,11 @@ class EloquentBrandRepository implements BrandRepositoryInterface
 
         return LaravelPaginatorAdapter::adapt(
             $paginator,
-            static fn (EloquentBrand $model) => EloquentBrandMapper::toDomain($model)
+            static fn (EloquentBrand $model) => DomainBrand::restore(
+                $model->id,
+                $model->name,
+                $model->image
+            )
         );
     }
 
@@ -52,7 +55,11 @@ class EloquentBrandRepository implements BrandRepositoryInterface
             'image' => $brand->image,
         ]);
 
-        return EloquentBrandMapper::toDomain($model);
+        return DomainBrand::restore(
+            $model->id,
+            $model->name,
+            $model->image
+        );
     }
 
     /**
@@ -62,7 +69,11 @@ class EloquentBrandRepository implements BrandRepositoryInterface
     {
         $model = EloquentBrand::findOrFail($id);
 
-        return EloquentBrandMapper::toDomain($model);
+        return DomainBrand::restore(
+            $model->id,
+            $model->name,
+            $model->image
+        );
     }
 
     /**
@@ -77,7 +88,11 @@ class EloquentBrandRepository implements BrandRepositoryInterface
             'image' => $brand->image,
         ]);
 
-        return EloquentBrandMapper::toDomain($model);
+        return DomainBrand::restore(
+            $model->id,
+            $model->name,
+            $model->image
+        );
     }
 
     public function delete(int $id): void
