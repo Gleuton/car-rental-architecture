@@ -34,7 +34,7 @@ class EloquentBrandRepository implements BrandRepositoryInterface
                 fn ($q) => $q->whereRaw('LOWER(name) LIKE ?', ['%'.mb_strtolower($filters->search).'%'])
             )
             ->orderBy($filters->orderBy, $filters->direction)
-            ->paginate($filters->perPage, '*', 'page', $filters->page);
+            ->paginate($filters->perPage, ['*'], 'page', $filters->page);
 
         return LaravelPaginatorAdapter::adapt(
             $paginator,
