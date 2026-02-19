@@ -17,12 +17,11 @@ beforeEach(function () {
 it('can create a CarModel', function () {
     /** @var Brand $brand */
     $brand = Brand::factory()->create();
-
     $file = UploadedFile::fake()->create('toyota_corolla.png', 100, 'image/png');
-
+    $carModelName = 'Corolla';
     $data = [
         'brand_id' => $brand->id,
-        'name' => 'Corolla',
+        'name' => $carModelName,
         'image' => $file,
         'doors_number' => 4,
         'seats_number' => 5,
@@ -31,24 +30,34 @@ it('can create a CarModel', function () {
     ];
 
     $response = $this->postJson('/api/car-model', $data);
+    $response->assertStatus(200)
+        ->assertJsonPath('data.id', fn ($id) => is_int($id))
+        ->assertJsonPath('data.brandId', $brand->id)
+        ->assertJsonPath('data.name', $carModelName)
+        ->assertJsonPath('data.image', 'car_models/toyota_corolla.png')
+        ->assertJsonPath('data.doorsNumber', 4)
+        ->assertJsonPath('data.seatsNumber', 5)
+        ->assertJsonPath('data.airbags', true)
+        ->assertJsonPath('data.abs', true);
 
-    $response->assertStatus(200);
+    $carModel = CarModel::where('name', $carModelName)->first();
 
-    $carModel = CarModel::where('name', 'Corolla')->first();
-    expect($carModel)->not->toBeNull()
-        ->and($carModel->brand_id)->toBe($brand->id)
-        ->and($carModel->image)->not->toBeEmpty();
+    expect($carModel)->not->toBeNull()->and($carModel->brand_id)->toBe($brand->id)->and(
+        $carModel->image
+    )->not->toBeEmpty();
 
     Storage::disk('public')->assertExists($carModel->image);
-
-    $this->assertDatabaseHas('car_models', [
-        'brand_id' => $brand->id,
-        'name' => 'Corolla',
-        'doors' => 4,
-        'seats' => 5,
-        'airbags' => true,
-        'abs' => true,
-    ]);
+    $this->assertDatabaseHas(
+        'car_models',
+        [
+            'brand_id' => $brand->id,
+            'name' => $carModelName,
+            'doors' => 4,
+            'seats' => 5,
+            'airbags' => true,
+            'abs' => true,
+        ]
+    );
 });
 
 it('validates required fields when creating a CarModel', function () {

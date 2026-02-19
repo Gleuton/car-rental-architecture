@@ -45,9 +45,8 @@ readonly class CreateCarModelUseCase
                 $dto->abs
             );
 
-            $this->repository->save($carModel);
+            return $this->repository->save($carModel);
 
-            return $carModel;
         } catch (CarModelDomainException $e) {
             $this->storage->delete($imagePath);
             throw $e;
