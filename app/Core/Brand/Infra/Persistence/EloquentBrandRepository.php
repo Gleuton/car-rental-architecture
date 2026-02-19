@@ -88,8 +88,6 @@ class EloquentBrandRepository implements BrandRepositoryInterface
 
     public function exists(int $brandId): bool
     {
-        return EloquentBrand::findOrFail($brandId)
-            ->first()
-            ->exists();
+        return EloquentBrand::whereKey($brandId)->exists();
     }
 }
