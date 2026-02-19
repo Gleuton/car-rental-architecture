@@ -28,8 +28,8 @@ class StoreCarModelRequest extends FormRequest
             'brand_id' => 'required|integer',
             'name' => 'required|min:3',
             'image' => 'required|file|mimes:png,jpeg,jpg',
-            'doors_number' => 'required|integer|digits_between:1,5',
-            'seats_number' => 'required|integer|digits_between:1,20',
+            'doors_number' => 'required|integer|digits_between:2,5',
+            'seats_number' => 'required|integer|digits_between:2,7',
             'airbags' => 'required|boolean',
             'abs' => 'required|boolean',
         ];
