@@ -6,6 +6,7 @@ use App\Core\Brand\Application\DTOs\UpdateBrandDTO;
 use App\Core\Brand\Application\UseCases\UpdateBrandUseCase;
 use App\Core\Brand\Domain\Entity\Brand;
 use App\Core\Brand\Domain\Repositories\BrandRepositoryInterface;
+use App\Core\Brand\Domain\Roles\UniqueBrandNameRule;
 use App\Core\Shared\Domain\Storage\DomainFile;
 use App\Core\Shared\Domain\Storage\FileStorageInterface;
 use App\Core\Shared\Domain\Storage\StoredFile;
@@ -35,6 +36,11 @@ it('updates a brand successfully', function () {
         ->once()
         ->andReturn($oldBrand);
 
+    $uniqueRule = Mockery::mock(UniqueBrandNameRule::class);
+    $uniqueRule->shouldReceive('validate')
+        ->with('Fiat Updated')
+        ->once();
+
     $storage = Mockery::mock(FileStorageInterface::class);
 
     $storage->shouldReceive('delete')
@@ -63,7 +69,7 @@ it('updates a brand successfully', function () {
         ->once()
         ->andReturn($updatedBrand);
 
-    $useCase = new UpdateBrandUseCase($repository, $storage);
+    $useCase = new UpdateBrandUseCase($repository, $storage, $uniqueRule);
 
     $result = $useCase->execute($dto);
 

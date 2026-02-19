@@ -11,10 +11,11 @@ readonly class BrandFilter
         public string $orderBy,
         public string $direction,
         public int $perPage,
+        public int $page
     ) {}
 
-    public static function create(?string $search, string $orderBy, string $direction, int $perPage): self
+    public static function create(?string $search, string $orderBy, string $direction, int $perPage, int $page): self
     {
-        return new self($search, $orderBy, $direction, $perPage);
+        return new self($search, $orderBy, $direction, $perPage, $page);
     }
 }

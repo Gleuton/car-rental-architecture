@@ -25,7 +25,8 @@ readonly class ListBrandsUseCase
             $filters->search,
             $filters->orderBy,
             $filters->direction,
-            $filters->perPage
+            $filters->perPage,
+            $filters->page
         );
 
         return $this->repository->findByFilters($brandFilterDomain);

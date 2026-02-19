@@ -8,10 +8,10 @@ use App\Core\Brand\Domain\Errors\BrandError;
 use App\Core\Brand\Domain\Exceptions\BrandDomainException;
 use App\Core\Brand\Domain\Repositories\BrandRepositoryInterface;
 
-readonly class UniqueBrandNameRule
+class UniqueBrandNameRule
 {
     public function __construct(
-        private BrandRepositoryInterface $repository
+        private readonly BrandRepositoryInterface $repository
     ) {}
 
     /**

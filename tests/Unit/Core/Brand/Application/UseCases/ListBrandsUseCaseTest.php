@@ -35,7 +35,8 @@ it('lists brands successfully', function () {
             return $filter->search === 'Fiat' &&
                    $filter->orderBy === 'name' &&
                    $filter->direction === 'asc' &&
-                   $filter->perPage === 15;
+                   $filter->perPage === 15 &&
+                   $filter->page === 1;
         }))
         ->andReturn($paginatedResult);
 

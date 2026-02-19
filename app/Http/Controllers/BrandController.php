@@ -72,7 +72,7 @@ class BrandController extends Controller
 
         $brand = $this->findBrandByIdUseCase->execute($brandDto);
 
-        return response()->json($brand);
+        return response()->json(['data' => $brand]);
     }
 
     /**
