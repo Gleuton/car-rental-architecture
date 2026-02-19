@@ -189,3 +189,27 @@ it('returns domain error when car model already exists for the brand', function 
             'message' => 'Car model already exists for this brand',
         ]);
 });
+
+it('can update name only in ModelCar', function () {
+    /** @var Brand $newBrand */
+    $newBrand = Brand::factory()->create();
+
+    /** @var CarModel $factoryModelCar */
+    $factoryModelCar = CarModel::factory()->create(['name' => 'Yaris']);
+    $newModelName = 'Corolla';
+    $data = [
+        'name' => $newModelName,
+        'brand_id' => $newBrand->id,
+    ];
+
+    $response = $this->putJson('/api/car-model/'.$factoryModelCar->id, $data);
+
+    $response->assertStatus(200)
+        ->assertJsonPath('data.name', $newModelName)
+        ->assertJsonPath('data.brandId', $newBrand->id);
+
+    $this->assertDatabaseHas('car_models', [
+        'name' => $newModelName,
+        'brand_id' => $newBrand->id,
+    ]);
+});

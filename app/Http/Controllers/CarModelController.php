@@ -4,17 +4,22 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Core\Brand\Domain\Exceptions\BrandDomainException;
 use App\Core\CarModel\Application\DTOs\CreateCarModelDTO;
+use App\Core\CarModel\Application\DTOs\UpdateCarModelDTO;
 use App\Core\CarModel\Application\UseCases\CreateCarModelUseCase;
+use App\Core\CarModel\Application\UseCases\UpdateCarModelUseCase;
+use App\Core\CarModel\Domain\Exceptions\CarModelDomainException;
 use App\Http\Requests\CarModel\StoreCarModelRequest;
+use App\Http\Requests\CarModel\UpdateCarModelRequest;
 use App\Models\CarModel;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class CarModelController extends Controller
 {
     public function __construct(
-        private readonly CreateCarModelUseCase $createCarModel
+        private readonly CreateCarModelUseCase $createCarModel,
+        private readonly UpdateCarModelUseCase $updateCarModel
     ) {}
 
     /**
@@ -43,10 +48,15 @@ class CarModelController extends Controller
 
     /**
      * Update the specified resource in storage.
+     *
+     * @throws BrandDomainException|CarModelDomainException
      */
-    public function update(Request $request, CarModel $carModel)
+    public function update(UpdateCarModelRequest $request, int $carModelId): JsonResponse
     {
-        //
+        $carModelDTO = UpdateCarModelDTO::fromRequest($request, $carModelId);
+        $carModel = $this->updateCarModel->execute($carModelDTO);
+
+        return response()->json(['data' => $carModel]);
     }
 
     /**

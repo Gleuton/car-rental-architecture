@@ -13,14 +13,14 @@ class CarModel
      * @throws CarModelDomainException
      */
     private function __construct(
-        public ?int $id,
-        public int $brandId,
-        public string $name,
-        public string $image,
-        public int $doorsNumber,
-        public int $seatsNumber,
-        public bool $airbags,
-        public bool $abs,
+        public readonly ?int $id,
+        public readonly int $brandId,
+        public readonly string $name,
+        public readonly string $image,
+        public readonly int $doorsNumber,
+        public readonly int $seatsNumber,
+        public readonly bool $airbags,
+        public readonly bool $abs,
     ) {
         $this->validateSeatsNumber();
         $this->validateDoorsNumber();
@@ -55,6 +55,37 @@ class CarModel
         bool $abs
     ): self {
         return new self($id, $brandId, $name, $image, $doorsNumber, $seatsNumber, $airbags, $abs);
+    }
+
+    /**
+     * @throws CarModelDomainException
+     */
+    public function update(
+        ?int $brandId,
+        ?string $name,
+        string $image,
+        ?int $doorsNumber,
+        ?int $seatsNumber,
+        ?bool $airbags,
+        ?bool $abs
+    ): self {
+        $newBrandId = $brandId ?? $this->brandId;
+        $newName = $name ?? $this->name;
+        $newDoorsNumber = $doorsNumber ?? $this->doorsNumber;
+        $newSeatsNumber = $seatsNumber ?? $this->seatsNumber;
+        $newAirbags = $airbags ?? $this->airbags;
+        $newAbs = $abs ?? $this->abs;
+
+        return new self(
+            $this->id,
+            $newBrandId,
+            $newName,
+            $image,
+            $newDoorsNumber,
+            $newSeatsNumber,
+            $newAirbags,
+            $newAbs
+        );
     }
 
     /**

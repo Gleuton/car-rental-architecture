@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Core\CarModel\Infra;
 
 use App\Core\CarModel\Domain\Entity\CarModel as DomainCarModel;
+use App\Core\CarModel\Domain\Exceptions\CarModelDomainException;
 use App\Core\CarModel\Domain\Repositories\CarModelRepositoryInterface;
 use App\Models\CarModel as EloquentCarModel;
 
@@ -39,5 +40,24 @@ class EloquentCarModelRepository implements CarModelRepositoryInterface
         return EloquentCarModel::where('name', $name)
             ->where('brand_id', $brandId)
             ->exists();
+    }
+
+    /**
+     * @throws CarModelDomainException
+     */
+    public function findById(int $id): DomainCarModel
+    {
+        $modelEloquent = EloquentCarModel::findOrFail($id);
+
+        return DomainCarModel::restore(
+            $modelEloquent->id,
+            $modelEloquent->brand_id,
+            $modelEloquent->name,
+            $modelEloquent->image,
+            $modelEloquent->doors,
+            $modelEloquent->seats,
+            (bool) $modelEloquent->airbags,
+            (bool) $modelEloquent->abs
+        );
     }
 }
