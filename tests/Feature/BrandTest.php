@@ -175,8 +175,8 @@ it('can update image only in brand', function () {
         ->assertJsonPath('data.name', 'Toyota_old');
 
     $brand = Brand::find($factoryBrand->id);
-    expect($brand->image)->not->toBe('brands/old.png');
-    Storage::disk('public')->assertExists($brand->image);
+    expect($brand?->image)->not->toBe('brands/old.png');
+    Storage::disk('public')->assertExists($brand?->image);
     Storage::disk('public')->assertMissing('brands/old.png');
 });
 
