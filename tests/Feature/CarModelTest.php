@@ -15,6 +15,7 @@ beforeEach(function () {
 });
 
 it('can create a CarModel', function () {
+    /** @var Brand $brand */
     $brand = Brand::factory()->create();
 
     $file = UploadedFile::fake()->create('toyota_corolla.png', 100, 'image/png');
@@ -66,6 +67,7 @@ it('validates required fields when creating a CarModel', function () {
 });
 
 it('validates doors_number range when creating a CarModel', function () {
+    /** @var Brand $brand */
     $brand = Brand::factory()->create();
     $file = UploadedFile::fake()->create('toyota_corolla.png', 100, 'image/png');
 
@@ -86,6 +88,7 @@ it('validates doors_number range when creating a CarModel', function () {
 });
 
 it('validates seats_number range when creating a CarModel', function () {
+    /** @var Brand $brand */
     $brand = Brand::factory()->create();
     $file = UploadedFile::fake()->create('toyota_corolla.png', 100, 'image/png');
 
@@ -106,6 +109,7 @@ it('validates seats_number range when creating a CarModel', function () {
 });
 
 it('validates image type when creating a CarModel', function () {
+    /** @var Brand $brand */
     $brand = Brand::factory()->create();
     $file = UploadedFile::fake()->create('manual.pdf', 100, 'application/pdf');
 
@@ -150,6 +154,7 @@ it('returns domain error when brand does not exist', function () {
 });
 
 it('returns domain error when car model already exists for the brand', function () {
+    /** @var Brand $brand */
     $brand = Brand::factory()->create();
 
     CarModel::create([
