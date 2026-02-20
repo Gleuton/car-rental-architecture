@@ -32,3 +32,52 @@ it('throws exception when creating a Brand instance with name shorter than 3 cha
 it('throws exception when creating a Brand instance with name longer than 120 characters', function () {
     Brand::new(str_repeat('x', 121), 'fiat.png');
 })->throws(BrandDomainException::class, 'Brand name too long');
+
+it('throws exception when creating a Brand with whitespace-only name', function () {
+    Brand::new('   ', 'fiat.png');
+})->throws(BrandDomainException::class, 'Brand name cannot be empty');
+
+it('can create a Brand with name exactly 3 characters', function () {
+    $brand = Brand::new('BMW', 'bmw.png');
+
+    expect($brand->name)->toBe('BMW');
+});
+
+it('can create a Brand with name exactly 120 characters', function () {
+    $name = str_repeat('x', 120);
+    $brand = Brand::new($name, 'brand.png');
+
+    expect($brand->name)->toBe($name);
+});
+
+it('can update a Brand name keeping the image', function () {
+    $brand = Brand::restore(1, 'Fiat', 'fiat.png');
+    $updated = $brand->update(name: 'Toyota');
+
+    expect($updated->id)->toBe(1)
+        ->and($updated->name)->toBe('Toyota')
+        ->and($updated->image)->toBe('fiat.png');
+});
+
+it('can update a Brand image keeping the name', function () {
+    $brand = Brand::restore(1, 'Fiat', 'fiat.png');
+    $updated = $brand->update(image: 'fiat_new.png');
+
+    expect($updated->id)->toBe(1)
+        ->and($updated->name)->toBe('Fiat')
+        ->and($updated->image)->toBe('fiat_new.png');
+});
+
+it('can update a Brand name and image', function () {
+    $brand = Brand::restore(1, 'Fiat', 'fiat.png');
+    $updated = $brand->update(name: 'Toyota', image: 'toyota.png');
+
+    expect($updated->id)->toBe(1)
+        ->and($updated->name)->toBe('Toyota')
+        ->and($updated->image)->toBe('toyota.png');
+});
+
+it('throws exception when updating a Brand with invalid name', function () {
+    $brand = Brand::restore(1, 'Fiat', 'fiat.png');
+    $brand->update(name: 'Fi');
+})->throws(BrandDomainException::class, 'Brand name must have at least 3 characters');

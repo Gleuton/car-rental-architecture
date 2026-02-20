@@ -195,3 +195,39 @@ it('can delete brand', function () {
         'id' => $factoryBrand->id,
     ]);
 });
+
+it('cannot update a brand with duplicate name', function () {
+    Brand::factory()->create(['name' => 'Toyota']);
+
+    /** @var Brand $factoryBrand */
+    $factoryBrand = Brand::factory()->create(['name' => 'Fiat']);
+
+    $data = [
+        'name' => 'Toyota',
+    ];
+
+    $response = $this->putJson('/api/brand/'.$factoryBrand->id, $data);
+
+    $response->assertStatus(409)
+        ->assertJson([
+            'type' => 'DOMAIN_ERROR',
+            'code' => 'ALREADY_EXISTS',
+            'message' => 'Brand already exists',
+        ]);
+});
+
+it('returns 404 when updating non-existent brand', function () {
+    $data = [
+        'name' => 'Toyota',
+    ];
+
+    $response = $this->putJson('/api/brand/999', $data);
+
+    $response->assertStatus(404);
+});
+
+it('returns 404 when deleting non-existent brand', function () {
+    $response = $this->deleteJson('/api/brand/999');
+
+    $response->assertStatus(404);
+});

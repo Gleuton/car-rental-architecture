@@ -33,3 +33,20 @@ it('deletes a brand successfully', function () {
 
     expect(true)->toBeTrue();
 });
+
+it('propagates exception when brand is not found during delete', function () {
+    $dto = BrandIdDTO::fromId(999);
+
+    $repository = Mockery::mock(BrandRepositoryInterface::class);
+    $repository->shouldReceive('findById')
+        ->with(999)
+        ->once()
+        ->andThrow(new RuntimeException('Brand not found'));
+
+    $storage = Mockery::mock(FileStorageInterface::class);
+
+    $useCase = new DeleteBrandUseCase($repository, $storage);
+
+    expect(fn () => $useCase->execute($dto))
+        ->toThrow(RuntimeException::class);
+});

@@ -127,3 +127,113 @@ it('allows creating CarModel with maximum valid values', function () {
     expect($carModel->doorsNumber)->toBe(5)
         ->and($carModel->seatsNumber)->toBe(7);
 });
+
+it('can update all fields of a CarModel', function () {
+    $carModel = CarModel::restore(
+        id: 1,
+        brandId: 1,
+        name: 'Civic',
+        image: 'civic.png',
+        doorsNumber: 4,
+        seatsNumber: 5,
+        airbags: true,
+        abs: true
+    );
+
+    $updated = $carModel->update(
+        brandId: 2,
+        name: 'Corolla',
+        image: 'corolla.png',
+        doorsNumber: 5,
+        seatsNumber: 7,
+        airbags: false,
+        abs: false
+    );
+
+    expect($updated->id)->toBe(1)
+        ->and($updated->brandId)->toBe(2)
+        ->and($updated->name)->toBe('Corolla')
+        ->and($updated->image)->toBe('corolla.png')
+        ->and($updated->doorsNumber)->toBe(5)
+        ->and($updated->seatsNumber)->toBe(7)
+        ->and($updated->airbags)->toBeFalse()
+        ->and($updated->abs)->toBeFalse();
+});
+
+it('can update CarModel partially keeping other fields', function () {
+    $carModel = CarModel::restore(
+        id: 1,
+        brandId: 1,
+        name: 'Civic',
+        image: 'civic.png',
+        doorsNumber: 4,
+        seatsNumber: 5,
+        airbags: true,
+        abs: true
+    );
+
+    $updated = $carModel->update(
+        brandId: null,
+        name: 'Civic Sport',
+        image: 'civic_sport.png',
+        doorsNumber: null,
+        seatsNumber: null,
+        airbags: null,
+        abs: null
+    );
+
+    expect($updated->id)->toBe(1)
+        ->and($updated->brandId)->toBe(1)
+        ->and($updated->name)->toBe('Civic Sport')
+        ->and($updated->image)->toBe('civic_sport.png')
+        ->and($updated->doorsNumber)->toBe(4)
+        ->and($updated->seatsNumber)->toBe(5)
+        ->and($updated->airbags)->toBeTrue()
+        ->and($updated->abs)->toBeTrue();
+});
+
+it('throws exception when updating CarModel with invalid doors number', function () {
+    $carModel = CarModel::restore(
+        id: 1,
+        brandId: 1,
+        name: 'Civic',
+        image: 'civic.png',
+        doorsNumber: 4,
+        seatsNumber: 5,
+        airbags: true,
+        abs: true
+    );
+
+    $carModel->update(
+        brandId: null,
+        name: null,
+        image: 'civic.png',
+        doorsNumber: 6,
+        seatsNumber: null,
+        airbags: null,
+        abs: null
+    );
+})->throws(CarModelDomainException::class, 'Doors number must be between 2 and 5');
+
+it('throws exception when updating CarModel with invalid seats number', function () {
+    $carModel = CarModel::restore(
+        id: 1,
+        brandId: 1,
+        name: 'Civic',
+        image: 'civic.png',
+        doorsNumber: 4,
+        seatsNumber: 5,
+        airbags: true,
+        abs: true
+    );
+
+    $carModel->update(
+        brandId: null,
+        name: null,
+        image: 'civic.png',
+        doorsNumber: null,
+        seatsNumber: 8,
+        airbags: null,
+        abs: null
+    );
+})->throws(CarModelDomainException::class, 'Seats number must be between 2 and 7');

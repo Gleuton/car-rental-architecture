@@ -350,3 +350,38 @@ it('can send same name to update name in ModelCar', function () {
         'abs' => (int) $factoryModelCar->abs,
     ]);
 });
+
+it('can update image only in ModelCar', function () {
+    /** @var CarModel $factoryModelCar */
+    $factoryModelCar = CarModel::factory()->create([
+        'name' => 'Corolla',
+        'image' => 'car_models/corolla.png',
+    ]);
+    Storage::disk('public')->put('car_models/corolla.png', 'fake content');
+
+    $file = UploadedFile::fake()->create('corolla_new.png', 100, 'image/png');
+
+    $data = [
+        'image' => $file,
+    ];
+
+    $response = $this->putJson('/api/car-model/'.$factoryModelCar->id, $data);
+
+    $response->assertStatus(200)
+        ->assertJsonPath('data.name', 'Corolla');
+
+    $carModel = CarModel::find($factoryModelCar->id);
+    expect($carModel?->image)->not->toBe('car_models/corolla.png');
+    Storage::disk('public')->assertExists($carModel?->image);
+    Storage::disk('public')->assertMissing('car_models/corolla.png');
+});
+
+it('returns 404 when updating non-existent ModelCar', function () {
+    $data = [
+        'name' => 'Corolla',
+    ];
+
+    $response = $this->putJson('/api/car-model/999', $data);
+
+    $response->assertStatus(404);
+});

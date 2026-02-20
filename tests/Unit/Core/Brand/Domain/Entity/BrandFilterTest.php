@@ -13,3 +13,13 @@ it('can create a BrandFilter', function () {
         ->and($filter->perPage)->toBe(15)
         ->and($filter->page)->toBe(1);
 });
+
+it('can create a BrandFilter with null search', function () {
+    $filter = BrandFilter::create(null, 'created_at', 'desc', 10, 2);
+
+    expect($filter->search)->toBeNull()
+        ->and($filter->orderBy)->toBe('created_at')
+        ->and($filter->direction)->toBe('desc')
+        ->and($filter->perPage)->toBe(10)
+        ->and($filter->page)->toBe(2);
+});

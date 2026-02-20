@@ -23,3 +23,18 @@ it('finds a brand by ID successfully', function () {
 
     expect($result)->toBe($expectedBrand);
 });
+
+it('propagates exception when brand is not found', function () {
+    $dto = BrandIdDTO::fromId(999);
+
+    $repository = Mockery::mock(BrandRepositoryInterface::class);
+    $repository->shouldReceive('findById')
+        ->with(999)
+        ->once()
+        ->andThrow(new RuntimeException('Brand not found'));
+
+    $useCase = new FindBrandByIdUseCase($repository);
+
+    expect(fn () => $useCase->execute($dto))
+        ->toThrow(RuntimeException::class);
+});
