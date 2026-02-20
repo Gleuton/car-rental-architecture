@@ -275,3 +275,27 @@ it('can update all data in ModelCar', function () {
         'abs' => (int) $carModelDetails['abs'],
     ]);
 });
+
+it('can send same name to update name in ModelCar', function () {
+    /** @var CarModel $factoryModelCar */
+    $factoryModelCar = CarModel::factory()->create(['name' => 'Corolla']);
+
+    $data = [
+        'name' => 'Corolla',
+    ];
+
+    $response = $this->putJson('/api/car-model/'.$factoryModelCar->id, $data);
+
+    $response->assertStatus(200)
+        ->assertJsonPath('data.name', 'Corolla');
+
+    $this->assertDatabaseHas('car_models', [
+        'id' => $factoryModelCar->id,
+        'name' => 'Corolla',
+        'brand_id' => $factoryModelCar->brand_id,
+        'doors' => $factoryModelCar->doors,
+        'seats' => $factoryModelCar->seats,
+        'airbags' => (int) $factoryModelCar->airbags,
+        'abs' => (int) $factoryModelCar->abs,
+    ]);
+});
