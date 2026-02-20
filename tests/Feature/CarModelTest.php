@@ -255,6 +255,31 @@ it('cant update name if other model has the same name in ModelCar', function () 
         ]);
 });
 
+it('cant update ModelCar with a invalid brand', function () {
+    /** @var CarModel $modelCar */
+    $modelCar = CarModel::factory()->create(['name' => 'Yaris']);
+
+    /** @var CarModel $otherModelCar */
+    CarModel::factory()->create([
+        'name' => 'Corolla',
+        'brand_id' => $modelCar->brand_id,
+    ]);
+
+    $data = [
+        'brand_id' => 999,
+    ];
+
+    $response = $this->putJson('/api/car-model/'.$modelCar->id, $data);
+
+    $response->assertStatus(409)
+        ->assertJson([
+            'type' => 'DOMAIN_ERROR',
+            'domain' => 'brand',
+            'code' => 'NOT_FOUND',
+            'message' => 'Brand not found',
+        ]);
+});
+
 it('can update all data in ModelCar', function () {
     /** @var Brand $newBrand */
     $newBrand = Brand::factory()->create();
