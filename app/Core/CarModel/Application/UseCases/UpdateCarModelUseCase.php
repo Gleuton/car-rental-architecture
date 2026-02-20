@@ -50,7 +50,7 @@ readonly class UpdateCarModelUseCase
             $dto->abs
         );
 
-        return $this->repository->save($newCarModel);
+        return $this->repository->update($newCarModel);
     }
 
     private function updateImage(UpdateCarModelDTO $carModelDTO, CarModel $brand, string $imagePath): string

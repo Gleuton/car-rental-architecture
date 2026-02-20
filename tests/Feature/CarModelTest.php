@@ -199,12 +199,13 @@ it('returns domain error when car model already exists for the brand', function 
         ]);
 });
 
-it('can update name only in ModelCar', function () {
+it('can update name and brand in ModelCar', function () {
     /** @var Brand $newBrand */
     $newBrand = Brand::factory()->create();
 
     /** @var CarModel $factoryModelCar */
     $factoryModelCar = CarModel::factory()->create(['name' => 'Yaris']);
+
     $newModelName = 'Corolla';
     $data = [
         'name' => $newModelName,
@@ -218,7 +219,12 @@ it('can update name only in ModelCar', function () {
         ->assertJsonPath('data.brandId', $newBrand->id);
 
     $this->assertDatabaseHas('car_models', [
+        'id' => $factoryModelCar->id,
         'name' => $newModelName,
         'brand_id' => $newBrand->id,
+        'doors' => $factoryModelCar->doors,
+        'seats' => $factoryModelCar->seats,
+        'airbags' => (int) $factoryModelCar->airbags,
+        'abs' => (int) $factoryModelCar->abs,
     ]);
 });

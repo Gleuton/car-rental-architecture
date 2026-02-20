@@ -11,6 +11,9 @@ use App\Models\CarModel as EloquentCarModel;
 
 class EloquentCarModelRepository implements CarModelRepositoryInterface
 {
+    /**
+     * @throws CarModelDomainException
+     */
     public function save(DomainCarModel $carModel): DomainCarModel
     {
         $model = EloquentCarModel::create([
@@ -23,16 +26,7 @@ class EloquentCarModelRepository implements CarModelRepositoryInterface
             'abs' => $carModel->abs,
         ]);
 
-        return DomainCarModel::restore(
-            $model->id,
-            $model->brand_id,
-            $model->name,
-            $model->image,
-            $model->doors,
-            $model->seats,
-            $model->airbags,
-            $model->abs
-        );
+        return $this->toDomainCarModel($model);
     }
 
     public function existsByNameAndBrandId(string $name, int $brandId): bool
@@ -49,15 +43,42 @@ class EloquentCarModelRepository implements CarModelRepositoryInterface
     {
         $modelEloquent = EloquentCarModel::findOrFail($id);
 
+        return $this->toDomainCarModel($modelEloquent);
+    }
+
+    /**
+     * @throws CarModelDomainException
+     */
+    public function update(DomainCarModel $carModel): DomainCarModel
+    {
+        $carModelEloquent = EloquentCarModel::findOrFail($carModel->id);
+        $carModelEloquent->update([
+            'name' => $carModel->name,
+            'brand_id' => $carModel->brandId,
+            'image' => $carModel->image,
+            'doors' => $carModel->doorsNumber,
+            'seats' => $carModel->seatsNumber,
+            'airbags' => $carModel->airbags,
+            'abs' => $carModel->abs,
+        ]);
+
+        return $this->toDomainCarModel($carModelEloquent);
+    }
+
+    /**
+     * @throws CarModelDomainException
+     */
+    private function toDomainCarModel(EloquentCarModel $carModel): DomainCarModel
+    {
         return DomainCarModel::restore(
-            $modelEloquent->id,
-            $modelEloquent->brand_id,
-            $modelEloquent->name,
-            $modelEloquent->image,
-            $modelEloquent->doors,
-            $modelEloquent->seats,
-            (bool) $modelEloquent->airbags,
-            (bool) $modelEloquent->abs
+            $carModel->id,
+            $carModel->brand_id,
+            $carModel->name,
+            $carModel->image,
+            $carModel->doors,
+            $carModel->seats,
+            (bool) $carModel->airbags,
+            (bool) $carModel->abs
         );
     }
 }
