@@ -1,12 +1,31 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "Running PHPStan..."
+MIN_COVERAGE=85
+
+echo ""
+echo "========================================"
+echo "  Pre-push quality checks"
+echo "========================================"
+
+echo ""
+echo "[1/4] PHPStan..."
 XDEBUG_MODE=off php -d memory_limit=1G vendor/bin/phpstan analyse
 
-echo "Running unit tests..."
+echo ""
+echo "[2/4] Unit Tests..."
 XDEBUG_MODE=off vendor/bin/pest --testsuite=Unit
 
-echo "Running feature tests..."
-XDEBUG_MODE=off php artisan test --testsuite=Feature
+echo ""
+echo "[3/4] Feature Tests..."
+XDEBUG_MODE=off vendor/bin/pest --testsuite=Feature
+
+echo ""
+echo "[4/4] Code Coverage (min ${MIN_COVERAGE}%)..."
+vendor/bin/pest --coverage --min="$MIN_COVERAGE"
+
+echo ""
+echo "========================================"
+echo "  All checks passed"
+echo "========================================"
 

@@ -13,6 +13,13 @@ chmod +x .githooks/pre-commit .githooks/pre-push
 
 ## What runs
 
-- `pre-commit`: runs Pint to auto-fix formatting.
-- `pre-push`: runs PHPStan, unit tests, and feature tests.
+- **pre-commit**: runs Pint to auto-fix formatting on staged PHP files.
+- **pre-push**: runs the full quality pipeline locally before pushing:
+  1. PHPStan (static analysis)
+  2. Unit Tests
+  3. Feature Tests
+  4. Code Coverage (fails if below 85%)
+
+> The coverage threshold must match the value configured in
+> `.github/workflows/quality.yml` (`--min=85`).
 
