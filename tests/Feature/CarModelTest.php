@@ -61,7 +61,7 @@ it('can create a CarModel', function () {
 });
 
 it('validates required fields when creating a CarModel', function () {
-    $response = $this->postJson('/api/car-model', []);
+    $response = $this->postJson('/api/car-model');
 
     $response->assertStatus(422)
         ->assertJsonValidationErrors([
@@ -226,5 +226,52 @@ it('can update name and brand in ModelCar', function () {
         'seats' => $factoryModelCar->seats,
         'airbags' => (int) $factoryModelCar->airbags,
         'abs' => (int) $factoryModelCar->abs,
+    ]);
+});
+
+it('can update all data in ModelCar', function () {
+    /** @var Brand $newBrand */
+    $newBrand = Brand::factory()->create();
+
+    /** @var Brand $oldBrand */
+    $oldBrand = Brand::factory()->create();
+
+    /** @var CarModel $factoryModelCar */
+    $factoryModelCar = CarModel::factory()->create([
+        'name' => 'Corolla',
+        'doors' => 5,
+        'seats' => 6,
+        'airbags' => false,
+        'abs' => false,
+        'image' => 'car_models/corolla.png',
+        'brand_id' => $oldBrand->id,
+    ]);
+
+    $file = UploadedFile::fake()->create('yaris.png', 100, 'image/png');
+
+    $carModelDetails = [
+        'name' => 'Yaris',
+        'brand_id' => $newBrand->id,
+        'doors_number' => 4,
+        'seats_number' => 5,
+        'airbags' => true,
+        'abs' => true,
+        'image' => $file,
+    ];
+
+    $response = $this->putJson('/api/car-model/'.$factoryModelCar->id, $carModelDetails);
+
+    $response->assertStatus(200)
+        ->assertJsonPath('data.name', $carModelDetails['name'])
+        ->assertJsonPath('data.brandId', $carModelDetails['brand_id']);
+
+    $this->assertDatabaseHas('car_models', [
+        'id' => $factoryModelCar->id,
+        'name' => $carModelDetails['name'],
+        'brand_id' => $carModelDetails['brand_id'],
+        'doors' => $carModelDetails['doors_number'],
+        'seats' => $carModelDetails['seats_number'],
+        'airbags' => (int) $carModelDetails['airbags'],
+        'abs' => (int) $carModelDetails['abs'],
     ]);
 });
