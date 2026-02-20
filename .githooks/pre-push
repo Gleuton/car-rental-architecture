@@ -9,19 +9,11 @@ echo "  Pre-push quality checks"
 echo "========================================"
 
 echo ""
-echo "[1/4] PHPStan..."
+echo "[1/2] PHPStan..."
 XDEBUG_MODE=off php -d memory_limit=1G vendor/bin/phpstan analyse
 
 echo ""
-echo "[2/4] Unit Tests..."
-XDEBUG_MODE=off vendor/bin/pest --testsuite=Unit
-
-echo ""
-echo "[3/4] Feature Tests..."
-XDEBUG_MODE=off vendor/bin/pest --testsuite=Feature
-
-echo ""
-echo "[4/4] Code Coverage (min ${MIN_COVERAGE}%)..."
+echo "[2/2] Tests + Coverage (min ${MIN_COVERAGE}%)..."
 vendor/bin/pest --coverage --min="$MIN_COVERAGE"
 
 echo ""
