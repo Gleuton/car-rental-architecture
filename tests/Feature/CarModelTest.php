@@ -229,6 +229,32 @@ it('can update name and brand in ModelCar', function () {
     ]);
 });
 
+it('cant update name if other model has the same name in ModelCar', function () {
+    /** @var CarModel $modelCar */
+    $modelCar = CarModel::factory()->create(['name' => 'Yaris']);
+
+    /** @var CarModel $otherModelCar */
+    CarModel::factory()->create([
+        'name' => 'Corolla',
+        'brand_id' => $modelCar->brand_id,
+    ]);
+
+    $newModelName = 'Corolla';
+    $data = [
+        'name' => $newModelName,
+    ];
+
+    $response = $this->putJson('/api/car-model/'.$modelCar->id, $data);
+
+    $response->assertStatus(409)
+        ->assertJson([
+            'type' => 'DOMAIN_ERROR',
+            'domain' => 'car_model',
+            'code' => 'ALREADY_EXISTS',
+            'message' => 'Car model already exists for this brand',
+        ]);
+});
+
 it('can update all data in ModelCar', function () {
     /** @var Brand $newBrand */
     $newBrand = Brand::factory()->create();

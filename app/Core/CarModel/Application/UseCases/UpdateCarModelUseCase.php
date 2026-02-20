@@ -34,7 +34,7 @@ readonly class UpdateCarModelUseCase
 
         $carModel = $this->repository->findById($dto->id);
 
-        if ($dto->name && $dto->name !== $carModel->name) {
+        if ($dto->name && ($dto->name !== $carModel->name)) {
             $this->carModelAlreadyRole->validate($dto->name, $dto->brandId ?? $carModel->brandId);
         }
 
