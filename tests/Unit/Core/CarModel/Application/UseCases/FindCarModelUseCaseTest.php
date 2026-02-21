@@ -46,6 +46,6 @@ it('propagates exception when model car is not found', function () {
 
     $useCase = new FindCarModelByIdUseCase($repository);
 
-    expect(fn () => $useCase->execute($dto))
+    expect(static fn () => $useCase->execute($dto))
         ->toThrow(RuntimeException::class);
 });
