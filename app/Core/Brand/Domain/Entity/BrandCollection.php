@@ -59,6 +59,9 @@ final class BrandCollection implements DomainCollectionInterface, JsonSerializab
         return new ArrayIterator($this->items);
     }
 
+    /**
+     * @return list<Brand>
+     */
     public function jsonSerialize(): array
     {
         return $this->items;

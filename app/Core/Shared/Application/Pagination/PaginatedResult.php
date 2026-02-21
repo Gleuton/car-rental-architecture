@@ -10,7 +10,7 @@ namespace App\Core\Shared\Application\Pagination;
 class PaginatedResult
 {
     /**
-     * @param list<T> $items
+     * @param T $items
      */
     public function __construct(
         public mixed $items,

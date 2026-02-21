@@ -59,6 +59,9 @@ final class CarModelCollection implements DomainCollectionInterface, JsonSeriali
         return new ArrayIterator($this->items);
     }
 
+    /**
+     * @return list<CarModel>
+     */
     public function jsonSerialize(): array
     {
         return $this->items;

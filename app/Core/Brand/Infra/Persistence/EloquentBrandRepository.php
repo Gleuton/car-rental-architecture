@@ -43,7 +43,7 @@ class EloquentBrandRepository implements BrandRepositoryInterface
                 $model->name,
                 $model->image
             ),
-            fn (array $items) => new BrandCollection($items)
+            static fn (array $items): BrandCollection => new BrandCollection($items)
         );
     }
 

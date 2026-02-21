@@ -33,7 +33,7 @@ class EloquentCarModelRepository implements CarModelRepositoryInterface
         return LaravelPaginatorAdapter::adapt(
             $paginator,
             fn (EloquentCarModel $model) => $this->toDomainCarModel($model),
-            fn (array $items) => new CarModelCollection($items)
+            fn (array $items): CarModelCollection => new CarModelCollection($items)
         );
     }
 

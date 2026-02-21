@@ -13,13 +13,14 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 final class LaravelPaginatorAdapter
 {
     /**
-     * @template TIn
+     * @template TIn of object
      * @template TOut
      *
+     * @param LengthAwarePaginator<int, TIn> $paginator
      * @param callable(TIn):TOut $mapper
      * @param (callable(array<int, TOut>): mixed)|null $collectionFactory
      *
-     * @return PaginatedResult<TOut>
+     * @return PaginatedResult<mixed>
      */
     public static function adapt(
         LengthAwarePaginator $paginator,
