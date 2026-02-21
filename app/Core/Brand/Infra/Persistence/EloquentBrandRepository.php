@@ -38,11 +38,7 @@ class EloquentBrandRepository implements BrandRepositoryInterface
 
         return LaravelPaginatorAdapter::adapt(
             $paginator,
-            static fn (EloquentBrand $model) => DomainBrand::restore(
-                $model->id,
-                $model->name,
-                $model->image
-            ),
+            fn (EloquentBrand $model) => $this->toDomainBrand($model),
             static fn (array $items): BrandCollection => new BrandCollection($items)
         );
     }
@@ -57,11 +53,7 @@ class EloquentBrandRepository implements BrandRepositoryInterface
             'image' => $brand->image,
         ]);
 
-        return DomainBrand::restore(
-            $model->id,
-            $model->name,
-            $model->image
-        );
+        return $this->toDomainBrand($model);
     }
 
     /**
@@ -71,11 +63,7 @@ class EloquentBrandRepository implements BrandRepositoryInterface
     {
         $model = EloquentBrand::findOrFail($id);
 
-        return DomainBrand::restore(
-            $model->id,
-            $model->name,
-            $model->image
-        );
+        return $this->toDomainBrand($model);
     }
 
     /**
@@ -90,11 +78,7 @@ class EloquentBrandRepository implements BrandRepositoryInterface
             'image' => $brand->image,
         ]);
 
-        return DomainBrand::restore(
-            $model->id,
-            $model->name,
-            $model->image
-        );
+        return $this->toDomainBrand($model);
     }
 
     public function delete(int $id): void
@@ -106,5 +90,17 @@ class EloquentBrandRepository implements BrandRepositoryInterface
     public function exists(int $brandId): bool
     {
         return EloquentBrand::whereKey($brandId)->exists();
+    }
+
+    /**
+     * @throws BrandDomainException
+     */
+    private function toDomainBrand(EloquentBrand $model): DomainBrand
+    {
+        return DomainBrand::restore(
+            $model->id,
+            $model->name,
+            $model->image
+        );
     }
 }
