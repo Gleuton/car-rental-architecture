@@ -187,7 +187,7 @@ it('can delete brand', function () {
 
     $response = $this->deleteJson('/api/brand/'.$factoryBrand->id);
 
-    $response->assertStatus(200);
+    $response->assertStatus(204);
 
     Storage::disk('public')->assertMissing('brands/toyota.png');
 
