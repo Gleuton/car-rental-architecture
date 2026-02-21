@@ -41,9 +41,9 @@ class CarModelController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(CarModel $carModel)
+    public function show(int $carModelId)
     {
-        //
+        return response()->json(['data' => CarModel::findOrFail($carModelId)]);
     }
 
     /**

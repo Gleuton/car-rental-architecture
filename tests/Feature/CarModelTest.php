@@ -385,3 +385,15 @@ it('returns 404 when updating non-existent ModelCar', function () {
 
     $response->assertStatus(404);
 });
+
+it('can show a ModelCar', function () {
+    /** @var CarModel $carModel */
+    $carModel = CarModel::factory()->create();
+
+    $response = $this->getJson("/api/car-model/$carModel->id");
+
+    $response->assertStatus(200)
+        ->assertJsonPath('data.id', $carModel->id)
+        ->assertJsonPath('data.name', $carModel->name)
+        ->assertJsonPath('data.image', $carModel->image);
+});
