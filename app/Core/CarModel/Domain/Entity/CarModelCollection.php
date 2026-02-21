@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Core\Brand\Domain\Entity;
+namespace App\Core\CarModel\Domain\Entity;
 
 use App\Core\Shared\Domain\Collection\DomainCollectionInterface;
 use ArrayIterator;
@@ -10,34 +10,34 @@ use InvalidArgumentException;
 use JsonSerializable;
 
 /**
- * @implements DomainCollectionInterface<Brand>
+ * @implements DomainCollectionInterface<CarModel>
  */
-final class BrandCollection implements DomainCollectionInterface, JsonSerializable
+final class CarModelCollection implements DomainCollectionInterface, JsonSerializable
 {
-    /** @var list<Brand> */
+    /** @var list<CarModel> */
     private array $items = [];
 
     /**
-     * @param list<Brand> $items
+     * @param list<CarModel> $items
      */
     public function __construct(array $items = [])
     {
         foreach ($items as $item) {
-            $this->validateBrand($item);
+            $this->validateCarModel($item);
             $this->items[] = $item;
         }
     }
 
     public function add(mixed $item): self
     {
-        $this->validateBrand($item);
+        $this->validateCarModel($item);
         $this->items[] = $item;
 
         return $this;
     }
 
     /**
-     * @return list<Brand>
+     * @return list<CarModel>
      */
     public function all(): array
     {
@@ -64,11 +64,11 @@ final class BrandCollection implements DomainCollectionInterface, JsonSerializab
         return $this->items;
     }
 
-    private function validateBrand(mixed $brand): void
+    private function validateCarModel(mixed $carModel): void
     {
-        if (! $brand instanceof Brand) {
+        if (! $carModel instanceof CarModel) {
             throw new InvalidArgumentException(
-                sprintf('A BrandCollection só aceita instâncias de %s.', Brand::class)
+                sprintf('A CarModelCollection só aceita instâncias de %s.', CarModel::class)
             );
         }
     }

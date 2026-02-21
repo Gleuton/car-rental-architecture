@@ -5,12 +5,38 @@ declare(strict_types=1);
 namespace App\Core\CarModel\Infra;
 
 use App\Core\CarModel\Domain\Entity\CarModel as DomainCarModel;
+use App\Core\CarModel\Domain\Entity\CarModelCollection;
+use App\Core\CarModel\Domain\Entity\CarModelFilter;
 use App\Core\CarModel\Domain\Exceptions\CarModelDomainException;
 use App\Core\CarModel\Domain\Repositories\CarModelRepositoryInterface;
+use App\Core\Shared\Application\Pagination\PaginatedResult;
+use App\Core\Shared\Infra\Adapters\LaravelPaginatorAdapter;
 use App\Models\CarModel as EloquentCarModel;
 
 class EloquentCarModelRepository implements CarModelRepositoryInterface
 {
+    /**
+     * @return PaginatedResult<CarModelCollection>
+     *
+     * @throws CarModelDomainException
+     */
+    public function findByFilters(CarModelFilter $filters): PaginatedResult
+    {
+        $paginator = EloquentCarModel::query()
+            ->when(
+                $filters->search,
+                fn ($q) => $q->whereRaw('LOWER(name) LIKE ?', ['%'.mb_strtolower($filters->search).'%'])
+            )
+            ->orderBy($filters->orderBy, $filters->direction)
+            ->paginate($filters->perPage, ['*'], 'page', $filters->page);
+
+        return LaravelPaginatorAdapter::adapt(
+            $paginator,
+            fn (EloquentCarModel $model) => $this->toDomainCarModel($model),
+            fn (array $items) => new CarModelCollection($items)
+        );
+    }
+
     /**
      * @throws CarModelDomainException
      */

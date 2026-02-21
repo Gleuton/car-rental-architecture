@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Core\Brand\Infra\Persistence;
 
 use App\Core\Brand\Domain\Entity\Brand as DomainBrand;
+use App\Core\Brand\Domain\Entity\BrandCollection;
 use App\Core\Brand\Domain\Entity\BrandFilter;
 use App\Core\Brand\Domain\Exceptions\BrandDomainException;
 use App\Core\Brand\Domain\Repositories\BrandRepositoryInterface;
@@ -23,7 +24,7 @@ class EloquentBrandRepository implements BrandRepositoryInterface
     }
 
     /**
-     * @return PaginatedResult<DomainBrand>
+     * @return PaginatedResult<BrandCollection>
      */
     public function findByFilters(BrandFilter $filters): PaginatedResult
     {
@@ -41,7 +42,8 @@ class EloquentBrandRepository implements BrandRepositoryInterface
                 $model->id,
                 $model->name,
                 $model->image
-            )
+            ),
+            fn (array $items) => new BrandCollection($items)
         );
     }
 
