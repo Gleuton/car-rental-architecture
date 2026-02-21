@@ -402,3 +402,9 @@ it('can show a ModelCar', function () {
         ->assertJsonPath('data.airbags', $carModel->airbags)
         ->assertJsonPath('data.abs', $carModel->abs);
 });
+
+it('returns 404 when tray show non-existent ModelCar', function () {
+    $response = $this->getJson('/api/car-model/999');
+
+    $response->assertStatus(404);
+});
