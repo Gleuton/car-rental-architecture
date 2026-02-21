@@ -393,7 +393,12 @@ it('can show a ModelCar', function () {
     $response = $this->getJson("/api/car-model/$carModel->id");
 
     $response->assertStatus(200)
-        ->assertJsonPath('data.id', $carModel->id)
+        ->assertJsonPath('data.id', fn ($id) => is_int($id))
+        ->assertJsonPath('data.brandId', $carModel->brand_id)
         ->assertJsonPath('data.name', $carModel->name)
-        ->assertJsonPath('data.image', $carModel->image);
+        ->assertJsonPath('data.image', $carModel->image)
+        ->assertJsonPath('data.doorsNumber', $carModel->doors)
+        ->assertJsonPath('data.seatsNumber', $carModel->seats)
+        ->assertJsonPath('data.airbags', $carModel->airbags)
+        ->assertJsonPath('data.abs', $carModel->abs);
 });

@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Core\Brand\Domain\Exceptions\BrandDomainException;
+use App\Core\CarModel\Application\DTOs\CarModelIdDTO;
 use App\Core\CarModel\Application\DTOs\CreateCarModelDTO;
 use App\Core\CarModel\Application\DTOs\UpdateCarModelDTO;
 use App\Core\CarModel\Application\UseCases\CreateCarModelUseCase;
+use App\Core\CarModel\Application\UseCases\FindCarModelByIdUseCase;
 use App\Core\CarModel\Application\UseCases\UpdateCarModelUseCase;
 use App\Core\CarModel\Domain\Exceptions\CarModelDomainException;
 use App\Http\Requests\CarModel\StoreCarModelRequest;
@@ -19,7 +21,8 @@ class CarModelController extends Controller
 {
     public function __construct(
         private readonly CreateCarModelUseCase $createCarModel,
-        private readonly UpdateCarModelUseCase $updateCarModel
+        private readonly UpdateCarModelUseCase $updateCarModel,
+        private readonly FindCarModelByIdUseCase $findCarModel
     ) {}
 
     /**
@@ -41,9 +44,12 @@ class CarModelController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(int $carModelId)
+    public function show(int $carModelId): JsonResponse
     {
-        return response()->json(['data' => CarModel::findOrFail($carModelId)]);
+        $idDTO = CarModelIdDTO::fromId($carModelId);
+        $carModel = $this->findCarModel->execute($idDTO);
+
+        return response()->json(['data' => $carModel]);
     }
 
     /**
