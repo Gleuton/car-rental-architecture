@@ -199,7 +199,7 @@ it('returns domain error when car model already exists for the brand', function 
         ]);
 });
 
-it('can update name and brand in ModelCar', function () {
+it('can update name and brand in model car', function () {
     /** @var Brand $newBrand */
     $newBrand = Brand::factory()->create();
 
@@ -229,7 +229,7 @@ it('can update name and brand in ModelCar', function () {
     ]);
 });
 
-it('cant update name if other model has the same name in ModelCar', function () {
+it('cant update name if other model has the same name in model car', function () {
     /** @var CarModel $modelCar */
     $modelCar = CarModel::factory()->create(['name' => 'Yaris']);
 
@@ -255,7 +255,7 @@ it('cant update name if other model has the same name in ModelCar', function () 
         ]);
 });
 
-it('cant update ModelCar with a invalid brand', function () {
+it('cant update model car with a invalid brand', function () {
     /** @var CarModel $modelCar */
     $modelCar = CarModel::factory()->create(['name' => 'Yaris']);
 
@@ -280,7 +280,7 @@ it('cant update ModelCar with a invalid brand', function () {
         ]);
 });
 
-it('can update all data in ModelCar', function () {
+it('can update all data in model car', function () {
     /** @var Brand $newBrand */
     $newBrand = Brand::factory()->create();
 
@@ -327,7 +327,7 @@ it('can update all data in ModelCar', function () {
     ]);
 });
 
-it('can send same name to update name in ModelCar', function () {
+it('can send same name to update name in model car', function () {
     /** @var CarModel $factoryModelCar */
     $factoryModelCar = CarModel::factory()->create(['name' => 'Corolla']);
 
@@ -351,7 +351,7 @@ it('can send same name to update name in ModelCar', function () {
     ]);
 });
 
-it('can update image only in ModelCar', function () {
+it('can update image only in model car', function () {
     /** @var CarModel $factoryModelCar */
     $factoryModelCar = CarModel::factory()->create([
         'name' => 'Corolla',
@@ -376,7 +376,7 @@ it('can update image only in ModelCar', function () {
     Storage::disk('public')->assertMissing('car_models/corolla.png');
 });
 
-it('returns 404 when updating non-existent ModelCar', function () {
+it('returns 404 when updating non-existent model car', function () {
     $data = [
         'name' => 'Corolla',
     ];
@@ -386,7 +386,7 @@ it('returns 404 when updating non-existent ModelCar', function () {
     $response->assertStatus(404);
 });
 
-it('can show a ModelCar', function () {
+it('can show a model car', function () {
     /** @var CarModel $carModel */
     $carModel = CarModel::factory()->create();
 
@@ -407,4 +407,24 @@ it('returns 404 when tray show non-existent ModelCar', function () {
     $response = $this->getJson('/api/car-model/999');
 
     $response->assertStatus(404);
+});
+
+it('can dele a model car', function () {
+    $imagePath = 'model-car/toyota.png';
+    /** @var CarModel $carModel */
+    $carModel = CarModel::factory()->create([
+        'image' => $imagePath,
+    ]);
+
+    Storage::disk('public')->put($imagePath, 'fake content');
+
+    $response = $this->deleteJson('/api/car-model/'.$carModel->id);
+
+    Storage::disk('public')->assertMissing($imagePath);
+
+    $response->assertStatus(204);
+
+    $this->assertDatabaseMissing('car_models', [
+        'id' => $carModel->id,
+    ]);
 });

@@ -81,4 +81,9 @@ class EloquentCarModelRepository implements CarModelRepositoryInterface
             (bool) $carModel->abs
         );
     }
+
+    public function delete(int $id): void
+    {
+        EloquentCarModel::findOrFail($id)->delete();
+    }
 }

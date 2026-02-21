@@ -15,4 +15,6 @@ interface CarModelRepositoryInterface
     public function existsByNameAndBrandId(string $name, int $brandId): bool;
 
     public function findById(int $id): CarModel;
+
+    public function delete(int $id): void;
 }

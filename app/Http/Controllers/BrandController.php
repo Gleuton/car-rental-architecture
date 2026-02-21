@@ -92,10 +92,12 @@ class BrandController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(int $brandId): void
+    public function destroy(int $brandId): jsonResponse
     {
         $brandDto = BrandIdDTO::fromId($brandId);
 
         $this->deleteBrandUseCase->execute($brandDto);
+
+        return response()->json([], 204);
     }
 }

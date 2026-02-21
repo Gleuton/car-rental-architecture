@@ -9,12 +9,12 @@ use App\Core\CarModel\Application\DTOs\CarModelIdDTO;
 use App\Core\CarModel\Application\DTOs\CreateCarModelDTO;
 use App\Core\CarModel\Application\DTOs\UpdateCarModelDTO;
 use App\Core\CarModel\Application\UseCases\CreateCarModelUseCase;
+use App\Core\CarModel\Application\UseCases\DeleteCarModelUseCase;
 use App\Core\CarModel\Application\UseCases\FindCarModelByIdUseCase;
 use App\Core\CarModel\Application\UseCases\UpdateCarModelUseCase;
 use App\Core\CarModel\Domain\Exceptions\CarModelDomainException;
 use App\Http\Requests\CarModel\StoreCarModelRequest;
 use App\Http\Requests\CarModel\UpdateCarModelRequest;
-use App\Models\CarModel;
 use Illuminate\Http\JsonResponse;
 
 class CarModelController extends Controller
@@ -22,7 +22,8 @@ class CarModelController extends Controller
     public function __construct(
         private readonly CreateCarModelUseCase $createCarModel,
         private readonly UpdateCarModelUseCase $updateCarModel,
-        private readonly FindCarModelByIdUseCase $findCarModel
+        private readonly FindCarModelByIdUseCase $findCarModel,
+        private readonly DeleteCarModelUseCase $deleteCarModel,
     ) {}
 
     /**
@@ -68,8 +69,12 @@ class CarModelController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(CarModel $carModel)
+    public function destroy(int $carModelId): JsonResponse
     {
-        //
+        $idDTO = CarModelIdDTO::fromId($carModelId);
+
+        $this->deleteCarModel->execute($idDTO);
+
+        return response()->json([], 204);
     }
 }
