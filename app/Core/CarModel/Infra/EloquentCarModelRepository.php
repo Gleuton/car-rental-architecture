@@ -17,8 +17,6 @@ class EloquentCarModelRepository implements CarModelRepositoryInterface
 {
     /**
      * @return PaginatedResult<CarModelCollection>
-     *
-     * @throws CarModelDomainException
      */
     public function findByFilters(CarModelFilter $filters): PaginatedResult
     {
@@ -33,7 +31,7 @@ class EloquentCarModelRepository implements CarModelRepositoryInterface
         return LaravelPaginatorAdapter::adapt(
             $paginator,
             fn (EloquentCarModel $model) => $this->toDomainCarModel($model),
-            fn (array $items): CarModelCollection => new CarModelCollection($items)
+            static fn (array $items): CarModelCollection => new CarModelCollection($items)
         );
     }
 
