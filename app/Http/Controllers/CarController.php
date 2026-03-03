@@ -4,12 +4,19 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Core\Car\Application\DTOs\CreateCarDTO;
+use App\Core\Car\Application\UseCases\CreateCarUseCase;
 use App\Http\Requests\Car\StoreCarRequest;
 use App\Models\Car;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class CarController extends Controller
 {
+    public function __construct(
+        private readonly CreateCarUseCase $createCar,
+    ) {}
+
     /**
      * Display a listing of the resource.
      */
@@ -21,9 +28,12 @@ class CarController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCarRequest $request)
+    public function store(StoreCarRequest $request): JsonResponse
     {
-        //
+        $dto = CreateCarDTO::fromRequest($request);
+        $car = $this->createCar->execute($dto);
+
+        return response()->json(['data' => $car]);
     }
 
     /**

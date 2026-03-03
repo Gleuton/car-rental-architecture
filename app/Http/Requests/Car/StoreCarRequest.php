@@ -25,11 +25,11 @@ class StoreCarRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'car_model_id' => 'required|integer',
+            'car_model_id' => 'required|integer|exists:car_models,id',
             'license_plate' => 'required|string|max:10',
             'color' => 'required|string|max:255',
-            'is_available' => 'required|boolean',
-            'km' => 'required|integer|min:0',
+            'is_available' => 'boolean',
+            'km' => 'integer|min:0',
         ];
     }
 }

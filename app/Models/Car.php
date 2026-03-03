@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Car extends Model
 {
-    protected $fillable = ['model_id', 'license_plate', 'color', 'is_available', 'km'];
+    protected $fillable = ['car_model_id', 'license_plate', 'color', 'is_available', 'km'];
 
     public function carModel(): BelongsTo
     {
