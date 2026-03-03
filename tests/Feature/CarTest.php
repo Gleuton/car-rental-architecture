@@ -13,14 +13,14 @@ it('can create a Car', function () {
 
     $data = [
         'car_model_id' => $carModel->id,
-        'license_plate' => 'ABC123',
+        'license_plate' => 'ABC-1234',
         'color' => 'red',
         'is_available' => true,
         'km' => 1000,
     ];
     $response = $this->postJson('/api/cars', $data);
     $response->assertStatus(200);
-    $response->assertJsonPath('data.licensePlate', 'ABC123');
+    $response->assertJsonPath('data.licensePlate', 'ABC-1234');
 
     $response->assertJsonPath('data.id', fn ($id) => is_int($id));
 
@@ -62,7 +62,7 @@ it('validates color max length when creating a Car', function () {
 
     $data = [
         'car_model_id' => $carModel->id,
-        'license_plate' => 'ABC123',
+        'license_plate' => 'ABC-1234',
         'color' => str_repeat('a', 256),
         'is_available' => true,
         'km' => 1000,
@@ -80,7 +80,7 @@ it('validates km must be a non-negative integer when creating a Car', function (
 
     $data = [
         'car_model_id' => $carModel->id,
-        'license_plate' => 'ABC123',
+        'license_plate' => 'ABC-1234',
         'color' => 'red',
         'is_available' => true,
         'km' => -100,
@@ -98,7 +98,7 @@ it('validates is_available must be a boolean when creating a Car', function () {
 
     $data = [
         'car_model_id' => $carModel->id,
-        'license_plate' => 'ABC123',
+        'license_plate' => 'ABC-1234',
         'color' => 'red',
         'is_available' => 'invalid',
         'km' => 1000,
@@ -113,7 +113,7 @@ it('validates is_available must be a boolean when creating a Car', function () {
 it('validates car_model_id must be an integer when creating a Car', function () {
     $data = [
         'car_model_id' => 'invalid',
-        'license_plate' => 'ABC123',
+        'license_plate' => 'ABC-1234',
         'color' => 'red',
         'is_available' => true,
         'km' => 1000,
@@ -131,7 +131,7 @@ it('creates a Car with default is_available and km values when not provided', fu
 
     $data = [
         'car_model_id' => $carModel->id,
-        'license_plate' => 'ABC123',
+        'license_plate' => 'ABC-1234',
         'color' => 'red',
     ];
 
@@ -143,7 +143,7 @@ it('creates a Car with default is_available and km values when not provided', fu
 
     $this->assertDatabaseHas('cars', [
         'car_model_id' => $carModel->id,
-        'license_plate' => 'ABC123',
+        'license_plate' => 'ABC-1234',
         'color' => 'red',
         'is_available' => true,
         'km' => 0,
@@ -153,7 +153,7 @@ it('creates a Car with default is_available and km values when not provided', fu
 it('returns appropriate error when car_model_id does not exist', function () {
     $data = [
         'car_model_id' => 999,
-        'license_plate' => 'ABC123',
+        'license_plate' => 'ABC-1234',
         'color' => 'red',
         'is_available' => true,
         'km' => 1000,
@@ -163,4 +163,139 @@ it('returns appropriate error when car_model_id does not exist', function () {
 
     $response->assertStatus(422)
         ->assertJsonValidationErrors(['car_model_id']);
+});
+
+it('validates license_plate min length when creating a Car', function () {
+    /** @var CarModel $carModel */
+    $carModel = CarModel::factory()->create();
+
+    $data = [
+        'car_model_id' => $carModel->id,
+        'license_plate' => 'ABC123',
+        'color' => 'red',
+        'is_available' => true,
+        'km' => 1000,
+    ];
+
+    $response = $this->postJson('/api/cars', $data);
+
+    $response->assertStatus(409)
+        ->assertJson([
+            'type' => 'DOMAIN_ERROR',
+            'code' => 'LICENSE_PLATE_TOO_SHORT',
+            'message' => 'License plate must have at least 7 characters',
+        ]);
+});
+
+it('validates color min length when creating a Car', function () {
+    /** @var CarModel $carModel */
+    $carModel = CarModel::factory()->create();
+
+    $data = [
+        'car_model_id' => $carModel->id,
+        'license_plate' => 'ABC-1234',
+        'color' => 'ab',
+        'is_available' => true,
+        'km' => 1000,
+    ];
+
+    $response = $this->postJson('/api/cars', $data);
+
+    $response->assertStatus(409)
+        ->assertJson([
+            'type' => 'DOMAIN_ERROR',
+            'code' => 'COLOR_TOO_SHORT',
+            'message' => 'Color must have at least 3 characters',
+        ]);
+});
+
+it('validates license_plate accepts exactly 7 characters', function () {
+    /** @var CarModel $carModel */
+    $carModel = CarModel::factory()->create();
+
+    $data = [
+        'car_model_id' => $carModel->id,
+        'license_plate' => 'ABC1234',
+        'color' => 'red',
+        'is_available' => true,
+        'km' => 1000,
+    ];
+
+    $response = $this->postJson('/api/cars', $data);
+
+    $response->assertStatus(200)
+        ->assertJsonPath('data.licensePlate', 'ABC1234');
+});
+
+it('validates license_plate accepts exactly 10 characters', function () {
+    /** @var CarModel $carModel */
+    $carModel = CarModel::factory()->create();
+
+    $data = [
+        'car_model_id' => $carModel->id,
+        'license_plate' => 'ABC-123456',
+        'color' => 'red',
+        'is_available' => true,
+        'km' => 1000,
+    ];
+
+    $response = $this->postJson('/api/cars', $data);
+
+    $response->assertStatus(200)
+        ->assertJsonPath('data.licensePlate', 'ABC-123456');
+});
+
+it('validates color accepts exactly 3 characters', function () {
+    /** @var CarModel $carModel */
+    $carModel = CarModel::factory()->create();
+
+    $data = [
+        'car_model_id' => $carModel->id,
+        'license_plate' => 'ABC-1234',
+        'color' => 'red',
+        'is_available' => true,
+        'km' => 1000,
+    ];
+
+    $response = $this->postJson('/api/cars', $data);
+
+    $response->assertStatus(200)
+        ->assertJsonPath('data.color', 'red');
+});
+
+it('validates color accepts exactly 50 characters', function () {
+    /** @var CarModel $carModel */
+    $carModel = CarModel::factory()->create();
+
+    $color = str_repeat('A', 50);
+    $data = [
+        'car_model_id' => $carModel->id,
+        'license_plate' => 'ABC-1234',
+        'color' => $color,
+        'is_available' => true,
+        'km' => 1000,
+    ];
+
+    $response = $this->postJson('/api/cars', $data);
+
+    $response->assertStatus(200)
+        ->assertJsonPath('data.color', $color);
+});
+
+it('accepts zero km when creating a Car', function () {
+    /** @var CarModel $carModel */
+    $carModel = CarModel::factory()->create();
+
+    $data = [
+        'car_model_id' => $carModel->id,
+        'license_plate' => 'ABC-1234',
+        'color' => 'red',
+        'is_available' => true,
+        'km' => 0,
+    ];
+
+    $response = $this->postJson('/api/cars', $data);
+
+    $response->assertStatus(200)
+        ->assertJsonPath('data.km', 0);
 });
