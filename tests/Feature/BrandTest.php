@@ -16,7 +16,7 @@ beforeEach(function () {
 it('can list brands', function () {
     Brand::factory()->count(3)->create();
 
-    $response = $this->getJson('/api/brand');
+    $response = $this->getJson('/api/brands');
 
     $response->assertStatus(200)
         ->assertJsonStructure([
@@ -38,7 +38,7 @@ it('can filter brands by name', function () {
     Brand::factory()->create(['name' => 'Fiat']);
     Brand::factory()->create(['name' => 'Ford']);
 
-    $response = $this->getJson('/api/brand?search=fer');
+    $response = $this->getJson('/api/brands?search=fer');
 
     $response->assertStatus(200)
         ->assertJsonCount(1, 'data')
@@ -53,7 +53,7 @@ it('can create a brand', function () {
         'image' => $file,
     ];
 
-    $response = $this->postJson('/api/brand', $data);
+    $response = $this->postJson('/api/brands', $data);
 
     $response->assertStatus(201)
         ->assertJsonPath('data.name', 'Toyota');
@@ -77,7 +77,7 @@ it('cannot create a brand with duplicate name', function () {
         'image' => $file,
     ];
 
-    $response = $this->postJson('/api/brand', $data);
+    $response = $this->postJson('/api/brands', $data);
 
     $response->assertStatus(409)
         ->assertJson([
@@ -91,7 +91,7 @@ it('can show a brand', function () {
     /** @var Brand $brand */
     $brand = Brand::factory()->create();
 
-    $response = $this->getJson("/api/brand/$brand->id");
+    $response = $this->getJson("/api/brands/$brand->id");
 
     $response->assertStatus(200)
         ->assertJsonPath('data.name', $brand->name)
@@ -99,13 +99,13 @@ it('can show a brand', function () {
 });
 
 it('returns 404 when showing non-existent brand', function () {
-    $response = $this->getJson('/api/brand/999');
+    $response = $this->getJson('/api/brands/999');
 
     $response->assertStatus(404);
 });
 
 it('validates brand creation', function () {
-    $response = $this->postJson('/api/brand');
+    $response = $this->postJson('/api/brands');
 
     $response->assertStatus(422)
         ->assertJsonValidationErrors(['name', 'image']);
@@ -123,7 +123,7 @@ it('can update all data in brand', function () {
         'image' => $file,
     ];
 
-    $response = $this->putJson('/api/brand/'.$factoryBrand->id, $data);
+    $response = $this->putJson('/api/brands/'.$factoryBrand->id, $data);
 
     $response->assertStatus(200)
         ->assertJsonPath('data.name', 'Toyota');
@@ -146,7 +146,7 @@ it('can update name only in brand', function () {
         'name' => 'Toyota',
     ];
 
-    $response = $this->putJson('/api/brand/'.$factoryBrand->id, $data);
+    $response = $this->putJson('/api/brands/'.$factoryBrand->id, $data);
 
     $response->assertStatus(200)
         ->assertJsonPath('data.name', 'Toyota')
@@ -169,7 +169,7 @@ it('can update image only in brand', function () {
         'image' => $file,
     ];
 
-    $response = $this->putJson('/api/brand/'.$factoryBrand->id, $data);
+    $response = $this->putJson('/api/brands/'.$factoryBrand->id, $data);
 
     $response->assertStatus(200)
         ->assertJsonPath('data.name', 'Toyota_old');
@@ -185,7 +185,7 @@ it('can delete brand', function () {
     $factoryBrand = Brand::factory()->create(['name' => 'Toyota', 'image' => 'brands/toyota.png']);
     Storage::disk('public')->put('brands/toyota.png', 'fake content');
 
-    $response = $this->deleteJson('/api/brand/'.$factoryBrand->id);
+    $response = $this->deleteJson('/api/brands/'.$factoryBrand->id);
 
     $response->assertStatus(204);
 
@@ -206,7 +206,7 @@ it('cannot update a brand with duplicate name', function () {
         'name' => 'Toyota',
     ];
 
-    $response = $this->putJson('/api/brand/'.$factoryBrand->id, $data);
+    $response = $this->putJson('/api/brands/'.$factoryBrand->id, $data);
 
     $response->assertStatus(409)
         ->assertJson([
@@ -221,13 +221,13 @@ it('returns 404 when updating non-existent brand', function () {
         'name' => 'Toyota',
     ];
 
-    $response = $this->putJson('/api/brand/999', $data);
+    $response = $this->putJson('/api/brands/999', $data);
 
     $response->assertStatus(404);
 });
 
 it('returns 404 when deleting non-existent brand', function () {
-    $response = $this->deleteJson('/api/brand/999');
+    $response = $this->deleteJson('/api/brands/999');
 
     $response->assertStatus(404);
 });

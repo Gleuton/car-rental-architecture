@@ -16,6 +16,6 @@ Route::get('/user', static function (Request $request) {
 
 Route::apiResource('clients', ClientController::class);
 Route::apiResource('cars', CarController::class);
-Route::apiResource('rental', RentalController::class);
-Route::apiResource('brand', BrandController::class);
-Route::apiResource('car-model', CarModelController::class);
+Route::apiResource('rentals', RentalController::class);
+Route::apiResource('brands', BrandController::class);
+Route::apiResource('car-models', CarModelController::class);

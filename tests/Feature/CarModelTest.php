@@ -17,7 +17,7 @@ beforeEach(function () {
 it('can list car models', function () {
     CarModel::factory()->count(20)->create();
 
-    $response = $this->getJson('/api/car-model');
+    $response = $this->getJson('/api/car-models');
 
     $response->assertSuccessful()
         ->assertJsonCount(15, 'data')
@@ -47,7 +47,7 @@ it('can search car models by name', function () {
     CarModel::factory()->create(['name' => 'Corolla']);
     CarModel::factory()->create(['name' => 'Civic']);
 
-    $response = $this->getJson('/api/car-model?search=corolla');
+    $response = $this->getJson('/api/car-models?search=corolla');
 
     $response->assertSuccessful()
         ->assertJsonCount(1, 'data')
@@ -57,7 +57,7 @@ it('can search car models by name', function () {
 it('can paginate car models', function () {
     CarModel::factory()->count(20)->create();
 
-    $response = $this->getJson('/api/car-model?per_page=5&page=2');
+    $response = $this->getJson('/api/car-models?per_page=5&page=2');
 
     $response->assertSuccessful()
         ->assertJsonCount(5, 'data')
@@ -80,7 +80,7 @@ it('can create a CarModel', function () {
         'abs' => true,
     ];
 
-    $response = $this->postJson('/api/car-model', $data);
+    $response = $this->postJson('/api/car-models', $data);
     $response->assertStatus(200)
         ->assertJsonPath('data.id', fn ($id) => is_int($id))
         ->assertJsonPath('data.brandId', $brand->id)
@@ -112,7 +112,7 @@ it('can create a CarModel', function () {
 });
 
 it('validates required fields when creating a CarModel', function () {
-    $response = $this->postJson('/api/car-model');
+    $response = $this->postJson('/api/car-models');
 
     $response->assertStatus(422)
         ->assertJsonValidationErrors([
@@ -141,7 +141,7 @@ it('validates doors_number range when creating a CarModel', function () {
         'abs' => true,
     ];
 
-    $response = $this->postJson('/api/car-model', $data);
+    $response = $this->postJson('/api/car-models', $data);
 
     $response->assertStatus(422)
         ->assertJsonValidationErrors(['doors_number']);
@@ -162,7 +162,7 @@ it('validates seats_number range when creating a CarModel', function () {
         'abs' => true,
     ];
 
-    $response = $this->postJson('/api/car-model', $data);
+    $response = $this->postJson('/api/car-models', $data);
 
     $response->assertStatus(422)
         ->assertJsonValidationErrors(['seats_number']);
@@ -183,7 +183,7 @@ it('validates image type when creating a CarModel', function () {
         'abs' => true,
     ];
 
-    $response = $this->postJson('/api/car-model', $data);
+    $response = $this->postJson('/api/car-models', $data);
 
     $response->assertStatus(422)
         ->assertJsonValidationErrors(['image']);
@@ -202,7 +202,7 @@ it('returns domain error when brand does not exist', function () {
         'abs' => true,
     ];
 
-    $response = $this->postJson('/api/car-model', $data);
+    $response = $this->postJson('/api/car-models', $data);
 
     $response->assertStatus(409)
         ->assertJson([
@@ -239,7 +239,7 @@ it('returns domain error when car model already exists for the brand', function 
         'abs' => true,
     ];
 
-    $response = $this->postJson('/api/car-model', $data);
+    $response = $this->postJson('/api/car-models', $data);
 
     $response->assertStatus(409)
         ->assertJson([
@@ -263,7 +263,7 @@ it('can update name and brand in model car', function () {
         'brand_id' => $newBrand->id,
     ];
 
-    $response = $this->putJson('/api/car-model/'.$factoryModelCar->id, $data);
+    $response = $this->putJson('/api/car-models/'.$factoryModelCar->id, $data);
 
     $response->assertStatus(200)
         ->assertJsonPath('data.name', $newModelName)
@@ -295,7 +295,7 @@ it('cant update name if other model has the same name in model car', function ()
         'name' => $newModelName,
     ];
 
-    $response = $this->putJson('/api/car-model/'.$modelCar->id, $data);
+    $response = $this->putJson('/api/car-models/'.$modelCar->id, $data);
 
     $response->assertStatus(409)
         ->assertJson([
@@ -320,7 +320,7 @@ it('cant update model car with a invalid brand', function () {
         'brand_id' => 999,
     ];
 
-    $response = $this->putJson('/api/car-model/'.$modelCar->id, $data);
+    $response = $this->putJson('/api/car-models/'.$modelCar->id, $data);
 
     $response->assertStatus(409)
         ->assertJson([
@@ -361,7 +361,7 @@ it('can update all data in model car', function () {
         'image' => $file,
     ];
 
-    $response = $this->putJson('/api/car-model/'.$factoryModelCar->id, $carModelDetails);
+    $response = $this->putJson('/api/car-models/'.$factoryModelCar->id, $carModelDetails);
 
     $response->assertStatus(200)
         ->assertJsonPath('data.name', $carModelDetails['name'])
@@ -386,7 +386,7 @@ it('can send same name to update name in model car', function () {
         'name' => 'Corolla',
     ];
 
-    $response = $this->putJson('/api/car-model/'.$factoryModelCar->id, $data);
+    $response = $this->putJson('/api/car-models/'.$factoryModelCar->id, $data);
 
     $response->assertStatus(200)
         ->assertJsonPath('data.name', 'Corolla');
@@ -416,7 +416,7 @@ it('can update image only in model car', function () {
         'image' => $file,
     ];
 
-    $response = $this->putJson('/api/car-model/'.$factoryModelCar->id, $data);
+    $response = $this->putJson('/api/car-models/'.$factoryModelCar->id, $data);
 
     $response->assertStatus(200)
         ->assertJsonPath('data.name', 'Corolla');
@@ -432,7 +432,7 @@ it('returns 404 when updating non-existent model car', function () {
         'name' => 'Corolla',
     ];
 
-    $response = $this->putJson('/api/car-model/999', $data);
+    $response = $this->putJson('/api/car-models/999', $data);
 
     $response->assertStatus(404);
 });
@@ -441,7 +441,7 @@ it('can show a model car', function () {
     /** @var CarModel $carModel */
     $carModel = CarModel::factory()->create();
 
-    $response = $this->getJson("/api/car-model/$carModel->id");
+    $response = $this->getJson("/api/car-models/$carModel->id");
 
     $response->assertStatus(200)
         ->assertJsonPath('data.id', fn ($id) => is_int($id))
@@ -455,7 +455,7 @@ it('can show a model car', function () {
 });
 
 it('returns 404 when tray show non-existent ModelCar', function () {
-    $response = $this->getJson('/api/car-model/999');
+    $response = $this->getJson('/api/car-models/999');
 
     $response->assertStatus(404);
 });
@@ -469,7 +469,7 @@ it('can dele a model car', function () {
 
     Storage::disk('public')->put($imagePath, 'fake content');
 
-    $response = $this->deleteJson('/api/car-model/'.$carModel->id);
+    $response = $this->deleteJson('/api/car-models/'.$carModel->id);
 
     Storage::disk('public')->assertMissing($imagePath);
 
