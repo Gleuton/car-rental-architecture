@@ -299,3 +299,27 @@ it('accepts zero km when creating a Car', function () {
     $response->assertStatus(200)
         ->assertJsonPath('data.km', 0);
 });
+
+it('rejects duplicate license_plate when creating a Car', function () {
+    /** @var CarModel $carModel */
+    $carModel = CarModel::factory()->create();
+
+    $data = [
+        'car_model_id' => $carModel->id,
+        'license_plate' => 'ABC-1234',
+        'color' => 'red',
+        'is_available' => true,
+        'km' => 1000,
+    ];
+
+    $this->postJson('/api/cars', $data)->assertStatus(200);
+
+    $response = $this->postJson('/api/cars', $data);
+
+    $response->assertStatus(409)
+        ->assertJson([
+            'type' => 'DOMAIN_ERROR',
+            'code' => 'ALREADY_EXISTS',
+            'message' => 'Car with this license plate already exists',
+        ]);
+});

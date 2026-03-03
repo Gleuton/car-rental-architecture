@@ -23,6 +23,11 @@ class EloquentCarRepository implements CarRepositoryInterface
         return $this->toDomainCar($eloquentCar);
     }
 
+    public function existsByLicensePlate(string $licensePlate): bool
+    {
+        return EloquentCar::where('license_plate', $licensePlate)->exists();
+    }
+
     private function toDomainCar(EloquentCar $eloquentCar): Car
     {
         return Car::restore(

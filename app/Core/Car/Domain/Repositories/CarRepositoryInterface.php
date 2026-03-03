@@ -9,4 +9,6 @@ use App\Core\Car\Domain\Entity\Car;
 interface CarRepositoryInterface
 {
     public function save(Car $car): Car;
+
+    public function existsByLicensePlate(string $licensePlate): bool;
 }
