@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Car\StoreCarRequest;
 use App\Models\Car;
 use Illuminate\Http\Request;
 
@@ -20,7 +21,7 @@ class CarController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreCarRequest $request)
     {
         //
     }
