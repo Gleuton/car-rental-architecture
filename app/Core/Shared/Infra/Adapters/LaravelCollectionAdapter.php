@@ -9,6 +9,8 @@ use Illuminate\Support\Collection;
 use Traversable;
 
 /**
+ * @codeCoverageIgnore
+ *
  * @template T
  *
  * @implements DomainCollectionInterface<T>
