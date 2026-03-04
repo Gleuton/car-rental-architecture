@@ -20,10 +20,10 @@ class CarFactory extends Factory
 
         return [
             'car_model_id' => $carModel->id,
-            'license_plate' => $this->faker->word(),
-            'color' => $this->faker->word(),
+            'license_plate' => $this->faker->regexify('[A-Z]{3}-[0-9]{4}'),
+            'color' => $this->faker->regexify('[A-Za-z]{3,10}'),
             'is_available' => $this->faker->boolean(),
-            'km' => $this->faker->randomNumber(),
+            'km' => $this->faker->numberBetween(1, 100),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ];

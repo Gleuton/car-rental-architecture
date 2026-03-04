@@ -6,8 +6,11 @@ namespace App\Http\Controllers;
 
 use App\Core\Car\Application\DTOs\CarIdDTO;
 use App\Core\Car\Application\DTOs\CreateCarDTO;
+use App\Core\Car\Application\DTOs\ListCarDTO;
 use App\Core\Car\Application\UseCases\CreateCarUseCase;
 use App\Core\Car\Application\UseCases\FindCarUseCase;
+use App\Core\Car\Application\UseCases\ListCarUseCase;
+use App\Http\Requests\Car\IndexCarRequest;
 use App\Http\Requests\Car\StoreCarRequest;
 use App\Models\Car;
 use Illuminate\Http\JsonResponse;
@@ -18,14 +21,26 @@ class CarController extends Controller
     public function __construct(
         private readonly CreateCarUseCase $createCar,
         private readonly FindCarUseCase $findCar,
+        private readonly ListCarUseCase $listCar,
     ) {}
 
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(IndexCarRequest $request): jsonResponse
     {
-        //
+        $dto = ListCarDTO::fromRequest($request);
+        $cars = $this->listCar->execute($dto);
+
+        return response()->json([
+            'data' => $cars->items,
+            'meta' => [
+                'current_page' => $cars->page,
+                'per_page' => $cars->perPage,
+                'total' => $cars->total,
+                'last_page' => $cars->lastPage,
+            ],
+        ]);
     }
 
     /**
