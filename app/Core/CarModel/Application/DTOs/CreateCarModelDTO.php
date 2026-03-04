@@ -7,7 +7,7 @@ namespace App\Core\CarModel\Application\DTOs;
 use App\Http\Requests\CarModel\StoreCarModelRequest;
 use Illuminate\Http\UploadedFile;
 
-class CreateCarModelDTO
+readonly class CreateCarModelDTO
 {
     private function __construct(
         public int $brandId,

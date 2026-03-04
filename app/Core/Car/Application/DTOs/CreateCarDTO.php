@@ -6,7 +6,7 @@ namespace App\Core\Car\Application\DTOs;
 
 use App\Http\Requests\Car\StoreCarRequest;
 
-class CreateCarDTO
+readonly class CreateCarDTO
 {
     private function __construct(
         public int $carModelId,

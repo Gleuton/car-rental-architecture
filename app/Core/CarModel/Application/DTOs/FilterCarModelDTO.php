@@ -6,7 +6,7 @@ namespace App\Core\CarModel\Application\DTOs;
 
 use App\Http\Requests\CarModel\IndexCarModelRequest;
 
-class FilterCarModelDTO
+readonly class FilterCarModelDTO
 {
     private function __construct(
         public ?string $search,

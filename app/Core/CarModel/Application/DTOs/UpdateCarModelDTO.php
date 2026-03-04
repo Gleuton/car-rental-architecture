@@ -7,7 +7,7 @@ namespace App\Core\CarModel\Application\DTOs;
 use App\Http\Requests\CarModel\UpdateCarModelRequest;
 use Illuminate\Http\UploadedFile;
 
-class UpdateCarModelDTO
+readonly class UpdateCarModelDTO
 {
     private function __construct(
         public int $id,

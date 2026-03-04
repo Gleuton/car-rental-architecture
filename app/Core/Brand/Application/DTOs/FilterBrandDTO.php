@@ -6,7 +6,7 @@ namespace App\Core\Brand\Application\DTOs;
 
 use App\Http\Requests\Brand\IndexBrandRequest;
 
-class FilterBrandDTO
+readonly class FilterBrandDTO
 {
     private function __construct(
         public ?string $search,
