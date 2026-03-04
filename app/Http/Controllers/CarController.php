@@ -8,6 +8,7 @@ use App\Core\Car\Application\DTOs\CarIdDTO;
 use App\Core\Car\Application\DTOs\CreateCarDTO;
 use App\Core\Car\Application\DTOs\ListCarDTO;
 use App\Core\Car\Application\UseCases\CreateCarUseCase;
+use App\Core\Car\Application\UseCases\DeleteCarUseCase;
 use App\Core\Car\Application\UseCases\FindCarUseCase;
 use App\Core\Car\Application\UseCases\ListCarUseCase;
 use App\Http\Requests\Car\IndexCarRequest;
@@ -22,6 +23,7 @@ class CarController extends Controller
         private readonly CreateCarUseCase $createCar,
         private readonly FindCarUseCase $findCar,
         private readonly ListCarUseCase $listCar,
+        private readonly DeleteCarUseCase $deleteCar,
     ) {}
 
     /**
@@ -78,8 +80,12 @@ class CarController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Car $car)
+    public function destroy(int $carId): JsonResponse
     {
-        //
+        $carDto = CarIdDTO::fromId($carId);
+
+        $this->deleteCar->execute($carDto);
+
+        return response()->json([], 204);
     }
 }

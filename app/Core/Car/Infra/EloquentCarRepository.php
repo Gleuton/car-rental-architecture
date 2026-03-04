@@ -61,6 +61,11 @@ class EloquentCarRepository implements CarRepositoryInterface
         );
     }
 
+    public function delete(int $id): void
+    {
+        EloquentCar::findOrFail($id)->delete();
+    }
+
     private function toDomainCar(EloquentCar $eloquentCar): Car
     {
         return Car::restore(

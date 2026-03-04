@@ -21,4 +21,6 @@ interface CarRepositoryInterface
      * @return PaginatedResult<CarCollection>
      */
     public function listCars(CarFilter $filter): PaginatedResult;
+
+    public function delete(int $id): void;
 }
