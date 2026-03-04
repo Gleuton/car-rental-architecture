@@ -11,4 +11,6 @@ interface CarRepositoryInterface
     public function save(Car $car): Car;
 
     public function existsByLicensePlate(string $licensePlate): bool;
+
+    public function findById(int $id): Car;
 }

@@ -329,9 +329,12 @@ it('can show a car', function () {
     /** @var Car $car */
     $car = Car::factory()->create([
         'license_plate' => 'ABC-1234',
+        'color' => 'red',
+        'is_available' => true,
+        'km' => 1000,
     ]);
 
     $response = $this->getJson('/api/cars/'.$car->id);
     $response->assertStatus(200)
-        ->assertJsonPath('data.license_plate', 'ABC-1234');
+        ->assertJsonPath('data.licensePlate', 'ABC-1234');
 });

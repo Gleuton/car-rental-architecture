@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Core\Car\Application\DTOs\CarIdDTO;
 use App\Core\Car\Application\DTOs\CreateCarDTO;
 use App\Core\Car\Application\UseCases\CreateCarUseCase;
+use App\Core\Car\Application\UseCases\FindCarUseCase;
 use App\Http\Requests\Car\StoreCarRequest;
 use App\Models\Car;
 use Illuminate\Http\JsonResponse;
@@ -16,6 +17,7 @@ class CarController extends Controller
 {
     public function __construct(
         private readonly CreateCarUseCase $createCar,
+        private readonly FindCarUseCase $findCar,
     ) {}
 
     /**
@@ -43,9 +45,10 @@ class CarController extends Controller
     public function show(int $carId): JsonResponse
     {
         $carDto = CarIdDTO::fromId($carId);
+        $car = $this->findCar->execute($carDto);
 
         return response()->json([
-            'data' => Car::find($carDto->id),
+            'data' => $car,
         ]);
     }
 

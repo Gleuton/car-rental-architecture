@@ -28,6 +28,13 @@ class EloquentCarRepository implements CarRepositoryInterface
         return EloquentCar::where('license_plate', $licensePlate)->exists();
     }
 
+    public function findById(int $id): Car
+    {
+        $eloquentCar = EloquentCar::findOrFail($id);
+
+        return $this->toDomainCar($eloquentCar);
+    }
+
     private function toDomainCar(EloquentCar $eloquentCar): Car
     {
         return Car::restore(
@@ -35,7 +42,7 @@ class EloquentCarRepository implements CarRepositoryInterface
             $eloquentCar->car_model_id,
             $eloquentCar->license_plate,
             $eloquentCar->color,
-            $eloquentCar->is_available,
+            (bool) $eloquentCar->is_available,
             $eloquentCar->km,
         );
     }
