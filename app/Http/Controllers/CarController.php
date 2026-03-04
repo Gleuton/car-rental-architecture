@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Core\Car\Application\DTOs\CarIdDTO;
 use App\Core\Car\Application\DTOs\CreateCarDTO;
 use App\Core\Car\Application\UseCases\CreateCarUseCase;
 use App\Http\Requests\Car\StoreCarRequest;
@@ -41,8 +42,10 @@ class CarController extends Controller
      */
     public function show(int $carId): JsonResponse
     {
+        $carDto = CarIdDTO::fromId($carId);
+
         return response()->json([
-            'data' => Car::find($carId),
+            'data' => Car::find($carDto->id),
         ]);
     }
 
