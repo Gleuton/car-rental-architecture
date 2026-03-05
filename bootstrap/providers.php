@@ -7,4 +7,5 @@ return [
     App\Providers\BrandServiceProvider::class,
     App\Providers\CarModelServiceProvider::class,
     App\Providers\CarServiceProvider::class,
+    App\Providers\ClientServiceProvider::class,
 ];

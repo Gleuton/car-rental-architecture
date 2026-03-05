@@ -4,17 +4,37 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Core\Client\Application\DTOs\FilterClientDTO;
+use App\Core\Client\Application\UseCases\ListClientsUseCase;
+use App\Http\Requests\Client\IndexClientRequest;
 use App\Models\Client;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
+    public function __construct(
+        private readonly ListClientsUseCase $listClientsUseCase,
+    ) {}
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(IndexClientRequest $request): JsonResponse
     {
-        //
+        $filters = FilterClientDTO::fromRequest($request);
+
+        $clients = $this->listClientsUseCase->execute($filters);
+
+        return response()->json([
+            'data' => $clients->items,
+            'meta' => [
+                'current_page' => $clients->page,
+                'per_page' => $clients->perPage,
+                'total' => $clients->total,
+                'last_page' => $clients->lastPage,
+            ],
+        ]);
     }
 
     /**
