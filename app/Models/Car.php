@@ -18,4 +18,10 @@ class Car extends Model
     {
         return $this->belongsTo(CarModel::class);
     }
+
+    protected $casts = [
+        'is_available' => 'boolean',
+        'created_at' => 'datetime:Y-m-d H:i:s',
+        'updated_at' => 'datetime:Y-m-d H:i:s',
+    ];
 }

@@ -7,15 +7,16 @@ namespace App\Http\Controllers;
 use App\Core\Car\Application\DTOs\CarIdDTO;
 use App\Core\Car\Application\DTOs\CreateCarDTO;
 use App\Core\Car\Application\DTOs\ListCarDTO;
+use App\Core\Car\Application\DTOs\UpdateCarDto;
 use App\Core\Car\Application\UseCases\CreateCarUseCase;
 use App\Core\Car\Application\UseCases\DeleteCarUseCase;
 use App\Core\Car\Application\UseCases\FindCarUseCase;
 use App\Core\Car\Application\UseCases\ListCarUseCase;
+use App\Core\Car\Application\UseCases\UpdateCarUseCase;
 use App\Http\Requests\Car\IndexCarRequest;
 use App\Http\Requests\Car\StoreCarRequest;
-use App\Models\Car;
+use App\Http\Requests\Car\UpdateCarRequest;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class CarController extends Controller
 {
@@ -24,6 +25,7 @@ class CarController extends Controller
         private readonly FindCarUseCase $findCar,
         private readonly ListCarUseCase $listCar,
         private readonly DeleteCarUseCase $deleteCar,
+        private readonly UpdateCarUseCase $updateCar,
     ) {}
 
     /**
@@ -72,9 +74,12 @@ class CarController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Car $car)
+    public function update(UpdateCarRequest $request, int $carId): jsonResponse
     {
-        //
+        $carDto = UpdateCarDto::fromRequest($request, $carId);
+        $car = $this->updateCar->execute($carDto);
+
+        return response()->json(['data' => $car]);
     }
 
     /**

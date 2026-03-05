@@ -77,4 +77,19 @@ class EloquentCarRepository implements CarRepositoryInterface
             $eloquentCar->km,
         );
     }
+
+    public function update(Car $car): Car
+    {
+        $eloquentCar = EloquentCar::findOrFail($car->id);
+
+        $eloquentCar->update([
+            'car_model_id' => $car->carModelId,
+            'license_plate' => $car->licensePlate,
+            'color' => $car->color,
+            'is_available' => $car->isAvailable,
+            'km' => $car->km,
+        ]);
+
+        return $this->toDomainCar($eloquentCar);
+    }
 }
