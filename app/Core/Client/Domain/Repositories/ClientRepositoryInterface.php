@@ -17,4 +17,6 @@ interface ClientRepositoryInterface
      * @return PaginatedResult<ClientCollection>
      */
     public function findByFilters(ClientFilter $filters): PaginatedResult;
+
+    public function findById(int $id): Client;
 }

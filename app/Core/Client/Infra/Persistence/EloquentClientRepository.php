@@ -43,6 +43,13 @@ class EloquentClientRepository implements ClientRepositoryInterface
         );
     }
 
+    public function findById(int $id): DomainClient
+    {
+        $model = EloquentClient::findOrFail($id);
+
+        return $this->toDomainClient($model);
+    }
+
     private function toDomainClient(EloquentClient $model): DomainClient
     {
         return DomainClient::restore(

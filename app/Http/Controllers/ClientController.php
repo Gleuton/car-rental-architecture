@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Core\Client\Application\DTOs\ClientIdDTO;
 use App\Core\Client\Application\DTOs\CreateClientDTO;
 use App\Core\Client\Application\DTOs\FilterClientDTO;
 use App\Core\Client\Application\UseCases\CreateClientUseCase;
+use App\Core\Client\Application\UseCases\FindClientByIdUseCase;
 use App\Core\Client\Application\UseCases\ListClientsUseCase;
 use App\Core\Client\Domain\Exceptions\ClientDomainException;
 use App\Http\Requests\Client\IndexClientRequest;
@@ -20,6 +22,7 @@ class ClientController extends Controller
     public function __construct(
         private readonly ListClientsUseCase $listClientsUseCase,
         private readonly CreateClientUseCase $createClientUseCase,
+        private readonly FindClientByIdUseCase $findClientByIdUseCase,
     ) {}
 
     /**
@@ -59,9 +62,13 @@ class ClientController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Client $client)
+    public function show(int $clientId): JsonResponse
     {
-        //
+        $dto = ClientIdDTO::fromId($clientId);
+
+        $client = $this->findClientByIdUseCase->execute($dto);
+
+        return response()->json(['data' => $client]);
     }
 
     /**
