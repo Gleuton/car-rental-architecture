@@ -54,11 +54,17 @@ final class ClientCollection implements DomainCollectionInterface, JsonSerializa
         return count($this->items);
     }
 
+    /**
+     * @return ArrayIterator<int, Client>
+     */
     public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->items);
     }
 
+    /**
+     * @return list<Client>
+     */
     public function jsonSerialize(): array
     {
         return $this->items;
