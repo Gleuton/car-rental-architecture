@@ -8,6 +8,7 @@ use App\Core\Client\Application\DTOs\ClientIdDTO;
 use App\Core\Client\Application\DTOs\CreateClientDTO;
 use App\Core\Client\Application\DTOs\FilterClientDTO;
 use App\Core\Client\Application\UseCases\CreateClientUseCase;
+use App\Core\Client\Application\UseCases\DeleteClientUseCase;
 use App\Core\Client\Application\UseCases\FindClientByIdUseCase;
 use App\Core\Client\Application\UseCases\ListClientsUseCase;
 use App\Core\Client\Domain\Exceptions\ClientDomainException;
@@ -23,6 +24,7 @@ class ClientController extends Controller
         private readonly ListClientsUseCase $listClientsUseCase,
         private readonly CreateClientUseCase $createClientUseCase,
         private readonly FindClientByIdUseCase $findClientByIdUseCase,
+        private readonly DeleteClientUseCase $deleteClientUseCase,
     ) {}
 
     /**
@@ -82,8 +84,12 @@ class ClientController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Client $client)
+    public function destroy(int $clientId): JsonResponse
     {
-        //
+        $dto = ClientIdDTO::fromId($clientId);
+
+        $this->deleteClientUseCase->execute($dto);
+
+        return response()->json([], 204);
     }
 }

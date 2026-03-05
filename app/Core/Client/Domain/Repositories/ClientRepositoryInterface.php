@@ -19,4 +19,6 @@ interface ClientRepositoryInterface
     public function findByFilters(ClientFilter $filters): PaginatedResult;
 
     public function findById(int $id): Client;
+
+    public function delete(int $id): void;
 }
