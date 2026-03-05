@@ -14,6 +14,15 @@ use App\Models\Client as EloquentClient;
 
 class EloquentClientRepository implements ClientRepositoryInterface
 {
+    public function save(DomainClient $client): DomainClient
+    {
+        $model = EloquentClient::create([
+            'name' => $client->name,
+        ]);
+
+        return $this->toDomainClient($model);
+    }
+
     /**
      * @return PaginatedResult<ClientCollection>
      */

@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Core\Client\Application\DTOs\CreateClientDTO;
 use App\Core\Client\Application\DTOs\FilterClientDTO;
+use App\Core\Client\Application\UseCases\CreateClientUseCase;
 use App\Core\Client\Application\UseCases\ListClientsUseCase;
+use App\Core\Client\Domain\Exceptions\ClientDomainException;
 use App\Http\Requests\Client\IndexClientRequest;
+use App\Http\Requests\Client\StoreClientRequest;
 use App\Models\Client;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -15,6 +19,7 @@ class ClientController extends Controller
 {
     public function __construct(
         private readonly ListClientsUseCase $listClientsUseCase,
+        private readonly CreateClientUseCase $createClientUseCase,
     ) {}
 
     /**
@@ -39,10 +44,16 @@ class ClientController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     *
+     * @throws ClientDomainException
      */
-    public function store(Request $request)
+    public function store(StoreClientRequest $request): JsonResponse
     {
-        //
+        $dto = CreateClientDTO::fromRequest($request);
+
+        $client = $this->createClientUseCase->execute($dto);
+
+        return response()->json(['data' => $client], 201);
     }
 
     /**
