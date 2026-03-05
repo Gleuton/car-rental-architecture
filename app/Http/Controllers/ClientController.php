@@ -7,16 +7,17 @@ namespace App\Http\Controllers;
 use App\Core\Client\Application\DTOs\ClientIdDTO;
 use App\Core\Client\Application\DTOs\CreateClientDTO;
 use App\Core\Client\Application\DTOs\FilterClientDTO;
+use App\Core\Client\Application\DTOs\UpdateClientDTO;
 use App\Core\Client\Application\UseCases\CreateClientUseCase;
 use App\Core\Client\Application\UseCases\DeleteClientUseCase;
 use App\Core\Client\Application\UseCases\FindClientByIdUseCase;
 use App\Core\Client\Application\UseCases\ListClientsUseCase;
+use App\Core\Client\Application\UseCases\UpdateClientUseCase;
 use App\Core\Client\Domain\Exceptions\ClientDomainException;
 use App\Http\Requests\Client\IndexClientRequest;
 use App\Http\Requests\Client\StoreClientRequest;
-use App\Models\Client;
+use App\Http\Requests\Client\UpdateClientRequest;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
@@ -25,6 +26,7 @@ class ClientController extends Controller
         private readonly CreateClientUseCase $createClientUseCase,
         private readonly FindClientByIdUseCase $findClientByIdUseCase,
         private readonly DeleteClientUseCase $deleteClientUseCase,
+        private readonly UpdateClientUseCase $updateClientUseCase,
     ) {}
 
     /**
@@ -75,10 +77,16 @@ class ClientController extends Controller
 
     /**
      * Update the specified resource in storage.
+     *
+     * @throws ClientDomainException
      */
-    public function update(Request $request, Client $client)
+    public function update(UpdateClientRequest $request, int $clientId): JsonResponse
     {
-        //
+        $dto = UpdateClientDTO::fromRequest($request, $clientId);
+
+        $client = $this->updateClientUseCase->execute($dto);
+
+        return response()->json(['data' => $client]);
     }
 
     /**

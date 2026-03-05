@@ -38,3 +38,21 @@ it('can create a Client with name at max length', function () {
     expect($client->name)->toBe($longName)
         ->and($client->id)->toBeNull();
 });
+
+it('can update client name keeping same id', function () {
+    $client = Client::restore(1, 'John Doe');
+
+    $updated = $client->update('John Updated');
+
+    expect($updated->id)->toBe(1)
+        ->and($updated->name)->toBe('John Updated');
+});
+
+it('keeps current name when update receives null', function () {
+    $client = Client::restore(1, 'John Doe');
+
+    $updated = $client->update(null);
+
+    expect($updated->id)->toBe(1)
+        ->and($updated->name)->toBe('John Doe');
+});

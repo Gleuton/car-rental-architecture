@@ -50,6 +50,17 @@ class EloquentClientRepository implements ClientRepositoryInterface
         return $this->toDomainClient($model);
     }
 
+    public function update(DomainClient $client): DomainClient
+    {
+        $model = EloquentClient::findOrFail($client->id);
+
+        $model->update([
+            'name' => $client->name,
+        ]);
+
+        return $this->toDomainClient($model);
+    }
+
     public function delete(int $id): void
     {
         $model = EloquentClient::findOrFail($id);

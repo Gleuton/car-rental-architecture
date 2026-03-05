@@ -47,4 +47,14 @@ readonly class Client
             throw new ClientDomainException('Client name must not exceed 255 characters');
         }
     }
+
+    /**
+     * @throws ClientDomainException
+     */
+    public function update(?string $name = null): self
+    {
+        $newName = $name ?? $this->name;
+
+        return new self($this->id, $newName);
+    }
 }

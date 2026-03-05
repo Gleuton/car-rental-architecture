@@ -20,5 +20,7 @@ interface ClientRepositoryInterface
 
     public function findById(int $id): Client;
 
+    public function update(Client $client): Client;
+
     public function delete(int $id): void;
 }
