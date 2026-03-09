@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Core\Rental\Appliocation\DTOs\CreateRentalDTO;
 use App\Http\Requests\Rental\StoreRentalRequest;
 use App\Models\Rental;
 use Illuminate\Http\JsonResponse;
@@ -24,7 +25,16 @@ class RentalController extends Controller
      */
     public function store(StoreRentalRequest $request): JsonResponse
     {
-        $rental = Rental::create($request->validated());
+        $dto = CreateRentalDTO::fromRequest($request);
+        $rental = Rental::create([
+            'client_id' => $dto->clientId,
+            'car_id' => $dto->carId,
+            'start_date' => $dto->startDate,
+            'end_date' => $dto->endDate,
+            'initial_km' => $dto->initialKm,
+            'final_km' => $dto->finalKm,
+            'day_price_cents' => $dto->dayPriceCents,
+        ]);
 
         return response()->json(['data' => $rental], 201);
     }
