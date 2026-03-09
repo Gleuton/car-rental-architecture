@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Core\Rental\Appliocation\DTOs\CreateRentalDTO;
+use App\Core\Rental\Application\DTOs\CreateRentalDTO;
+use App\Core\Rental\Application\UseCases\CreateRentalUseCase;
 use App\Http\Requests\Rental\StoreRentalRequest;
 use App\Models\Rental;
 use Illuminate\Http\JsonResponse;
@@ -12,6 +13,10 @@ use Illuminate\Http\Request;
 
 class RentalController extends Controller
 {
+    public function __construct(
+        private readonly CreateRentalUseCase $createRentalUseCase,
+    ) {}
+
     /**
      * Display a listing of the resource.
      */
@@ -26,15 +31,7 @@ class RentalController extends Controller
     public function store(StoreRentalRequest $request): JsonResponse
     {
         $dto = CreateRentalDTO::fromRequest($request);
-        $rental = Rental::create([
-            'client_id' => $dto->clientId,
-            'car_id' => $dto->carId,
-            'start_date' => $dto->startDate,
-            'end_date' => $dto->endDate,
-            'initial_km' => $dto->initialKm,
-            'final_km' => $dto->finalKm,
-            'day_price_cents' => $dto->dayPriceCents,
-        ]);
+        $rental = $this->createRentalUseCase->execute($dto);
 
         return response()->json(['data' => $rental], 201);
     }

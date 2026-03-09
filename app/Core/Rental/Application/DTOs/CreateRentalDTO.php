@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Core\Rental\Appliocation\DTOs;
+namespace App\Core\Rental\Application\DTOs;
 
 use App\Http\Requests\Rental\StoreRentalRequest;
 
