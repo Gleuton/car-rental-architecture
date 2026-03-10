@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace App\Core\Rental\Domain\Entity;
 
+use App\Core\Rental\Domain\Errors\RentalError;
+use App\Core\Rental\Domain\Exceptions\RentalDomainException;
 use DateTime;
-use Exception;
 
 readonly class Rental
 {
     /**
-     * @throws Exception
+     * @throws RentalDomainException
      */
     private function __construct(
         public ?int $id,
@@ -29,7 +30,7 @@ readonly class Rental
     }
 
     /**
-     * @throws Exception
+     * @throws RentalDomainException
      */
     public static function new(
         int $carId,
@@ -53,7 +54,7 @@ readonly class Rental
     }
 
     /**
-     * @throws Exception
+     * @throws RentalDomainException
      */
     public static function restore(
         int $id,
@@ -77,20 +78,26 @@ readonly class Rental
         );
     }
 
-    private function validateDateTime(string $startDate): void
+    /**
+     * @throws RentalDomainException
+     */
+    private function validateDateTime(string $dateString): void
     {
-        if (! DateTime::createFromFormat('Y-m-d H:i:s', $startDate)) {
-            throw new Exception('Invalid date format');
+        if (! DateTime::createFromFormat('Y-m-d H:i:s', $dateString)) {
+            throw new RentalDomainException(RentalError::INVALID_DATE_FORMAT);
         }
     }
 
+    /**
+     * @throws RentalDomainException
+     */
     private function validateInterval(): void
     {
         $startDate = DateTime::createFromFormat('Y-m-d H:i:s', $this->startDate);
         $endDate = DateTime::createFromFormat('Y-m-d H:i:s', $this->endDate);
 
         if ($startDate > $endDate) {
-            throw new Exception('Invalid date');
+            throw new RentalDomainException(RentalError::INVALID_DATE_INTERVAL);
         }
     }
 }
