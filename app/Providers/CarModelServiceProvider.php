@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Core\CarModel\Domain\Repositories\CarModelRepositoryInterface;
-use App\Core\CarModel\Infra\EloquentCarModelRepository;
+use App\Core\CarModel\Infra\Persistence\EloquentCarModelRepository;
 use Illuminate\Support\ServiceProvider;
 
 class CarModelServiceProvider extends ServiceProvider

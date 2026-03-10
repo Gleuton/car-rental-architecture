@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Core\Car\Infra;
+namespace App\Core\Car\Infra\Persistence;
 
 use App\Core\Car\Domain\Entity\Car;
 use App\Core\Car\Domain\Entity\CarCollection;
