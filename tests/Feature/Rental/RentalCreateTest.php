@@ -14,8 +14,8 @@ it('can create a Rental', function () {
     /** @var Car $car */
     $car = Car::factory()->create();
 
-    $startDate = now()->toDateTime()->format('Y-m-d H:i:s');
-    $endDate = now()->addDays(30)->toDateTime()->format('Y-m-d H:i:s');
+    $startDate = now()->toDateTime();
+    $endDate = now()->addDays(30)->toDateTime();
     $dayPrice = 5000;
     $initialKm = 1000;
     $finalKm = 1500;
@@ -23,8 +23,8 @@ it('can create a Rental', function () {
     $data = [
         'client_id' => $cliente->id,
         'car_id' => $car->id,
-        'start_date' => $startDate,
-        'end_date' => $endDate,
+        'start_date' => $startDate->format('Y-m-d H:i:s'),
+        'end_date' => $endDate->format('Y-m-d H:i:s'),
         'day_price_cents' => $dayPrice,
         'initial_km' => $initialKm,
         'final_km' => $finalKm,
@@ -34,8 +34,8 @@ it('can create a Rental', function () {
 
     $response->assertStatus(201)
         ->assertJsonPath('data.id', fn ($id) => is_int($id))
-        ->assertJsonPath('data.startDate', $startDate)
-        ->assertJsonPath('data.endDate', $endDate)
+        ->assertJsonPath('data.startDate', $startDate->format('Y-m-d H:i:s'))
+        ->assertJsonPath('data.endDate', $endDate->format('Y-m-d H:i:s'))
         ->assertJsonPath('data.dayPriceCents', $dayPrice)
         ->assertJsonPath('data.initialKm', $initialKm)
         ->assertJsonPath('data.finalKm', $finalKm);

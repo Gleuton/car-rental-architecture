@@ -17,12 +17,15 @@ readonly class Rental
         public int $carId,
         public int $clientId,
         public int $dayPriceCents,
-        public DateTime $startDate,
-        public DateTime $endDate,
+        public string $startDate,
+        public string $endDate,
         public int $initialKm,
         public int $finalKm,
     ) {
-        $this->validateStartEnd();
+        $this->validateDateTime($startDate);
+        $this->validateDateTime($endDate);
+
+        $this->validateInterval();
     }
 
     /**
@@ -32,8 +35,8 @@ readonly class Rental
         int $carId,
         int $clientId,
         int $dayPriceCents,
-        DateTime $startDate,
-        DateTime $endDate,
+        string $startDate,
+        string $endDate,
         int $initialKm,
         int $finalKm,
     ): self {
@@ -57,8 +60,8 @@ readonly class Rental
         int $carId,
         int $clientId,
         int $dayPriceCents,
-        DateTime $startDate,
-        DateTime $endDate,
+        string $startDate,
+        string $endDate,
         int $initialKm,
         int $finalKm
     ): self {
@@ -74,9 +77,19 @@ readonly class Rental
         );
     }
 
-    private function validateStartEnd(): void
+    private function validateDateTime(string $startDate): void
     {
-        if ($this->startDate > $this->endDate) {
+        if (! DateTime::createFromFormat('Y-m-d H:i:s', $startDate)) {
+            throw new Exception('Invalid date format');
+        }
+    }
+
+    private function validateInterval(): void
+    {
+        $startDate = DateTime::createFromFormat('Y-m-d H:i:s', $this->startDate);
+        $endDate = DateTime::createFromFormat('Y-m-d H:i:s', $this->endDate);
+
+        if ($startDate > $endDate) {
             throw new Exception('Invalid date');
         }
     }

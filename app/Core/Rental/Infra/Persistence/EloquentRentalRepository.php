@@ -32,8 +32,8 @@ class EloquentRentalRepository implements RentalRepositoryInterface
             $model->car_id,
             $model->client_id,
             $model->day_price_cents,
-            $model->start_date,
-            $model->end_date,
+            $model->start_date->format('Y-m-d H:i:s'),
+            $model->end_date->format('Y-m-d H:i:s'),
             $model->initial_km,
             $model->final_km,
         );
