@@ -27,11 +27,11 @@ class StoreRentalRequest extends FormRequest
         return [
             'client_id' => 'required|integer',
             'car_id' => 'required|integer',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date',
-            'day_price_cents' => 'required|numeric|min:0',
-            'initial_km' => 'required|integer|min:0',
-            'final_km' => 'required|integer|min:0',
+            'start_date' => 'required|string',
+            'end_date' => 'required|string',
+            'day_price_cents' => 'required|integer',
+            'initial_km' => 'required|integer',
+            'final_km' => 'required|integer',
         ];
     }
 }

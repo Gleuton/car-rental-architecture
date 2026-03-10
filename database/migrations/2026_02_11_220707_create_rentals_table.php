@@ -22,8 +22,8 @@ return new class extends Migration
                 ->constrained()
                 ->restrictOnDelete();
 
-            $table->date('start_date');
-            $table->date('end_date');
+            $table->dateTime('start_date');
+            $table->dateTime('end_date');
             $table->unsignedInteger('day_price_cents')->default(0);
             $table->unsignedInteger('initial_km')->default(0);
             $table->unsignedInteger('final_km')->default(0);
