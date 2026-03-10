@@ -8,7 +8,7 @@ use App\Core\Rental\Domain\Errors\RentalError;
 use App\Core\Rental\Domain\Exceptions\RentalDomainException;
 use DateTimeImmutable;
 
-readonly class Rental
+class Rental
 {
     private DateTimeImmutable $startAt;
 
@@ -20,14 +20,14 @@ readonly class Rental
      * @throws RentalDomainException
      */
     private function __construct(
-        public ?int $id,
-        public int $carId,
-        public int $clientId,
-        public int $dayPriceCents,
-        public string $startDate,
-        public string $endDate,
-        public int $initialKm,
-        public int $finalKm,
+        public readonly ?int $id,
+        public readonly int $carId,
+        public readonly int $clientId,
+        public readonly int $dayPriceCents,
+        public readonly string $startDate,
+        public readonly string $endDate,
+        public readonly int $initialKm,
+        public readonly int $finalKm,
     ) {
         $this->startAt = $this->parseDateTime($this->startDate);
         $this->endAt = $this->parseDateTime($this->endDate);
