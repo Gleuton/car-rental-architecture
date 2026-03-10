@@ -6,7 +6,9 @@ namespace App\Http\Controllers;
 
 use App\Core\Rental\Application\DTOs\CreateRentalDTO;
 use App\Core\Rental\Application\DTOs\FilterRentalDTO;
+use App\Core\Rental\Application\DTOs\RentalIdDTO;
 use App\Core\Rental\Application\UseCases\CreateRentalUseCase;
+use App\Core\Rental\Application\UseCases\FindRentalByIdUseCase;
 use App\Core\Rental\Application\UseCases\ListRentalsUseCase;
 use App\Http\Requests\Rental\IndexRentalRequest;
 use App\Http\Requests\Rental\StoreRentalRequest;
@@ -19,6 +21,7 @@ class RentalController extends Controller
     public function __construct(
         private readonly CreateRentalUseCase $createRentalUseCase,
         private readonly ListRentalsUseCase $listRentalsUseCase,
+        private readonly FindRentalByIdUseCase $findRentalByIdUseCase,
     ) {}
 
     /**
@@ -54,9 +57,12 @@ class RentalController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Rental $rental)
+    public function show(int $rentalId): JsonResponse
     {
-        //
+        $dto = RentalIdDTO::fromId($rentalId);
+        $rental = $this->findRentalByIdUseCase->execute($dto);
+
+        return response()->json(['data' => $rental]);
     }
 
     /**

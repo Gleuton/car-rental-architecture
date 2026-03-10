@@ -1,0 +1,50 @@
+<?php
+
+declare(strict_types=1);
+
+use App\Core\Rental\Application\DTOs\RentalIdDTO;
+use App\Core\Rental\Application\UseCases\FindRentalByIdUseCase;
+use App\Core\Rental\Domain\Entity\Rental;
+use App\Core\Rental\Domain\Repositories\RentalRepositoryInterface;
+
+it('finds a rental by ID successfully', function () {
+    $dto = RentalIdDTO::fromId(1);
+
+    $repository = Mockery::mock(RentalRepositoryInterface::class);
+
+    $expectedRental = Rental::restore(
+        1,
+        1,
+        1,
+        5000,
+        '2026-03-01 08:00:00',
+        '2026-03-05 08:00:00',
+        1000,
+        1500,
+    );
+
+    $repository->shouldReceive('findById')
+        ->with(1)
+        ->once()
+        ->andReturn($expectedRental);
+
+    $useCase = new FindRentalByIdUseCase($repository);
+    $result = $useCase->execute($dto);
+
+    expect($result)->toBe($expectedRental);
+});
+
+it('propagates exception when rental is not found', function () {
+    $dto = RentalIdDTO::fromId(999);
+
+    $repository = Mockery::mock(RentalRepositoryInterface::class);
+    $repository->shouldReceive('findById')
+        ->with(999)
+        ->once()
+        ->andThrow(new RuntimeException('Rental not found'));
+
+    $useCase = new FindRentalByIdUseCase($repository);
+
+    expect(fn () => $useCase->execute($dto))
+        ->toThrow(RuntimeException::class);
+});

@@ -29,6 +29,13 @@ class EloquentRentalRepository implements RentalRepositoryInterface
         return $this->toDomain($model);
     }
 
+    public function findById(int $id): DomainRental
+    {
+        $model = EloquentRental::findOrFail($id);
+
+        return $this->toDomain($model);
+    }
+
     /**
      * @return PaginatedResult<RentalCollection>
      */

@@ -13,6 +13,8 @@ interface RentalRepositoryInterface
 {
     public function save(Rental $rental): Rental;
 
+    public function findById(int $id): Rental;
+
     /**
      * @return PaginatedResult<RentalCollection>
      */
