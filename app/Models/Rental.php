@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Rental extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'car_id',
         'client_id',
@@ -33,6 +36,6 @@ class Rental extends Model
 
     public function client(): BelongsTo
     {
-        return $this->belongsTo(user::class);
+        return $this->belongsTo(Client::class);
     }
 }

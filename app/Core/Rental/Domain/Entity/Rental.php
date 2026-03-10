@@ -14,6 +14,8 @@ readonly class Rental
 
     private DateTimeImmutable $endAt;
 
+    public private(set) float $totalPrice;
+
     /**
      * @throws RentalDomainException
      */
@@ -33,6 +35,7 @@ readonly class Rental
         $this->validatePrice();
         $this->validateMileage();
         $this->validateInterval();
+        $this->calculateTotalPrice();
     }
 
     /**
@@ -137,5 +140,10 @@ readonly class Rental
         if ($this->startAt > $this->endAt) {
             throw new RentalDomainException(RentalError::INVALID_DATE_INTERVAL);
         }
+    }
+
+    private function calculateTotalPrice(): void
+    {
+        $this->totalPrice = ($this->dayPriceCents * $this->endAt->diff($this->startAt)->days) / 100;
     }
 }

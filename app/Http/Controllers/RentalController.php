@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Core\Rental\Application\DTOs\CreateRentalDTO;
+use App\Core\Rental\Application\DTOs\FilterRentalDTO;
 use App\Core\Rental\Application\UseCases\CreateRentalUseCase;
+use App\Core\Rental\Application\UseCases\ListRentalsUseCase;
+use App\Http\Requests\Rental\IndexRentalRequest;
 use App\Http\Requests\Rental\StoreRentalRequest;
 use App\Models\Rental;
 use Illuminate\Http\JsonResponse;
@@ -15,14 +18,26 @@ class RentalController extends Controller
 {
     public function __construct(
         private readonly CreateRentalUseCase $createRentalUseCase,
+        private readonly ListRentalsUseCase $listRentalsUseCase,
     ) {}
 
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(IndexRentalRequest $request): JsonResponse
     {
-        //
+        $filters = FilterRentalDTO::fromRequest($request);
+        $rentals = $this->listRentalsUseCase->execute($filters);
+
+        return response()->json([
+            'data' => $rentals->items,
+            'meta' => [
+                'current_page' => $rentals->page,
+                'per_page' => $rentals->perPage,
+                'total' => $rentals->total,
+                'last_page' => $rentals->lastPage,
+            ],
+        ]);
     }
 
     /**
