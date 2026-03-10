@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Core\Brand\Domain\Repositories\BrandRepositoryInterface;
-use App\Core\Brand\Infra\Persistence\EloquentRentalRepository;
+use App\Core\Brand\Infra\Persistence\EloquentBrandRepository;
 use Illuminate\Support\ServiceProvider;
 
 class BrandServiceProvider extends ServiceProvider
@@ -17,7 +17,7 @@ class BrandServiceProvider extends ServiceProvider
     {
         $this->app->bind(
             BrandRepositoryInterface::class,
-            EloquentRentalRepository::class
+            EloquentBrandRepository::class
         );
     }
 
