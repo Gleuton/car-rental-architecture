@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Models\Car;
-use App\Models\Client;
 use App\Models\Rental;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -43,15 +41,12 @@ it('can list all rentals returning with price calculated', function () {
 });
 
 it('filters rentals by start_date range', function () {
-    $client = Client::factory()->create();
-    $car = Car::factory()->create();
-
-    Rental::factory()->for($car)->for($client)->create([
+    Rental::factory()->create([
         'start_date' => '2026-03-01 08:00:00',
         'end_date' => '2026-03-02 08:00:00',
     ]);
 
-    Rental::factory()->for($car)->for($client)->create([
+    Rental::factory()->create([
         'start_date' => '2026-03-10 08:00:00',
         'end_date' => '2026-03-11 08:00:00',
     ]);
@@ -64,15 +59,12 @@ it('filters rentals by start_date range', function () {
 });
 
 it('applies default ordering by start_date', function () {
-    $client = Client::factory()->create();
-    $car = Car::factory()->create();
-
-    $lateRental = Rental::factory()->for($car)->for($client)->create([
+    $lateRental = Rental::factory()->create([
         'start_date' => '2026-03-10 08:00:00',
         'end_date' => '2026-03-11 08:00:00',
     ]);
 
-    $earlyRental = Rental::factory()->for($car)->for($client)->create([
+    $earlyRental = Rental::factory()->create([
         'start_date' => '2026-03-01 08:00:00',
         'end_date' => '2026-03-02 08:00:00',
     ]);
@@ -86,17 +78,10 @@ it('applies default ordering by start_date', function () {
 });
 
 it('can paginate rentals', function () {
-    $client = Client::factory()->create();
-    $car = Car::factory()->create();
-
-    for ($day = 1; $day <= 20; $day++) {
-        $date = sprintf('2026-03-%02d', $day);
-
-        Rental::factory()->for($car)->for($client)->create([
-            'start_date' => $date.' 08:00:00',
-            'end_date' => $date.' 18:00:00',
-        ]);
-    }
+    Rental::factory(20)->create([
+        'start_date' => '2026-03-01 08:00:00',
+        'end_date' => '2026-03-05 18:00:00',
+    ]);
 
     $response = $this->getJson('/api/rentals?per_page=5&page=2');
 
