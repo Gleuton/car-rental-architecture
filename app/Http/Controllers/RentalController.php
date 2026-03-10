@@ -7,15 +7,16 @@ namespace App\Http\Controllers;
 use App\Core\Rental\Application\DTOs\CreateRentalDTO;
 use App\Core\Rental\Application\DTOs\FilterRentalDTO;
 use App\Core\Rental\Application\DTOs\RentalIdDTO;
+use App\Core\Rental\Application\DTOs\UpdateRentalDTO;
 use App\Core\Rental\Application\UseCases\CreateRentalUseCase;
 use App\Core\Rental\Application\UseCases\DeleteRentalUseCase;
 use App\Core\Rental\Application\UseCases\FindRentalByIdUseCase;
 use App\Core\Rental\Application\UseCases\ListRentalsUseCase;
+use App\Core\Rental\Application\UseCases\UpdateRentalUseCase;
 use App\Http\Requests\Rental\IndexRentalRequest;
 use App\Http\Requests\Rental\StoreRentalRequest;
-use App\Models\Rental;
+use App\Http\Requests\Rental\UpdateRentalRequest;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class RentalController extends Controller
 {
@@ -24,6 +25,7 @@ class RentalController extends Controller
         private readonly ListRentalsUseCase $listRentalsUseCase,
         private readonly FindRentalByIdUseCase $findRentalByIdUseCase,
         private readonly DeleteRentalUseCase $deleteRentalUseCase,
+        private readonly UpdateRentalUseCase $updateRentalUseCase,
     ) {}
 
     /**
@@ -70,9 +72,12 @@ class RentalController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Rental $rental)
+    public function update(UpdateRentalRequest $request, int $rentalId): JsonResponse
     {
-        //
+        $dto = UpdateRentalDTO::fromRequest($request, $rentalId);
+        $rental = $this->updateRentalUseCase->execute($dto);
+
+        return response()->json(['data' => $rental]);
     }
 
     /**

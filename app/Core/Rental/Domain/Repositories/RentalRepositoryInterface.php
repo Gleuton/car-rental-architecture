@@ -17,6 +17,8 @@ interface RentalRepositoryInterface
 
     public function delete(int $id): void;
 
+    public function update(Rental $rental): Rental;
+
     /**
      * @return PaginatedResult<RentalCollection>
      */

@@ -41,6 +41,23 @@ class EloquentRentalRepository implements RentalRepositoryInterface
         EloquentRental::findOrFail($id)->delete();
     }
 
+    public function update(DomainRental $rental): DomainRental
+    {
+        $model = EloquentRental::findOrFail($rental->id);
+
+        $model->update([
+            'car_id' => $rental->carId,
+            'client_id' => $rental->clientId,
+            'day_price_cents' => $rental->dayPriceCents,
+            'start_date' => $rental->startDate,
+            'end_date' => $rental->endDate,
+            'initial_km' => $rental->initialKm,
+            'final_km' => $rental->finalKm,
+        ]);
+
+        return $this->toDomain($model);
+    }
+
     /**
      * @return PaginatedResult<RentalCollection>
      */
