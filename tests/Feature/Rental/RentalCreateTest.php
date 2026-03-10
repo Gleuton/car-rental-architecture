@@ -14,8 +14,8 @@ it('can create a Rental', function () {
     /** @var Car $car */
     $car = Car::factory()->create();
 
-    $startDate = now()->toDateString();
-    $endDate = now()->addDays(30)->toDateString();
+    $startDate = now()->toDateTime()->format('Y-m-d H:i:s');
+    $endDate = now()->addDays(30)->toDateTime()->format('Y-m-d H:i:s');
     $dayPrice = 5000;
     $initialKm = 1000;
     $finalKm = 1500;
@@ -34,11 +34,11 @@ it('can create a Rental', function () {
 
     $response->assertStatus(201)
         ->assertJsonPath('data.id', fn ($id) => is_int($id))
-        ->assertJsonPath('data.start_date', $startDate)
-        ->assertJsonPath('data.end_date', $endDate)
-        ->assertJsonPath('data.day_price_cents', $dayPrice)
-        ->assertJsonPath('data.initial_km', $initialKm)
-        ->assertJsonPath('data.final_km', $finalKm);
+        ->assertJsonPath('data.startDate', $startDate)
+        ->assertJsonPath('data.endDate', $endDate)
+        ->assertJsonPath('data.dayPriceCents', $dayPrice)
+        ->assertJsonPath('data.initialKm', $initialKm)
+        ->assertJsonPath('data.finalKm', $finalKm);
 
     $this->assertDatabaseHas('rentals', [
         'client_id' => $cliente->id,

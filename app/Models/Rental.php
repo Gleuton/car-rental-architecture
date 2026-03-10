@@ -19,6 +19,13 @@ class Rental extends Model
         'final_km',
     ];
 
+    protected array $dates = ['start_date', 'end_date'];
+
+    protected $casts = [
+        'start_date' => 'datetime',
+        'end_date' => 'datetime',
+    ];
+
     public function car(): BelongsTo
     {
         return $this->belongsTo(Car::class);

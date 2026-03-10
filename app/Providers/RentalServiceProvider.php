@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use App\Core\Client\Domain\Repositories\ClientRepositoryInterface;
-use App\Core\Client\Infra\EloquentClientRepository;
+use App\Core\Rental\Domain\Repositories\RentalRepositoryInterface;
+use App\Core\Rental\Infra\Persistence\EloquentRentalRepository;
 use Illuminate\Support\ServiceProvider;
 
-class ClientServiceProvider extends ServiceProvider
+class RentalServiceProvider extends ServiceProvider
 {
     /**
      * Register services.
@@ -16,8 +16,8 @@ class ClientServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(
-            ClientRepositoryInterface::class,
-            EloquentClientRepository::class
+            RentalRepositoryInterface::class,
+            EloquentRentalRepository::class
         );
     }
 
