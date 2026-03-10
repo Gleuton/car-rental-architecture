@@ -17,8 +17,8 @@ readonly class Rental
         public int $carId,
         public int $clientId,
         public int $dayPriceCents,
-        public string $startDate,
-        public string $endDate,
+        public DateTime $startDate,
+        public DateTime $endDate,
         public int $initialKm,
         public int $finalKm,
     ) {
@@ -32,8 +32,8 @@ readonly class Rental
         int $carId,
         int $clientId,
         int $dayPriceCents,
-        string $startDate,
-        string $endDate,
+        DateTime $startDate,
+        DateTime $endDate,
         int $initialKm,
         int $finalKm,
     ): self {

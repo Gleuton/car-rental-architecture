@@ -7,6 +7,7 @@ namespace App\Core\Rental\Application\UseCases;
 use App\Core\Rental\Application\DTOs\CreateRentalDTO;
 use App\Core\Rental\Domain\Entity\Rental;
 use App\Core\Rental\Domain\Repositories\RentalRepositoryInterface;
+use DateTime;
 use Exception;
 
 readonly class CreateRentalUseCase
@@ -24,8 +25,8 @@ readonly class CreateRentalUseCase
             $dto->carId,
             $dto->clientId,
             $dto->dayPriceCents,
-            $dto->startDate,
-            $dto->endDate,
+            new DateTime($dto->startDate),
+            new DateTime($dto->endDate),
             $dto->initialKm,
             $dto->finalKm,
         );
