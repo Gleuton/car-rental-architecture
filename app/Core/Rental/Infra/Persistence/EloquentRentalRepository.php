@@ -36,6 +36,11 @@ class EloquentRentalRepository implements RentalRepositoryInterface
         return $this->toDomain($model);
     }
 
+    public function delete(int $id): void
+    {
+        EloquentRental::findOrFail($id)->delete();
+    }
+
     /**
      * @return PaginatedResult<RentalCollection>
      */

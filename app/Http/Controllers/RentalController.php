@@ -8,6 +8,7 @@ use App\Core\Rental\Application\DTOs\CreateRentalDTO;
 use App\Core\Rental\Application\DTOs\FilterRentalDTO;
 use App\Core\Rental\Application\DTOs\RentalIdDTO;
 use App\Core\Rental\Application\UseCases\CreateRentalUseCase;
+use App\Core\Rental\Application\UseCases\DeleteRentalUseCase;
 use App\Core\Rental\Application\UseCases\FindRentalByIdUseCase;
 use App\Core\Rental\Application\UseCases\ListRentalsUseCase;
 use App\Http\Requests\Rental\IndexRentalRequest;
@@ -22,6 +23,7 @@ class RentalController extends Controller
         private readonly CreateRentalUseCase $createRentalUseCase,
         private readonly ListRentalsUseCase $listRentalsUseCase,
         private readonly FindRentalByIdUseCase $findRentalByIdUseCase,
+        private readonly DeleteRentalUseCase $deleteRentalUseCase,
     ) {}
 
     /**
@@ -76,8 +78,12 @@ class RentalController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Rental $rental)
+    public function destroy(int $rentalId): JsonResponse
     {
-        //
+        $dto = RentalIdDTO::fromId($rentalId);
+
+        $this->deleteRentalUseCase->execute($dto);
+
+        return response()->json([], 204);
     }
 }
