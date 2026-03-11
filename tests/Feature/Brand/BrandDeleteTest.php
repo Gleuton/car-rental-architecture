@@ -3,7 +3,9 @@
 declare(strict_types=1);
 
 use App\Models\Brand;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 uses(RefreshDatabase::class);
@@ -13,6 +15,8 @@ beforeEach(function () {
 });
 
 it('can delete brand', function () {
+    Auth::guard('api')->login(User::factory()->create());
+
     /** @var Brand $factoryBrand */
     $factoryBrand = Brand::factory()->create(['name' => 'Toyota', 'image' => 'brands/toyota.png']);
     Storage::disk('public')->put('brands/toyota.png', 'fake content');
@@ -29,7 +33,15 @@ it('can delete brand', function () {
 });
 
 it('returns 404 when deleting non-existent brand', function () {
+    Auth::guard('api')->login(User::factory()->create());
+
     $response = $this->deleteJson('/api/brands/999');
 
     $response->assertStatus(404);
+});
+
+it('returns 401 when deleting a brand without authentication', function () {
+    $brand = Brand::factory()->create(['name' => 'Toyota', 'image' => 'brands/toyota.png']);
+    $response = $this->deleteJson('/api/brands/'.$brand->id);
+    $response->assertStatus(401);
 });

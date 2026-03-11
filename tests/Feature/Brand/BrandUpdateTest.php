@@ -3,8 +3,10 @@
 declare(strict_types=1);
 
 use App\Models\Brand;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 uses(RefreshDatabase::class);
@@ -14,6 +16,8 @@ beforeEach(function () {
 });
 
 it('can update all data in brand', function () {
+    Auth::guard('api')->login(User::factory()->create());
+
     /** @var Brand $factoryBrand */
     $factoryBrand = Brand::factory()->create(['name' => 'Toyota_old', 'image' => 'brands/old.png']);
     Storage::disk('public')->put('brands/old.png', 'fake content');
@@ -41,6 +45,8 @@ it('can update all data in brand', function () {
 });
 
 it('can update name only in brand', function () {
+    Auth::guard('api')->login(User::factory()->create());
+
     /** @var Brand $factoryBrand */
     $factoryBrand = Brand::factory()->create(['name' => 'Toyota_old', 'image' => 'brands/old.png']);
 
@@ -61,6 +67,8 @@ it('can update name only in brand', function () {
 });
 
 it('can update image only in brand', function () {
+    Auth::guard('api')->login(User::factory()->create());
+
     /** @var Brand $factoryBrand */
     $factoryBrand = Brand::factory()->create(['name' => 'Toyota_old', 'image' => 'brands/old.png']);
     Storage::disk('public')->put('brands/old.png', 'fake content');
@@ -83,6 +91,8 @@ it('can update image only in brand', function () {
 });
 
 it('cannot update a brand with duplicate name', function () {
+    Auth::guard('api')->login(User::factory()->create());
+
     Brand::factory()->create(['name' => 'Toyota']);
 
     /** @var Brand $factoryBrand */
@@ -103,6 +113,8 @@ it('cannot update a brand with duplicate name', function () {
 });
 
 it('returns 404 when updating non-existent brand', function () {
+    Auth::guard('api')->login(User::factory()->create());
+
     $data = [
         'name' => 'Toyota',
     ];
@@ -110,4 +122,10 @@ it('returns 404 when updating non-existent brand', function () {
     $response = $this->putJson('/api/brands/999', $data);
 
     $response->assertStatus(404);
+});
+
+it('returns 401 when updating a brand without authentication', function () {
+    $brand = Brand::factory()->create(['name' => 'Toyota', 'image' => 'brands/old.png']);
+    $response = $this->putJson('/api/brands/'.$brand->id, ['name' => 'Updated']);
+    $response->assertStatus(401);
 });

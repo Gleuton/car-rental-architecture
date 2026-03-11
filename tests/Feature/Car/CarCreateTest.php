@@ -8,6 +8,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 uses(RefreshDatabase::class);
 
 it('can create a Car', function () {
+    authenticateApi();
+
     /** @var CarModel $carModel */
     $carModel = CarModel::factory()->create();
 
@@ -28,6 +30,8 @@ it('can create a Car', function () {
 });
 
 it('validates required fields when creating a Car', function () {
+    authenticateApi();
+
     $response = $this->postJson('/api/cars', []);
 
     $response->assertStatus(422)
@@ -39,6 +43,8 @@ it('validates required fields when creating a Car', function () {
 });
 
 it('validates license_plate max length when creating a Car', function () {
+    authenticateApi();
+
     /** @var CarModel $carModel */
     $carModel = CarModel::factory()->create();
 
@@ -57,6 +63,8 @@ it('validates license_plate max length when creating a Car', function () {
 });
 
 it('validates color max length when creating a Car', function () {
+    authenticateApi();
+
     /** @var CarModel $carModel */
     $carModel = CarModel::factory()->create();
 
@@ -75,6 +83,8 @@ it('validates color max length when creating a Car', function () {
 });
 
 it('validates km must be a non-negative integer when creating a Car', function () {
+    authenticateApi();
+
     /** @var CarModel $carModel */
     $carModel = CarModel::factory()->create();
 
@@ -93,6 +103,8 @@ it('validates km must be a non-negative integer when creating a Car', function (
 });
 
 it('validates is_available must be a boolean when creating a Car', function () {
+    authenticateApi();
+
     /** @var CarModel $carModel */
     $carModel = CarModel::factory()->create();
 
@@ -111,6 +123,8 @@ it('validates is_available must be a boolean when creating a Car', function () {
 });
 
 it('validates car_model_id must be an integer when creating a Car', function () {
+    authenticateApi();
+
     $data = [
         'car_model_id' => 'invalid',
         'license_plate' => 'ABC-1234',
@@ -126,6 +140,8 @@ it('validates car_model_id must be an integer when creating a Car', function () 
 });
 
 it('creates a Car with default is_available and km values when not provided', function () {
+    authenticateApi();
+
     /** @var CarModel $carModel */
     $carModel = CarModel::factory()->create();
 
@@ -151,6 +167,8 @@ it('creates a Car with default is_available and km values when not provided', fu
 });
 
 it('returns appropriate error when car_model_id does not exist', function () {
+    authenticateApi();
+
     $data = [
         'car_model_id' => 999,
         'license_plate' => 'ABC-1234',
@@ -166,6 +184,8 @@ it('returns appropriate error when car_model_id does not exist', function () {
 });
 
 it('validates license_plate min length when creating a Car', function () {
+    authenticateApi();
+
     /** @var CarModel $carModel */
     $carModel = CarModel::factory()->create();
 
@@ -188,6 +208,8 @@ it('validates license_plate min length when creating a Car', function () {
 });
 
 it('validates color min length when creating a Car', function () {
+    authenticateApi();
+
     /** @var CarModel $carModel */
     $carModel = CarModel::factory()->create();
 
@@ -210,6 +232,8 @@ it('validates color min length when creating a Car', function () {
 });
 
 it('validates license_plate accepts exactly 7 characters', function () {
+    authenticateApi();
+
     /** @var CarModel $carModel */
     $carModel = CarModel::factory()->create();
 
@@ -228,6 +252,8 @@ it('validates license_plate accepts exactly 7 characters', function () {
 });
 
 it('validates license_plate accepts exactly 10 characters', function () {
+    authenticateApi();
+
     /** @var CarModel $carModel */
     $carModel = CarModel::factory()->create();
 
@@ -246,6 +272,8 @@ it('validates license_plate accepts exactly 10 characters', function () {
 });
 
 it('validates color accepts exactly 3 characters', function () {
+    authenticateApi();
+
     /** @var CarModel $carModel */
     $carModel = CarModel::factory()->create();
 
@@ -264,6 +292,8 @@ it('validates color accepts exactly 3 characters', function () {
 });
 
 it('validates color accepts exactly 50 characters', function () {
+    authenticateApi();
+
     /** @var CarModel $carModel */
     $carModel = CarModel::factory()->create();
 
@@ -283,6 +313,8 @@ it('validates color accepts exactly 50 characters', function () {
 });
 
 it('accepts zero km when creating a Car', function () {
+    authenticateApi();
+
     /** @var CarModel $carModel */
     $carModel = CarModel::factory()->create();
 
@@ -301,6 +333,8 @@ it('accepts zero km when creating a Car', function () {
 });
 
 it('rejects duplicate license_plate when creating a Car', function () {
+    authenticateApi();
+
     /** @var CarModel $carModel */
     $carModel = CarModel::factory()->create();
 
@@ -322,4 +356,14 @@ it('rejects duplicate license_plate when creating a Car', function () {
             'code' => 'ALREADY_EXISTS',
             'message' => 'Car with this license plate already exists',
         ]);
+});
+
+it('returns 401 when creating a car without authentication', function () {
+    $carModel = CarModel::factory()->create();
+    $response = $this->postJson('/api/cars', [
+        'car_model_id' => $carModel->id,
+        'license_plate' => 'ABC-1234',
+        'color' => 'red',
+    ]);
+    $response->assertStatus(401);
 });

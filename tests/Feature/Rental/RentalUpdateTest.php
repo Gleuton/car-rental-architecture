@@ -8,6 +8,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 uses(RefreshDatabase::class);
 
 it('can update rental data', function () {
+    authenticateApi();
+
     /** @var Rental $rental */
     $rental = Rental::factory()->create([
         'day_price_cents' => 5000,
@@ -44,6 +46,8 @@ it('can update rental data', function () {
 });
 
 it('can partially update rental data', function () {
+    authenticateApi();
+
     /** @var Rental $rental */
     $rental = Rental::factory()->create([
         'day_price_cents' => 5000,
@@ -62,6 +66,8 @@ it('can partially update rental data', function () {
 });
 
 it('returns 404 when updating non-existent rental', function () {
+    authenticateApi();
+
     $response = $this->putJson('/api/rentals/999999', [
         'day_price_cents' => 7000,
     ]);
@@ -70,6 +76,8 @@ it('returns 404 when updating non-existent rental', function () {
 });
 
 it('returns validation error for invalid update payload', function () {
+    authenticateApi();
+
     /** @var Rental $rental */
     $rental = Rental::factory()->create();
 
@@ -79,4 +87,10 @@ it('returns validation error for invalid update payload', function () {
 
     $response->assertStatus(422)
         ->assertJsonValidationErrors(['start_date']);
+});
+
+it('returns 401 when updating a rental without authentication', function () {
+    $rental = Rental::factory()->create();
+    $response = $this->putJson('/api/rentals/'.$rental->id, ['day_price_cents' => 7000]);
+    $response->assertStatus(401);
 });

@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 use App\Models\Brand;
 use App\Models\CarModel;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 uses(RefreshDatabase::class);
@@ -15,6 +17,8 @@ beforeEach(function () {
 });
 
 it('can update name and brand in model car', function () {
+    Auth::guard('api')->login(User::factory()->create());
+
     /** @var Brand $newBrand */
     $newBrand = Brand::factory()->create();
 
@@ -45,6 +49,8 @@ it('can update name and brand in model car', function () {
 });
 
 it('cant update name if other model has the same name in model car', function () {
+    Auth::guard('api')->login(User::factory()->create());
+
     /** @var CarModel $modelCar */
     $modelCar = CarModel::factory()->create(['name' => 'Yaris']);
 
@@ -71,6 +77,8 @@ it('cant update name if other model has the same name in model car', function ()
 });
 
 it('cant update model car with a invalid brand', function () {
+    Auth::guard('api')->login(User::factory()->create());
+
     /** @var CarModel $modelCar */
     $modelCar = CarModel::factory()->create(['name' => 'Yaris']);
 
@@ -96,6 +104,8 @@ it('cant update model car with a invalid brand', function () {
 });
 
 it('can update all data in model car', function () {
+    Auth::guard('api')->login(User::factory()->create());
+
     /** @var Brand $newBrand */
     $newBrand = Brand::factory()->create();
 
@@ -143,6 +153,8 @@ it('can update all data in model car', function () {
 });
 
 it('can send same name to update name in model car', function () {
+    Auth::guard('api')->login(User::factory()->create());
+
     /** @var CarModel $factoryModelCar */
     $factoryModelCar = CarModel::factory()->create(['name' => 'Corolla']);
 
@@ -167,6 +179,8 @@ it('can send same name to update name in model car', function () {
 });
 
 it('can update image only in model car', function () {
+    Auth::guard('api')->login(User::factory()->create());
+
     /** @var CarModel $factoryModelCar */
     $factoryModelCar = CarModel::factory()->create([
         'name' => 'Corolla',
@@ -192,6 +206,8 @@ it('can update image only in model car', function () {
 });
 
 it('returns 404 when updating non-existent model car', function () {
+    Auth::guard('api')->login(User::factory()->create());
+
     $data = [
         'name' => 'Corolla',
     ];
@@ -199,4 +215,10 @@ it('returns 404 when updating non-existent model car', function () {
     $response = $this->putJson('/api/car-models/999', $data);
 
     $response->assertStatus(404);
+});
+
+it('returns 401 when updating a car model without authentication', function () {
+    $carModel = CarModel::factory()->create();
+    $response = $this->putJson('/api/car-models/'.$carModel->id, ['name' => 'Updated']);
+    $response->assertStatus(401);
 });

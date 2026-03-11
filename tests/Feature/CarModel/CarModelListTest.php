@@ -3,11 +3,14 @@
 declare(strict_types=1);
 
 use App\Models\CarModel;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Auth;
 
 uses(RefreshDatabase::class);
 
 it('can list car models', function () {
+    Auth::guard('api')->login(User::factory()->create());
     CarModel::factory()->count(20)->create();
 
     $response = $this->getJson('/api/car-models');
@@ -37,6 +40,7 @@ it('can list car models', function () {
 });
 
 it('can search car models by name', function () {
+    Auth::guard('api')->login(User::factory()->create());
     CarModel::factory()->create(['name' => 'Corolla']);
     CarModel::factory()->create(['name' => 'Civic']);
 
@@ -48,6 +52,7 @@ it('can search car models by name', function () {
 });
 
 it('can paginate car models', function () {
+    Auth::guard('api')->login(User::factory()->create());
     CarModel::factory()->count(20)->create();
 
     $response = $this->getJson('/api/car-models?per_page=5&page=2');
@@ -56,4 +61,9 @@ it('can paginate car models', function () {
         ->assertJsonCount(5, 'data')
         ->assertJsonPath('meta.current_page', 2)
         ->assertJsonPath('meta.per_page', 5);
+});
+
+it('returns 401 when listing car models without authentication', function () {
+    $response = $this->getJson('/api/car-models');
+    $response->assertStatus(401);
 });

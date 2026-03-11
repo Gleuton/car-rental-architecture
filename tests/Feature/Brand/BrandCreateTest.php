@@ -16,12 +16,17 @@ beforeEach(function () {
 it('can create a brand', function () {
     $file = UploadedFile::fake()->create('toyota.png', 100, 'image/png');
 
+    authenticateApi();
+
     $data = [
         'name' => 'Toyota',
         'image' => $file,
     ];
 
-    $response = $this->postJson('/api/brands', $data);
+    $response = $this->postJson(
+        '/api/brands',
+        $data,
+    );
 
     $response->assertStatus(201)
         ->assertJsonPath('data.name', 'Toyota');
@@ -35,7 +40,20 @@ it('can create a brand', function () {
     ]);
 });
 
+it('returns 401 when creating a brand without authentication', function () {
+    $file = UploadedFile::fake()->create('toyota.png', 100, 'image/png');
+
+    $response = $this->postJson('/api/brands', [
+        'name' => 'Toyota',
+        'image' => $file,
+    ]);
+
+    $response->assertStatus(401);
+});
+
 it('validates brand creation', function () {
+    authenticateApi();
+
     $response = $this->postJson('/api/brands');
 
     $response->assertStatus(422)
@@ -44,6 +62,7 @@ it('validates brand creation', function () {
 
 it('cannot create a brand with duplicate name', function () {
     Brand::factory()->create(['name' => 'Toyota']);
+    authenticateApi();
 
     $file = UploadedFile::fake()->create('toyota_2.png', 100, 'image/png');
 

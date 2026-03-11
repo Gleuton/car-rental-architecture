@@ -9,6 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 uses(RefreshDatabase::class);
 
 it('can create a Rental', function () {
+    authenticateApi();
     /** @var Client $cliente */
     $cliente = Client::factory()->create();
     /** @var Car $car */
@@ -49,4 +50,19 @@ it('can create a Rental', function () {
         'initial_km' => $initialKm,
         'final_km' => $finalKm,
     ]);
+});
+
+it('returns 401 when creating a rental without authentication', function () {
+    $client = Client::factory()->create();
+    $car = Car::factory()->create();
+    $response = $this->postJson('/api/rentals', [
+        'client_id' => $client->id,
+        'car_id' => $car->id,
+        'start_date' => now()->format('Y-m-d H:i:s'),
+        'end_date' => now()->addDays(1)->format('Y-m-d H:i:s'),
+        'day_price_cents' => 5000,
+        'initial_km' => 1000,
+        'final_km' => 1500,
+    ]);
+    $response->assertStatus(401);
 });

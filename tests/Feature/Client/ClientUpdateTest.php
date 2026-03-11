@@ -3,11 +3,15 @@
 declare(strict_types=1);
 
 use App\Models\Client;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Auth;
 
 uses(RefreshDatabase::class);
 
 it('can update client name', function () {
+    Auth::guard('api')->login(User::factory()->create());
+
     $client = Client::factory()->create(['name' => 'John Doe']);
 
     $response = $this->putJson('/api/clients/'.$client->id, [
@@ -25,6 +29,8 @@ it('can update client name', function () {
 });
 
 it('returns 404 when updating non-existent client', function () {
+    Auth::guard('api')->login(User::factory()->create());
+
     $response = $this->putJson('/api/clients/999999', [
         'name' => 'John Updated',
     ]);
@@ -33,6 +39,8 @@ it('returns 404 when updating non-existent client', function () {
 });
 
 it('returns validation error when name exceeds max length on update', function () {
+    Auth::guard('api')->login(User::factory()->create());
+
     $client = Client::factory()->create(['name' => 'John Doe']);
 
     $response = $this->putJson('/api/clients/'.$client->id, [
@@ -41,4 +49,10 @@ it('returns validation error when name exceeds max length on update', function (
 
     $response->assertStatus(422)
         ->assertJsonValidationErrors(['name']);
+});
+
+it('returns 401 when updating a client without authentication', function () {
+    $client = Client::factory()->create();
+    $response = $this->putJson('/api/clients/'.$client->id, ['name' => 'Updated']);
+    $response->assertStatus(401);
 });

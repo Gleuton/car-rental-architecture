@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 use App\Models\Brand;
 use App\Models\CarModel;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 uses(RefreshDatabase::class);
@@ -15,6 +17,7 @@ beforeEach(function () {
 });
 
 it('can create a CarModel', function () {
+    Auth::guard('api')->login(User::factory()->create());
     /** @var Brand $brand */
     $brand = Brand::factory()->create();
     $file = UploadedFile::fake()->create('toyota_corolla.png', 100, 'image/png');
@@ -61,6 +64,7 @@ it('can create a CarModel', function () {
 });
 
 it('validates required fields when creating a CarModel', function () {
+    Auth::guard('api')->login(User::factory()->create());
     $response = $this->postJson('/api/car-models');
 
     $response->assertStatus(422)
@@ -76,6 +80,7 @@ it('validates required fields when creating a CarModel', function () {
 });
 
 it('validates doors_number range when creating a CarModel', function () {
+    Auth::guard('api')->login(User::factory()->create());
     /** @var Brand $brand */
     $brand = Brand::factory()->create();
     $file = UploadedFile::fake()->create('toyota_corolla.png', 100, 'image/png');
@@ -97,6 +102,7 @@ it('validates doors_number range when creating a CarModel', function () {
 });
 
 it('validates seats_number range when creating a CarModel', function () {
+    Auth::guard('api')->login(User::factory()->create());
     /** @var Brand $brand */
     $brand = Brand::factory()->create();
     $file = UploadedFile::fake()->create('toyota_corolla.png', 100, 'image/png');
@@ -118,6 +124,7 @@ it('validates seats_number range when creating a CarModel', function () {
 });
 
 it('validates image type when creating a CarModel', function () {
+    Auth::guard('api')->login(User::factory()->create());
     /** @var Brand $brand */
     $brand = Brand::factory()->create();
     $file = UploadedFile::fake()->create('manual.pdf', 100, 'application/pdf');
@@ -139,6 +146,7 @@ it('validates image type when creating a CarModel', function () {
 });
 
 it('returns domain error when brand does not exist', function () {
+    Auth::guard('api')->login(User::factory()->create());
     $file = UploadedFile::fake()->create('toyota_corolla.png', 100, 'image/png');
 
     $data = [
@@ -163,6 +171,7 @@ it('returns domain error when brand does not exist', function () {
 });
 
 it('returns domain error when car model already exists for the brand', function () {
+    Auth::guard('api')->login(User::factory()->create());
     /** @var Brand $brand */
     $brand = Brand::factory()->create();
 
@@ -197,4 +206,19 @@ it('returns domain error when car model already exists for the brand', function 
             'code' => 'ALREADY_EXISTS',
             'message' => 'Car model already exists for this brand',
         ]);
+});
+
+it('returns 401 when creating a car model without authentication', function () {
+    $brand = Brand::factory()->create();
+    $file = UploadedFile::fake()->create('corolla.png', 100, 'image/png');
+    $response = $this->postJson('/api/car-models', [
+        'brand_id' => $brand->id,
+        'name' => 'Corolla',
+        'image' => $file,
+        'doors_number' => 4,
+        'seats_number' => 5,
+        'airbags' => true,
+        'abs' => true,
+    ]);
+    $response->assertStatus(401);
 });

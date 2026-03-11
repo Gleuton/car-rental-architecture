@@ -3,11 +3,14 @@
 declare(strict_types=1);
 
 use App\Models\Client;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Auth;
 
 uses(RefreshDatabase::class);
 
 it('can list clients', function () {
+    Auth::guard('api')->login(User::factory()->create());
     Client::factory()->count(3)->create();
 
     $response = $this->getJson('/api/clients');
@@ -28,6 +31,7 @@ it('can list clients', function () {
 });
 
 it('can filter clients by name', function () {
+    Auth::guard('api')->login(User::factory()->create());
     Client::factory()->create(['name' => 'John Doe']);
     Client::factory()->create(['name' => 'Jane Smith']);
     Client::factory()->create(['name' => 'John Silva']);
@@ -39,6 +43,7 @@ it('can filter clients by name', function () {
 });
 
 it('can paginate clients', function () {
+    Auth::guard('api')->login(User::factory()->create());
     Client::factory()->count(20)->create();
 
     $response = $this->getJson('/api/clients?per_page=10&page=1');
@@ -51,6 +56,7 @@ it('can paginate clients', function () {
 });
 
 it('can order clients by name ascending', function () {
+    Auth::guard('api')->login(User::factory()->create());
     Client::factory()->create(['name' => 'Zoe']);
     Client::factory()->create(['name' => 'Alice']);
     Client::factory()->create(['name' => 'Bob']);
@@ -63,4 +69,9 @@ it('can order clients by name ascending', function () {
     expect($data[0]['name'])->toBe('Alice')
         ->and($data[1]['name'])->toBe('Bob')
         ->and($data[2]['name'])->toBe('Zoe');
+});
+
+it('returns 401 when listing clients without authentication', function () {
+    $response = $this->getJson('/api/clients');
+    $response->assertStatus(401);
 });

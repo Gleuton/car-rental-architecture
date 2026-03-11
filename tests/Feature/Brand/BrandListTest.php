@@ -3,11 +3,14 @@
 declare(strict_types=1);
 
 use App\Models\Brand;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Auth;
 
 uses(RefreshDatabase::class);
 
 it('can list brands', function () {
+    Auth::guard('api')->login(User::factory()->create());
     Brand::factory()->count(3)->create();
 
     $response = $this->getJson('/api/brands');
@@ -28,6 +31,7 @@ it('can list brands', function () {
 });
 
 it('can filter brands by name', function () {
+    Auth::guard('api')->login(User::factory()->create());
     Brand::factory()->create(['name' => 'Ferrari']);
     Brand::factory()->create(['name' => 'Fiat']);
     Brand::factory()->create(['name' => 'Ford']);
@@ -37,4 +41,9 @@ it('can filter brands by name', function () {
     $response->assertStatus(200)
         ->assertJsonCount(1, 'data')
         ->assertJsonPath('data.0.name', 'Ferrari');
+});
+
+it('returns 401 when listing brands without authentication', function () {
+    $response = $this->getJson('/api/brands');
+    $response->assertStatus(401);
 });

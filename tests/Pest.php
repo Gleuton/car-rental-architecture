@@ -13,7 +13,11 @@ declare(strict_types=1);
 |
 */
 
-pest()->extend(Tests\TestCase::class)
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Tests\TestCase;
+
+pest()->extend(TestCase::class)
  // ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
     ->in('Feature');
 
@@ -43,7 +47,18 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+function something() {}
+
+/**
+ * Authenticate the current feature test with a JWT bearer token.
+ */
+function authenticateApi(?User $user = null): User
 {
-    // ..
+    $user ??= User::factory()->create();
+
+    $token = Auth::guard('api')->login($user);
+
+    test()->withToken((string) $token);
+
+    return $user;
 }

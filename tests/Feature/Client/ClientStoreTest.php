@@ -2,11 +2,15 @@
 
 declare(strict_types=1);
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Auth;
 
 uses(RefreshDatabase::class);
 
 it('can create a client', function () {
+    Auth::guard('api')->login(User::factory()->create());
+
     $response = $this->postJson('/api/clients', [
         'name' => 'John Doe',
     ]);
@@ -19,6 +23,8 @@ it('can create a client', function () {
 });
 
 it('returns validation error when name is missing', function () {
+    Auth::guard('api')->login(User::factory()->create());
+
     $response = $this->postJson('/api/clients', []);
 
     $response->assertStatus(422)
@@ -26,6 +32,8 @@ it('returns validation error when name is missing', function () {
 });
 
 it('returns validation error when name exceeds max length', function () {
+    Auth::guard('api')->login(User::factory()->create());
+
     $response = $this->postJson('/api/clients', [
         'name' => str_repeat('a', 256),
     ]);
@@ -35,6 +43,8 @@ it('returns validation error when name exceeds max length', function () {
 });
 
 it('creates multiple clients successfully', function () {
+    Auth::guard('api')->login(User::factory()->create());
+
     $this->postJson('/api/clients', ['name' => 'Client 1']);
     $this->postJson('/api/clients', ['name' => 'Client 2']);
 
@@ -42,4 +52,9 @@ it('creates multiple clients successfully', function () {
 
     $response->assertStatus(200)
         ->assertJsonCount(2, 'data');
+});
+
+it('returns 401 when creating a client without authentication', function () {
+    $response = $this->postJson('/api/clients', ['name' => 'John Doe']);
+    $response->assertStatus(401);
 });

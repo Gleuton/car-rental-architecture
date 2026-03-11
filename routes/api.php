@@ -15,12 +15,15 @@ Route::get('/user', static function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::apiResource('clients', ClientController::class);
-Route::apiResource('cars', CarController::class);
-Route::apiResource('rentals', RentalController::class);
-Route::apiResource('brands', BrandController::class);
-Route::apiResource('car-models', CarModelController::class);
-
 Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout']);
-Route::post('/refresh', [AuthController::class, 'refresh']);
+
+Route::group(['middleware' => 'auth:api'], function () {
+    Route::apiResource('clients', ClientController::class);
+    Route::apiResource('cars', CarController::class);
+    Route::apiResource('rentals', RentalController::class);
+    Route::apiResource('brands', BrandController::class);
+    Route::apiResource('car-models', CarModelController::class);
+
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/refresh', [AuthController::class, 'refresh']);
+});

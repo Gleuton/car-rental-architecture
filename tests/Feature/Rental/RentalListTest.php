@@ -8,6 +8,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 uses(RefreshDatabase::class);
 
 it('can list all rentals returning with price calculated', function () {
+    authenticateApi();
+
     Rental::factory()->create([
         'start_date' => '2026-03-01 08:00:00',
         'end_date' => '2026-03-05 08:00:00',
@@ -41,6 +43,8 @@ it('can list all rentals returning with price calculated', function () {
 });
 
 it('filters rentals by start_date range', function () {
+    authenticateApi();
+
     Rental::factory()->create([
         'start_date' => '2026-03-01 08:00:00',
         'end_date' => '2026-03-02 08:00:00',
@@ -59,6 +63,8 @@ it('filters rentals by start_date range', function () {
 });
 
 it('applies default ordering by start_date', function () {
+    authenticateApi();
+
     $lateRental = Rental::factory()->create([
         'start_date' => '2026-03-10 08:00:00',
         'end_date' => '2026-03-11 08:00:00',
@@ -78,6 +84,8 @@ it('applies default ordering by start_date', function () {
 });
 
 it('can paginate rentals', function () {
+    authenticateApi();
+
     Rental::factory(20)->create([
         'start_date' => '2026-03-01 08:00:00',
         'end_date' => '2026-03-05 18:00:00',
@@ -94,7 +102,14 @@ it('can paginate rentals', function () {
 });
 
 it('validates index filters', function () {
+    authenticateApi();
+
     $response = $this->getJson('/api/rentals?start_date_from=invalid-date');
 
     $response->assertStatus(422);
+});
+
+it('returns 401 when listing rentals without authentication', function () {
+    $response = $this->getJson('/api/rentals');
+    $response->assertStatus(401);
 });

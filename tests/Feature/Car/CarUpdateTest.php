@@ -9,6 +9,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 uses(RefreshDatabase::class);
 
 it('can update all data car', function () {
+    authenticateApi();
+
     /** @var Car $carEloquent */
     $carEloquent = Car::factory()->create();
 
@@ -41,6 +43,8 @@ it('can update all data car', function () {
 });
 
 it('can update license plate to the same value', function () {
+    authenticateApi();
+
     $licensePlate = 'ABC-123';
 
     /** @var Car $carEloquent */
@@ -62,6 +66,8 @@ it('can update license plate to the same value', function () {
 });
 
 it('cant update the license plate to one that is already in use.', function () {
+    authenticateApi();
+
     $newLicensePlate = 'ABC-123';
 
     /** @var Car $carEloquent */
@@ -81,4 +87,10 @@ it('cant update the license plate to one that is already in use.', function () {
         ->assertJsonPath('app_code', 6009);
 
     $this->assertDatabaseHas('cars', $carEloquent->toArray());
+});
+
+it('returns 401 when updating a car without authentication', function () {
+    $car = Car::factory()->create();
+    $response = $this->putJson('/api/cars/'.$car->id, ['color' => 'blue']);
+    $response->assertStatus(401);
 });
