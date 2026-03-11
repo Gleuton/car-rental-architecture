@@ -31,7 +31,7 @@ class CarController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(IndexCarRequest $request): jsonResponse
+    public function index(IndexCarRequest $request): JsonResponse
     {
         $dto = ListCarDTO::fromRequest($request);
         $cars = $this->listCar->execute($dto);
@@ -74,7 +74,7 @@ class CarController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCarRequest $request, int $carId): jsonResponse
+    public function update(UpdateCarRequest $request, int $carId): JsonResponse
     {
         $carDto = UpdateCarDto::fromRequest($request, $carId);
         $car = $this->updateCar->execute($carDto);
