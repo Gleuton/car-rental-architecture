@@ -1,12 +1,20 @@
 <?php
 
 declare(strict_types=1);
+use App\Providers\AppServiceProvider;
+use App\Providers\BrandServiceProvider;
+use App\Providers\CarModelServiceProvider;
+use App\Providers\CarServiceProvider;
+use App\Providers\ClientServiceProvider;
+use App\Providers\RentalServiceProvider;
+use Tymon\JWTAuth\Providers\LaravelServiceProvider;
 
 return [
-    App\Providers\AppServiceProvider::class,
-    App\Providers\BrandServiceProvider::class,
-    App\Providers\CarModelServiceProvider::class,
-    App\Providers\CarServiceProvider::class,
-    App\Providers\ClientServiceProvider::class,
-    App\Providers\RentalServiceProvider::class,
+    AppServiceProvider::class,
+    BrandServiceProvider::class,
+    CarModelServiceProvider::class,
+    CarServiceProvider::class,
+    ClientServiceProvider::class,
+    RentalServiceProvider::class,
+    LaravelServiceProvider::class,
 ];
