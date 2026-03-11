@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-use Tymon\JWTAuth\Providers\Auth\Illuminate;
+use Tymon\JWTAuth\Providers\Auth\Illuminate as Auth;
 use Tymon\JWTAuth\Providers\JWT\Lcobucci;
 use Tymon\JWTAuth\Providers\JWT\Provider;
+use Tymon\JWTAuth\Providers\Storage\Illuminate as Storage;
 
 return [
     'secret' => env('JWT_SECRET'),
@@ -41,7 +42,7 @@ return [
 
     'providers' => [
         'jwt' => Lcobucci::class,
-        'auth' => Illuminate::class,
-        'storage' => Tymon\JWTAuth\Providers\Storage\Illuminate::class,
+        'auth' => Auth::class,
+        'storage' => Storage::class,
     ],
 ];
