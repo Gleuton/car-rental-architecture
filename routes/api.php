@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\CarModelController;
@@ -19,3 +20,7 @@ Route::apiResource('cars', CarController::class);
 Route::apiResource('rentals', RentalController::class);
 Route::apiResource('brands', BrandController::class);
 Route::apiResource('car-models', CarModelController::class);
+
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout']);
+Route::post('/refresh', [AuthController::class, 'refresh']);

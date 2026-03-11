@@ -1,6 +1,8 @@
 <?php
 
 declare(strict_types=1);
+
+use App\Providers\ApiAuthServiceProvider;
 use App\Providers\AppServiceProvider;
 use App\Providers\BrandServiceProvider;
 use App\Providers\CarModelServiceProvider;
@@ -11,6 +13,7 @@ use Tymon\JWTAuth\Providers\LaravelServiceProvider;
 
 return [
     AppServiceProvider::class,
+    ApiAuthServiceProvider::class,
     BrandServiceProvider::class,
     CarModelServiceProvider::class,
     CarServiceProvider::class,
