@@ -24,6 +24,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::apiResource('brands', BrandController::class);
     Route::apiResource('car-models', CarModelController::class);
 
+    Route::get('/me', [AuthController::class, 'me']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
 });
