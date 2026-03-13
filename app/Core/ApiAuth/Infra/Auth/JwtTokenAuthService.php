@@ -7,6 +7,7 @@ namespace App\Core\ApiAuth\Infra\Auth;
 use App\Core\ApiAuth\Domain\Services\TokenAuthServiceInterface;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Auth;
+use Throwable;
 
 class JwtTokenAuthService implements TokenAuthServiceInterface
 {
@@ -34,5 +35,20 @@ class JwtTokenAuthService implements TokenAuthServiceInterface
         $user = Auth::guard('api')->user();
 
         return $user instanceof Authenticatable ? $user : null;
+    }
+
+    public function invalidateCurrentToken(): bool
+    {
+        if ($this->authenticatedUser() === null) {
+            return false;
+        }
+
+        try {
+            Auth::guard('api')->logout();
+
+            return true;
+        } catch (Throwable) {
+            return false;
+        }
     }
 }

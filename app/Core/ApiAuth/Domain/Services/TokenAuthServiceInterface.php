@@ -13,4 +13,6 @@ interface TokenAuthServiceInterface
     public function tokenTimeToLive(): int;
 
     public function authenticatedUser(): ?Authenticatable;
+
+    public function invalidateCurrentToken(): bool;
 }

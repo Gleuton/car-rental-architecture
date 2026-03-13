@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Core\ApiAuth\Application\DTOs\LoginDTO;
 use App\Core\ApiAuth\Application\UseCases\GetAuthenticatedUserUseCase;
 use App\Core\ApiAuth\Application\UseCases\LoginUseCase;
+use App\Core\ApiAuth\Application\UseCases\LogoutUseCase;
 use App\Http\Requests\AuthApi\LoginRequest;
 use Illuminate\Http\JsonResponse;
 
@@ -15,6 +16,7 @@ class AuthController extends Controller
     public function __construct(
         private readonly LoginUseCase $loginUseCase,
         private readonly GetAuthenticatedUserUseCase $getAuthenticatedUserUseCase,
+        private readonly LogoutUseCase $logoutUseCase,
     ) {}
 
     public function login(LoginRequest $request): JsonResponse
@@ -31,7 +33,16 @@ class AuthController extends Controller
         return response()->json($token->toArray());
     }
 
-    public function logout(): void {}
+    public function logout(): JsonResponse
+    {
+        if (! $this->logoutUseCase->execute()) {
+            return response()->json([
+                'message' => 'Unauthenticated.',
+            ], 401);
+        }
+
+        return response()->json([], 204);
+    }
 
     public function refresh(): void {}
 
