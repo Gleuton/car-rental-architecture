@@ -8,12 +8,19 @@ use App\Core\ApiAuth\Domain\Services\TokenAuthServiceInterface;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Auth;
 use Throwable;
+use Tymon\JWTAuth\JWTGuard;
 
 class JwtTokenAuthService implements TokenAuthServiceInterface
 {
     public function attempt(string $email, string $password): ?string
     {
-        $token = Auth::guard('api')->attempt([
+        $guard = $this->jwtGuard();
+
+        if ($guard === null) {
+            return null;
+        }
+
+        $token = $guard->attempt([
             'email' => $email,
             'password' => $password,
         ]);
@@ -27,17 +34,19 @@ class JwtTokenAuthService implements TokenAuthServiceInterface
 
     public function refreshCurrentToken(): ?string
     {
+        $guard = $this->jwtGuard();
+
+        if ($guard === null) {
+            return null;
+        }
+
         try {
-            $token = Auth::guard('api')->refresh();
+            $token = $guard->refresh();
         } catch (Throwable) {
             return null;
         }
 
-        if (! is_string($token) || $token === '') {
-            return null;
-        }
-
-        return $token;
+        return is_string($token) && $token !== '' ? $token : null;
     }
 
     public function tokenTimeToLive(): int
@@ -47,23 +56,38 @@ class JwtTokenAuthService implements TokenAuthServiceInterface
 
     public function authenticatedUser(): ?Authenticatable
     {
-        $user = Auth::guard('api')->user();
+        $guard = $this->jwtGuard();
+
+        if ($guard === null) {
+            return null;
+        }
+
+        $user = $guard->user();
 
         return $user instanceof Authenticatable ? $user : null;
     }
 
     public function invalidateCurrentToken(): bool
     {
-        if ($this->authenticatedUser() === null) {
+        $guard = $this->jwtGuard();
+
+        if ($guard === null || $guard->user() === null) {
             return false;
         }
 
         try {
-            Auth::guard('api')->logout();
+            $guard->logout();
 
             return true;
         } catch (Throwable) {
             return false;
         }
+    }
+
+    private function jwtGuard(): ?JWTGuard
+    {
+        $guard = Auth::guard('api');
+
+        return $guard instanceof JWTGuard ? $guard : null;
     }
 }
