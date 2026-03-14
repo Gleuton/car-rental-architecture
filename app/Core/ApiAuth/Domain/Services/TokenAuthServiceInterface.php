@@ -10,6 +10,8 @@ interface TokenAuthServiceInterface
 {
     public function attempt(string $email, string $password): ?string;
 
+    public function refreshCurrentToken(): ?string;
+
     public function tokenTimeToLive(): int;
 
     public function authenticatedUser(): ?Authenticatable;

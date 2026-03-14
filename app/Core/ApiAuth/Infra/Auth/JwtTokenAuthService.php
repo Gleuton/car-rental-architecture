@@ -25,6 +25,21 @@ class JwtTokenAuthService implements TokenAuthServiceInterface
         return $token;
     }
 
+    public function refreshCurrentToken(): ?string
+    {
+        try {
+            $token = Auth::guard('api')->refresh();
+        } catch (Throwable) {
+            return null;
+        }
+
+        if (! is_string($token) || $token === '') {
+            return null;
+        }
+
+        return $token;
+    }
+
     public function tokenTimeToLive(): int
     {
         return (int) config('jwt.ttl', 60) * 60;

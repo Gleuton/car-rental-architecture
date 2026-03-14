@@ -52,7 +52,7 @@ function something() {}
 /**
  * Authenticate the current feature test with a JWT bearer token.
  */
-function authenticateApi(?User $user = null): User
+function authenticateApi(?User $user = null): string
 {
     $user ??= User::factory()->create();
 
@@ -60,5 +60,5 @@ function authenticateApi(?User $user = null): User
 
     test()->withToken((string) $token);
 
-    return $user;
+    return $token;
 }
