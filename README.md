@@ -76,3 +76,14 @@ Para rodar os testes com Pest:
 ```bash
 docker compose -f docker-compose.dev.yml exec locadora-app php artisan test
 ```
+
+Para rodar apenas os testes unitários:
+```bash
+docker compose -f docker-compose.dev.yml exec locadora-app composer test:unit
+```
+
+Para rodar mutation testing nativo do Pest apenas na suíte Unit:
+```bash
+docker compose -f docker-compose.dev.yml exec locadora-app composer mutate:unit
+```
+

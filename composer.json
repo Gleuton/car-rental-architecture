@@ -58,6 +58,12 @@
             "@php artisan config:clear --ansi",
             "@php artisan test"
         ],
+        "test:unit": [
+            "@php ./vendor/bin/pest --testsuite=Unit"
+        ],
+        "mutate:unit": [
+            "@php ./vendor/bin/pest --mutate --testsuite=Unit --everything --covered-only --min=0"
+        ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
