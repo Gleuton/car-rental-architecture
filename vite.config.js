@@ -25,6 +25,14 @@ export default defineConfig({
             vue: 'vue/dist/vue.esm-bundler.js',
         },
     },
+    css: {
+        preprocessorOptions: {
+            scss: {
+                quietDeps: true,
+                silenceDeprecations: ['import'],
+            },
+        },
+    },
     server: {
         host: '0.0.0.0',
         port: 5173,
