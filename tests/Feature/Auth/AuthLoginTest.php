@@ -20,7 +20,7 @@ it('can login and receive a jwt token payload', function () {
 
     $response->assertOk()
         ->assertJsonStructure([
-            'access_token',
+            'token',
             'token_type',
             'expires_in',
         ])

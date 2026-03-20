@@ -16,7 +16,7 @@ it('can refresh token and receive a jwt token payload', function () {
         ->postJson('/api/refresh')
         ->assertOk()
         ->assertJsonStructure([
-            'access_token',
+            'token',
             'token_type',
             'expires_in',
         ])
@@ -46,7 +46,7 @@ it('accepts the new token returned by refresh', function () {
         ->postJson('/api/refresh')
         ->assertOk();
 
-    $newToken = $refreshResponse->json('access_token');
+    $newToken = $refreshResponse->json('token');
 
     expect($newToken)
         ->not->toBeEmpty()
