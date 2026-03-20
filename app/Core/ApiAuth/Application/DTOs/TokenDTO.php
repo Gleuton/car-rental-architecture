@@ -13,7 +13,7 @@ readonly class TokenDTO
     ) {}
 
     /**
-     * @return array{access_token: string, token_type: string, expires_in: int}
+     * @return array{token: string, token_type: string, expires_in: int}
      */
     public function toArray(): array
     {
