@@ -1,6 +1,60 @@
 <script setup>
+import {reactive, ref} from "vue";
 
-import TableBrands from "./TableBrands.vue";
+const formPayload = reactive({
+    name: '',
+    image: []
+})
+
+const alerts = ref([]);
+const success = ref(false);
+
+const fileInput = ref(null)
+fileInput.value = null;
+
+function cleanAlerts() {
+    alerts.value = [];
+    success.value = false;
+}
+
+function resentForm() {
+    formPayload.name = '';
+    formPayload.image = [];
+    cleanAlerts();
+
+    if (fileInput.value) {
+        fileInput.value.value = ''
+    }
+}
+
+function submitForm() {
+    cleanAlerts();
+    const token = localStorage.getItem('token');
+    const config = {headers: {'Authorization': `Bearer ${token}`}};
+
+    const formData = new FormData();
+
+    formData.append('name', formPayload.name);
+    formData.append('image', formPayload.image);
+
+    axios.post('/api/brands', formData, config)
+        .then(() => {
+            resentForm();
+            success.value = true;
+        })
+        .catch(error => {
+            if (error.response.status === 422) {
+                const errors = error.response.data.errors;
+                for (const key in errors) {
+                    if (errors.hasOwnProperty(key)) {
+                        alerts.value.push(key + ': ' + errors[key]);
+                    }
+                }
+                return
+            }
+            alerts.value.push(error.response.data.message);
+        });
+}
 </script>
 
 <template>
@@ -11,20 +65,20 @@ import TableBrands from "./TableBrands.vue";
                     <div class="card-header">Busca de Marcas</div>
                     <div class="card-body">
                         <div class="row mb-0">
-                            <label for="name" class="col-md-4 col-form-label text-md-end">Nome da Marca</label>
+                            <label for="search" class="col-md-4 col-form-label text-md-end">Nome da Marca</label>
 
                             <div class="col-md-6">
                                 <div class="input-group">
                                     <input
-                                        id="name"
+                                        id="search"
                                         type="text"
                                         class="form-control"
-                                        name="name"
-                                        required
+                                        name="search"
                                         autocomplete="name"
                                         autofocus>
 
-                                    <button type="submit" class="btn btn-primary d-inline-flex align-items-center gap-2">
+                                    <button type="submit"
+                                            class="btn btn-primary d-inline-flex align-items-center gap-2">
                                         <i class="bi bi-search" aria-hidden="true"></i>
                                         <span>Buscar</span>
                                     </button>
@@ -40,15 +94,68 @@ import TableBrands from "./TableBrands.vue";
                     <div class="card-header">Marcas</div>
 
                     <div class="card-body">
-                        <table-brands/>
+                        <table-brands-component/>
                     </div>
 
-                    <div class="card-footer">
-                        <button class="btn btn-primary">Adicionar Marca</button>
+                    <div class="card-footer d-flex justify-content-end">
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#formCadBrand">Adicionar
+                            Marca
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
+        <modal-component
+            title="Adicionar Marca"
+            modal_id="formCadBrand"
+        >
+            <template #body>
+                <form>
+                    <div class="mb-3">
+                        <label for="brand_name" class="form-label">Nome da Marca</label>
+                        <input
+                            type="text"
+                            class="form-control"
+                            id="brand_name"
+                            v-model="formPayload.name"
+                            required="required"
+                            autofocus
+                        >
+                    </div>
+                    <div class="mb-3">
+                        <label for="brand_img" class="form-label">Logo da Marca</label>
+                        <input
+                            type="file"
+                            class="form-control"
+                            id="brand_img"
+                            @change="formPayload.image = $event.target.files[0]"
+                            ref="fileInput"
+                            required
+                        >
+
+                    </div>
+                </form>
+                <div class="alert alert-danger" role="alert" v-for="alert in alerts" :key="alert">
+                    {{ alert }}
+                </div>
+                <div class="alert alert-success" role="alert" v-if="success">
+                    Marca adicionada com sucesso!
+                </div>
+            </template>
+            <template #footer>
+                <button
+                    type="button"
+                    class="btn btn-danger"
+                    @click="resentForm()"
+                    data-bs-dismiss="modal">Fechar
+                </button>
+                <button
+                    type="button"
+                    @click="submitForm()"
+                    class="btn btn-primary">Salvar
+                </button>
+            </template>
+        </modal-component>
     </div>
 </template>
 
