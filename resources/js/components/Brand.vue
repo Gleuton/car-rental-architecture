@@ -1,10 +1,11 @@
 <script setup>
-import {reactive, ref} from "vue";
+import {reactive, ref} from 'vue';
+import { mapBrandApiError } from '../errors/brandApiErrorMapper.js';
 
 const formPayload = reactive({
     name: '',
-    image: []
-})
+    image: null,
+});
 
 const alerts = ref([]);
 const success = ref(false);
@@ -17,42 +18,35 @@ function cleanAlerts() {
     success.value = false;
 }
 
-function resentForm() {
+function resetForm() {
     formPayload.name = '';
-    formPayload.image = [];
+    formPayload.image = null;
     cleanAlerts();
 
     if (fileInput.value) {
-        fileInput.value.value = ''
+        fileInput.value.value = '';
     }
 }
 
 function submitForm() {
     cleanAlerts();
+
     const token = localStorage.getItem('token');
     const config = {headers: {'Authorization': `Bearer ${token}`}};
-
     const formData = new FormData();
 
     formData.append('name', formPayload.name);
-    formData.append('image', formPayload.image);
+    if (formPayload.image) {
+        formData.append('image', formPayload.image);
+    }
 
     axios.post('/api/brands', formData, config)
         .then(() => {
-            resentForm();
+            resetForm();
             success.value = true;
         })
-        .catch(error => {
-            if (error.response.status === 422) {
-                const errors = error.response.data.errors;
-                for (const key in errors) {
-                    if (errors.hasOwnProperty(key)) {
-                        alerts.value.push(key + ': ' + errors[key]);
-                    }
-                }
-                return
-            }
-            alerts.value.push(error.response.data.message);
+        .catch((error) => {
+            alerts.value = mapBrandApiError(error);
         });
 }
 </script>
@@ -146,7 +140,7 @@ function submitForm() {
                 <button
                     type="button"
                     class="btn btn-danger"
-                    @click="resentForm()"
+                    @click="resetForm()"
                     data-bs-dismiss="modal">Fechar
                 </button>
                 <button
