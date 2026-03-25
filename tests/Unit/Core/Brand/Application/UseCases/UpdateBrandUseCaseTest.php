@@ -66,7 +66,7 @@ it('updates a brand with name and image successfully', function () {
     $result = $this->useCase->execute($dto);
 
     expect($result->name->value)->toBe('Fiat Updated')
-        ->and($result->image)->toBe('brands/fiat_updated.png');
+        ->and($result->image->path)->toBe('brands/fiat_updated.png');
 });
 
 it('updates a brand name only without changing image', function () {
@@ -97,7 +97,7 @@ it('updates a brand name only without changing image', function () {
     $result = $this->useCase->execute($dto);
 
     expect($result->name->value)->toBe('Toyota')
-        ->and($result->image)->toBe('brands/fiat.png');
+        ->and($result->image->path)->toBe('brands/fiat.png');
 });
 
 it('updates a brand image only without validating name uniqueness', function () {
@@ -137,7 +137,7 @@ it('updates a brand image only without validating name uniqueness', function () 
     $result = $this->useCase->execute($dto);
 
     expect($result->name->value)->toBe('Fiat')
-        ->and($result->image)->toBe('brands/fiat_new.png');
+        ->and($result->image->path)->toBe('brands/fiat_new.png');
 });
 
 it('throws exception when updating brand with duplicate name', function () {

@@ -9,7 +9,7 @@ it('can create a Brand instance', function () {
     $brand = Brand::new('Fiat', 'fiat.png');
 
     expect($brand->name->value)->toBe('Fiat')
-        ->and($brand->image)->toBe('fiat.png')
+        ->and($brand->image->path)->toBe('fiat.png')
         ->and($brand->id)->toBeNull();
 });
 
@@ -18,7 +18,7 @@ it('can create a Brand instance with ID', function () {
 
     expect($brand->id)->toBe(1)
         ->and($brand->name->value)->toBe('Fiat')
-        ->and($brand->image)->toBe('fiat.png');
+        ->and($brand->image->path)->toBe('fiat.png');
 });
 
 it('throws exception when creating a Brand instance with empty name', function () {
@@ -56,7 +56,7 @@ it('can update a Brand name keeping the image', function () {
 
     expect($updated->id)->toBe(1)
         ->and($updated->name->value)->toBe('Toyota')
-        ->and($updated->image)->toBe('fiat.png');
+        ->and($updated->image->path)->toBe('fiat.png');
 });
 
 it('can update a Brand image keeping the name', function () {
@@ -65,7 +65,7 @@ it('can update a Brand image keeping the name', function () {
 
     expect($updated->id)->toBe(1)
         ->and($updated->name->value)->toBe('Fiat')
-        ->and($updated->image)->toBe('fiat_new.png');
+        ->and($updated->image->path)->toBe('fiat_new.png');
 });
 
 it('can update a Brand name and image', function () {
@@ -74,7 +74,7 @@ it('can update a Brand name and image', function () {
 
     expect($updated->id)->toBe(1)
         ->and($updated->name->value)->toBe('Toyota')
-        ->and($updated->image)->toBe('toyota.png');
+        ->and($updated->image->path)->toBe('toyota.png');
 });
 
 it('throws exception when updating a Brand with invalid name', function () {

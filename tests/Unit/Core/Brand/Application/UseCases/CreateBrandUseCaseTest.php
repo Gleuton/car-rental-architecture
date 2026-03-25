@@ -69,7 +69,7 @@ it('creates a brand successfully when name is unique', function () {
 
     expect($result->id)->toBe(1)
         ->and($result->name->value)->toBe('Fiat')
-        ->and($result->image)->toBe('brands/fiat_stored.png');
+        ->and($result->image->path)->toBe('brands/fiat_stored.png');
 });
 
 it('throws exception when brand name already exists', function () {

@@ -50,7 +50,7 @@ class EloquentBrandRepository implements BrandRepositoryInterface
     {
         $model = EloquentBrand::create([
             'name' => $brand->name->value,
-            'image' => $brand->image,
+            'image' => $brand->image->path,
         ]);
 
         return $this->toDomainBrand($model);
@@ -75,7 +75,7 @@ class EloquentBrandRepository implements BrandRepositoryInterface
 
         $model->update([
             'name' => $brand->name->value,
-            'image' => $brand->image,
+            'image' => $brand->image->path,
         ]);
 
         return $this->toDomainBrand($model);

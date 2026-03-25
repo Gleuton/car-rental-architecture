@@ -11,6 +11,8 @@ enum BrandError: int
     case NAME_TOO_SHORT = 4003;
     case NAME_TOO_LONG = 4004;
     case NOT_FOUND = 4005;
+    case LOGO_PATH_TOO_LONG = 4006;
+    case LOGO_PATH_EMPTY = 4007;
 
     public function message(): string
     {
@@ -20,6 +22,8 @@ enum BrandError: int
             self::NAME_TOO_SHORT => 'Brand name must have at least 3 characters',
             self::NAME_TOO_LONG => 'Brand name too long',
             self::NOT_FOUND => 'Brand not found',
+            self::LOGO_PATH_TOO_LONG => 'Brand logo path cannot exceed 255 characters.',
+            self::LOGO_PATH_EMPTY => 'Brand logo path cannot be empty.',
         };
     }
 }
