@@ -19,7 +19,7 @@ readonly class DeleteBrandUseCase
     {
         $brand = $this->repository->findById($brandDto->id);
 
-        $this->storage->delete($brand->image->path);
+        $this->storage->delete($brand->imagePath());
 
         $this->repository->delete($brandDto->id);
     }

@@ -8,17 +8,17 @@ use App\Core\Brand\Domain\Exceptions\BrandDomainException;
 it('can create a Brand instance', function () {
     $brand = Brand::new('Fiat', 'fiat.png');
 
-    expect($brand->name->value)->toBe('Fiat')
-        ->and($brand->image->path)->toBe('fiat.png')
-        ->and($brand->id)->toBeNull();
+    expect($brand->name())->toBe('Fiat')
+        ->and($brand->imagePath())->toBe('fiat.png')
+        ->and($brand->id())->toBeNull();
 });
 
 it('can create a Brand instance with ID', function () {
     $brand = Brand::restore(1, 'Fiat', 'fiat.png');
 
-    expect($brand->id)->toBe(1)
-        ->and($brand->name->value)->toBe('Fiat')
-        ->and($brand->image->path)->toBe('fiat.png');
+    expect($brand->id())->toBe(1)
+        ->and($brand->name())->toBe('Fiat')
+        ->and($brand->imagePath())->toBe('fiat.png');
 });
 
 it('throws exception when creating a Brand instance with empty name', function () {
@@ -40,32 +40,32 @@ it('throws exception when creating a Brand with whitespace-only name', function 
 it('can create a Brand with name exactly 3 characters', function () {
     $brand = Brand::new('BMW', 'bmw.png');
 
-    expect($brand->name->value)->toBe('BMW');
+    expect($brand->name())->toBe('BMW');
 });
 
 it('can create a Brand with name exactly 120 characters', function () {
     $name = str_repeat('x', 120);
     $brand = Brand::new($name, 'brand.png');
 
-    expect($brand->name->value)->toBe($name);
+    expect($brand->name())->toBe($name);
 });
 
 it('can update a Brand name keeping the image', function () {
     $brand = Brand::restore(1, 'Fiat', 'fiat.png');
     $updated = $brand->updateName('Toyota');
 
-    expect($updated->id)->toBe(1)
-        ->and($updated->name->value)->toBe('Toyota')
-        ->and($updated->image->path)->toBe('fiat.png');
+    expect($updated->id())->toBe(1)
+        ->and($updated->name())->toBe('Toyota')
+        ->and($updated->imagePath())->toBe('fiat.png');
 });
 
 it('can update a Brand image keeping the name', function () {
     $brand = Brand::restore(1, 'Fiat', 'fiat.png');
     $updated = $brand->updateLogo('fiat_new.png');
 
-    expect($updated->id)->toBe(1)
-        ->and($updated->name->value)->toBe('Fiat')
-        ->and($updated->image->path)->toBe('fiat_new.png');
+    expect($updated->id())->toBe(1)
+        ->and($updated->name())->toBe('Fiat')
+        ->and($updated->imagePath())->toBe('fiat_new.png');
 });
 
 it('can update a Brand name and image', function () {
@@ -73,9 +73,9 @@ it('can update a Brand name and image', function () {
     $updated = $brand->updateName('Toyota')
         ->updateLogo('toyota.png');
 
-    expect($updated->id)->toBe(1)
-        ->and($updated->name->value)->toBe('Toyota')
-        ->and($updated->image->path)->toBe('toyota.png');
+    expect($updated->id())->toBe(1)
+        ->and($updated->name())->toBe('Toyota')
+        ->and($updated->imagePath())->toBe('toyota.png');
 });
 
 it('throws exception when updating a Brand with invalid name', function () {

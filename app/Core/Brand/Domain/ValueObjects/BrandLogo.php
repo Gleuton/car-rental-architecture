@@ -17,11 +17,6 @@ readonly class BrandLogo
         $this->validate();
     }
 
-    public function __toString(): string
-    {
-        return $this->path;
-    }
-
     /**
      * @throws BrandDomainException
      */

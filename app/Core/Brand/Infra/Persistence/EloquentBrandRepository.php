@@ -49,8 +49,8 @@ class EloquentBrandRepository implements BrandRepositoryInterface
     public function save(DomainBrand $brand): DomainBrand
     {
         $model = EloquentBrand::create([
-            'name' => $brand->name->value,
-            'image' => $brand->image->path,
+            'name' => $brand->name(),
+            'image' => $brand->imagePath(),
         ]);
 
         return $this->toDomainBrand($model);
@@ -71,11 +71,11 @@ class EloquentBrandRepository implements BrandRepositoryInterface
      */
     public function update(DomainBrand $brand): DomainBrand
     {
-        $model = EloquentBrand::findOrFail($brand->id);
+        $model = EloquentBrand::findOrFail($brand->id());
 
         $model->update([
-            'name' => $brand->name->value,
-            'image' => $brand->image->path,
+            'name' => $brand->name(),
+            'image' => $brand->imagePath(),
         ]);
 
         return $this->toDomainBrand($model);

@@ -17,11 +17,6 @@ readonly class BrandName
         $this->validate($value);
     }
 
-    public function __toString(): string
-    {
-        return $this->value;
-    }
-
     /**
      * @throws BrandDomainException
      */

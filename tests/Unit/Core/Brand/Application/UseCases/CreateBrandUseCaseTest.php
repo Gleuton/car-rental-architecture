@@ -67,9 +67,9 @@ it('creates a brand successfully when name is unique', function () {
 
     $result = $this->useCase->execute($dto);
 
-    expect($result->id)->toBe(1)
-        ->and($result->name->value)->toBe('Fiat')
-        ->and($result->image->path)->toBe('brands/fiat_stored.png');
+    expect($result->id())->toBe(1)
+        ->and($result->name())->toBe('Fiat')
+        ->and($result->imagePath())->toBe('brands/fiat_stored.png');
 });
 
 it('throws exception when brand name already exists', function () {

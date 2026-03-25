@@ -11,10 +11,25 @@ use App\Core\Brand\Domain\ValueObjects\BrandName;
 readonly class Brand
 {
     private function __construct(
-        public ?int $id,
-        public BrandName $name,
-        public BrandLogo $image
+        private ?int $id,
+        private BrandName $name,
+        private BrandLogo $image
     ) {}
+
+    public function id(): ?int
+    {
+        return $this->id;
+    }
+
+    public function name(): string
+    {
+        return $this->name->value;
+    }
+
+    public function imagePath(): string
+    {
+        return $this->image->path;
+    }
 
     /**
      * @throws BrandDomainException
