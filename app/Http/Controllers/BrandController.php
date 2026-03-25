@@ -38,8 +38,18 @@ class BrandController extends Controller
 
         $brands = $this->listBrandsUseCase->execute($filters);
 
+        $formatBrands = [];
+
+        foreach ($brands->items as $brand) {
+            $formatBrands[] = [
+                'id' => $brand->id,
+                'name' => $brand->name->value,
+                'image' => $brand->image,
+            ];
+        }
+
         return response()->json([
-            'data' => $brands->items,
+            'data' => $formatBrands,
             'meta' => [
                 'current_page' => $brands->page,
                 'per_page' => $brands->perPage,
@@ -60,7 +70,13 @@ class BrandController extends Controller
 
         $brand = $this->createBrandUseCase->execute($dto);
 
-        return response()->json(['data' => $brand], 201);
+        return response()->json([
+            'data' => [
+                'id' => $brand->id,
+                'name' => $brand->name->value,
+                'image' => $brand->image,
+            ],
+        ], 201);
     }
 
     /**
@@ -72,7 +88,13 @@ class BrandController extends Controller
 
         $brand = $this->findBrandByIdUseCase->execute($brandDto);
 
-        return response()->json(['data' => $brand]);
+        return response()->json([
+            'data' => [
+                'id' => $brand->id,
+                'name' => $brand->name->value,
+                'image' => $brand->image,
+            ],
+        ]);
     }
 
     /**
@@ -86,7 +108,13 @@ class BrandController extends Controller
 
         $brand = $this->updateBrandUseCase->execute($brandDto);
 
-        return response()->json(['data' => $brand]);
+        return response()->json([
+            'data' => [
+                'id' => $brand->id,
+                'name' => $brand->name->value,
+                'image' => $brand->image,
+            ],
+        ]);
     }
 
     /**

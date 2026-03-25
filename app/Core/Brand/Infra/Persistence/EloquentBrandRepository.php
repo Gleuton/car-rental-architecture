@@ -49,7 +49,7 @@ class EloquentBrandRepository implements BrandRepositoryInterface
     public function save(DomainBrand $brand): DomainBrand
     {
         $model = EloquentBrand::create([
-            'name' => $brand->name,
+            'name' => $brand->name->value,
             'image' => $brand->image,
         ]);
 
@@ -74,7 +74,7 @@ class EloquentBrandRepository implements BrandRepositoryInterface
         $model = EloquentBrand::findOrFail($brand->id);
 
         $model->update([
-            'name' => $brand->name,
+            'name' => $brand->name->value,
             'image' => $brand->image,
         ]);
 

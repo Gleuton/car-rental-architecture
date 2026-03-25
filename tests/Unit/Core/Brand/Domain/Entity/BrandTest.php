@@ -8,7 +8,7 @@ use App\Core\Brand\Domain\Exceptions\BrandDomainException;
 it('can create a Brand instance', function () {
     $brand = Brand::new('Fiat', 'fiat.png');
 
-    expect($brand->name)->toBe('Fiat')
+    expect($brand->name->value)->toBe('Fiat')
         ->and($brand->image)->toBe('fiat.png')
         ->and($brand->id)->toBeNull();
 });
@@ -17,7 +17,7 @@ it('can create a Brand instance with ID', function () {
     $brand = Brand::restore(1, 'Fiat', 'fiat.png');
 
     expect($brand->id)->toBe(1)
-        ->and($brand->name)->toBe('Fiat')
+        ->and($brand->name->value)->toBe('Fiat')
         ->and($brand->image)->toBe('fiat.png');
 });
 
@@ -40,14 +40,14 @@ it('throws exception when creating a Brand with whitespace-only name', function 
 it('can create a Brand with name exactly 3 characters', function () {
     $brand = Brand::new('BMW', 'bmw.png');
 
-    expect($brand->name)->toBe('BMW');
+    expect($brand->name->value)->toBe('BMW');
 });
 
 it('can create a Brand with name exactly 120 characters', function () {
     $name = str_repeat('x', 120);
     $brand = Brand::new($name, 'brand.png');
 
-    expect($brand->name)->toBe($name);
+    expect($brand->name->value)->toBe($name);
 });
 
 it('can update a Brand name keeping the image', function () {
@@ -55,7 +55,7 @@ it('can update a Brand name keeping the image', function () {
     $updated = $brand->update(name: 'Toyota');
 
     expect($updated->id)->toBe(1)
-        ->and($updated->name)->toBe('Toyota')
+        ->and($updated->name->value)->toBe('Toyota')
         ->and($updated->image)->toBe('fiat.png');
 });
 
@@ -64,7 +64,7 @@ it('can update a Brand image keeping the name', function () {
     $updated = $brand->update(image: 'fiat_new.png');
 
     expect($updated->id)->toBe(1)
-        ->and($updated->name)->toBe('Fiat')
+        ->and($updated->name->value)->toBe('Fiat')
         ->and($updated->image)->toBe('fiat_new.png');
 });
 
@@ -73,7 +73,7 @@ it('can update a Brand name and image', function () {
     $updated = $brand->update(name: 'Toyota', image: 'toyota.png');
 
     expect($updated->id)->toBe(1)
-        ->and($updated->name)->toBe('Toyota')
+        ->and($updated->name->value)->toBe('Toyota')
         ->and($updated->image)->toBe('toyota.png');
 });
 

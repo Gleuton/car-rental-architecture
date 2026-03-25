@@ -68,7 +68,7 @@ it('creates a brand successfully when name is unique', function () {
     $result = $this->useCase->execute($dto);
 
     expect($result->id)->toBe(1)
-        ->and($result->name)->toBe('Fiat')
+        ->and($result->name->value)->toBe('Fiat')
         ->and($result->image)->toBe('brands/fiat_stored.png');
 });
 
