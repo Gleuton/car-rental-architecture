@@ -17,6 +17,7 @@ use App\Core\Brand\Domain\Exceptions\BrandDomainException;
 use App\Http\Requests\Brand\IndexBrandRequest;
 use App\Http\Requests\Brand\StoreBrandRequest;
 use App\Http\Requests\Brand\UpdateBrandRequest;
+use App\Http\Resources\BrandResource;
 use Illuminate\Http\JsonResponse;
 
 class BrandController extends Controller
@@ -38,18 +39,8 @@ class BrandController extends Controller
 
         $brands = $this->listBrandsUseCase->execute($filters);
 
-        $formatBrands = [];
-
-        foreach ($brands->items as $brand) {
-            $formatBrands[] = [
-                'id' => $brand->id,
-                'name' => $brand->name->value,
-                'image' => $brand->image,
-            ];
-        }
-
         return response()->json([
-            'data' => $formatBrands,
+            'data' => BrandResource::BrandCollectionToArray($brands->items),
             'meta' => [
                 'current_page' => $brands->page,
                 'per_page' => $brands->perPage,
@@ -70,13 +61,7 @@ class BrandController extends Controller
 
         $brand = $this->createBrandUseCase->execute($dto);
 
-        return response()->json([
-            'data' => [
-                'id' => $brand->id,
-                'name' => $brand->name->value,
-                'image' => $brand->image,
-            ],
-        ], 201);
+        return response()->json(['data' => BrandResource::BrandToArray($brand)], 201);
     }
 
     /**
@@ -89,11 +74,7 @@ class BrandController extends Controller
         $brand = $this->findBrandByIdUseCase->execute($brandDto);
 
         return response()->json([
-            'data' => [
-                'id' => $brand->id,
-                'name' => $brand->name->value,
-                'image' => $brand->image,
-            ],
+            'data' => BrandResource::BrandToArray($brand),
         ]);
     }
 
@@ -109,11 +90,7 @@ class BrandController extends Controller
         $brand = $this->updateBrandUseCase->execute($brandDto);
 
         return response()->json([
-            'data' => [
-                'id' => $brand->id,
-                'name' => $brand->name->value,
-                'image' => $brand->image,
-            ],
+            'data' => BrandResource::BrandToArray($brand),
         ]);
     }
 
