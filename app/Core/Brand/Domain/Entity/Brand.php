@@ -43,11 +43,20 @@ readonly class Brand
     /**
      * @throws BrandDomainException
      */
-    public function update(?string $name = null, ?string $image = null): self
+    public function updateLogo(?string $image): self
     {
-        $newName = $name ?? $this->name->value;
-        $newImage = $image ?? $this->image->path;
+        $newImage = $image ? new BrandLogo($image) : $this->image;
 
-        return new self($this->id, new BrandName($newName), new BrandLogo($newImage));
+        return new self($this->id, $this->name, $newImage);
+    }
+
+    /**
+     * @throws BrandDomainException
+     */
+    public function updateName(?string $name): self
+    {
+        $newName = $name ? new BrandName($name) : $this->name;
+
+        return new self($this->id, $newName, $this->image);
     }
 }
