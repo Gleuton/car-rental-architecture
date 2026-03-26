@@ -49,6 +49,23 @@ function submitForm() {
             alerts.value = mapBrandApiError(error);
         });
 }
+
+const brandList = ref([]);
+function loadBrandList() {
+    const token = localStorage.getItem('token');
+    const config = {headers: {'Authorization': `Bearer ${token}`}};
+
+    axios.get('/api/brands', config)
+        .then((response) => {
+            brandList.value = response.data.data;
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+}
+loadBrandList();
+
+
 </script>
 
 <template>
@@ -88,7 +105,7 @@ function submitForm() {
                     <div class="card-header">Marcas</div>
 
                     <div class="card-body">
-                        <table-brands-component/>
+                        <table-brands-component :brands="brandList"/>
                     </div>
 
                     <div class="card-footer d-flex justify-content-end">
