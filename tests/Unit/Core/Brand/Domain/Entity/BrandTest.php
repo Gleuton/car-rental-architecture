@@ -52,7 +52,7 @@ it('can create a Brand with name exactly 120 characters', function () {
 
 it('can update a Brand name keeping the image', function () {
     $brand = Brand::restore(1, 'Fiat', 'fiat.png');
-    $updated = $brand->updateName('Toyota');
+    $updated = $brand->rename('Toyota');
 
     expect($updated->id())->toBe(1)
         ->and($updated->name())->toBe('Toyota')
@@ -61,7 +61,7 @@ it('can update a Brand name keeping the image', function () {
 
 it('can update a Brand image keeping the name', function () {
     $brand = Brand::restore(1, 'Fiat', 'fiat.png');
-    $updated = $brand->updateLogo('fiat_new.png');
+    $updated = $brand->changeLogo('fiat_new.png');
 
     expect($updated->id())->toBe(1)
         ->and($updated->name())->toBe('Fiat')
@@ -70,8 +70,8 @@ it('can update a Brand image keeping the name', function () {
 
 it('can update a Brand name and image', function () {
     $brand = Brand::restore(1, 'Fiat', 'fiat.png');
-    $updated = $brand->updateName('Toyota')
-        ->updateLogo('toyota.png');
+    $updated = $brand->rename('Toyota')
+        ->changeLogo('toyota.png');
 
     expect($updated->id())->toBe(1)
         ->and($updated->name())->toBe('Toyota')
@@ -80,5 +80,5 @@ it('can update a Brand name and image', function () {
 
 it('throws exception when updating a Brand with invalid name', function () {
     $brand = Brand::restore(1, 'Fiat', 'fiat.png');
-    $brand->updateName(name: 'Fi');
+    $brand->rename(name: 'Fi');
 })->throws(BrandDomainException::class, 'Brand name must have at least 3 characters');

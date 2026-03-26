@@ -8,10 +8,10 @@ use App\Core\Brand\Domain\Exceptions\BrandDomainException;
 use App\Core\Brand\Domain\ValueObjects\BrandLogo;
 use App\Core\Brand\Domain\ValueObjects\BrandName;
 
-readonly class Brand
+class Brand
 {
     private function __construct(
-        private ?int $id,
+        private readonly ?int $id,
         private BrandName $name,
         private BrandLogo $image
     ) {}
@@ -58,20 +58,20 @@ readonly class Brand
     /**
      * @throws BrandDomainException
      */
-    public function updateLogo(?string $image): self
+    public function changeLogo(?string $image): self
     {
-        $newImage = $image ? new BrandLogo($image) : $this->image;
+        $this->image = $image ? new BrandLogo($image) : $this->image;
 
-        return new self($this->id, $this->name, $newImage);
+        return $this;
     }
 
     /**
      * @throws BrandDomainException
      */
-    public function updateName(?string $name): self
+    public function rename(?string $name): self
     {
-        $newName = $name ? new BrandName($name) : $this->name;
+        $this->name = $name ? new BrandName($name) : $this->name;
 
-        return new self($this->id, $newName, $this->image);
+        return $this;
     }
 }

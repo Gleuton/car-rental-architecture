@@ -34,8 +34,8 @@ readonly class UpdateBrandUseCase
         $imagePath = $brand->imagePath();
         $imagePath = $this->updateImage($brandDto, $brand, $imagePath);
 
-        $updatedBrand = $brand->updateLogo($imagePath)
-            ->updateName($brandDto->name);
+        $updatedBrand = $brand->changeLogo($imagePath)
+            ->rename($brandDto->name);
 
         return $this->repository->update($updatedBrand);
     }
