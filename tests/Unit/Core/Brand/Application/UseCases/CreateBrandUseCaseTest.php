@@ -3,26 +3,24 @@
 declare(strict_types=1);
 
 use App\Core\Brand\Application\DTOs\CreateBrandDTO;
+use App\Core\Brand\Application\Services\BrandLogoService;
 use App\Core\Brand\Application\UseCases\CreateBrandUseCase;
 use App\Core\Brand\Domain\Entity\Brand as DomainBrand;
 use App\Core\Brand\Domain\Exceptions\BrandDomainException;
 use App\Core\Brand\Domain\Repositories\BrandRepositoryInterface;
 use App\Core\Brand\Domain\Roles\UniqueBrandNameRule;
-use App\Core\Shared\Domain\Storage\DomainFile;
-use App\Core\Shared\Domain\Storage\FileStorageInterface;
-use App\Core\Shared\Domain\Storage\StoredFile;
 use App\Http\Requests\Brand\StoreBrandRequest;
 use Illuminate\Http\UploadedFile;
 
 beforeEach(function () {
     $this->repository = Mockery::mock(BrandRepositoryInterface::class);
     $this->uniqueRule = new UniqueBrandNameRule($this->repository);
-    $this->storage = Mockery::mock(FileStorageInterface::class);
+    $this->logoService = Mockery::mock(BrandLogoService::class);
 
     $this->useCase = new CreateBrandUseCase(
         $this->repository,
         $this->uniqueRule,
-        $this->storage
+        $this->logoService
     );
 });
 
@@ -45,15 +43,10 @@ it('creates a brand successfully when name is unique', function () {
         ->once()
         ->andReturn(false);
 
-    $storedFile = new StoredFile('brands/fiat_stored.png', '');
-
-    $this->storage->shouldReceive('upload')
-        ->with(
-            Mockery::type(DomainFile::class),
-            'brands'
-        )
+    $this->logoService->shouldReceive('upload')
+        ->with($file)
         ->once()
-        ->andReturn($storedFile);
+        ->andReturn('brands/fiat_stored.png');
 
     $expectedBrand = DomainBrand::restore(
         1,

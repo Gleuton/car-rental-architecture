@@ -3,27 +3,25 @@
 declare(strict_types=1);
 
 use App\Core\Brand\Application\DTOs\UpdateBrandDTO;
+use App\Core\Brand\Application\Services\BrandLogoService;
 use App\Core\Brand\Application\UseCases\UpdateBrandUseCase;
 use App\Core\Brand\Domain\Entity\Brand;
 use App\Core\Brand\Domain\Errors\BrandError;
 use App\Core\Brand\Domain\Exceptions\BrandDomainException;
 use App\Core\Brand\Domain\Repositories\BrandRepositoryInterface;
 use App\Core\Brand\Domain\Roles\UniqueBrandNameRule;
-use App\Core\Shared\Domain\Storage\DomainFile;
-use App\Core\Shared\Domain\Storage\FileStorageInterface;
-use App\Core\Shared\Domain\Storage\StoredFile;
 use App\Http\Requests\Brand\UpdateBrandRequest;
 use Illuminate\Http\UploadedFile;
 
 beforeEach(function () {
     $this->repository = Mockery::mock(BrandRepositoryInterface::class);
-    $this->storage = Mockery::mock(FileStorageInterface::class);
+    $this->logoService = Mockery::mock(BrandLogoService::class);
     $this->uniqueRule = Mockery::mock(UniqueBrandNameRule::class);
 
     $this->useCase = new UpdateBrandUseCase(
         $this->repository,
-        $this->storage,
-        $this->uniqueRule
+        $this->uniqueRule,
+        $this->logoService
     );
 
     $this->existingBrand = Brand::restore(1, 'Fiat', 'brands/fiat.png');
@@ -45,16 +43,10 @@ it('updates a brand with name and image successfully', function () {
         ->once()
         ->andReturn($this->existingBrand);
 
-    $storedFile = new StoredFile('brands/fiat_updated.png', '');
-
-    $this->storage->shouldReceive('upload')
-        ->with(Mockery::type(DomainFile::class), 'brands')
+    $this->logoService->shouldReceive('replace')
+        ->with($file, 'brands/fiat.png')
         ->once()
-        ->andReturn($storedFile);
-
-    $this->storage->shouldReceive('delete')
-        ->with('brands/fiat.png')
-        ->once();
+        ->andReturn('brands/fiat_updated.png');
 
     $updatedBrand = Brand::restore(1, 'Fiat Updated', 'brands/fiat_updated.png');
 
@@ -84,8 +76,7 @@ it('updates a brand name only without changing image', function () {
         ->once()
         ->andReturn($this->existingBrand);
 
-    $this->storage->shouldNotReceive('upload');
-    $this->storage->shouldNotReceive('delete');
+    $this->logoService->shouldNotReceive('replace');
 
     $updatedBrand = Brand::restore(1, 'Toyota', 'brands/fiat.png');
 
@@ -116,16 +107,10 @@ it('updates a brand image only without validating name uniqueness', function () 
         ->once()
         ->andReturn($this->existingBrand);
 
-    $storedFile = new StoredFile('brands/fiat_new.png', '');
-
-    $this->storage->shouldReceive('upload')
-        ->with(Mockery::type(DomainFile::class), 'brands')
+    $this->logoService->shouldReceive('replace')
+        ->with($file, 'brands/fiat.png')
         ->once()
-        ->andReturn($storedFile);
-
-    $this->storage->shouldReceive('delete')
-        ->with('brands/fiat.png')
-        ->once();
+        ->andReturn('brands/fiat_new.png');
 
     $updatedBrand = Brand::restore(1, 'Fiat', 'brands/fiat_new.png');
 

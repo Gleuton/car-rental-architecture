@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 use App\Core\Brand\Application\DTOs\BrandIdDTO;
+use App\Core\Brand\Application\Services\BrandLogoService;
 use App\Core\Brand\Application\UseCases\DeleteBrandUseCase;
 use App\Core\Brand\Domain\Entity\Brand;
 use App\Core\Brand\Domain\Repositories\BrandRepositoryInterface;
-use App\Core\Shared\Domain\Storage\FileStorageInterface;
 
 it('deletes a brand successfully', function () {
     $dto = BrandIdDTO::fromId(1);
@@ -23,12 +23,12 @@ it('deletes a brand successfully', function () {
         ->with(1)
         ->once();
 
-    $storage = Mockery::mock(FileStorageInterface::class);
-    $storage->shouldReceive('delete')
+    $logoService = Mockery::mock(BrandLogoService::class);
+    $logoService->shouldReceive('delete')
         ->with('brands/fiat.png')
         ->once();
 
-    $useCase = new DeleteBrandUseCase($repository, $storage);
+    $useCase = new DeleteBrandUseCase($repository, $logoService);
     $useCase->execute($dto);
 
     expect(true)->toBeTrue();
@@ -43,9 +43,9 @@ it('propagates exception when brand is not found during delete', function () {
         ->once()
         ->andThrow(new RuntimeException('Brand not found'));
 
-    $storage = Mockery::mock(FileStorageInterface::class);
+    $logoService = Mockery::mock(BrandLogoService::class);
 
-    $useCase = new DeleteBrandUseCase($repository, $storage);
+    $useCase = new DeleteBrandUseCase($repository, $logoService);
 
     expect(fn () => $useCase->execute($dto))
         ->toThrow(RuntimeException::class);

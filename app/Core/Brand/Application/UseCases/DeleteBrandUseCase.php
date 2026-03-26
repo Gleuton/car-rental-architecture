@@ -5,21 +5,21 @@ declare(strict_types=1);
 namespace App\Core\Brand\Application\UseCases;
 
 use App\Core\Brand\Application\DTOs\BrandIdDTO;
+use App\Core\Brand\Application\Services\BrandLogoService;
 use App\Core\Brand\Domain\Repositories\BrandRepositoryInterface;
-use App\Core\Shared\Domain\Storage\FileStorageInterface;
 
 readonly class DeleteBrandUseCase
 {
     public function __construct(
         private BrandRepositoryInterface $repository,
-        private FileStorageInterface $storage
+        private BrandLogoService $logoService
     ) {}
 
     public function execute(BrandIdDTO $brandDto): void
     {
         $brand = $this->repository->findById($brandDto->id);
 
-        $this->storage->delete($brand->imagePath());
+        $this->logoService->delete($brand->imagePath());
 
         $this->repository->delete($brandDto->id);
     }
