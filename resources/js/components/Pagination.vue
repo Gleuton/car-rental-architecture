@@ -1,5 +1,5 @@
 <script setup>
-import {computed, ref} from "vue";
+import {computed} from "vue";
 
 const props = defineProps({
     loadBrandList: {},
@@ -19,19 +19,19 @@ const lastPage = computed(() => props.pagination?.last_page ?? 1);
 const isFirstPage = computed(() => currentPage.value <= 1);
 const isLastPage = computed(() => currentPage.value >= lastPage.value);
 
-function previous(){
-    if (currentPage > 1) {
-        return currentPage - 1;
+const previousPage = computed(() => {
+    if (currentPage.value > 1) {
+        return currentPage.value - 1;
     }
     return 1;
-}
+});
 
-function next(){
-    if (currentPage < lastPage) {
-        return currentPage + 1;
+const nextPage = computed(() => {
+    if (currentPage.value < lastPage.value) {
+        return currentPage.value + 1;
     }
     return lastPage.value;
-}
+});
 
 </script>
 
@@ -39,7 +39,7 @@ function next(){
     <nav class="mt-4">
         <ul class="pagination">
             <li class="page-item" :class="{ disabled: isFirstPage }">
-                <a class="page-link" href="#" @click.prevent="loadBrandList(previous())">Previous</a>
+                <a class="page-link" href="#" @click.prevent="loadBrandList(previousPage)">Previous</a>
             </li>
             <li class="page-item" v-for="page in pagination.last_page" :key="page">
                 <a class="page-link" href="#"
@@ -48,7 +48,7 @@ function next(){
                 </a>
             </li>
             <li class="page-item" :class="{ disabled: isLastPage }">
-                <a class="page-link" href="#" @click.prevent="loadBrandList(next())">Next</a>
+                <a class="page-link" href="#" @click.prevent="loadBrandList(nextPage)">Next</a>
             </li>
         </ul>
     </nav>
