@@ -16,17 +16,13 @@ const isFirstPage = computed(() => currentPage.value <= 1);
 const isLastPage = computed(() => currentPage.value >= lastPage.value);
 
 const previousPage = computed(() => {
-    if (currentPage.value > 1) {
-        return currentPage.value - 1;
-    }
-    return 1;
+    if (isFirstPage.value) return 1;
+    return currentPage.value - 1;
 });
 
 const nextPage = computed(() => {
-    if (currentPage.value < lastPage.value) {
-        return currentPage.value + 1;
-    }
-    return lastPage.value;
+    if (isLastPage.value) return lastPage.value;
+    return currentPage.value + 1;
 });
 
 </script>
