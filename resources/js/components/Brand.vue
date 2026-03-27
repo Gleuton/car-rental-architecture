@@ -56,7 +56,7 @@ const paginationBrand = ref({});
 function loadBrandList(page = 1) {
     const token = localStorage.getItem('token');
     const url = '/api/brands';
-    const params = '?page=' + page + '&per_page=2';
+    const params = '?page=' + page;
     const config = {headers: {'Authorization': `Bearer ${token}`}};
 
     axios.get(url + params, config)
