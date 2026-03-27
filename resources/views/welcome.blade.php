@@ -129,7 +129,7 @@
                 </div>
                 <div class="feature-item">
                     <h3>📍 Localização</h3>
-                    <p>Encontre carros perto de você</p>
+                    <p>Sempre perto de você</p>
                 </div>
             </div>
         </div>
