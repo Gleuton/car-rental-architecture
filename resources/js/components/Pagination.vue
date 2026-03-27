@@ -6,16 +6,12 @@ const props = defineProps({
     pagination: {
         type: Object,
         required: true,
-        default: () => ({
-            last_page: 1,
-            current_page: 1,
-            total: 0,
-        })
     },
 })
 
 const currentPage = computed(() => props.pagination?.current_page ?? 1);
 const lastPage = computed(() => props.pagination?.last_page ?? 1);
+
 const isFirstPage = computed(() => currentPage.value <= 1);
 const isLastPage = computed(() => currentPage.value >= lastPage.value);
 
@@ -41,7 +37,7 @@ const nextPage = computed(() => {
             <li class="page-item" :class="{ disabled: isFirstPage }">
                 <a class="page-link" href="#" @click.prevent="loadBrandList(previousPage)">Previous</a>
             </li>
-            <li class="page-item" v-for="page in pagination.last_page" :key="page">
+            <li class="page-item" v-for="page in lastPage" :key="page">
                 <a class="page-link" href="#"
                    @click.prevent="loadBrandList(page)">
                     {{ page }}

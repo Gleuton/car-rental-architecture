@@ -1,5 +1,5 @@
 <script setup>
-import {reactive, ref} from 'vue';
+import {onMounted, reactive, ref} from 'vue';
 import {mapBrandApiError} from '../errors/brandApiErrorMapper.js';
 
 const formPayload = reactive({
@@ -51,7 +51,7 @@ function submitForm() {
 }
 
 const brandList = ref([]);
-const paginationBrand = ref([]);
+const paginationBrand = ref({});
 
 function loadBrandList(page = 1) {
     const token = localStorage.getItem('token');
@@ -63,15 +63,13 @@ function loadBrandList(page = 1) {
         .then((response) => {
             brandList.value = response.data.data;
             paginationBrand.value = response.data.meta;
-            console.log(paginationBrand);
         })
         .catch((error) => {
             console.error(error);
         });
 }
 
-loadBrandList();
-
+onMounted(() => loadBrandList());
 
 </script>
 
