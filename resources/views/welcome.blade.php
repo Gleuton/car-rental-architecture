@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Locadora de Carros - Bem-vindo</title>
+    <title>LoCar - Bem-vindo</title>
     <style>
         body {
             margin: 0;
@@ -108,7 +108,8 @@
 <body>
     <section class="hero">
         <div class="hero-content">
-            <h1>🚗 Locadora de Carros</h1>
+            <h1>🚗 LoCar</h1>
+            <p>Seu novo meio de alugar carros</p>
             <p>Alugue o seu carro perfeito com segurança, comodidade e os melhores preços do mercado.</p>
 
             <a href="{{ route('login') }}" class="cta-button">Fazer Login</a>
@@ -125,6 +126,10 @@
                 <div class="feature-item">
                     <h3>🛡️ Seguro</h3>
                     <p>Frotas bem mantidas e seguras</p>
+                </div>
+                <div class="feature-item">
+                    <h3>📍 Localização</h3>
+                    <p>Encontre carros perto de você</p>
                 </div>
             </div>
         </div>
