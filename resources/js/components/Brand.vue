@@ -1,6 +1,6 @@
 <script setup>
 import {reactive, ref} from 'vue';
-import { mapBrandApiError } from '../errors/brandApiErrorMapper.js';
+import {mapBrandApiError} from '../errors/brandApiErrorMapper.js';
 
 const formPayload = reactive({
     name: '',
@@ -51,18 +51,24 @@ function submitForm() {
 }
 
 const brandList = ref([]);
-function loadBrandList() {
+const paginationBrand = ref([]);
+
+function loadBrandList(page = 1) {
     const token = localStorage.getItem('token');
+    const url = '/api/brands';
+    const params = '?page=' + page + '&per_page=2';
     const config = {headers: {'Authorization': `Bearer ${token}`}};
 
-    axios.get('/api/brands', config)
+    axios.get(url + params, config)
         .then((response) => {
             brandList.value = response.data.data;
+            paginationBrand.value = response.data.meta;
         })
         .catch((error) => {
             console.error(error);
         });
 }
+
 loadBrandList();
 
 
@@ -108,9 +114,13 @@ loadBrandList();
                         <table-brands-component :brands="brandList"/>
                     </div>
 
-                    <div class="card-footer d-flex justify-content-end">
-                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#formCadBrand">Adicionar
-                            Marca
+                    <div class="card-footer d-flex justify-content-between align-items-center">
+                        <pagination-component
+                            :load-brand-list="loadBrandList"
+                            :pagination="paginationBrand"
+                        />
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#formCadBrand">
+                            Adicionar Marca
                         </button>
                     </div>
                 </div>

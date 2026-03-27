@@ -17,7 +17,7 @@ Route::get('/user', static function (Request $request) {
 
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::group(['middleware' => 'auth:api'], function () {
+Route::group(['middleware' => 'auth:api'], static function () {
     Route::apiResource('clients', ClientController::class);
     Route::apiResource('cars', CarController::class);
     Route::apiResource('rentals', RentalController::class);
