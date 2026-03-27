@@ -28,7 +28,7 @@ function next(){
     if (currentPage < lastPage) {
         return currentPage + 1;
     }
-    return lastPage;
+    return lastPage.value;
 }
 
 </script>
