@@ -4,11 +4,11 @@ defineProps({
     pagination: {
         type: Object,
         required: true,
-        default: {
+        default: () => ({
             last_page: 1,
             current_page: 1,
             total: 1,
-        }
+        })
     },
 })
 
