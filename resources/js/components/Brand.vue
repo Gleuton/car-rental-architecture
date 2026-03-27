@@ -114,7 +114,7 @@ onMounted(() => loadBrandList());
                     </div>
 
                     <div class="card-footer d-flex justify-content-between align-items-center">
-                        <pagination-component
+                        <pagination-brand-component
                             :load-brand-list="loadBrandList"
                             :pagination="paginationBrand"
                         />
