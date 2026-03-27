@@ -35,6 +35,7 @@ const nextPage = computed(() => {
             </li>
             <li class="page-item" v-for="page in lastPage" :key="page">
                 <a class="page-link" href="#"
+                   :class="{ active: page === currentPage }"
                    @click.prevent="loadBrandList(page)">
                     {{ page }}
                 </a>
