@@ -63,6 +63,7 @@ function loadBrandList(page = 1) {
         .then((response) => {
             brandList.value = response.data.data;
             paginationBrand.value = response.data.meta;
+            console.log(paginationBrand);
         })
         .catch((error) => {
             console.error(error);
