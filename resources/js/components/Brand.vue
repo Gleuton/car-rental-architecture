@@ -13,6 +13,7 @@ const brandList = ref([]);
 const paginationBrand = ref({});
 const fileInput = ref(null)
 const searchBrand = ref('');
+
 fileInput.value = null;
 
 function cleanAlerts() {
@@ -52,16 +53,17 @@ function submitForm() {
         });
 }
 
-function loadBrandList(page = 1, search = '') {
+function loadBrandList(page = 1) {
     const token = localStorage.getItem('token');
     const url = '/api/brands';
-    const params = '?page=' + page + '&search=' + search;
+    const params = '?page=' + page + '&search=' + searchBrand.value;
     const config = {headers: {'Authorization': `Bearer ${token}`}};
 
     axios.get(url + params, config)
         .then((response) => {
             brandList.value = response.data.data;
             paginationBrand.value = response.data.meta;
+
         })
         .catch((error) => {
             console.error(error);
@@ -80,31 +82,30 @@ onMounted(() => loadBrandList());
                     <div class="card-header">Busca de Marcas</div>
                     <div class="card-body">
                         <div class="row mb-0">
-                            <label for="search" class="col-md-4 col-form-label text-md-end">Nome da Marca</label>
+                            <form class="d-flex" @submit.prevent="loadBrandList()">
+                                <label for="search" class="col-md-4 col-form-label text-md-end">Nome da Marca: </label>
 
-                            <div class="col-md-6">
-                                <div class="input-group">
-                                    <input
-                                        id="search"
-                                        type="text"
-                                        class="form-control"
-                                        v-model="searchBrand"
-                                        autofocus>
+                                <div class="col-md-6">
+                                    <div class="input-group">
+                                        <input
+                                            id="search"
+                                            type="text"
+                                            class="form-control"
+                                            v-model="searchBrand"
+                                            autofocus>
 
-                                    <button
-                                        @click="loadBrandList(1, searchBrand)"
-                                        class="btn btn-primary d-inline-flex align-items-center gap-2">
-                                        <i class="bi bi-search" aria-hidden="true"></i>
-                                        <span>Buscar</span>
-                                    </button>
+                                        <button
+                                            type="submit"
+                                            class="btn btn-primary d-inline-flex align-items-center gap-2">
+                                            <span>Buscar</span>
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>
-
                 <hr>
-
                 <div class="card">
                     <div class="card-header">Marcas</div>
 
