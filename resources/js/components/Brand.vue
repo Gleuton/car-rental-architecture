@@ -1,6 +1,7 @@
 <script setup>
 import {onMounted, reactive, ref} from 'vue';
 import {mapBrandApiError} from '../errors/brandApiErrorMapper.js';
+import {createBrand, listBrands} from '../services/brandApi.js';
 
 const formPayload = reactive({
     name: '',
@@ -33,9 +34,6 @@ function resetForm() {
 
 function submitForm() {
     cleanAlerts();
-
-    const token = localStorage.getItem('token');
-    const config = {headers: {'Authorization': `Bearer ${token}`}};
     const formData = new FormData();
 
     formData.append('name', formPayload.name);
@@ -43,7 +41,7 @@ function submitForm() {
         formData.append('image', formPayload.image);
     }
 
-    axios.post('/api/brands', formData, config)
+    createBrand(formData)
         .then(() => {
             resetForm();
             success.value = true;
@@ -54,20 +52,18 @@ function submitForm() {
 }
 
 function loadBrandList(page = 1) {
-    const token = localStorage.getItem('token');
-    const url = '/api/brands';
-    const params = '?page=' + page + '&search=' + searchBrand.value;
-    const config = {headers: {'Authorization': `Bearer ${token}`}};
-
-    axios.get(url + params, config)
+    listBrands({
+        page,
+        search: searchBrand.value,
+    })
         .then((response) => {
-            brandList.value = response.data.data;
-            paginationBrand.value = response.data.meta;
+        brandList.value = response.data.data;
+        paginationBrand.value = response.data.meta;
 
-        })
+    })
         .catch((error) => {
-            console.error(error);
-        });
+        console.error(error);
+    });
 }
 
 onMounted(() => loadBrandList());
