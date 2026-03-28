@@ -9,8 +9,10 @@ const formPayload = reactive({
 
 const alerts = ref([]);
 const success = ref(false);
-
+const brandList = ref([]);
+const paginationBrand = ref({});
 const fileInput = ref(null)
+const searchBrand = ref('');
 fileInput.value = null;
 
 function cleanAlerts() {
@@ -50,13 +52,10 @@ function submitForm() {
         });
 }
 
-const brandList = ref([]);
-const paginationBrand = ref({});
-
-function loadBrandList(page = 1) {
+function loadBrandList(page = 1, search = '') {
     const token = localStorage.getItem('token');
     const url = '/api/brands';
-    const params = '?page=' + page;
+    const params = '?page=' + page + '&search=' + search;
     const config = {headers: {'Authorization': `Bearer ${token}`}};
 
     axios.get(url + params, config)
@@ -89,12 +88,12 @@ onMounted(() => loadBrandList());
                                         id="search"
                                         type="text"
                                         class="form-control"
-                                        name="search"
-                                        autocomplete="name"
+                                        v-model="searchBrand"
                                         autofocus>
 
-                                    <button type="submit"
-                                            class="btn btn-primary d-inline-flex align-items-center gap-2">
+                                    <button
+                                        @click="loadBrandList(1, searchBrand)"
+                                        class="btn btn-primary d-inline-flex align-items-center gap-2">
                                         <i class="bi bi-search" aria-hidden="true"></i>
                                         <span>Buscar</span>
                                     </button>
