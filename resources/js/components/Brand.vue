@@ -1,7 +1,8 @@
 <script setup>
-import {onMounted, reactive, ref} from 'vue';
+import {reactive, ref} from 'vue';
+import {useBrandList} from '../composables/useBrandList.js';
 import {mapBrandApiError} from '../errors/brandApiErrorMapper.js';
-import {createBrand, listBrands} from '../services/brandApi.js';
+import {createBrand} from '../services/brandApi.js';
 
 const formPayload = reactive({
     name: '',
@@ -10,10 +11,8 @@ const formPayload = reactive({
 
 const alerts = ref([]);
 const success = ref(false);
-const brandList = ref([]);
-const paginationBrand = ref({});
 const fileInput = ref(null)
-const searchBrand = ref('');
+const {brandList, paginationBrand, searchBrand, loadBrandList} = useBrandList();
 
 fileInput.value = null;
 
@@ -51,22 +50,6 @@ function submitForm() {
         });
 }
 
-function loadBrandList(page = 1) {
-    listBrands({
-        page,
-        search: searchBrand.value,
-    })
-        .then((response) => {
-        brandList.value = response.data.data;
-        paginationBrand.value = response.data.meta;
-
-    })
-        .catch((error) => {
-        console.error(error);
-    });
-}
-
-onMounted(() => loadBrandList());
 
 </script>
 
