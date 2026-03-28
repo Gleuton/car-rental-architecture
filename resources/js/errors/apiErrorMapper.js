@@ -1,6 +1,6 @@
 const STATUS_MESSAGES = {
-    401: 'Sua sessao expirou. Faca login novamente.',
-    403: 'Voce nao tem permissao para realizar esta acao.',
+    401: 'Sua sessão expirou. Faca login novamente.',
+    403: 'Voce nao tem permissão para realizar esta ação.',
     404: 'Recurso nao encontrado.',
     500: 'Erro interno do servidor. Tente novamente em instantes.',
 };
@@ -16,7 +16,7 @@ const VALIDATION_KEY_MESSAGES = {
     'validation.image': 'O arquivo enviado deve ser uma imagem válida.',
     'validation.mimes': 'O tipo do arquivo enviado não e permitido.',
     'validation.max.string': 'O texto informado e maior do que o permitido.',
-    'validation.max.file': 'O arquivo excede o tamanho maximo permitido.',
+    'validation.max.file': 'O arquivo excede o tamanho máximo permitido.',
 };
 
 function translateValidationMessage(message) {
@@ -37,7 +37,7 @@ function translateValidationMessage(message) {
 
 function normalizeValidationErrors(errors) {
     if (!errors || typeof errors !== 'object') {
-        return ['Dados invalidos.'];
+        return ['Dados inválidos.'];
     }
 
     return Object.entries(errors).flatMap(([field, msgs]) => {
@@ -53,7 +53,7 @@ export function mapApiError(error, options = {}) {
     const response = error?.response;
 
     if (!response) {
-        return ['Falha de conexao. Verifique sua internet e tente novamente.'];
+        return ['Falha de conexão. Verifique sua internet e tente novamente.'];
     }
 
     const { status, data } = response;
