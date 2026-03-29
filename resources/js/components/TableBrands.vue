@@ -26,8 +26,9 @@ defineProps({
             </td>
             <td class="text-center">
                 <div class="btn-group" role="group" aria-label="Grupo de botões">
-                    <button type="button" class="btn btn-primary" :value="brand.id">Editar</button>
-                    <button type="button" class="btn btn-danger" :value="brand.id">Excluir</button>
+                    <button type="button" class="btn btn-secondary">Detalhes</button>
+                    <button type="button" class="btn btn-primary">Editar</button>
+                    <button type="button" class="btn btn-danger">Excluir</button>
                 </div>
             </td>
         </tr>
