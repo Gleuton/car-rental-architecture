@@ -33,7 +33,7 @@ class IndexBrandRequest extends FormRequest
         $this->merge([
             'order_by' => $this->order_by ?? 'name',
             'direction' => $this->direction ?? 'asc',
-            'per_page' => $this->per_page ?? 15,
+            'per_page' => $this->per_page ?? 10,
         ]);
     }
 }
