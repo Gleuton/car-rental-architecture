@@ -24,3 +24,7 @@ export function listBrands({page = 1, search = ''} = {}) {
     });
 }
 
+export function getBrandDetails(id) {
+    return axios.get(`/api/brands/${id}`, getAuthConfig());
+}
+

@@ -1,6 +1,9 @@
 <script setup>
 
 defineProps({
+    detailsBrand: {
+        type: Function,
+    },
     brands: {
         type: Array,
         required: true,
@@ -26,7 +29,14 @@ defineProps({
             </td>
             <td class="text-center">
                 <div class="btn-group" role="group" aria-label="Grupo de botões">
-                    <button type="button" class="btn btn-secondary">Detalhes</button>
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-toggle="modal"
+                        @click="detailsBrand(brand.id)"
+                        data-bs-target="#formDetailsBrand">
+                        Detalhes
+                    </button>
                     <button type="button" class="btn btn-primary">Editar</button>
                     <button type="button" class="btn btn-danger">Excluir</button>
                 </div>

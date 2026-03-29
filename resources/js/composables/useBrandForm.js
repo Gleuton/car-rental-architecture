@@ -11,7 +11,6 @@ export function useBrandForm() {
     const alerts = ref([]);
     const success = ref(false);
     const fileInput = ref(null);
-    fileInput.value = null;
 
     function cleanAlerts() {
         alerts.value = [];

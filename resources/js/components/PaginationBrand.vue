@@ -2,7 +2,10 @@
 import {computed} from "vue";
 
 const props = defineProps({
-    loadBrandList: {},
+    loadBrandList: {
+        type: Function,
+        required: true,
+    },
     pagination: {
         type: Object,
         required: true,

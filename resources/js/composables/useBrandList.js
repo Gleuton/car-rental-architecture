@@ -1,10 +1,11 @@
 import {onMounted, ref} from 'vue';
-import {listBrands} from '../services/brandApi.js';
+import {getBrandDetails, listBrands} from '../services/brandApi.js';
 
 export function useBrandList() {
     const brandList = ref([]);
     const paginationBrand = ref({});
     const searchBrand = ref('');
+    const detailsBrandId = ref(null);
 
     function loadBrandList(page = 1) {
         return listBrands({
@@ -20,13 +21,25 @@ export function useBrandList() {
             });
     }
 
+    function detailsBrand(id) {
+        return getBrandDetails(id)
+            .then((response) => {
+                detailsBrandId.value = response.data.data;
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
+
     onMounted(() => loadBrandList());
 
     return {
         brandList,
         paginationBrand,
         searchBrand,
+        detailsBrandId,
         loadBrandList,
+        detailsBrand,
     };
 }
 
