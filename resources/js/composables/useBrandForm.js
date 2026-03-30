@@ -41,9 +41,9 @@ export function useBrandForm({onSuccess} = {}) {
 
         createBrand(formData)
             .then(() => {
-                success.value = true;
                 resetForm();
                 runOnSuccess();
+                success.value = true;
             })
             .catch((error) => {
                 alerts.value = mapBrandApiError(error);
