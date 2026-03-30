@@ -5,7 +5,7 @@ export function useBrandList() {
     const brandList = ref([]);
     const paginationBrand = ref({});
     const searchBrand = ref('');
-    const detailsBrandId = ref(null);
+    const detailsBrand = ref(null);
 
     function loadBrandList(page = 1) {
         return listBrands({
@@ -21,10 +21,10 @@ export function useBrandList() {
             });
     }
 
-    function detailsBrand(id) {
+    function getDetailsBrand(id) {
         return getBrandDetails(id)
             .then((response) => {
-                detailsBrandId.value = response.data.data;
+                detailsBrand.value = response.data.data;
             })
             .catch((error) => {
                 console.error(error);
@@ -37,9 +37,9 @@ export function useBrandList() {
         brandList,
         paginationBrand,
         searchBrand,
-        detailsBrandId,
+        detailsBrand,
         loadBrandList,
-        detailsBrand
+        getDetailsBrand
     };
 }
 

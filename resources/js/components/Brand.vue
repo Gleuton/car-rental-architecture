@@ -6,9 +6,9 @@ const {
     brandList,
     paginationBrand,
     searchBrand,
-    detailsBrandId,
-    loadBrandList,
     detailsBrand,
+    loadBrandList,
+    getDetailsBrand,
 } = useBrandList();
 
 const {
@@ -60,7 +60,7 @@ const {
                     <div class="card-header">Marcas</div>
 
                     <div class="card-body">
-                        <table-brands-component :brands="brandList" :details-brand="detailsBrand"/>
+                        <table-brands-component :brands="brandList" :details-brand="getDetailsBrand"/>
                     </div>
 
                     <div class="card-footer d-flex justify-content-between align-items-center">
@@ -130,7 +130,7 @@ const {
             modalId="detailsBrand"
         >
             <template #body>
-                <div v-if="detailsBrandId">
+                <div v-if="detailsBrand">
                     <div class="row">
                         <div class="col-md-6">
                             <label for="brand_name_dtl" class="form-label">Nome da Marca</label>
@@ -138,7 +138,7 @@ const {
                                 type="text"
                                 class="form-control"
                                 id="brand_name_dtl"
-                                :value="detailsBrandId.name"
+                                :value="detailsBrand.name"
                                 disabled
                             >
                         </div>
@@ -148,7 +148,7 @@ const {
                         <div class="col-md-12">
                             <label class="form-label">Logo da Marca</label>
                             <div class="d-flex justify-content-center">
-                                <img :src="'/storage/'+detailsBrandId.image" alt="logo da marca" class="img-fluid"
+                                <img :src="'/storage/'+detailsBrand.image" alt="logo da marca" class="img-fluid"
                                      width="300px">
                             </div>
                         </div>
@@ -175,9 +175,9 @@ const {
             modalId="deleteBrand"
         >
             <template #body>
-                <div v-if="detailsBrandId">
-                    <p>Tem certeza que deseja deletar a marca <b>{{ detailsBrandId.name }}</b>?</p>
-                    <input type="hidden" name="brand_id" id="brand_id" :value="detailsBrandId.id">
+                <div v-if="detailsBrand">
+                    <p>Tem certeza que deseja deletar a marca <b>{{ detailsBrand.name }}</b>?</p>
+                    <input type="hidden" name="brand_id" id="brand_id" :value="detailsBrand.id">
                 </div>
             </template>
             <template #footer>
@@ -189,10 +189,10 @@ const {
                         <span>Não</span>
                     </button>
                 </div>
-                <div v-if="detailsBrandId">
+                <div v-if="detailsBrand">
                     <button
                         type="button"
-                        @click="deleteForm(detailsBrandId.id)"
+                        @click="deleteForm(detailsBrand.id)"
                         class="btn btn-danger">
                         <span>Sim</span>
                     </button>
