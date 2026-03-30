@@ -77,7 +77,7 @@ const {
         </div>
         <modal-component
             title="Adicionar Marca"
-            modal_id="formCadBrand"
+            modalId="formCadBrand"
         >
             <template #body>
                 <form>
@@ -127,19 +127,19 @@ const {
         </modal-component>
         <modal-component
             title="Detalhes da Marca"
-            modal_id="detailsBrand"
+            modalId="detailsBrand"
         >
             <template #body>
                 <div v-if="detailsBrandId">
                     <div class="row">
                         <div class="col-md-6">
-                            <label for="brand_name" class="form-label">Nome da Marca</label>
+                            <label for="brand_name_dtl" class="form-label">Nome da Marca</label>
                             <input
                                 type="text"
                                 class="form-control"
-                                id="brand_name"
+                                id="brand_name_dtl"
                                 :value="detailsBrandId.name"
-                                disabled="disabled"
+                                disabled
                             >
                         </div>
                     </div>
@@ -172,7 +172,7 @@ const {
         </modal-component>
         <modal-component
             title="Deletar Marca"
-            modal_id="deleteBrand"
+            modalId="deleteBrand"
         >
             <template #body>
                 <div v-if="detailsBrandId">
@@ -181,18 +181,22 @@ const {
                 </div>
             </template>
             <template #footer>
-                <button
-                    type="button"
-                    class="btn btn-secondary"
-                    data-bs-dismiss="modal">
-                    <span>Não</span>
-                </button>
-                <button
-                    type="button"
-                    @click="deleteForm(detailsBrandId.id)"
-                    class="btn btn-danger">
-                    <span>Sim</span>
-                </button>
+                <div>
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                        <span>Não</span>
+                    </button>
+                </div>
+                <div v-if="detailsBrandId">
+                    <button
+                        type="button"
+                        @click="deleteForm(detailsBrandId.id)"
+                        class="btn btn-danger">
+                        <span>Sim</span>
+                    </button>
+                </div>
             </template>
         </modal-component>
     </div>

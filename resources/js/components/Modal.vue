@@ -5,13 +5,13 @@ const props = defineProps({
         type: String,
         default: 'Modal title'
     },
-    modal_id: String,
+    modalId: String,
 })
 
 </script>
 
 <template>
-    <div ref="modalRef" class="modal fade" :id="props.modal_id" tabindex="-1" aria-hidden="true">
+    <div ref="modalRef" class="modal fade" :id="props.modalId" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
