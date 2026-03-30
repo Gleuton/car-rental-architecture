@@ -104,7 +104,7 @@ const {
                         >
                     </div>
                 </form>
-                <div class="alert alert-danger" role="alert" v-for="alert in alerts" :key="alert">
+                <div class="alert alert-danger" role="alert" v-for="(alert, index) in alerts" :key="alert + index">
                     {{ alert }}
                 </div>
                 <div class="alert alert-success" role="alert" v-if="success">
@@ -154,7 +154,7 @@ const {
                         </div>
                     </div>
                 </div>
-                <div class="alert alert-danger" role="alert" v-for="alert in alerts" :key="alert">
+                <div class="alert alert-danger" role="alert" v-for="(alert, index) in alerts" :key="alert + index">
                     {{ alert }}
                 </div>
                 <div class="alert alert-success" role="alert" v-if="success">
