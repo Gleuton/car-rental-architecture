@@ -39,7 +39,7 @@ export function useBrandList() {
         searchBrand,
         detailsBrandId,
         loadBrandList,
-        detailsBrand,
+        detailsBrand
     };
 }
 

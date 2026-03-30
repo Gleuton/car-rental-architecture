@@ -1,12 +1,15 @@
 import {reactive, ref} from 'vue';
-import {createBrand} from "../services/brandApi.js";
+import {createBrand, deleteBrand} from "../services/brandApi.js";
 import {mapBrandApiError} from "../errors/brandApiErrorMapper.js";
+import {Modal} from "bootstrap";
 
-export function useBrandForm() {
+export function useBrandForm({onSuccess} = {}) {
     const formPayload = reactive({
         name: '',
         image: null,
     });
+
+    const runOnSuccess = onSuccess ?? (() => {});
 
     const alerts = ref([]);
     const success = ref(false);
@@ -46,11 +49,28 @@ export function useBrandForm() {
             });
     }
 
+    function deleteForm(id) {
+        return deleteBrand(id)
+            .then(() => {
+                closeModal();
+                runOnSuccess();
+            })
+            .catch((error) => {
+                console.error(error);
+            })
+    }
+
+    function closeModal() {
+        const modal = document.querySelector('.modal.show');
+        Modal.getInstance(modal)?.hide();
+    }
+
     return {
         alerts,
         success,
         formPayload,
         fileInput,
+        deleteForm,
         submitForm,
         resetForm,
     };

@@ -34,11 +34,17 @@ defineProps({
                         class="btn btn-secondary"
                         data-bs-toggle="modal"
                         @click="detailsBrand(brand.id)"
-                        data-bs-target="#formDetailsBrand">
+                        data-bs-target="#detailsBrand">
                         Detalhes
                     </button>
                     <button type="button" class="btn btn-primary">Editar</button>
-                    <button type="button" class="btn btn-danger">Excluir</button>
+                    <button
+                        type="button"
+                        class="btn btn-danger"
+                        @click="detailsBrand(brand.id)"
+                        data-bs-toggle="modal"
+                        data-bs-target="#deleteBrand"
+                    >Excluir</button>
                 </div>
             </td>
         </tr>

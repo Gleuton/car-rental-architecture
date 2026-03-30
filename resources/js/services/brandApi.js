@@ -28,3 +28,7 @@ export function getBrandDetails(id) {
     return axios.get(`/api/brands/${id}`, getAuthConfig());
 }
 
+export function deleteBrand(id) {
+    return axios.delete(`/api/brands/${id}`, getAuthConfig());
+}
+

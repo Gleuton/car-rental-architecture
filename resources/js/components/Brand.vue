@@ -2,8 +2,26 @@
 import {useBrandList} from '../composables/useBrandList.js';
 import {useBrandForm} from "../composables/useBrandForm.js";
 
-const {alerts, success, formPayload, fileInput, resetForm, submitForm} = useBrandForm()
-const {brandList, paginationBrand, searchBrand, detailsBrandId, loadBrandList, detailsBrand} = useBrandList();
+const {
+    brandList,
+    paginationBrand,
+    searchBrand,
+    detailsBrandId,
+    loadBrandList,
+    detailsBrand,
+} = useBrandList();
+
+const {
+    alerts,
+    success,
+    formPayload,
+    fileInput,
+    resetForm,
+    deleteForm,
+    submitForm
+} = useBrandForm({
+    onSuccess: () => loadBrandList(),
+});
 
 </script>
 
@@ -80,6 +98,7 @@ const {brandList, paginationBrand, searchBrand, detailsBrandId, loadBrandList, d
                             type="file"
                             class="form-control"
                             id="brand_img"
+                            @change="formPayload.image = $event.target.files[0]"
                             ref="fileInput"
                             required
                         >
@@ -108,7 +127,7 @@ const {brandList, paginationBrand, searchBrand, detailsBrandId, loadBrandList, d
         </modal-component>
         <modal-component
             title="Detalhes da Marca"
-            modal_id="formDetailsBrand"
+            modal_id="detailsBrand"
         >
             <template #body>
                 <div v-if="detailsBrandId">
@@ -148,6 +167,31 @@ const {brandList, paginationBrand, searchBrand, detailsBrandId, loadBrandList, d
                     class="btn btn-danger"
                     data-bs-dismiss="modal">
                     <span>Fechar</span>
+                </button>
+            </template>
+        </modal-component>
+        <modal-component
+            title="Deletar Marca"
+            modal_id="deleteBrand"
+        >
+            <template #body>
+                <div v-if="detailsBrandId">
+                    <p>Tem certeza que deseja deletar a marca <b>{{ detailsBrandId.name }}</b>?</p>
+                    <input type="hidden" name="brand_id" id="brand_id" :value="detailsBrandId.id">
+                </div>
+            </template>
+            <template #footer>
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal">
+                    <span>Não</span>
+                </button>
+                <button
+                    type="button"
+                    @click="deleteForm(detailsBrandId.id)"
+                    class="btn btn-danger">
+                    <span>Sim</span>
                 </button>
             </template>
         </modal-component>
