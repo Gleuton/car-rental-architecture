@@ -1,6 +1,6 @@
 <script setup>
 import {useBrandList} from '../composables/useBrandList.js';
-import {useBrandForm} from "../composables/useBrandForm.js";
+import {useBrandForm} from '../composables/useBrandForm.js';
 
 const {
     brandList,
