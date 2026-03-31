@@ -30,6 +30,7 @@ export function useBrandList() {
             .then((response) => {
                 detailsBrand.name = response.data.data.name;
                 detailsBrand.id = response.data.data.id;
+                detailsBrand.image = response.data.data.image;
                 detailsBrand.img_url = '/storage/' + response.data.data.image;
             })
             .catch((error) => {

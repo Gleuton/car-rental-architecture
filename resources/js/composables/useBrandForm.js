@@ -1,5 +1,5 @@
 import {reactive, ref} from 'vue';
-import {createBrand, deleteBrand} from '../services/brandApi.js';
+import {createBrand, deleteBrand, putBrand} from '../services/brandApi.js';
 import {mapBrandApiError} from '../errors/brandApiErrorMapper.js';
 import {Modal} from 'bootstrap';
 
@@ -9,7 +9,8 @@ export function useBrandForm({onSuccess} = {}) {
         image: null,
     });
 
-    const runOnSuccess = onSuccess ?? (() => {});
+    const runOnSuccess = onSuccess ?? (() => {
+    });
 
     const alerts = ref([]);
     const success = ref(false);
@@ -32,7 +33,6 @@ export function useBrandForm({onSuccess} = {}) {
             fileInput.value.value = '';
         }
     }
-
 
     const handleImage = (event) => {
         fileInput.value = event.target;
@@ -74,6 +74,24 @@ export function useBrandForm({onSuccess} = {}) {
             })
     }
 
+    function updateForm(brand = {}) {
+        const formData = new FormData();
+        formData.append('name', brand.name);
+
+        if (formPayload.image) {
+            formData.append('image', formPayload.image);
+        }
+
+        console.log(formData);
+
+        return putBrand(brand.id, formData).then(() => {
+            closeModal();
+            runOnSuccess();
+        }).catch((error) => {
+            console.error(error);
+        });
+    }
+
     function closeModal() {
         const modal = document.querySelector('.modal.show');
         Modal.getInstance(modal)?.hide();
@@ -86,6 +104,7 @@ export function useBrandForm({onSuccess} = {}) {
         previewImage,
         handleImage,
         deleteForm,
+        updateForm,
         submitForm,
         resetForm,
     };

@@ -32,3 +32,7 @@ export function deleteBrand(id) {
     return axios.delete(`/api/brands/${id}`, getAuthConfig());
 }
 
+export function putBrand(id, formData) {
+    return axios.put(`/api/brands/${id}`,formData, getAuthConfig());
+}
+
