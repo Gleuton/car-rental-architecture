@@ -1,11 +1,15 @@
-import {onMounted, ref} from 'vue';
+import {onMounted, reactive, ref} from 'vue';
 import {getBrandDetails, listBrands} from '../services/brandApi.js';
 
 export function useBrandList() {
     const brandList = ref([]);
     const paginationBrand = ref({});
     const searchBrand = ref('');
-    const detailsBrand = ref(null);
+    const detailsBrand = reactive({
+        name: '',
+        img_url: '',
+        id: null
+    })
 
     function loadBrandList(page = 1) {
         return listBrands({
@@ -24,7 +28,9 @@ export function useBrandList() {
     function getDetailsBrand(id) {
         return getBrandDetails(id)
             .then((response) => {
-                detailsBrand.value = response.data.data;
+                detailsBrand.name = response.data.data.name;
+                detailsBrand.id = response.data.data.id;
+                detailsBrand.img_url = '/storage/' + response.data.data.image;
             })
             .catch((error) => {
                 console.error(error);

@@ -151,7 +151,7 @@ const {
                         <div class="col-md-12">
                             <label class="form-label">Logo da Marca</label>
                             <div class="d-flex justify-content-center">
-                                <img :src="'/storage/'+detailsBrand.image" alt="logo da marca" class="img-fluid"
+                                <img :src="detailsBrand.img_url" alt="logo da marca" class="img-fluid"
                                      width="300px">
                             </div>
                         </div>
