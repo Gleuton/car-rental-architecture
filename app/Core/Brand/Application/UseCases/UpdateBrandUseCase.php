@@ -24,11 +24,12 @@ readonly class UpdateBrandUseCase
      */
     public function execute(UpdateBrandDTO $brandDto): Brand
     {
-        if ($brandDto->name) {
+        $brand = $this->repository->findById($brandDto->id);
+
+        if ($brandDto->name && $brandDto->name !== $brand->name()) {
             $this->uniqueBrandNameRule->validate($brandDto->name);
         }
 
-        $brand = $this->repository->findById($brandDto->id);
         $imagePath = $brand->imagePath();
 
         if ($brandDto->imageFile) {
