@@ -9,7 +9,8 @@ export function useBrandForm({onSuccess} = {}) {
         image: null,
     });
 
-    const runOnSuccess = onSuccess ?? (() => {});
+    const runOnSuccess = onSuccess ?? (() => {
+    });
 
     const alerts = ref([]);
     const success = ref(false);
@@ -81,13 +82,12 @@ export function useBrandForm({onSuccess} = {}) {
             formData.append('image', formPayload.image);
         }
 
-        console.log(formData);
 
         return putBrand(brand.id, formData).then(() => {
             closeModal();
             runOnSuccess();
         }).catch((error) => {
-            console.error(error);
+            alerts.value = mapBrandApiError(error);
         });
     }
 
