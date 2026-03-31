@@ -69,7 +69,7 @@ export function useBrandForm({onSuccess} = {}) {
                 runOnSuccess();
             })
             .catch((error) => {
-                console.error(error);
+                alerts.value = mapBrandApiError(error);
             })
     }
 

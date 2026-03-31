@@ -234,9 +234,6 @@ const {
                 <div class="alert alert-danger" role="alert" v-for="(alert, index) in alerts" :key="alert + index">
                     {{ alert }}
                 </div>
-                <div class="alert alert-success" role="alert" v-if="success">
-                    Marca modificada com sucesso!
-                </div>
             </template>
             <template #footer>
                 <button

@@ -1,11 +1,11 @@
 import { mapApiError } from './apiErrorMapper.js';
 
 const BRAND_CODE_MESSAGES = {
-    ALREADY_EXISTS: 'Ja existe uma marca com esse nome.',
-    INVALID_NAME: 'O nome da marca e obrigatorio.',
+    ALREADY_EXISTS: 'Já existe uma marca com esse nome.',
+    INVALID_NAME: 'O nome da marca e obrigatório.',
     NAME_TOO_SHORT: 'O nome da marca precisa ter pelo menos 3 caracteres.',
-    NAME_TOO_LONG: 'O nome da marca deve ter no maximo 120 caracteres.',
-    NOT_FOUND: 'Marca nao encontrada.',
+    NAME_TOO_LONG: 'O nome da marca deve ter no máximo 120 caracteres.',
+    NOT_FOUND: 'Marca não encontrada.',
 };
 
 const BRAND_APP_CODE_MESSAGES = {
