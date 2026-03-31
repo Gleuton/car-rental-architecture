@@ -9,18 +9,15 @@ export function useBrandForm({onSuccess} = {}) {
         image: null,
     });
 
-    const runOnSuccess = onSuccess ?? (() => {
-    });
+    const runOnSuccess = onSuccess ?? (() => {});
 
     const alerts = ref([]);
-    const success = ref(false);
     const fileInput = ref(null);
     const previewImage = ref(null);
 
 
     function cleanAlerts() {
         alerts.value = [];
-        success.value = false;
     }
 
     function resetForm() {
@@ -55,8 +52,8 @@ export function useBrandForm({onSuccess} = {}) {
         createBrand(formData)
             .then(() => {
                 resetForm();
+                closeModal();
                 runOnSuccess();
-                success.value = true;
             })
             .catch((error) => {
                 alerts.value = mapBrandApiError(error);
@@ -66,6 +63,7 @@ export function useBrandForm({onSuccess} = {}) {
     function deleteForm(id) {
         return deleteBrand(id)
             .then(() => {
+                resetForm();
                 closeModal();
                 runOnSuccess();
             })
@@ -82,7 +80,6 @@ export function useBrandForm({onSuccess} = {}) {
             formData.append('image', formPayload.image);
         }
 
-
         return putBrand(brand.id, formData).then(() => {
             closeModal();
             runOnSuccess();
@@ -98,7 +95,6 @@ export function useBrandForm({onSuccess} = {}) {
 
     return {
         alerts,
-        success,
         formPayload,
         previewImage,
         handleImage,

@@ -13,7 +13,6 @@ const {
 
 const {
     alerts,
-    success,
     formPayload,
     previewImage,
     handleImage,
@@ -111,9 +110,6 @@ const {
                 </form>
                 <div class="alert alert-danger" role="alert" v-for="(alert, index) in alerts" :key="alert + index">
                     {{ alert }}
-                </div>
-                <div class="alert alert-success" role="alert" v-if="success">
-                    Marca adicionada com sucesso!
                 </div>
             </template>
             <template #footer>
