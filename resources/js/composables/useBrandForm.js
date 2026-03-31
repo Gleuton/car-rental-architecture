@@ -14,6 +14,8 @@ export function useBrandForm({onSuccess} = {}) {
     const alerts = ref([]);
     const success = ref(false);
     const fileInput = ref(null);
+    const previewImage = ref(null);
+
 
     function cleanAlerts() {
         alerts.value = [];
@@ -23,10 +25,21 @@ export function useBrandForm({onSuccess} = {}) {
     function resetForm() {
         formPayload.name = '';
         formPayload.image = null;
+        previewImage.value = null;
         cleanAlerts();
 
         if (fileInput.value) {
             fileInput.value.value = '';
+        }
+    }
+
+
+    const handleImage = (event) => {
+        fileInput.value = event.target;
+        const file = fileInput.value.files[0];
+        if (file) {
+            formPayload.image = file;
+            previewImage.value = URL.createObjectURL(file);
         }
     }
 
@@ -70,7 +83,8 @@ export function useBrandForm({onSuccess} = {}) {
         alerts,
         success,
         formPayload,
-        fileInput,
+        previewImage,
+        handleImage,
         deleteForm,
         submitForm,
         resetForm,

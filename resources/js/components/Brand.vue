@@ -15,7 +15,8 @@ const {
     alerts,
     success,
     formPayload,
-    fileInput,
+    previewImage,
+    handleImage,
     resetForm,
     deleteForm,
     submitForm
@@ -98,10 +99,12 @@ const {
                             type="file"
                             class="form-control"
                             id="brand_img"
-                            @change="formPayload.image = $event.target.files[0]"
-                            ref="fileInput"
+                            @change="handleImage"
                             required
                         >
+                    </div>
+                    <div class="mb-3" v-if="previewImage">
+                        <img :src="previewImage" alt="logo da marca" class="img-fluid" width="200px">
                     </div>
                 </form>
                 <div class="alert alert-danger" role="alert" v-for="(alert, index) in alerts" :key="alert + index">
