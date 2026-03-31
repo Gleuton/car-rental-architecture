@@ -9,10 +9,10 @@ use Illuminate\Http\UploadedFile;
 
 final class LaravelUploadedFileAdapter
 {
-    public static function adapt(UploadedFile $file): DomainFile
+    public static function adapt(UploadedFile $file, ?string $fileName = null): DomainFile
     {
         return new DomainFile(
-            name: $file->getClientOriginalName(),
+            name: $fileName ?? $file->getClientOriginalName(),
             mimeType: $file->getClientMimeType(),
             content: file_get_contents($file->getRealPath())
         );

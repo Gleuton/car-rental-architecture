@@ -44,7 +44,7 @@ it('creates a brand successfully when name is unique', function () {
         ->andReturn(false);
 
     $this->logoService->shouldReceive('upload')
-        ->with($file)
+        ->with($file, 'Fiat')
         ->once()
         ->andReturn('brands/fiat_stored.png');
 

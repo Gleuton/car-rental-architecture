@@ -25,7 +25,7 @@ readonly class CreateBrandUseCase
     public function execute(CreateBrandDTO $dto): DomainBrand
     {
         $this->uniqueBrandNameRule->validate($dto->name);
-        $imagePath = $this->logoService->upload($dto->image);
+        $imagePath = $this->logoService->upload($dto->image, $dto->name);
 
         $brand = DomainBrand::new($dto->name, $imagePath);
 

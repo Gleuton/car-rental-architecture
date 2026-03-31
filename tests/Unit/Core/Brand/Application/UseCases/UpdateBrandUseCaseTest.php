@@ -44,7 +44,7 @@ it('updates a brand with name and image successfully', function () {
         ->andReturn($this->existingBrand);
 
     $this->logoService->shouldReceive('replace')
-        ->with($file, 'brands/fiat.png')
+        ->with($file, 'brands/fiat.png', 'Fiat Updated')
         ->once()
         ->andReturn('brands/fiat_updated.png');
 
@@ -108,7 +108,7 @@ it('updates a brand image only without validating name uniqueness', function () 
         ->andReturn($this->existingBrand);
 
     $this->logoService->shouldReceive('replace')
-        ->with($file, 'brands/fiat.png')
+        ->with($file, 'brands/fiat.png', 'Fiat')
         ->once()
         ->andReturn('brands/fiat_new.png');
 
@@ -132,6 +132,11 @@ it('throws exception when updating brand with duplicate name', function () {
     $requestMock->shouldReceive('input')->with('name')->andReturn('Toyota');
 
     $dto = UpdateBrandDTO::fromRequestId($requestMock, 1);
+
+    $this->repository->shouldReceive('findById')
+        ->with(1)
+        ->once()
+        ->andReturn($this->existingBrand);
 
     $this->uniqueRule->shouldReceive('validate')
         ->with('Toyota')

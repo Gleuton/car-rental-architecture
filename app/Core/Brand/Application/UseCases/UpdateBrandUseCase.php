@@ -33,7 +33,8 @@ readonly class UpdateBrandUseCase
         $imagePath = $brand->imagePath();
 
         if ($brandDto->imageFile) {
-            $imagePath = $this->logoService->replace($brandDto->imageFile, $brand->imagePath());
+            $brandNameForLogo = $brandDto->name ?? $brand->name();
+            $imagePath = $this->logoService->replace($brandDto->imageFile, $brand->imagePath(), $brandNameForLogo);
         }
 
         $brand->changeLogo($imagePath)

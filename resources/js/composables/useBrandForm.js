@@ -9,8 +9,7 @@ export function useBrandForm({onSuccess} = {}) {
         image: null,
     });
 
-    const runOnSuccess = onSuccess ?? (() => {
-    });
+    const runOnSuccess = onSuccess ?? (() => {});
 
     const alerts = ref([]);
     const success = ref(false);
