@@ -21,8 +21,7 @@ const {
     updateForm,
     submitForm
 } = useBrandForm({
-    onSuccess: () => loadBrandList(),
-    brand: detailsBrand
+    onSuccess: () => loadBrandList()
 });
 
 </script>
