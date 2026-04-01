@@ -209,7 +209,6 @@ const {
                             class="form-control"
                             id="brand_name_edt"
                             v-model="detailsBrand.name"
-                            required="required"
                             autofocus
                         >
                     </div>
@@ -220,7 +219,6 @@ const {
                             class="form-control"
                             id="brand_img_edit"
                             @change="handleImage"
-                            required
                         >
                     </div>
                     <div class="mb-3">
