@@ -1,22 +1,11 @@
-import axios from 'axios';
-
-function getAuthConfig() {
-    const token = localStorage.getItem('token');
-
-    return {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    };
-}
+import httpClient from './httpClient.js';
 
 export function createBrand(formData) {
-    return axios.post('/api/brands', formData, getAuthConfig());
+    return httpClient.post('/api/brands', formData);
 }
 
 export function listBrands({page = 1, search = ''} = {}) {
-    return axios.get('/api/brands', {
-        ...getAuthConfig(),
+    return httpClient.get('/api/brands', {
         params: {
             page,
             search,
@@ -25,14 +14,14 @@ export function listBrands({page = 1, search = ''} = {}) {
 }
 
 export function getBrandDetails(id) {
-    return axios.get(`/api/brands/${id}`, getAuthConfig());
+    return httpClient.get(`/api/brands/${id}`);
 }
 
 export function deleteBrand(id) {
-    return axios.delete(`/api/brands/${id}`, getAuthConfig());
+    return httpClient.delete(`/api/brands/${id}`);
 }
 
 export function putBrand(id, formData) {
-    return axios.put(`/api/brands/${id}`,formData, getAuthConfig());
+    return httpClient.put(`/api/brands/${id}`,formData);
 }
 
