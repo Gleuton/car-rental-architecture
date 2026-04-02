@@ -1,4 +1,4 @@
-import { mapApiError } from './apiErrorMapper.js';
+import { mapApiError } from '@shared/errors/apiErrorMapper.js';
 
 const BRAND_CODE_MESSAGES = {
     ALREADY_EXISTS: 'Já existe uma marca com esse nome.',

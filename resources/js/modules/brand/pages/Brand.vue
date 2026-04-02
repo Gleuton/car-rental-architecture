@@ -1,6 +1,9 @@
 <script setup>
-import {useBrandList} from '../composables/useBrandList.js';
-import {useBrandForm} from '../composables/useBrandForm.js';
+import { useBrandList } from '@modules/brand/composables/useBrandList.js';
+import { useBrandForm } from '@modules/brand/composables/useBrandForm.js';
+import TableBrands from '@modules/brand/components/TableBrands.vue';
+import PaginationBrand from '@modules/brand/components/PaginationBrand.vue';
+import Modal from '@shared/components/Modal.vue';
 
 const {
     brandList,
@@ -61,11 +64,11 @@ const {
                     <div class="card-header">Marcas</div>
 
                     <div class="card-body">
-                        <table-brands-component :brands="brandList" :details-brand="getDetailsBrand"/>
+                        <TableBrands :brands="brandList" :details-brand="getDetailsBrand" />
                     </div>
 
                     <div class="card-footer d-flex justify-content-between align-items-center">
-                        <pagination-brand-component
+                        <PaginationBrand
                             :load-brand-list="loadBrandList"
                             :pagination="paginationBrand"
                         />
@@ -76,7 +79,7 @@ const {
                 </div>
             </div>
         </div>
-        <modal-component
+        <Modal
             title="Adicionar Marca"
             modalId="formCadBrand"
         >
@@ -124,8 +127,8 @@ const {
                     class="btn btn-primary">Salvar
                 </button>
             </template>
-        </modal-component>
-        <modal-component
+        </Modal>
+        <Modal
             title="Detalhes da Marca"
             modalId="detailsBrand"
         >
@@ -163,8 +166,8 @@ const {
                     <span>Fechar</span>
                 </button>
             </template>
-        </modal-component>
-        <modal-component
+        </Modal>
+        <Modal
             title="Deletar Marca"
             modalId="deleteBrand"
         >
@@ -192,9 +195,9 @@ const {
                     </button>
                 </div>
             </template>
-        </modal-component>
+        </Modal>
 
-        <modal-component
+        <Modal
             title="Editar Marca"
             modalId="editBrand"
         >
@@ -241,7 +244,7 @@ const {
                     class="btn btn-primary">Salvar
                 </button>
             </template>
-        </modal-component>
+        </Modal>
     </div>
 </template>
 

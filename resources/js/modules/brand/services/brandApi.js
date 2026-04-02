@@ -1,4 +1,4 @@
-import httpClient from './httpClient.js';
+import httpClient from '@shared/services/httpClient.js';
 
 export function createBrand(formData) {
     return httpClient.post('/api/brands', formData);

@@ -1,6 +1,6 @@
 import {reactive, ref} from 'vue';
-import {createBrand, deleteBrand, putBrand} from '../services/brandApi.js';
-import {mapBrandApiError} from '../errors/brandApiErrorMapper.js';
+import {createBrand, deleteBrand, putBrand} from '@modules/brand/services/brandApi.js';
+import {mapBrandApiError} from '@modules/brand/errors/brandApiErrorMapper.js';
 import {Modal} from 'bootstrap';
 
 export function useBrandForm({onSuccess} = {}) {

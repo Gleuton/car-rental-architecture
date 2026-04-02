@@ -1,5 +1,5 @@
 import {onMounted, reactive, ref} from 'vue';
-import {getBrandDetails, listBrands} from '../services/brandApi.js';
+import {getBrandDetails, listBrands} from '@modules/brand/services/brandApi.js';
 
 export function useBrandList() {
     const brandList = ref([]);
