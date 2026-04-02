@@ -1,5 +1,7 @@
 <script setup>
-import {reactive} from 'vue'
+import axios from 'axios';
+import { reactive } from 'vue';
+import { setStoredToken } from '@shared/services/authRefreshService.js';
 
 defineProps({
     token_csrf: String
@@ -10,17 +12,17 @@ const formPayload = reactive({
     password: '',
 })
 const login = async (event) => {
-    await axios.post('/api/login', formPayload)
-        .then(response => {
-            if (response.data.token) {
-                localStorage.setItem('token', response.data.token);
-            }
-        })
-        .catch(error => {
-            console.log(error.response);
-        })
+    try {
+        const response = await axios.post('/api/login', formPayload);
 
-    event.target.submit();
+        if (response?.data?.token) {
+            setStoredToken(response.data.token);
+        }
+    } catch (error) {
+        console.log(error?.response);
+    } finally {
+        event.target.submit();
+    }
 }
 
 </script>
