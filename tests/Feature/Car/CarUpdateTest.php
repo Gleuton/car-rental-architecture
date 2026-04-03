@@ -13,7 +13,7 @@ it('can update allowed car data', function () {
     /** @var Car $carEloquent */
     $carEloquent = Car::factory()->create();
 
-    $response = $this->putJson('/api/cars/'.$carEloquent->id, [
+    $response = $this->patchJson('/api/cars/'.$carEloquent->id, [
         'license_plate' => 'ABC-123',
         'color' => 'red',
         'is_available' => false,
@@ -46,7 +46,7 @@ it('can update license plate to the same value', function () {
         'license_plate' => $licensePlate,
     ]);
 
-    $response = $this->putJson('/api/cars/'.$carEloquent->id, [
+    $response = $this->patchJson('/api/cars/'.$carEloquent->id, [
         'license_plate' => $licensePlate,
     ]);
 
@@ -69,7 +69,7 @@ it('cant update the license plate to one that is already in use.', function () {
 
     Car::factory()->create(['license_plate' => $newLicensePlate]);
 
-    $response = $this->putJson('/api/cars/'.$carEloquent->id, [
+    $response = $this->patchJson('/api/cars/'.$carEloquent->id, [
         'license_plate' => $newLicensePlate,
     ]);
 
@@ -85,6 +85,6 @@ it('cant update the license plate to one that is already in use.', function () {
 
 it('returns 401 when updating a car without authentication', function () {
     $car = Car::factory()->create();
-    $response = $this->putJson('/api/cars/'.$car->id, ['color' => 'blue']);
+    $response = $this->patchJson('/api/cars/'.$car->id, ['color' => 'blue']);
     $response->assertStatus(401);
 });
