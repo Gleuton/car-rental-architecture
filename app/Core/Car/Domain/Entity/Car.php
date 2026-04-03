@@ -13,16 +13,16 @@ class Car
      * @throws CarDomainException
      */
     private function __construct(
-        public readonly ?int $id,
-        public readonly int $carModelId,
-        public readonly string $licensePlate,
-        public readonly string $color,
-        public readonly bool $isAvailable,
-        public readonly int $km
+        public ?int $id,
+        public int $carModelId,
+        public string $licensePlate,
+        public string $color,
+        public bool $isAvailable,
+        public int $km
     ) {
-        $this->validateLicensePlate();
-        $this->validateColor();
-        $this->validateKm();
+        $this->validateLicensePlate($this->licensePlate);
+        $this->validateColor($this->color);
+        $this->validateKm($this->km);
     }
 
     /**
@@ -63,22 +63,25 @@ class Car
         $newIsAvailable = $isAvailable ?? $this->isAvailable;
         $newKm = $km ?? $this->km;
 
-        return new self(
-            $this->id,
-            $newCarModelId,
-            $newLicensePlate,
-            $newColor,
-            $newIsAvailable,
-            $newKm
-        );
+        $this->validateLicensePlate($newLicensePlate);
+        $this->validateColor($newColor);
+        $this->validateKm($newKm);
+
+        $this->carModelId = $newCarModelId;
+        $this->licensePlate = $newLicensePlate;
+        $this->color = $newColor;
+        $this->isAvailable = $newIsAvailable;
+        $this->km = $newKm;
+
+        return $this;
     }
 
     /**
      * @throws CarDomainException
      */
-    private function validateLicensePlate(): void
+    private function validateLicensePlate(string $licensePlate): void
     {
-        $plate = trim($this->licensePlate);
+        $plate = trim($licensePlate);
 
         if ($plate === '') {
             throw new CarDomainException(CarError::INVALID_LICENSE_PLATE);
@@ -96,9 +99,9 @@ class Car
     /**
      * @throws CarDomainException
      */
-    private function validateColor(): void
+    private function validateColor(string $color): void
     {
-        $color = trim($this->color);
+        $color = trim($color);
 
         if ($color === '') {
             throw new CarDomainException(CarError::INVALID_COLOR);
@@ -116,9 +119,9 @@ class Car
     /**
      * @throws CarDomainException
      */
-    private function validateKm(): void
+    private function validateKm(int $km): void
     {
-        if ($this->km < 0) {
+        if ($km < 0) {
             throw new CarDomainException(CarError::INVALID_KM);
         }
     }
