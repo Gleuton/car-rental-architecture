@@ -21,13 +21,11 @@ beforeEach(function () {
     );
 });
 
-it('updates a car successfully with all fields', function () {
+it('updates license plate, color and availability', function () {
     $carId = 1;
-    $newCarModelId = 2;
     $newLicensePlate = 'XYZ-9876';
     $newColor = 'Blue';
     $newIsAvailable = false;
-    $newKm = 50000;
 
     $existingCar = DomainCar::restore(
         $carId,
@@ -39,11 +37,9 @@ it('updates a car successfully with all fields', function () {
     );
 
     $request = Mockery::mock(UpdateCarRequest::class);
-    $request->shouldReceive('input')->with('car_model_id')->andReturn($newCarModelId);
     $request->shouldReceive('input')->with('license_plate')->andReturn($newLicensePlate);
     $request->shouldReceive('input')->with('color')->andReturn($newColor);
     $request->shouldReceive('input')->with('is_available')->andReturn($newIsAvailable);
-    $request->shouldReceive('input')->with('km')->andReturn($newKm);
 
     $dto = UpdateCarDto::fromRequest($request, $carId);
 
@@ -60,75 +56,12 @@ it('updates a car successfully with all fields', function () {
     $this->repository->shouldReceive('update')
         ->once()
         ->with(
-            Mockery::on(static function (DomainCar $car) use ($carId, $newCarModelId, $newLicensePlate, $newColor, $newIsAvailable, $newKm): bool {
-                return $car->id === $carId &&
-                    $car->carModelId === $newCarModelId &&
-                    $car->licensePlate === $newLicensePlate &&
-                    $car->color === $newColor &&
-                    $car->isAvailable === $newIsAvailable &&
-                    $car->km === $newKm;
-            })
-        )
-        ->andReturn(DomainCar::restore(
-            $carId,
-            $newCarModelId,
-            $newLicensePlate,
-            $newColor,
-            $newIsAvailable,
-            $newKm
-        ));
-
-    $result = $this->useCase->execute($dto);
-
-    expect($result->id)->toBe($carId)
-        ->and($result->carModelId)->toBe($newCarModelId)
-        ->and($result->licensePlate)->toBe($newLicensePlate)
-        ->and($result->color)->toBe($newColor)
-        ->and($result->isAvailable)->toBe($newIsAvailable)
-        ->and($result->km)->toBe($newKm);
-});
-
-it('updates only license plate when other fields are null', function () {
-    $carId = 1;
-    $newLicensePlate = 'XYZ-9876';
-
-    $existingCar = DomainCar::restore(
-        $carId,
-        1,
-        'ABC-1234',
-        'Red',
-        true,
-        10000
-    );
-
-    $request = Mockery::mock(UpdateCarRequest::class);
-    $request->shouldReceive('input')->with('car_model_id')->andReturn(null);
-    $request->shouldReceive('input')->with('license_plate')->andReturn($newLicensePlate);
-    $request->shouldReceive('input')->with('color')->andReturn(null);
-    $request->shouldReceive('input')->with('is_available')->andReturn(null);
-    $request->shouldReceive('input')->with('km')->andReturn(null);
-
-    $dto = UpdateCarDto::fromRequest($request, $carId);
-
-    $this->repository->shouldReceive('findById')
-        ->with($carId)
-        ->once()
-        ->andReturn($existingCar);
-
-    $this->carAlreadyExistsRole
-        ->shouldReceive('validate')
-        ->with($newLicensePlate)
-        ->once();
-
-    $this->repository->shouldReceive('update')
-        ->once()
-        ->with(
-            Mockery::on(static function (DomainCar $car) use ($carId, $newLicensePlate): bool {
+            Mockery::on(static function (DomainCar $car) use ($carId, $newLicensePlate, $newColor, $newIsAvailable): bool {
                 return $car->id === $carId &&
                     $car->carModelId === 1 &&
                     $car->licensePlate === $newLicensePlate &&
-                    $car->color === 'Red' &&
-                    $car->isAvailable === true &&
+                    $car->color === $newColor &&
+                    $car->isAvailable === $newIsAvailable &&
                     $car->km === 10000;
             })
         )
@@ -136,16 +69,18 @@ it('updates only license plate when other fields are null', function () {
             $carId,
             1,
             $newLicensePlate,
-            'Red',
-            true,
+            $newColor,
+            $newIsAvailable,
             10000
         ));
 
     $result = $this->useCase->execute($dto);
 
     expect($result->licensePlate)->toBe($newLicensePlate)
+        ->and($result->color)->toBe($newColor)
+        ->and($result->isAvailable)->toBe($newIsAvailable)
         ->and($result->carModelId)->toBe(1)
-        ->and($result->color)->toBe('Red');
+        ->and($result->km)->toBe(10000);
 });
 
 it('does not validate license plate when it remains the same', function () {
@@ -162,11 +97,9 @@ it('does not validate license plate when it remains the same', function () {
     );
 
     $request = Mockery::mock(UpdateCarRequest::class);
-    $request->shouldReceive('input')->with('car_model_id')->andReturn(null);
     $request->shouldReceive('input')->with('license_plate')->andReturn($existingLicensePlate);
     $request->shouldReceive('input')->with('color')->andReturn('Blue');
     $request->shouldReceive('input')->with('is_available')->andReturn(null);
-    $request->shouldReceive('input')->with('km')->andReturn(null);
 
     $dto = UpdateCarDto::fromRequest($request, $carId);
 
@@ -208,11 +141,9 @@ it('throws exception when new license plate already exists', function () {
     );
 
     $request = Mockery::mock(UpdateCarRequest::class);
-    $request->shouldReceive('input')->with('car_model_id')->andReturn(null);
     $request->shouldReceive('input')->with('license_plate')->andReturn($newLicensePlate);
     $request->shouldReceive('input')->with('color')->andReturn(null);
     $request->shouldReceive('input')->with('is_available')->andReturn(null);
-    $request->shouldReceive('input')->with('km')->andReturn(null);
 
     $dto = UpdateCarDto::fromRequest($request, $carId);
 
@@ -235,10 +166,9 @@ it('throws exception when new license plate already exists', function () {
     'Car with this license plate already exists'
 );
 
-it('updates only color and km when other fields are null', function () {
+it('updates only color when other fields are null', function () {
     $carId = 1;
     $newColor = 'Green';
-    $newKm = 75000;
 
     $existingCar = DomainCar::restore(
         $carId,
@@ -250,11 +180,9 @@ it('updates only color and km when other fields are null', function () {
     );
 
     $request = Mockery::mock(UpdateCarRequest::class);
-    $request->shouldReceive('input')->with('car_model_id')->andReturn(null);
     $request->shouldReceive('input')->with('license_plate')->andReturn(null);
     $request->shouldReceive('input')->with('color')->andReturn($newColor);
     $request->shouldReceive('input')->with('is_available')->andReturn(null);
-    $request->shouldReceive('input')->with('km')->andReturn($newKm);
 
     $dto = UpdateCarDto::fromRequest($request, $carId);
 
@@ -269,11 +197,11 @@ it('updates only color and km when other fields are null', function () {
     $this->repository->shouldReceive('update')
         ->once()
         ->with(
-            Mockery::on(static function (DomainCar $car) use ($carId, $newColor, $newKm): bool {
+            Mockery::on(static function (DomainCar $car) use ($carId, $newColor): bool {
                 return $car->id === $carId &&
                     $car->licensePlate === 'ABC-1234' &&
                     $car->color === $newColor &&
-                    $car->km === $newKm &&
+                    $car->km === 10000 &&
                     $car->carModelId === 1 &&
                     $car->isAvailable === true;
             })
@@ -284,13 +212,13 @@ it('updates only color and km when other fields are null', function () {
             'ABC-1234',
             $newColor,
             true,
-            $newKm
+            10000
         ));
 
     $result = $this->useCase->execute($dto);
 
     expect($result->color)->toBe($newColor)
-        ->and($result->km)->toBe($newKm)
+        ->and($result->km)->toBe(10000)
         ->and($result->licensePlate)->toBe('ABC-1234');
 });
 
@@ -308,11 +236,9 @@ it('updates availability status successfully', function () {
     );
 
     $request = Mockery::mock(UpdateCarRequest::class);
-    $request->shouldReceive('input')->with('car_model_id')->andReturn(null);
     $request->shouldReceive('input')->with('license_plate')->andReturn(null);
     $request->shouldReceive('input')->with('color')->andReturn(null);
     $request->shouldReceive('input')->with('is_available')->andReturn($newIsAvailable);
-    $request->shouldReceive('input')->with('km')->andReturn(null);
 
     $dto = UpdateCarDto::fromRequest($request, $carId);
 

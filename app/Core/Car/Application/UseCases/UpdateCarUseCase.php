@@ -25,11 +25,9 @@ readonly class UpdateCarUseCase
         }
 
         $updatedCar = $car->update(
-            $dto->carModelId,
-            $dto->licensePlate,
-            $dto->color,
-            $dto->isAvailable,
-            $dto->km,
+            licensePlate: $dto->licensePlate,
+            color: $dto->color,
+            isAvailable: $dto->isAvailable,
         );
 
         return $this->repository->update($updatedCar);

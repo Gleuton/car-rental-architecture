@@ -25,11 +25,9 @@ class UpdateCarRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'car_model_id' => 'integer',
             'license_plate' => 'string|max:10',
             'color' => 'string|max:255',
             'is_available' => 'boolean',
-            'km' => 'integer|min:0',
         ];
     }
 }

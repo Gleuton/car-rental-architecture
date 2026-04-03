@@ -3,42 +3,36 @@
 declare(strict_types=1);
 
 use App\Models\Car;
-use App\Models\CarModel;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
-it('can update all data car', function () {
+it('can update allowed car data', function () {
     authenticateApi();
 
     /** @var Car $carEloquent */
     $carEloquent = Car::factory()->create();
 
-    /** @var CarModel $newCarModel */
-    $newCarModel = CarModel::factory()->create();
-
     $response = $this->putJson('/api/cars/'.$carEloquent->id, [
-        'car_model_id' => $newCarModel->id,
         'license_plate' => 'ABC-123',
         'color' => 'red',
-        'is_available' => true,
-        'km' => 1919,
+        'is_available' => false,
     ]);
 
     $response->assertStatus(200)
-        ->assertJsonPath('data.carModelId', $newCarModel->id)
         ->assertJsonPath('data.licensePlate', 'ABC-123')
         ->assertJsonPath('data.color', 'red')
-        ->assertJsonPath('data.isAvailable', true)
-        ->assertJsonPath('data.km', 1919);
+        ->assertJsonPath('data.isAvailable', false)
+        ->assertJsonPath('data.carModelId', $carEloquent->car_model_id)
+        ->assertJsonPath('data.km', $carEloquent->km);
 
     $this->assertDatabaseHas('cars', [
         'id' => $carEloquent->id,
-        'car_model_id' => $newCarModel->id,
+        'car_model_id' => $carEloquent->car_model_id,
         'license_plate' => 'ABC-123',
         'color' => 'red',
-        'is_available' => 1,
-        'km' => 1919,
+        'is_available' => 0,
+        'km' => $carEloquent->km,
     ]);
 });
 
