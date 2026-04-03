@@ -50,28 +50,35 @@ class Car
     /**
      * @throws CarDomainException
      */
-    public function update(
-        ?int $carModelId = null,
-        ?string $licensePlate = null,
-        ?string $color = null,
-        ?bool $isAvailable = null,
-        ?int $km = null
-    ): self {
-        $newCarModelId = $carModelId ?? $this->carModelId;
-        $newLicensePlate = $licensePlate ?? $this->licensePlate;
-        $newColor = $color ?? $this->color;
-        $newIsAvailable = $isAvailable ?? $this->isAvailable;
-        $newKm = $km ?? $this->km;
+    public function changeLicensePlate(string $licensePlate): self
+    {
+        $this->validateLicensePlate($licensePlate);
+        $this->licensePlate = $licensePlate;
 
-        $this->validateLicensePlate($newLicensePlate);
-        $this->validateColor($newColor);
-        $this->validateKm($newKm);
+        return $this;
+    }
 
-        $this->carModelId = $newCarModelId;
-        $this->licensePlate = $newLicensePlate;
-        $this->color = $newColor;
-        $this->isAvailable = $newIsAvailable;
-        $this->km = $newKm;
+    /**
+     * @throws CarDomainException
+     */
+    public function changeColor(string $color): self
+    {
+        $this->validateColor($color);
+        $this->color = $color;
+
+        return $this;
+    }
+
+    public function markAsAvailable(): self
+    {
+        $this->isAvailable = true;
+
+        return $this;
+    }
+
+    public function markAsUnavailable(): self
+    {
+        $this->isAvailable = false;
 
         return $this;
     }

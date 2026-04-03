@@ -40,7 +40,7 @@ it('can restore a Car instance with ID', function () {
         ->and($car->km)->toBe(10000);
 });
 
-it('can update a Car instance', function () {
+it('can change license plate', function () {
     $car = Car::new(
         carModelId: 1,
         licensePlate: 'ABC-1234',
@@ -49,22 +49,16 @@ it('can update a Car instance', function () {
         km: 10000
     );
 
-    $updatedCar = $car->update(
-        carModelId: 2,
-        licensePlate: 'XYZ-5678',
-        color: 'Blue',
-        isAvailable: false,
-        km: 20000
-    );
+    $updatedCar = $car->changeLicensePlate('XYZ-5678');
 
-    expect($updatedCar->carModelId)->toBe(2)
-        ->and($updatedCar->licensePlate)->toBe('XYZ-5678')
-        ->and($updatedCar->color)->toBe('Blue')
-        ->and($updatedCar->isAvailable)->toBeFalse()
-        ->and($updatedCar->km)->toBe(20000);
+    expect($updatedCar->licensePlate)->toBe('XYZ-5678')
+        ->and($updatedCar->carModelId)->toBe(1)
+        ->and($updatedCar->color)->toBe('Red')
+        ->and($updatedCar->isAvailable)->toBeTrue()
+        ->and($updatedCar->km)->toBe(10000);
 });
 
-it('can partially update a Car instance', function () {
+it('can change color', function () {
     $car = Car::new(
         carModelId: 1,
         licensePlate: 'ABC-1234',
@@ -73,13 +67,41 @@ it('can partially update a Car instance', function () {
         km: 10000
     );
 
-    $updatedCar = $car->update(color: 'Blue', km: 15000);
+    $updatedCar = $car->changeColor('Blue');
 
     expect($updatedCar->carModelId)->toBe(1)
         ->and($updatedCar->licensePlate)->toBe('ABC-1234')
         ->and($updatedCar->color)->toBe('Blue')
         ->and($updatedCar->isAvailable)->toBeTrue()
-        ->and($updatedCar->km)->toBe(15000);
+        ->and($updatedCar->km)->toBe(10000);
+});
+
+it('can mark a car as unavailable', function () {
+    $car = Car::new(
+        carModelId: 1,
+        licensePlate: 'ABC-1234',
+        color: 'Red',
+        isAvailable: true,
+        km: 10000
+    );
+
+    $updatedCar = $car->markAsUnavailable();
+
+    expect($updatedCar->isAvailable)->toBeFalse();
+});
+
+it('can mark a car as available', function () {
+    $car = Car::new(
+        carModelId: 1,
+        licensePlate: 'ABC-1234',
+        color: 'Red',
+        isAvailable: false,
+        km: 10000
+    );
+
+    $updatedCar = $car->markAsAvailable();
+
+    expect($updatedCar->isAvailable)->toBeTrue();
 });
 
 it('throws exception when creating Car with empty license plate', function () {
@@ -245,7 +267,7 @@ it('accepts Car with positive km', function () {
     expect($car->km)->toBe(100000);
 });
 
-it('validates license plate when updating', function () {
+it('validates license plate when changing license plate', function () {
     $car = Car::new(
         carModelId: 1,
         licensePlate: 'ABC-1234',
@@ -254,10 +276,10 @@ it('validates license plate when updating', function () {
         km: 10000
     );
 
-    $car->update(licensePlate: 'ABC');
+    $car->changeLicensePlate('ABC');
 })->throws(CarDomainException::class, 'License plate must have at least 7 characters');
 
-it('validates color when updating', function () {
+it('validates color when changing color', function () {
     $car = Car::new(
         carModelId: 1,
         licensePlate: 'ABC-1234',
@@ -266,17 +288,5 @@ it('validates color when updating', function () {
         km: 10000
     );
 
-    $car->update(color: 'AB');
+    $car->changeColor('AB');
 })->throws(CarDomainException::class, 'Color must have at least 3 characters');
-
-it('validates km when updating', function () {
-    $car = Car::new(
-        carModelId: 1,
-        licensePlate: 'ABC-1234',
-        color: 'Red',
-        isAvailable: true,
-        km: 10000
-    );
-
-    $car->update(km: -500);
-})->throws(CarDomainException::class, 'Kilometers must be zero or positive');
