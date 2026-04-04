@@ -13,6 +13,7 @@ use App\Core\Car\Application\UseCases\DeleteCarUseCase;
 use App\Core\Car\Application\UseCases\FindCarUseCase;
 use App\Core\Car\Application\UseCases\ListCarUseCase;
 use App\Core\Car\Application\UseCases\UpdateCarUseCase;
+use App\Core\Car\Domain\Entity\Car;
 use App\Http\Requests\Car\IndexCarRequest;
 use App\Http\Requests\Car\StoreCarRequest;
 use App\Http\Requests\Car\UpdateCarRequest;
@@ -36,6 +37,8 @@ class CarController extends Controller
         $dto = ListCarDTO::fromRequest($request);
         $cars = $this->listCar->execute($dto);
 
+        $cars->items = array_map(fn (Car $car) => $this->formatCar($car), $cars->items->all());
+
         return response()->json([
             'data' => $cars->items,
             'meta' => [
@@ -55,7 +58,7 @@ class CarController extends Controller
         $dto = CreateCarDTO::fromRequest($request);
         $car = $this->createCar->execute($dto);
 
-        return response()->json(['data' => $car]);
+        return response()->json(['data' => $this->formatCar($car)]);
     }
 
     /**
@@ -67,7 +70,7 @@ class CarController extends Controller
         $car = $this->findCar->execute($carDto);
 
         return response()->json([
-            'data' => $car,
+            'data' => $this->formatCar($car),
         ]);
     }
 
@@ -79,7 +82,9 @@ class CarController extends Controller
         $carDto = UpdateCarDto::fromRequest($request, $carId);
         $car = $this->updateCar->execute($carDto);
 
-        return response()->json(['data' => $car]);
+        return response()->json([
+            'data' => $this->formatCar($car),
+        ]);
     }
 
     /**
@@ -92,5 +97,17 @@ class CarController extends Controller
         $this->deleteCar->execute($carDto);
 
         return response()->json([], 204);
+    }
+
+    private function formatCar(Car $car): array
+    {
+        return [
+            'id' => $car->id,
+            'licensePlate' => $car->licensePlate(),
+            'color' => $car->color,
+            'isAvailable' => $car->isAvailable,
+            'carModelId' => $car->carModelId,
+            'km' => $car->km,
+        ];
     }
 }

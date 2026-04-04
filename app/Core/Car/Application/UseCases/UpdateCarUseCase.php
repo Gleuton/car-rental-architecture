@@ -24,7 +24,7 @@ readonly class UpdateCarUseCase
     {
         $car = $this->repository->findById($dto->id);
 
-        if ($dto->licensePlate && ($car->licensePlate !== $dto->licensePlate)) {
+        if ($dto->licensePlate && ($car->licensePlate() !== $dto->licensePlate)) {
             $this->carAlreadyExistsRole->validate($dto->licensePlate);
             $car->changeLicensePlate($dto->licensePlate);
         }

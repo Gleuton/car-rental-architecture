@@ -48,7 +48,7 @@ it('creates a car successfully', function () {
             Mockery::on(static function (DomainCar $car) use ($carModelId, $licensePlate, $color, $km): bool {
                 return $car->id === null &&
                     $car->carModelId === $carModelId &&
-                    $car->licensePlate === $licensePlate &&
+                    $car->licensePlate() === $licensePlate &&
                     $car->color === $color &&
                     $car->isAvailable === true &&
                     $car->km === $km;
@@ -67,7 +67,7 @@ it('creates a car successfully', function () {
 
     expect($result->id)->toBe(1)
         ->and($result->carModelId)->toBe($carModelId)
-        ->and($result->licensePlate)->toBe($licensePlate)
+        ->and($result->licensePlate())->toBe($licensePlate)
         ->and($result->color)->toBe($color)
         ->and($result->isAvailable)->toBe(true)
         ->and($result->km)->toBe($km);

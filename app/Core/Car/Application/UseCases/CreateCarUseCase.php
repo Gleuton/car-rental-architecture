@@ -6,6 +6,7 @@ namespace App\Core\Car\Application\UseCases;
 
 use App\Core\Car\Application\DTOs\CreateCarDTO;
 use App\Core\Car\Domain\Entity\Car;
+use App\Core\Car\Domain\Exceptions\CarDomainException;
 use App\Core\Car\Domain\Repositories\CarRepositoryInterface;
 use App\Core\Car\Domain\Roles\CarAlreadyExistsRole;
 
@@ -16,6 +17,9 @@ readonly class CreateCarUseCase
         private CarAlreadyExistsRole $carAlreadyExistsRole,
     ) {}
 
+    /**
+     * @throws CarDomainException
+     */
     public function execute(CreateCarDTO $dto): Car
     {
         $this->carAlreadyExistsRole->validate($dto->licensePlate);

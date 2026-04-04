@@ -6,6 +6,7 @@ namespace App\Core\Car\Domain\Entity;
 
 use App\Core\Car\Domain\Errors\CarError;
 use App\Core\Car\Domain\Exceptions\CarDomainException;
+use App\Core\Car\Domain\ValueObjects\LicensePlate;
 
 class Car
 {
@@ -15,12 +16,11 @@ class Car
     private function __construct(
         public ?int $id,
         public int $carModelId,
-        public string $licensePlate,
+        private LicensePlate $licensePlate,
         public string $color,
         public bool $isAvailable,
         public int $km
     ) {
-        $this->validateLicensePlate($this->licensePlate);
         $this->validateColor($this->color);
         $this->validateKm($this->km);
     }
@@ -30,7 +30,7 @@ class Car
      */
     public static function new(int $carModelId, string $licensePlate, string $color, bool $isAvailable, int $km): self
     {
-        return new self(null, $carModelId, $licensePlate, $color, $isAvailable, $km);
+        return new self(null, $carModelId, new LicensePlate($licensePlate), $color, $isAvailable, $km);
     }
 
     /**
@@ -38,13 +38,13 @@ class Car
      */
     public static function restore(
         int $id,
-        int $car_model_id,
-        string $license_plate,
+        int $carModelId,
+        string $licensePlate,
         string $color,
-        bool $is_available,
+        bool $isAvailable,
         int $km
     ): self {
-        return new self($id, $car_model_id, $license_plate, $color, $is_available, $km);
+        return new self($id, $carModelId, new LicensePlate($licensePlate), $color, $isAvailable, $km);
     }
 
     /**
@@ -52,8 +52,7 @@ class Car
      */
     public function changeLicensePlate(string $licensePlate): self
     {
-        $this->validateLicensePlate($licensePlate);
-        $this->licensePlate = $licensePlate;
+        $this->licensePlate = new LicensePlate($licensePlate);
 
         return $this;
     }
@@ -83,24 +82,9 @@ class Car
         return $this;
     }
 
-    /**
-     * @throws CarDomainException
-     */
-    private function validateLicensePlate(string $licensePlate): void
+    public function licensePlate(): string
     {
-        $plate = trim($licensePlate);
-
-        if ($plate === '') {
-            throw new CarDomainException(CarError::INVALID_LICENSE_PLATE);
-        }
-
-        if (mb_strlen($plate) < 7) {
-            throw new CarDomainException(CarError::LICENSE_PLATE_TOO_SHORT);
-        }
-
-        if (mb_strlen($plate) > 10) {
-            throw new CarDomainException(CarError::LICENSE_PLATE_TOO_LONG);
-        }
+        return $this->licensePlate->value;
     }
 
     /**

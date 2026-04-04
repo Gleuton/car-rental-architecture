@@ -13,12 +13,12 @@ it('finds a car by ID successfully', function () {
     $repository = Mockery::mock(CarRepositoryInterface::class);
 
     $expectedCar = Car::restore(
-        id: 1,
-        car_model_id: 1,
-        license_plate: 'ABC-1234',
-        color: 'Red',
-        is_available: true,
-        km: 50000
+        1,
+        1,
+        'ABC-1234',
+        'Red',
+        true,
+        50000
     );
 
     $repository->shouldReceive('findById')
