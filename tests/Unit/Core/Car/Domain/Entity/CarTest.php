@@ -7,16 +7,16 @@ use App\Core\Car\Domain\Exceptions\CarDomainException;
 
 it('can create a Car instance', function () {
     $car = Car::new(
-        carModelId: 1,
-        licensePlate: 'ABC-1234',
-        color: 'Red',
-        isAvailable: true,
-        km: 10000
+        1,
+        'ABC-1234',
+        'Red',
+        true,
+        10000
     );
 
     expect($car->carModelId)->toBe(1)
         ->and($car->licensePlate())->toBe('ABC-1234')
-        ->and($car->color)->toBe('Red')
+        ->and($car->color())->toBe('Red')
         ->and($car->isAvailable)->toBeTrue()
         ->and($car->km)->toBe(10000)
         ->and($car->id)->toBeNull();
@@ -35,43 +35,43 @@ it('can restore a Car instance with ID', function () {
     expect($car->id)->toBe(1)
         ->and($car->carModelId)->toBe(1)
         ->and($car->licensePlate())->toBe('ABC-1234')
-        ->and($car->color)->toBe('Red')
+        ->and($car->color())->toBe('Red')
         ->and($car->isAvailable)->toBeTrue()
         ->and($car->km)->toBe(10000);
 });
 
 it('can change license plate', function () {
     $car = Car::new(
-        carModelId: 1,
-        licensePlate: 'ABC-1234',
-        color: 'Red',
-        isAvailable: true,
-        km: 10000
+        1,
+        'ABC-1234',
+        'Red',
+        true,
+        10000
     );
 
     $updatedCar = $car->changeLicensePlate('XYZ-5678');
 
     expect($updatedCar->licensePlate())->toBe('XYZ-5678')
         ->and($updatedCar->carModelId)->toBe(1)
-        ->and($updatedCar->color)->toBe('Red')
+        ->and($updatedCar->color())->toBe('Red')
         ->and($updatedCar->isAvailable)->toBeTrue()
         ->and($updatedCar->km)->toBe(10000);
 });
 
 it('can change color', function () {
     $car = Car::new(
-        carModelId: 1,
-        licensePlate: 'ABC-1234',
-        color: 'Red',
-        isAvailable: true,
-        km: 10000
+        1,
+        'ABC-1234',
+        'Red',
+        true,
+        10000
     );
 
     $updatedCar = $car->changeColor('Blue');
 
     expect($updatedCar->carModelId)->toBe(1)
         ->and($updatedCar->licensePlate())->toBe('ABC-1234')
-        ->and($updatedCar->color)->toBe('Blue')
+        ->and($updatedCar->color())->toBe('Blue')
         ->and($updatedCar->isAvailable)->toBeTrue()
         ->and($updatedCar->km)->toBe(10000);
 });
@@ -217,7 +217,7 @@ it('accepts color with exactly 3 characters', function () {
         10000
     );
 
-    expect($car->color)->toBe('Red');
+    expect($car->color())->toBe('Red');
 });
 
 it('accepts color with exactly 50 characters', function () {
@@ -230,7 +230,7 @@ it('accepts color with exactly 50 characters', function () {
         10000
     );
 
-    expect($car->color)->toBe($color);
+    expect($car->color())->toBe($color);
 });
 
 it('throws exception when creating Car with negative km', function () {

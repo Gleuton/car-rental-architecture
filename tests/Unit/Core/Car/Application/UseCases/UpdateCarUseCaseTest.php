@@ -60,7 +60,7 @@ it('updates license plate, color and availability', function () {
                 return $car->id === $carId &&
                     $car->carModelId === 1 &&
                     $car->licensePlate() === $newLicensePlate &&
-                    $car->color === $newColor &&
+                    $car->color() === $newColor &&
                     $car->isAvailable === $newIsAvailable &&
                     $car->km === 10000;
             })
@@ -77,7 +77,7 @@ it('updates license plate, color and availability', function () {
     $result = $this->useCase->execute($dto);
 
     expect($result->licensePlate())->toBe($newLicensePlate)
-        ->and($result->color)->toBe($newColor)
+        ->and($result->color())->toBe($newColor)
         ->and($result->isAvailable)->toBe($newIsAvailable)
         ->and($result->carModelId)->toBe(1)
         ->and($result->km)->toBe(10000);
@@ -124,7 +124,7 @@ it('does not validate license plate when it remains the same', function () {
 
     $result = $this->useCase->execute($dto);
 
-    expect($result->color)->toBe('Blue');
+    expect($result->color())->toBe('Blue');
 });
 
 it('throws exception when new license plate already exists', function () {
@@ -200,7 +200,7 @@ it('updates only color when other fields are null', function () {
             Mockery::on(static function (DomainCar $car) use ($carId, $newColor): bool {
                 return $car->id === $carId &&
                     $car->licensePlate() === 'ABC-1234' &&
-                    $car->color === $newColor &&
+                    $car->color() === $newColor &&
                     $car->km === 10000 &&
                     $car->carModelId === 1 &&
                     $car->isAvailable === true;
@@ -217,7 +217,7 @@ it('updates only color when other fields are null', function () {
 
     $result = $this->useCase->execute($dto);
 
-    expect($result->color)->toBe($newColor)
+    expect($result->color())->toBe($newColor)
         ->and($result->km)->toBe(10000)
         ->and($result->licensePlate())->toBe('ABC-1234');
 });

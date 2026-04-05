@@ -19,7 +19,7 @@ class EloquentCarRepository implements CarRepositoryInterface
         $eloquentCar = EloquentCar::create([
             'car_model_id' => $car->carModelId,
             'license_plate' => $car->licensePlate(),
-            'color' => $car->color,
+            'color' => $car->color(),
             'is_available' => $car->isAvailable,
             'km' => $car->km,
         ]);
@@ -85,7 +85,7 @@ class EloquentCarRepository implements CarRepositoryInterface
         $eloquentCar->update([
             'car_model_id' => $car->carModelId,
             'license_plate' => $car->licensePlate(),
-            'color' => $car->color,
+            'color' => $car->color(),
             'is_available' => $car->isAvailable,
             'km' => $car->km,
         ]);

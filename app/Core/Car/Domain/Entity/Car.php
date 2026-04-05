@@ -6,6 +6,7 @@ namespace App\Core\Car\Domain\Entity;
 
 use App\Core\Car\Domain\Errors\CarError;
 use App\Core\Car\Domain\Exceptions\CarDomainException;
+use App\Core\Car\Domain\ValueObjects\Color;
 use App\Core\Car\Domain\ValueObjects\LicensePlate;
 
 class Car
@@ -17,11 +18,10 @@ class Car
         public ?int $id,
         public int $carModelId,
         private LicensePlate $licensePlate,
-        public string $color,
+        public Color $color,
         public bool $isAvailable,
         public int $km
     ) {
-        $this->validateColor($this->color);
         $this->validateKm($this->km);
     }
 
@@ -30,7 +30,7 @@ class Car
      */
     public static function new(int $carModelId, string $licensePlate, string $color, bool $isAvailable, int $km): self
     {
-        return new self(null, $carModelId, new LicensePlate($licensePlate), $color, $isAvailable, $km);
+        return new self(null, $carModelId, new LicensePlate($licensePlate), new Color($color), $isAvailable, $km);
     }
 
     /**
@@ -44,7 +44,7 @@ class Car
         bool $isAvailable,
         int $km
     ): self {
-        return new self($id, $carModelId, new LicensePlate($licensePlate), $color, $isAvailable, $km);
+        return new self($id, $carModelId, new LicensePlate($licensePlate), new Color($color), $isAvailable, $km);
     }
 
     /**
@@ -62,8 +62,7 @@ class Car
      */
     public function changeColor(string $color): self
     {
-        $this->validateColor($color);
-        $this->color = $color;
+        $this->color = new Color($color);
 
         return $this;
     }
@@ -87,24 +86,9 @@ class Car
         return $this->licensePlate->value;
     }
 
-    /**
-     * @throws CarDomainException
-     */
-    private function validateColor(string $color): void
+    public function color(): string
     {
-        $color = trim($color);
-
-        if ($color === '') {
-            throw new CarDomainException(CarError::INVALID_COLOR);
-        }
-
-        if (mb_strlen($color) < 3) {
-            throw new CarDomainException(CarError::COLOR_TOO_SHORT);
-        }
-
-        if (mb_strlen($color) > 50) {
-            throw new CarDomainException(CarError::COLOR_TOO_LONG);
-        }
+        return $this->color->value;
     }
 
     /**

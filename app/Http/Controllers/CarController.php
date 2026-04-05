@@ -104,7 +104,7 @@ class CarController extends Controller
         return [
             'id' => $car->id,
             'licensePlate' => $car->licensePlate(),
-            'color' => $car->color,
+            'color' => $car->color(),
             'isAvailable' => $car->isAvailable,
             'carModelId' => $car->carModelId,
             'km' => $car->km,

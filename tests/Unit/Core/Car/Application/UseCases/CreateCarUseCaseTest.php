@@ -49,7 +49,7 @@ it('creates a car successfully', function () {
                 return $car->id === null &&
                     $car->carModelId === $carModelId &&
                     $car->licensePlate() === $licensePlate &&
-                    $car->color === $color &&
+                    $car->color() === $color &&
                     $car->isAvailable === true &&
                     $car->km === $km;
             })
@@ -68,7 +68,7 @@ it('creates a car successfully', function () {
     expect($result->id)->toBe(1)
         ->and($result->carModelId)->toBe($carModelId)
         ->and($result->licensePlate())->toBe($licensePlate)
-        ->and($result->color)->toBe($color)
+        ->and($result->color())->toBe($color)
         ->and($result->isAvailable)->toBe(true)
         ->and($result->km)->toBe($km);
 });
