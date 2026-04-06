@@ -34,6 +34,26 @@ class Brand
     /**
      * @throws BrandDomainException
      */
+    public function changeLogo(?string $image): self
+    {
+        $this->image = $image ? new BrandLogo($image) : $this->image;
+
+        return $this;
+    }
+
+    /**
+     * @throws BrandDomainException
+     */
+    public function rename(?string $name): self
+    {
+        $this->name = $name ? new BrandName($name) : $this->name;
+
+        return $this;
+    }
+
+    /**
+     * @throws BrandDomainException
+     */
     public static function new(string $name, string $image): self
     {
         return new self(
@@ -53,25 +73,5 @@ class Brand
             new BrandName($name),
             new BrandLogo($image)
         );
-    }
-
-    /**
-     * @throws BrandDomainException
-     */
-    public function changeLogo(?string $image): self
-    {
-        $this->image = $image ? new BrandLogo($image) : $this->image;
-
-        return $this;
-    }
-
-    /**
-     * @throws BrandDomainException
-     */
-    public function rename(?string $name): self
-    {
-        $this->name = $name ? new BrandName($name) : $this->name;
-
-        return $this;
     }
 }
