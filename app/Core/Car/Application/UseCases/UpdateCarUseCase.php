@@ -26,12 +26,10 @@ readonly class UpdateCarUseCase
 
         if ($dto->licensePlate && ($car->licensePlate() !== $dto->licensePlate)) {
             $this->carAlreadyExistsRole->validate($dto->licensePlate);
-            $car->changeLicensePlate($dto->licensePlate);
         }
 
-        if ($dto->color !== null) {
-            $car->changeColor($dto->color);
-        }
+        $car->changeLicensePlate($dto->licensePlate)
+            ->changeColor($dto->color);
 
         if ($dto->isAvailable !== null) {
             $dto->isAvailable ? $car->markAsAvailable() : $car->markAsUnavailable();

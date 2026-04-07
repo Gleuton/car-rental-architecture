@@ -50,9 +50,9 @@ class Car
     /**
      * @throws CarDomainException
      */
-    public function changeLicensePlate(string $licensePlate): self
+    public function changeLicensePlate(?string $licensePlate): self
     {
-        $this->licensePlate = new LicensePlate($licensePlate);
+        $this->licensePlate = $licensePlate ? new LicensePlate($licensePlate) : $this->licensePlate;
 
         return $this;
     }
@@ -60,9 +60,9 @@ class Car
     /**
      * @throws CarDomainException
      */
-    public function changeColor(string $color): self
+    public function changeColor(?string $color): self
     {
-        $this->color = new Color($color);
+        $this->color = $color ? new Color($color) : $this->color;
 
         return $this;
     }
