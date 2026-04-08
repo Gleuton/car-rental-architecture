@@ -50,8 +50,8 @@ it('creates a car successfully', function () {
                     $car->carModelId === $carModelId &&
                     $car->licensePlate() === $licensePlate &&
                     $car->color() === $color &&
-                    $car->isAvailable === true &&
-                    $car->km === $km;
+                    $car->isAvailable() === true &&
+                    $car->km() === $km;
             })
         )
         ->andReturn(DomainCar::restore(
@@ -69,8 +69,8 @@ it('creates a car successfully', function () {
         ->and($result->carModelId)->toBe($carModelId)
         ->and($result->licensePlate())->toBe($licensePlate)
         ->and($result->color())->toBe($color)
-        ->and($result->isAvailable)->toBe(true)
-        ->and($result->km)->toBe($km);
+        ->and($result->isAvailable())->toBe(true)
+        ->and($result->km())->toBe($km);
 });
 
 it('throws exception when car with license plate already exists', function () {

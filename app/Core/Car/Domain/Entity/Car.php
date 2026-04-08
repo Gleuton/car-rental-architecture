@@ -4,33 +4,28 @@ declare(strict_types=1);
 
 namespace App\Core\Car\Domain\Entity;
 
-use App\Core\Car\Domain\Errors\CarError;
 use App\Core\Car\Domain\Exceptions\CarDomainException;
 use App\Core\Car\Domain\ValueObjects\Color;
 use App\Core\Car\Domain\ValueObjects\LicensePlate;
+use App\Core\Car\Domain\ValueObjects\Mileage;
 
 class Car
 {
-    /**
-     * @throws CarDomainException
-     */
     private function __construct(
-        public ?int $id,
-        public int $carModelId,
+        public readonly ?int $id,
+        public readonly int $carModelId,
         private LicensePlate $licensePlate,
-        public Color $color,
-        public bool $isAvailable,
-        public int $km
-    ) {
-        $this->validateKm($this->km);
-    }
+        private Color $color,
+        private bool $available,
+        private readonly Mileage $km
+    ) {}
 
     /**
      * @throws CarDomainException
      */
     public static function new(int $carModelId, string $licensePlate, string $color, bool $isAvailable, int $km): self
     {
-        return new self(null, $carModelId, new LicensePlate($licensePlate), new Color($color), $isAvailable, $km);
+        return new self(null, $carModelId, new LicensePlate($licensePlate), new Color($color), $isAvailable, new Mileage($km));
     }
 
     /**
@@ -44,7 +39,7 @@ class Car
         bool $isAvailable,
         int $km
     ): self {
-        return new self($id, $carModelId, new LicensePlate($licensePlate), new Color($color), $isAvailable, $km);
+        return new self($id, $carModelId, new LicensePlate($licensePlate), new Color($color), $isAvailable, new Mileage($km));
     }
 
     /**
@@ -69,14 +64,14 @@ class Car
 
     public function markAsAvailable(): self
     {
-        $this->isAvailable = true;
+        $this->available = true;
 
         return $this;
     }
 
     public function markAsUnavailable(): self
     {
-        $this->isAvailable = false;
+        $this->available = false;
 
         return $this;
     }
@@ -91,13 +86,13 @@ class Car
         return $this->color->value;
     }
 
-    /**
-     * @throws CarDomainException
-     */
-    private function validateKm(int $km): void
+    public function km(): int
     {
-        if ($km < 0) {
-            throw new CarDomainException(CarError::INVALID_KM);
-        }
+        return $this->km->mileage;
+    }
+
+    public function isAvailable(): bool
+    {
+        return $this->available;
     }
 }

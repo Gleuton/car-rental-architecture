@@ -61,8 +61,8 @@ it('updates license plate, color and availability', function () {
                     $car->carModelId === 1 &&
                     $car->licensePlate() === $newLicensePlate &&
                     $car->color() === $newColor &&
-                    $car->isAvailable === $newIsAvailable &&
-                    $car->km === 10000;
+                    $car->isAvailable() === $newIsAvailable &&
+                    $car->km() === 10000;
             })
         )
         ->andReturn(DomainCar::restore(
@@ -78,9 +78,9 @@ it('updates license plate, color and availability', function () {
 
     expect($result->licensePlate())->toBe($newLicensePlate)
         ->and($result->color())->toBe($newColor)
-        ->and($result->isAvailable)->toBe($newIsAvailable)
+        ->and($result->isAvailable())->toBe($newIsAvailable)
         ->and($result->carModelId)->toBe(1)
-        ->and($result->km)->toBe(10000);
+        ->and($result->km())->toBe(10000);
 });
 
 it('does not validate license plate when it remains the same', function () {
@@ -201,9 +201,9 @@ it('updates only color when other fields are null', function () {
                 return $car->id === $carId &&
                     $car->licensePlate() === 'ABC-1234' &&
                     $car->color() === $newColor &&
-                    $car->km === 10000 &&
+                    $car->km() === 10000 &&
                     $car->carModelId === 1 &&
-                    $car->isAvailable === true;
+                    $car->isAvailable() === true;
             })
         )
         ->andReturn(DomainCar::restore(
@@ -218,7 +218,7 @@ it('updates only color when other fields are null', function () {
     $result = $this->useCase->execute($dto);
 
     expect($result->color())->toBe($newColor)
-        ->and($result->km)->toBe(10000)
+        ->and($result->km())->toBe(10000)
         ->and($result->licensePlate())->toBe('ABC-1234');
 });
 
@@ -263,5 +263,5 @@ it('updates availability status successfully', function () {
 
     $result = $this->useCase->execute($dto);
 
-    expect($result->isAvailable)->toBe($newIsAvailable);
+    expect($result->isAvailable())->toBe($newIsAvailable);
 });

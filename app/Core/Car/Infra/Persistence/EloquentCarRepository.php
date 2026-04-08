@@ -20,8 +20,8 @@ class EloquentCarRepository implements CarRepositoryInterface
             'car_model_id' => $car->carModelId,
             'license_plate' => $car->licensePlate(),
             'color' => $car->color(),
-            'is_available' => $car->isAvailable,
-            'km' => $car->km,
+            'is_available' => $car->isAvailable(),
+            'km' => $car->km(),
         ]);
 
         return $this->toDomainCar($eloquentCar);
@@ -86,8 +86,8 @@ class EloquentCarRepository implements CarRepositoryInterface
             'car_model_id' => $car->carModelId,
             'license_plate' => $car->licensePlate(),
             'color' => $car->color(),
-            'is_available' => $car->isAvailable,
-            'km' => $car->km,
+            'is_available' => $car->isAvailable(),
+            'km' => $car->km(),
         ]);
 
         return $this->toDomainCar($eloquentCar);

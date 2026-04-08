@@ -17,8 +17,8 @@ it('can create a Car instance', function () {
     expect($car->carModelId)->toBe(1)
         ->and($car->licensePlate())->toBe('ABC-1234')
         ->and($car->color())->toBe('Red')
-        ->and($car->isAvailable)->toBeTrue()
-        ->and($car->km)->toBe(10000)
+        ->and($car->isAvailable())->toBeTrue()
+        ->and($car->km())->toBe(10000)
         ->and($car->id)->toBeNull();
 });
 
@@ -36,8 +36,8 @@ it('can restore a Car instance with ID', function () {
         ->and($car->carModelId)->toBe(1)
         ->and($car->licensePlate())->toBe('ABC-1234')
         ->and($car->color())->toBe('Red')
-        ->and($car->isAvailable)->toBeTrue()
-        ->and($car->km)->toBe(10000);
+        ->and($car->isAvailable())->toBeTrue()
+        ->and($car->km())->toBe(10000);
 });
 
 it('can change license plate', function () {
@@ -54,8 +54,8 @@ it('can change license plate', function () {
     expect($updatedCar->licensePlate())->toBe('XYZ-5678')
         ->and($updatedCar->carModelId)->toBe(1)
         ->and($updatedCar->color())->toBe('Red')
-        ->and($updatedCar->isAvailable)->toBeTrue()
-        ->and($updatedCar->km)->toBe(10000);
+        ->and($updatedCar->isAvailable())->toBeTrue()
+        ->and($updatedCar->km())->toBe(10000);
 });
 
 it('can change color', function () {
@@ -72,8 +72,8 @@ it('can change color', function () {
     expect($updatedCar->carModelId)->toBe(1)
         ->and($updatedCar->licensePlate())->toBe('ABC-1234')
         ->and($updatedCar->color())->toBe('Blue')
-        ->and($updatedCar->isAvailable)->toBeTrue()
-        ->and($updatedCar->km)->toBe(10000);
+        ->and($updatedCar->isAvailable())->toBeTrue()
+        ->and($updatedCar->km())->toBe(10000);
 });
 
 it('can mark a car as unavailable', function () {
@@ -87,7 +87,7 @@ it('can mark a car as unavailable', function () {
 
     $updatedCar = $car->markAsUnavailable();
 
-    expect($updatedCar->isAvailable)->toBeFalse();
+    expect($updatedCar->isAvailable())->toBeFalse();
 });
 
 it('can mark a car as available', function () {
@@ -101,7 +101,7 @@ it('can mark a car as available', function () {
 
     $updatedCar = $car->markAsAvailable();
 
-    expect($updatedCar->isAvailable)->toBeTrue();
+    expect($updatedCar->isAvailable())->toBeTrue();
 });
 
 it('throws exception when creating Car with empty license plate', function () {
@@ -252,7 +252,7 @@ it('accepts Car with zero km', function () {
         0
     );
 
-    expect($car->km)->toBe(0);
+    expect($car->km())->toBe(0);
 });
 
 it('accepts Car with positive km', function () {
@@ -264,7 +264,7 @@ it('accepts Car with positive km', function () {
         100000
     );
 
-    expect($car->km)->toBe(100000);
+    expect($car->km())->toBe(100000);
 });
 
 it('validates license plate when changing license plate', function () {
