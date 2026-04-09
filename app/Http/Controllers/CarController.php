@@ -13,10 +13,11 @@ use App\Core\Car\Application\UseCases\DeleteCarUseCase;
 use App\Core\Car\Application\UseCases\FindCarUseCase;
 use App\Core\Car\Application\UseCases\ListCarUseCase;
 use App\Core\Car\Application\UseCases\UpdateCarUseCase;
-use App\Core\Car\Domain\Entity\Car;
+use App\Core\Car\Domain\Exceptions\CarDomainException;
 use App\Http\Requests\Car\IndexCarRequest;
 use App\Http\Requests\Car\StoreCarRequest;
 use App\Http\Requests\Car\UpdateCarRequest;
+use App\Http\Resources\CarResource;
 use Illuminate\Http\JsonResponse;
 
 class CarController extends Controller
@@ -37,28 +38,20 @@ class CarController extends Controller
         $dto = ListCarDTO::fromRequest($request);
         $cars = $this->listCar->execute($dto);
 
-        $cars->items = array_map(fn (Car $car) => $this->formatCar($car), $cars->items->all());
-
-        return response()->json([
-            'data' => $cars->items,
-            'meta' => [
-                'current_page' => $cars->page,
-                'per_page' => $cars->perPage,
-                'total' => $cars->total,
-                'last_page' => $cars->lastPage,
-            ],
-        ]);
+        return response()->json(CarResource::PaginatedToArray($cars));
     }
 
     /**
      * Store a newly created resource in storage.
+     *
+     * @throws CarDomainException
      */
     public function store(StoreCarRequest $request): JsonResponse
     {
         $dto = CreateCarDTO::fromRequest($request);
         $car = $this->createCar->execute($dto);
 
-        return response()->json(['data' => $this->formatCar($car)]);
+        return response()->json(['data' => CarResource::CarToArray($car)]);
     }
 
     /**
@@ -69,13 +62,13 @@ class CarController extends Controller
         $carDto = CarIdDTO::fromId($carId);
         $car = $this->findCar->execute($carDto);
 
-        return response()->json([
-            'data' => $this->formatCar($car),
-        ]);
+        return response()->json(['data' => CarResource::CarToArray($car)]);
     }
 
     /**
      * Update the specified resource in storage.
+     *
+     * @throws CarDomainException
      */
     public function update(UpdateCarRequest $request, int $carId): JsonResponse
     {
@@ -83,7 +76,7 @@ class CarController extends Controller
         $car = $this->updateCar->execute($carDto);
 
         return response()->json([
-            'data' => $this->formatCar($car),
+            'data' => CarResource::CarToArray($car),
         ]);
     }
 
@@ -97,17 +90,5 @@ class CarController extends Controller
         $this->deleteCar->execute($carDto);
 
         return response()->json([], 204);
-    }
-
-    private function formatCar(Car $car): array
-    {
-        return [
-            'id' => $car->id,
-            'licensePlate' => $car->licensePlate(),
-            'color' => $car->color(),
-            'isAvailable' => $car->isAvailable(),
-            'carModelId' => $car->carModelId,
-            'km' => $car->km(),
-        ];
     }
 }
