@@ -6,6 +6,7 @@ namespace App\Http\Resources;
 
 use App\Core\Brand\Domain\Entity\Brand;
 use App\Core\Brand\Domain\Entity\BrandCollection;
+use App\Core\Shared\Application\Pagination\PaginatedResult;
 
 class BrandResource
 {
@@ -18,8 +19,22 @@ class BrandResource
         ];
     }
 
-    public static function BrandCollectionToArray(BrandCollection $brands): array
+    /**
+     * @param PaginatedResult<BrandCollection> $brands
+     */
+    public static function PaginatedToArray(PaginatedResult $brands): array
     {
-        return array_map(static fn (Brand $brand) => self::BrandToArray($brand), $brands->all());
+
+        $items = array_map(static fn (Brand $brand) => self::BrandToArray($brand), $brands->items->all());
+
+        return [
+            'data' => $items,
+            'meta' => [
+                'current_page' => $brands->page,
+                'per_page' => $brands->perPage,
+                'total' => $brands->total,
+                'last_page' => $brands->lastPage,
+            ],
+        ];
     }
 }

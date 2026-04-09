@@ -39,15 +39,7 @@ class BrandController extends Controller
 
         $brands = $this->listBrandsUseCase->execute($filters);
 
-        return response()->json([
-            'data' => BrandResource::BrandCollectionToArray($brands->items),
-            'meta' => [
-                'current_page' => $brands->page,
-                'per_page' => $brands->perPage,
-                'total' => $brands->total,
-                'last_page' => $brands->lastPage,
-            ],
-        ]);
+        return response()->json(BrandResource::PaginatedToArray($brands));
     }
 
     /**
