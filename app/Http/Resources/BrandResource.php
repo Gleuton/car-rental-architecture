@@ -24,7 +24,6 @@ class BrandResource
      */
     public static function PaginatedToArray(PaginatedResult $brands): array
     {
-
         $items = array_map(static fn (Brand $brand) => self::BrandToArray($brand), $brands->items->all());
 
         return [
