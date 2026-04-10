@@ -3,6 +3,7 @@ import {useBrandList} from '@modules/brand/composables/useBrandList.js';
 import {useBrandForm} from '@modules/brand/composables/useBrandForm.js';
 import TableBrands from '@modules/brand/components/TableBrands.vue';
 import PaginationBrand from '@modules/brand/components/PaginationBrand.vue';
+import BrandCreateModal from '@modules/brand/components/BrandCreateModal.vue';
 import Modal from '@shared/components/Modal.vue';
 import SearchBrand from "@modules/brand/pages/SearchBrand.vue";
 
@@ -16,13 +17,11 @@ const {
 
 const {
     alerts,
-    formPayload,
     previewImage,
     handleImage,
     resetForm,
     deleteForm,
     updateForm,
-    submitForm
 } = useBrandForm({
     onSuccess: () => loadBrandList()
 });
@@ -47,62 +46,11 @@ const {
                             :load-brand-list="loadBrandList"
                             :pagination="paginationBrand"
                         />
-                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#formCadBrand">
-                            Adicionar Marca
-                        </button>
+                        <BrandCreateModal @success="loadBrandList" />
                     </div>
                 </div>
             </div>
         </div>
-        <Modal
-            title="Adicionar Marca"
-            modalId="formCadBrand"
-        >
-            <template #body>
-                <form>
-                    <div class="mb-3">
-                        <label for="brand_name" class="form-label">Nome da Marca</label>
-                        <input
-                            type="text"
-                            class="form-control"
-                            id="brand_name"
-                            v-model="formPayload.name"
-                            required="required"
-                            autofocus
-                        >
-                    </div>
-                    <div class="mb-3">
-                        <label for="brand_img" class="form-label">Logo da Marca</label>
-                        <input
-                            type="file"
-                            class="form-control"
-                            id="brand_img"
-                            @change="handleImage"
-                            required
-                        >
-                    </div>
-                    <div class="mb-3" v-if="previewImage">
-                        <img :src="previewImage" alt="logo da marca" class="img-fluid" width="200px">
-                    </div>
-                </form>
-                <div class="alert alert-danger" role="alert" v-for="(alert, index) in alerts" :key="alert + index">
-                    {{ alert }}
-                </div>
-            </template>
-            <template #footer>
-                <button
-                    type="button"
-                    class="btn btn-danger"
-                    @click="resetForm()"
-                    data-bs-dismiss="modal">Fechar
-                </button>
-                <button
-                    type="button"
-                    @click="submitForm()"
-                    class="btn btn-primary">Salvar
-                </button>
-            </template>
-        </Modal>
         <Modal
             title="Detalhes da Marca"
             modalId="detailsBrand"
