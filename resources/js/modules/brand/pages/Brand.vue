@@ -1,14 +1,14 @@
 <script setup>
-import { useBrandList } from '@modules/brand/composables/useBrandList.js';
-import { useBrandForm } from '@modules/brand/composables/useBrandForm.js';
+import {useBrandList} from '@modules/brand/composables/useBrandList.js';
+import {useBrandForm} from '@modules/brand/composables/useBrandForm.js';
 import TableBrands from '@modules/brand/components/TableBrands.vue';
 import PaginationBrand from '@modules/brand/components/PaginationBrand.vue';
 import Modal from '@shared/components/Modal.vue';
+import SearchBrand from "@modules/brand/pages/SearchBrand.vue";
 
 const {
     brandList,
     paginationBrand,
-    searchBrand,
     detailsBrand,
     loadBrandList,
     getDetailsBrand,
@@ -33,32 +33,7 @@ const {
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">Busca de Marcas</div>
-                    <div class="card-body">
-                        <div class="row mb-0">
-                            <form class="d-flex" @submit.prevent="loadBrandList()">
-                                <label for="search" class="col-md-4 col-form-label text-md-end">Nome da Marca: </label>
-                                <div class="col-md-6">
-                                    <div class="input-group">
-                                        <input
-                                            id="search"
-                                            type="text"
-                                            class="form-control"
-                                            v-model="searchBrand"
-                                            autofocus>
-
-                                        <button
-                                            type="submit"
-                                            class="btn btn-primary d-inline-flex align-items-center gap-2">
-                                            <span>Buscar</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+                <SearchBrand :load-brand-list="loadBrandList"/>
                 <hr>
                 <div class="card">
                     <div class="card-header">Marcas</div>

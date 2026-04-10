@@ -4,17 +4,16 @@ import {getBrandDetails, listBrands} from '@modules/brand/services/brandApi.js';
 export function useBrandList() {
     const brandList = ref([]);
     const paginationBrand = ref({});
-    const searchBrand = ref('');
     const detailsBrand = reactive({
         name: '',
         img_url: '',
         id: null
     })
 
-    function loadBrandList(page = 1) {
+    function loadBrandList(page = 1, search = '') {
         return listBrands({
             page,
-            search: searchBrand.value,
+            search: search,
         })
             .then((response) => {
                 brandList.value = response.data.data;
@@ -43,7 +42,6 @@ export function useBrandList() {
     return {
         brandList,
         paginationBrand,
-        searchBrand,
         detailsBrand,
         loadBrandList,
         getDetailsBrand
