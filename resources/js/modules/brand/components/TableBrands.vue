@@ -1,6 +1,6 @@
 <script setup>
 
-const emit = defineEmits(['details', 'delete']);
+const emit = defineEmits(['details', 'edit', 'delete']);
 
 defineProps({
     detailsBrand: {
@@ -44,7 +44,7 @@ defineProps({
                     <button
                         type="button"
                         class="btn btn-primary"
-                        @click="detailsBrand(brand.id)"
+                        @click="emit('edit', brand.id)"
                         data-bs-toggle="modal"
                         data-bs-target="#editBrand"
                     >Editar</button>

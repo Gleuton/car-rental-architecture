@@ -24,7 +24,6 @@ export default function useBrandDelete({onSuccess} = {}) {
             .then((response) => {
                 deleteInfo.id = response.data.data.id;
                 deleteInfo.name = response.data.data.name;
-                console.log(deleteInfo);
             })
             .catch((error) => {
                 console.error(error);

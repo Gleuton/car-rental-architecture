@@ -9,6 +9,7 @@ import BrandDeleteModal from '@modules/brand/components/BrandDeleteModal.vue';
 import Modal from '@shared/components/Modal.vue';
 import SearchBrand from "@modules/brand/pages/SearchBrand.vue";
 import BrandEditModal from "@modules/brand/components/BrandEditModal.vue";
+import useBrandEdit from "@modules/brand/composables/useBrandEdit.js";
 
 const {
     brandList,
@@ -17,6 +18,11 @@ const {
     loadBrandList,
     getDetailsBrand,
 } = useBrandList();
+
+const {
+    editInfo,
+    getEditInfo
+} = useBrandEdit();
 
 const {
     deleteInfo,
@@ -53,6 +59,7 @@ const {
                             :brands="brandList"
                             :details-brand="getDetailsBrand"
                             @delete="getDeleteInfo"
+                            @edit="getEditInfo"
                         />
                     </div>
 
@@ -108,11 +115,12 @@ const {
         </Modal>
         <BrandEditModal
             :handle-image="handleImage"
-            :details-brand="detailsBrand"
+            :details-brand="editInfo"
             :alerts="alerts"
             :preview-image="previewImage"
             @confirm="updateForm"
-            @close="resetForm"/>
+            @close="resetForm"
+        />
         <BrandDeleteModal
             :delete-info="deleteInfo"
             @confirm="deleteSubmit"
