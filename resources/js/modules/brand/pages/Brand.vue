@@ -1,7 +1,6 @@
 <script setup>
 import {useBrandList} from '@modules/brand/composables/useBrandList.js';
 import useBrandDelete from '@modules/brand/composables/useBrandDelete.js';
-import {useBrandForm} from '@modules/brand/composables/useBrandForm.js';
 import TableBrands from '@modules/brand/components/TableBrands.vue';
 import PaginationBrand from '@modules/brand/components/PaginationBrand.vue';
 import BrandCreateModal from '@modules/brand/components/BrandCreateModal.vue';
@@ -21,8 +20,15 @@ const {
 
 const {
     editInfo,
-    getEditInfo
-} = useBrandEdit();
+    getEditInfo,
+    submitUpdate,
+    resetEditInfo,
+    alertsEditForm,
+    previewEditImage,
+    handleImageEditForm
+} = useBrandEdit({
+    onSuccess: () => loadBrandList(),
+});
 
 const {
     deleteInfo,
@@ -31,16 +37,6 @@ const {
     resetDeleteInfo,
 } = useBrandDelete({
     onSuccess: () => loadBrandList(),
-});
-
-const {
-    alerts,
-    previewImage,
-    handleImage,
-    resetForm,
-    updateForm,
-} = useBrandForm({
-    onSuccess: () => loadBrandList()
 });
 
 </script>
@@ -68,7 +64,7 @@ const {
                             :load-brand-list="loadBrandList"
                             :pagination="paginationBrand"
                         />
-                        <BrandCreateModal @success="loadBrandList" />
+                        <BrandCreateModal @success="loadBrandList"/>
                     </div>
                 </div>
             </div>
@@ -114,12 +110,12 @@ const {
             </template>
         </Modal>
         <BrandEditModal
-            :handle-image="handleImage"
+            :handle-image="handleImageEditForm"
             :details-brand="editInfo"
-            :alerts="alerts"
-            :preview-image="previewImage"
-            @confirm="updateForm"
-            @close="resetForm"
+            :alerts="alertsEditForm"
+            :preview-image="previewEditImage"
+            @confirm="submitUpdate"
+            @close="resetEditInfo"
         />
         <BrandDeleteModal
             :delete-info="deleteInfo"
