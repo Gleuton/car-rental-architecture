@@ -29,7 +29,7 @@ const {
     submitForm,
     isSubmitting,
 } = useBrandCreateForm({
-    modalId: props.modalId,
+    modalId: 'formCadBrand',
     onSuccess: () => emit('success'),
 });
 
@@ -38,11 +38,11 @@ const handleModalHidden = () => {
 };
 
 onMounted(() => {
-    document.getElementById(props.modalId)?.addEventListener('hidden.bs.modal', handleModalHidden);
+    document.getElementById('formCadBrand')?.addEventListener('hidden.bs.modal', handleModalHidden);
 });
 
 onBeforeUnmount(() => {
-    document.getElementById(props.modalId)?.removeEventListener('hidden.bs.modal', handleModalHidden);
+    document.getElementById('formCadBrand')?.removeEventListener('hidden.bs.modal', handleModalHidden);
 });
 
 </script>

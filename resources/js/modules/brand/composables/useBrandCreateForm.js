@@ -3,7 +3,7 @@ import {Modal} from 'bootstrap';
 import {createBrand} from '@modules/brand/services/brandApi.js';
 import {mapBrandApiError} from '@modules/brand/errors/brandApiErrorMapper.js';
 
-export function useBrandCreateForm({onSuccess, modalId = 'formCadBrand'} = {}) {
+export function useBrandCreateForm({onSuccess} = {}) {
     const formPayload = reactive({
         name: '',
         image: null,
@@ -56,7 +56,7 @@ export function useBrandCreateForm({onSuccess, modalId = 'formCadBrand'} = {}) {
     };
 
     function closeModal() {
-        const modalElement = document.getElementById(modalId);
+        const modalElement = document.getElementById('formCadBrand');
 
         if (!modalElement) {
             return;
