@@ -1,48 +1,40 @@
 <script setup>
-import {onBeforeUnmount, onMounted} from 'vue';
-import {useBrandCreateForm} from '@modules/brand/composables/useBrandCreateForm.js';
-
-const emit = defineEmits(['success']);
+const emit = defineEmits(['confirm', 'close']);
 
 const props = defineProps({
-    modalId: {
-        type: String,
-        default: 'formCadBrand',
+    alerts: {
+        type: Array,
+        default: () => [],
     },
-    title: {
-        type: String,
-        default: 'Adicionar Marca',
+    formPayload:{
+        type: Object,
+        default: () => ({
+            name: '',
+            img_url: '',
+        }),
     },
-    buttonLabel: {
+    previewImage:{
         type: String,
-        default: 'Adicionar Marca',
     },
+    handleImage:{
+        type: Function,
+        required: true,
+    },
+    resetForm:{
+        type: Function,
+        required: true,
+    },
+    submitForm:{
+        type: Function,
+        required: true,
+    },
+    isSubmitting:{
+        type: Boolean,
+        default: false,
+    },
+
 });
 
-const {
-    alerts,
-    formPayload,
-    previewImage,
-    handleImage,
-    resetForm,
-    submitForm,
-    isSubmitting,
-} = useBrandCreateForm({
-    modalId: 'formCadBrand',
-    onSuccess: () => emit('success'),
-});
-
-const handleModalHidden = () => {
-    resetForm();
-};
-
-onMounted(() => {
-    document.getElementById('formCadBrand')?.addEventListener('hidden.bs.modal', handleModalHidden);
-});
-
-onBeforeUnmount(() => {
-    document.getElementById('formCadBrand')?.removeEventListener('hidden.bs.modal', handleModalHidden);
-});
 
 </script>
 
@@ -50,15 +42,15 @@ onBeforeUnmount(() => {
     <button
         class="btn btn-primary"
         data-bs-toggle="modal"
-        :data-bs-target="`#${modalId}`"
+        data-bs-target="#formCadBrand"
         type="button"
     >
-        {{ buttonLabel }}
+        Cadastrar Marca
     </button>
 
     <modal-component
-        :title="title"
-        :modalId="modalId"
+        title="Cadastrar Marca"
+        modalId="formCadBrand"
     >
         <template #body>
             <form @submit.prevent="submitForm">

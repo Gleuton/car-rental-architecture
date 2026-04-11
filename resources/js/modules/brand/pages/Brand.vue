@@ -2,6 +2,7 @@
 import {useBrandList} from '@modules/brand/composables/useBrandList.js';
 import {useBrandDelete} from '@modules/brand/composables/useBrandDelete.js';
 import {useBrandEdit} from "@modules/brand/composables/useBrandEdit.js";
+import {useBrandCreate} from "@modules/brand/composables/useBrandCreate.js";
 
 import TableBrands from '@modules/brand/components/TableBrands.vue';
 import PaginationBrand from '@modules/brand/components/PaginationBrand.vue';
@@ -19,6 +20,18 @@ const {
     loadBrandList,
     getDetailsBrand,
 } = useBrandList();
+
+const {
+    alertsCreateForm,
+    createFormPayload,
+    previewCreateImage,
+    handleCrateFormImage,
+    resetCreateForm,
+    submitCreateForm,
+    isSubmittingCreateForm,
+} = useBrandCreate({
+    onSuccess: () => loadBrandList(),
+});
 
 const {
     editInfo,
@@ -66,7 +79,15 @@ const {
                             :load-brand-list="loadBrandList"
                             :pagination="paginationBrand"
                         />
-                        <BrandCreateModal @success="loadBrandList"/>
+                        <BrandCreateModal
+                            :alerts="alertsCreateForm"
+                            :form-payload="createFormPayload"
+                            :preview-image="previewCreateImage"
+                            :handle-image="handleCrateFormImage"
+                            :reset-form="resetCreateForm"
+                            :submit-form="submitCreateForm"
+                            :is-submitting="isSubmittingCreateForm"
+                        />
                     </div>
                 </div>
             </div>
