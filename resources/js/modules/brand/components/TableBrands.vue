@@ -1,15 +1,19 @@
 <script setup>
 
+const emit = defineEmits(['details', 'delete']);
+
 defineProps({
     detailsBrand: {
         type: Function,
+        default: null,
     },
     brands: {
         type: Array,
         required: true,
         default: () => []
     }
-})
+});
+
 </script>
 
 <template>
@@ -47,7 +51,7 @@ defineProps({
                     <button
                         type="button"
                         class="btn btn-danger"
-                        @click="detailsBrand(brand.id)"
+                        @click="emit('delete', brand.id)"
                         data-bs-toggle="modal"
                         data-bs-target="#deleteBrand"
                     >Excluir</button>

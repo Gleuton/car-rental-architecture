@@ -1,5 +1,4 @@
 import {reactive, ref} from 'vue';
-import {deleteBrand, putBrand} from '@modules/brand/services/brandApi.js';
 import {mapBrandApiError} from '@modules/brand/errors/brandApiErrorMapper.js';
 import {Modal} from 'bootstrap';
 
@@ -38,18 +37,6 @@ export function useBrandForm({onSuccess} = {}) {
         }
     }
 
-    function deleteForm(id) {
-        return deleteBrand(id)
-            .then(() => {
-                resetForm();
-                closeModal();
-                runOnSuccess();
-            })
-            .catch((error) => {
-                alerts.value = mapBrandApiError(error);
-            })
-    }
-
     function updateForm(brand = {}) {
         const formData = new FormData();
         formData.append('name', brand.name);
@@ -76,7 +63,6 @@ export function useBrandForm({onSuccess} = {}) {
         formPayload,
         previewImage,
         handleImage,
-        deleteForm,
         updateForm,
         resetForm,
     };

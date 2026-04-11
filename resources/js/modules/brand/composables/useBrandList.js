@@ -44,7 +44,7 @@ export function useBrandList() {
         paginationBrand,
         detailsBrand,
         loadBrandList,
-        getDetailsBrand
+        getDetailsBrand,
     };
 }
 

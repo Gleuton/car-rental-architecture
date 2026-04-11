@@ -1,9 +1,11 @@
 <script setup>
 import {useBrandList} from '@modules/brand/composables/useBrandList.js';
+import useBrandDelete from '@modules/brand/composables/useBrandDelete.js';
 import {useBrandForm} from '@modules/brand/composables/useBrandForm.js';
 import TableBrands from '@modules/brand/components/TableBrands.vue';
 import PaginationBrand from '@modules/brand/components/PaginationBrand.vue';
 import BrandCreateModal from '@modules/brand/components/BrandCreateModal.vue';
+import BrandDeleteModal from '@modules/brand/components/BrandDeleteModal.vue';
 import Modal from '@shared/components/Modal.vue';
 import SearchBrand from "@modules/brand/pages/SearchBrand.vue";
 
@@ -16,11 +18,19 @@ const {
 } = useBrandList();
 
 const {
+    deleteInfo,
+    getDeleteInfo,
+    deleteSubmit,
+    resetDeleteInfo,
+} = useBrandDelete({
+    onSuccess: () => loadBrandList(),
+});
+
+const {
     alerts,
     previewImage,
     handleImage,
     resetForm,
-    deleteForm,
     updateForm,
 } = useBrandForm({
     onSuccess: () => loadBrandList()
@@ -38,7 +48,11 @@ const {
                     <div class="card-header">Marcas</div>
 
                     <div class="card-body">
-                        <TableBrands :brands="brandList" :details-brand="getDetailsBrand" />
+                        <TableBrands
+                            :brands="brandList"
+                            :details-brand="getDetailsBrand"
+                            @delete="getDeleteInfo"
+                        />
                     </div>
 
                     <div class="card-footer d-flex justify-content-between align-items-center">
@@ -51,6 +65,7 @@ const {
                 </div>
             </div>
         </div>
+
         <Modal
             title="Detalhes da Marca"
             modalId="detailsBrand"
@@ -90,35 +105,11 @@ const {
                 </button>
             </template>
         </Modal>
-        <Modal
-            title="Deletar Marca"
-            modalId="deleteBrand"
-        >
-            <template #body>
-                <div v-if="detailsBrand">
-                    <p>Tem certeza que deseja deletar a marca <b>{{ detailsBrand.name }}</b>?</p>
-                    <input type="hidden" name="brand_id" id="brand_id" :value="detailsBrand.id">
-                </div>
-            </template>
-            <template #footer>
-                <div>
-                    <button
-                        type="button"
-                        class="btn btn-secondary"
-                        data-bs-dismiss="modal">
-                        <span>Não</span>
-                    </button>
-                </div>
-                <div v-if="detailsBrand">
-                    <button
-                        type="button"
-                        @click="deleteForm(detailsBrand.id)"
-                        class="btn btn-danger">
-                        <span>Sim</span>
-                    </button>
-                </div>
-            </template>
-        </Modal>
+        <BrandDeleteModal
+            :delete-info="deleteInfo"
+            @confirm="deleteSubmit"
+            @close="resetDeleteInfo"
+        />
 
         <Modal
             title="Editar Marca"
