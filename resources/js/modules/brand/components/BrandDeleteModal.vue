@@ -1,6 +1,4 @@
 <script setup>
-import Modal from '@shared/components/Modal.vue';
-
 const emit = defineEmits(['confirm', 'close']);
 
 defineProps({
@@ -13,7 +11,7 @@ defineProps({
 </script>
 
 <template>
-    <Modal
+    <modal-component
         title="Deletar Marca"
         modalId="deleteBrand"
     >
@@ -42,6 +40,6 @@ defineProps({
                 </button>
             </div>
         </template>
-    </Modal>
+    </modal-component>
 </template>
 

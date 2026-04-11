@@ -6,7 +6,9 @@ const app = createApp({});
 import LoginComponent from '@modules/auth/pages/Login.vue';
 import HomeComponent from '@modules/home/pages/Home.vue';
 import BrandComponent from '@modules/brand/pages/Brand.vue';
+import ModalComponent from '@shared/components/Modal.vue';
 
+app.component('modal-component', ModalComponent);
 app.component('login-component', LoginComponent);
 app.component('home-component', HomeComponent);
 app.component('brand-component', BrandComponent);

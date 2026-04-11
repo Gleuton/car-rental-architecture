@@ -1,7 +1,5 @@
 <script setup>
 
-import Modal from "@shared/components/Modal.vue";
-
 const emit = defineEmits(['confirm', 'close']);
 defineProps({
     detailsBrand: {
@@ -23,7 +21,7 @@ defineProps({
 </script>
 
 <template>
-    <Modal
+    <modal-component
         title="Editar Marca"
         modalId="editBrand"
     >
@@ -70,7 +68,7 @@ defineProps({
                 class="btn btn-primary">Salvar
             </button>
         </template>
-    </Modal>
+    </modal-component>
 
 </template>
 

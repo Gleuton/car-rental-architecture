@@ -1,6 +1,5 @@
 <script setup>
 import {onBeforeUnmount, onMounted} from 'vue';
-import Modal from '@shared/components/Modal.vue';
 import {useBrandCreateForm} from '@modules/brand/composables/useBrandCreateForm.js';
 
 const emit = defineEmits(['success']);
@@ -57,7 +56,7 @@ onBeforeUnmount(() => {
         {{ buttonLabel }}
     </button>
 
-    <Modal
+    <modal-component
         :title="title"
         :modalId="modalId"
     >
@@ -116,6 +115,6 @@ onBeforeUnmount(() => {
                 Salvar
             </button>
         </template>
-    </Modal>
+    </modal-component>
 </template>
 
