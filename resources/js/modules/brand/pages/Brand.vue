@@ -9,7 +9,7 @@ import PaginationBrand from '@modules/brand/components/PaginationBrand.vue';
 import BrandCreateModal from '@modules/brand/components/BrandCreateModal.vue';
 import BrandDeleteModal from '@modules/brand/components/BrandDeleteModal.vue';
 import Modal from '@shared/components/Modal.vue';
-import SearchBrand from "@modules/brand/pages/SearchBrand.vue";
+import SearchBrand from "@modules/brand/components/SearchBrand.vue";
 import BrandEditModal from "@modules/brand/components/BrandEditModal.vue";
 
 
