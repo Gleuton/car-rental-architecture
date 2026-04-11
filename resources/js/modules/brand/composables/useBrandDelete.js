@@ -2,7 +2,7 @@ import {reactive} from 'vue';
 import {deleteBrand, getBrandDetails} from '@modules/brand/services/brandApi.js';
 import {Modal} from "bootstrap";
 
-export default function useBrandDelete({onSuccess} = {}) {
+export function useBrandDelete({onSuccess} = {}) {
     const runOnSuccess = onSuccess ?? (() => {});
     const deleteInfo = reactive({
         id: null,

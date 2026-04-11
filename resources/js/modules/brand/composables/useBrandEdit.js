@@ -3,7 +3,7 @@ import {getBrandDetails, putBrand} from "@modules/brand/services/brandApi.js";
 import {mapBrandApiError} from "@modules/brand/errors/brandApiErrorMapper.js";
 import {Modal} from "bootstrap";
 
-export default function useBrandEdit({onSuccess} = {}) {
+export function useBrandEdit({onSuccess} = {}) {
     const runOnSuccess = onSuccess ?? (() => {});
     const editInfo = reactive({
         id: null,

@@ -1,6 +1,8 @@
 <script setup>
 import {useBrandList} from '@modules/brand/composables/useBrandList.js';
-import useBrandDelete from '@modules/brand/composables/useBrandDelete.js';
+import {useBrandDelete} from '@modules/brand/composables/useBrandDelete.js';
+import {useBrandEdit} from "@modules/brand/composables/useBrandEdit.js";
+
 import TableBrands from '@modules/brand/components/TableBrands.vue';
 import PaginationBrand from '@modules/brand/components/PaginationBrand.vue';
 import BrandCreateModal from '@modules/brand/components/BrandCreateModal.vue';
@@ -8,7 +10,7 @@ import BrandDeleteModal from '@modules/brand/components/BrandDeleteModal.vue';
 import Modal from '@shared/components/Modal.vue';
 import SearchBrand from "@modules/brand/pages/SearchBrand.vue";
 import BrandEditModal from "@modules/brand/components/BrandEditModal.vue";
-import useBrandEdit from "@modules/brand/composables/useBrandEdit.js";
+
 
 const {
     brandList,
