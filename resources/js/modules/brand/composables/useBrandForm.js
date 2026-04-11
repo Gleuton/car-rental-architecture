@@ -1,6 +1,7 @@
 import {reactive, ref} from 'vue';
 import {mapBrandApiError} from '@modules/brand/errors/brandApiErrorMapper.js';
 import {Modal} from 'bootstrap';
+import {putBrand} from "@modules/brand/services/brandApi.js";
 
 export function useBrandForm({onSuccess} = {}) {
     const formPayload = reactive({
