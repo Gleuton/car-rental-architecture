@@ -1,5 +1,6 @@
 <script setup>
 import {useBrandList} from '@modules/brand/composables/useBrandList.js';
+import {useBrandDetails} from '@modules/brand/composables/useBrandDetails.js';
 import {useBrandDelete} from '@modules/brand/composables/useBrandDelete.js';
 import {useBrandEdit} from "@modules/brand/composables/useBrandEdit.js";
 import {useBrandCreate} from "@modules/brand/composables/useBrandCreate.js";
@@ -16,10 +17,14 @@ import BrandDetailsModal from "@modules/brand/components/BrandDetailsModal.vue";
 const {
     brandList,
     paginationBrand,
-    detailsBrand,
     loadBrandList,
-    getDetailsBrand,
 } = useBrandList();
+
+const {
+    detailsBrand,
+    getDetailsInfo,
+    resetDetailsInfo,
+} = useBrandDetails();
 
 const {
     alertsCreateForm,
@@ -68,7 +73,7 @@ const {
                     <div class="card-body">
                         <TableBrands
                             :brands="brandList"
-                            @details="getDetailsBrand"
+                            @details="getDetailsInfo"
                             @delete="getDeleteInfo"
                             @edit="getEditInfo"
                         />
@@ -93,7 +98,10 @@ const {
             </div>
         </div>
 
-        <BrandDetailsModal :details-brand="detailsBrand" />
+        <BrandDetailsModal
+            :details-brand="detailsBrand"
+            @close="resetDetailsInfo"
+        />
         <BrandEditModal
             :handle-image="handleImageEditForm"
             :details-brand="editInfo"

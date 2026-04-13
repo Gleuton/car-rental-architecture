@@ -1,4 +1,6 @@
 <script setup>
+const emit = defineEmits(['close']);
+
 defineProps({
     detailsBrand: {
         type: Object,
@@ -13,7 +15,7 @@ defineProps({
         modalId="detailsBrand"
     >
         <template #body>
-            <div v-if="detailsBrand">
+            <div v-if="detailsBrand?.id">
                 <div class="row">
                     <div class="col-md-6">
                         <label for="brand_name_dtl" class="form-label">Nome da Marca</label>
@@ -41,6 +43,7 @@ defineProps({
             <button
                 type="button"
                 class="btn btn-danger"
+                @click="emit('close')"
                 data-bs-dismiss="modal"
             >
                 <span>Fechar</span>
