@@ -68,7 +68,7 @@ const {
                     <div class="card-body">
                         <TableBrands
                             :brands="brandList"
-                            :details-brand="getDetailsBrand"
+                            @details="getDetailsBrand"
                             @delete="getDeleteInfo"
                             @edit="getEditInfo"
                         />

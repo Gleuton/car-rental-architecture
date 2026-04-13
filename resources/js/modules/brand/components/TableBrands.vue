@@ -3,10 +3,6 @@
 const emit = defineEmits(['details', 'edit', 'delete']);
 
 defineProps({
-    detailsBrand: {
-        type: Function,
-        default: null,
-    },
     brands: {
         type: Array,
         required: true,
@@ -37,7 +33,7 @@ defineProps({
                         type="button"
                         class="btn btn-secondary"
                         data-bs-toggle="modal"
-                        @click="detailsBrand(brand.id)"
+                        @click="emit('details', brand.id)"
                         data-bs-target="#detailsBrand">
                         Detalhes
                     </button>
