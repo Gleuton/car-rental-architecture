@@ -13,7 +13,6 @@ import BrandDeleteModal from '@modules/brand/components/BrandDeleteModal.vue';
 import BrandEditModal from "@modules/brand/components/BrandEditModal.vue";
 import BrandDetailsModal from "@modules/brand/components/BrandDetailsModal.vue";
 
-
 const {
     brandList,
     paginationBrand,
@@ -108,7 +107,6 @@ const {
             @confirm="deleteSubmit"
             @close="resetDeleteInfo"
         />
-
     </div>
 </template>
 
