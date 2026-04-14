@@ -30,7 +30,7 @@ const {
     alertsCreateForm,
     createFormPayload,
     previewCreateImage,
-    handleCrateFormImage,
+    handleCreateFormImage,
     resetCreateForm,
     submitCreateForm,
     isSubmittingCreateForm,
@@ -88,7 +88,7 @@ const {
                             :alerts="alertsCreateForm"
                             :form-payload="createFormPayload"
                             :preview-image="previewCreateImage"
-                            :handle-image="handleCrateFormImage"
+                            :handle-image="handleCreateFormImage"
                             :reset-form="resetCreateForm"
                             :submit-form="submitCreateForm"
                             :is-submitting="isSubmittingCreateForm"

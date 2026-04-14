@@ -41,7 +41,7 @@ export function useBrandCreate({onSuccess} = {}) {
         }
     }
 
-    const handleCrateFormImage = (event) => {
+    const handleCreateFormImage = (event) => {
         fileCreateInput.value = event.target;
         const file = fileCreateInput.value?.files?.[0];
 
@@ -97,7 +97,7 @@ export function useBrandCreate({onSuccess} = {}) {
         alertsCreateForm,
         createFormPayload,
         previewCreateImage,
-        handleCrateFormImage,
+        handleCreateFormImage,
         resetCreateForm,
         submitCreateForm,
         isSubmittingCreateForm,

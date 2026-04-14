@@ -16,7 +16,7 @@ export function useBrandEdit({onSuccess} = {}) {
     const alertsEditForm = ref([]);
     const fileEditInput = ref(null);
 
-    function resetEditForm() {
+    function resetEditInfo() {
         editInfo.image = null;
         previewEditImage.value = null;
         alertsEditForm.value = [];
@@ -55,7 +55,7 @@ export function useBrandEdit({onSuccess} = {}) {
     function closeModal() {
         const modal = document.querySelector('.modal.show');
         Modal.getInstance(modal)?.hide();
-        resetEditForm();
+        resetEditInfo();
     }
 
     function getEditInfo(id) {
@@ -75,7 +75,7 @@ export function useBrandEdit({onSuccess} = {}) {
         editInfo,
         getEditInfo,
         submitUpdate,
-        resetEditForm,
+        resetEditInfo,
         alertsEditForm,
         previewEditImage,
         handleImageEditForm,

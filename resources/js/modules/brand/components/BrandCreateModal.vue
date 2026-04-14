@@ -1,5 +1,4 @@
 <script setup>
-const emit = defineEmits(['confirm', 'close']);
 
 const props = defineProps({
     alerts: {
