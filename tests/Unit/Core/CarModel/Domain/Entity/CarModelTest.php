@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Core\CarModel\Domain\Entity\CarModel;
 use App\Core\CarModel\Domain\Exceptions\CarModelDomainException;
+use Illuminate\Support\Str;
 
 it('can create a CarModel instance', function () {
     $carModel = CarModel::new(
@@ -17,6 +18,7 @@ it('can create a CarModel instance', function () {
     );
 
     expect($carModel->brandId)->toBe(1)
+        ->and(Str::isUuid($carModel->uuid))->toBeTrue()
         ->and($carModel->name)->toBe('Civic')
         ->and($carModel->image)->toBe('civic.png')
         ->and($carModel->doorsNumber)->toBe(4)
@@ -39,6 +41,7 @@ it('can create a CarModel instance with ID', function () {
     );
 
     expect($carModel->id)->toBe(1)
+        ->and(Str::isUuid($carModel->uuid))->toBeTrue()
         ->and($carModel->brandId)->toBe(1)
         ->and($carModel->name)->toBe('Civic')
         ->and($carModel->image)->toBe('civic.png')
@@ -151,6 +154,7 @@ it('can update all fields of a CarModel', function () {
     );
 
     expect($updated->id)->toBe(1)
+        ->and($updated->uuid)->toBe($carModel->uuid)
         ->and($updated->brandId)->toBe(2)
         ->and($updated->name)->toBe('Corolla')
         ->and($updated->image)->toBe('corolla.png')
@@ -183,6 +187,7 @@ it('can update CarModel partially keeping other fields', function () {
     );
 
     expect($updated->id)->toBe(1)
+        ->and($updated->uuid)->toBe($carModel->uuid)
         ->and($updated->brandId)->toBe(1)
         ->and($updated->name)->toBe('Civic Sport')
         ->and($updated->image)->toBe('civic_sport.png')

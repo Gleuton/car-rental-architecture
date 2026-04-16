@@ -9,6 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 uses(RefreshDatabase::class);
 
@@ -47,7 +48,9 @@ it('can create a CarModel', function () {
 
     expect($carModel)->not->toBeNull()->and($carModel->brand_id)->toBe($brand->id)->and(
         $carModel->image
-    )->not->toBeEmpty();
+    )->not->toBeEmpty()
+        ->and($carModel->uuid)->not->toBeNull()
+        ->and(Str::isUuid($carModel->uuid))->toBeTrue();
 
     Storage::disk('public')->assertExists($carModel->image);
     $this->assertDatabaseHas(

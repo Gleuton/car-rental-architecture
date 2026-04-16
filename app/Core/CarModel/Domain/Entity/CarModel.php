@@ -6,6 +6,7 @@ namespace App\Core\CarModel\Domain\Entity;
 
 use App\Core\CarModel\Domain\Errors\CarModelError;
 use App\Core\CarModel\Domain\Exceptions\CarModelDomainException;
+use Illuminate\Support\Str;
 
 class CarModel
 {
@@ -14,6 +15,7 @@ class CarModel
      */
     private function __construct(
         public readonly ?int $id,
+        public readonly string $uuid,
         public readonly int $brandId,
         public readonly string $name,
         public readonly string $image,
@@ -38,7 +40,7 @@ class CarModel
         bool $airbags,
         bool $abs
     ): self {
-        return new self(null, $brandId, $name, $image, $doorsNumber, $seatsNumber, $airbags, $abs);
+        return new self(null, (string) Str::uuid(), $brandId, $name, $image, $doorsNumber, $seatsNumber, $airbags, $abs);
     }
 
     /**
@@ -52,9 +54,10 @@ class CarModel
         int $doorsNumber,
         int $seatsNumber,
         bool $airbags,
-        bool $abs
+        bool $abs,
+        ?string $uuid = null,
     ): self {
-        return new self($id, $brandId, $name, $image, $doorsNumber, $seatsNumber, $airbags, $abs);
+        return new self($id, $uuid ?? (string) Str::uuid(), $brandId, $name, $image, $doorsNumber, $seatsNumber, $airbags, $abs);
     }
 
     /**
@@ -78,6 +81,7 @@ class CarModel
 
         return new self(
             $this->id,
+            $this->uuid,
             $newBrandId,
             $newName,
             $image,

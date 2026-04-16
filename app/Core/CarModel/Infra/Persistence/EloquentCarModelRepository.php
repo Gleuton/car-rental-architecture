@@ -41,6 +41,7 @@ class EloquentCarModelRepository implements CarModelRepositoryInterface
     public function save(DomainCarModel $carModel): DomainCarModel
     {
         $model = EloquentCarModel::create([
+            'uuid' => $carModel->uuid,
             'brand_id' => $carModel->brandId,
             'name' => $carModel->name,
             'image' => $carModel->image,
@@ -102,7 +103,8 @@ class EloquentCarModelRepository implements CarModelRepositoryInterface
             $carModel->doors,
             $carModel->seats,
             (bool) $carModel->airbags,
-            (bool) $carModel->abs
+            (bool) $carModel->abs,
+            $carModel->uuid,
         );
     }
 

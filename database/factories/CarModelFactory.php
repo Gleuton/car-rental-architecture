@@ -16,15 +16,22 @@ class CarModelFactory extends Factory
     public function definition(): array
     {
         $brandId = Brand::factory()->create()->id;
+        $name = $this->faker->name();
+        $image = $this->faker->word();
+        $doors = $this->faker->numberBetween(2, 4);
+        $seats = $this->faker->numberBetween(2, 7);
+        $airbags = $this->faker->boolean();
+        $abs = $this->faker->boolean();
 
         return [
+            'uuid' => $this->faker->uuid(),
             'brand_id' => $brandId,
-            'name' => $this->faker->name(),
-            'image' => $this->faker->word(),
-            'doors' => $this->faker->numberBetween(2, 4),
-            'seats' => $this->faker->numberBetween(2, 7),
-            'airbags' => $this->faker->boolean(),
-            'abs' => $this->faker->boolean(),
+            'name' => $name,
+            'image' => $image,
+            'doors' => $doors,
+            'seats' => $seats,
+            'airbags' => $airbags,
+            'abs' => $abs,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ];
