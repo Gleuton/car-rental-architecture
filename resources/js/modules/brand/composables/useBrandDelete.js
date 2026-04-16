@@ -1,16 +1,16 @@
 import {reactive} from 'vue';
-import {deleteBrand, getBrandDetails} from '@modules/brand/services/brandApi.js';
+import {deleteBrandByUuid, getBrandDetailsByUuid} from '@modules/brand/services/brandApi.js';
 import {Modal} from "bootstrap";
 
 export function useBrandDelete({onSuccess} = {}) {
     const runOnSuccess = onSuccess ?? (() => {});
     const deleteInfo = reactive({
-        id: null,
+        uuid: null,
         name: '',
     });
 
     function resetDeleteInfo() {
-        deleteInfo.id = null;
+        deleteInfo.uuid = null;
         deleteInfo.name = '';
     }
 
@@ -19,10 +19,10 @@ export function useBrandDelete({onSuccess} = {}) {
         Modal.getInstance(modal)?.hide();
     }
 
-    function getDeleteInfo(id) {
-        return getBrandDetails(id)
+    function getDeleteInfo(uuid) {
+        return getBrandDetailsByUuid(uuid)
             .then((response) => {
-                deleteInfo.id = response.data.data.id;
+                deleteInfo.uuid = response.data.data.uuid;
                 deleteInfo.name = response.data.data.name;
             })
             .catch((error) => {
@@ -30,8 +30,8 @@ export function useBrandDelete({onSuccess} = {}) {
             });
     }
 
-    function deleteSubmit(id) {
-        return deleteBrand(id)
+    function deleteSubmit(uuid) {
+        return deleteBrandByUuid(uuid)
             .then(() => {
                 runOnSuccess();
                 closeModal();

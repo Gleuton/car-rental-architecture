@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Core\Brand\Application\DTOs\BrandIdDTO;
 use App\Core\Brand\Application\DTOs\CreateBrandDTO;
 use App\Core\Brand\Application\DTOs\FilterBrandDTO;
 use App\Core\Brand\Application\DTOs\UpdateBrandDTO;
 use App\Core\Brand\Application\UseCases\CreateBrandUseCase;
-use App\Core\Brand\Application\UseCases\DeleteBrandUseCase;
-use App\Core\Brand\Application\UseCases\FindBrandByIdUseCase;
+use App\Core\Brand\Application\UseCases\DeleteBrandByUuidUseCase;
+use App\Core\Brand\Application\UseCases\FindBrandByUuidUseCase;
 use App\Core\Brand\Application\UseCases\ListBrandsUseCase;
 use App\Core\Brand\Application\UseCases\UpdateBrandUseCase;
 use App\Core\Brand\Domain\Exceptions\BrandDomainException;
@@ -25,9 +24,9 @@ class BrandController extends Controller
     public function __construct(
         private readonly ListBrandsUseCase $listBrandsUseCase,
         private readonly CreateBrandUseCase $createBrandUseCase,
-        private readonly FindBrandByIdUseCase $findBrandByIdUseCase,
+        private readonly FindBrandByUuidUseCase $findBrandByUuidUseCase,
         private readonly UpdateBrandUseCase $updateBrandUseCase,
-        private readonly DeleteBrandUseCase $deleteBrandUseCase
+        private readonly DeleteBrandByUuidUseCase $deleteBrandByUuidUseCase
     ) {}
 
     /**
@@ -59,11 +58,9 @@ class BrandController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(int $brandId): JsonResponse
+    public function show(string $brandUuid): JsonResponse
     {
-        $brandDto = BrandIdDTO::fromId($brandId);
-
-        $brand = $this->findBrandByIdUseCase->execute($brandDto);
+        $brand = $this->findBrandByUuidUseCase->execute($brandUuid);
 
         return response()->json([
             'data' => BrandResource::BrandToArray($brand),
@@ -75,9 +72,9 @@ class BrandController extends Controller
      *
      * @throws BrandDomainException
      */
-    public function update(UpdateBrandRequest $request, int $brandId): JsonResponse
+    public function update(UpdateBrandRequest $request, string $brandUuid): JsonResponse
     {
-        $brandDto = UpdateBrandDTO::fromRequestId($request, $brandId);
+        $brandDto = UpdateBrandDTO::fromRequestUuid($request, $brandUuid);
 
         $brand = $this->updateBrandUseCase->execute($brandDto);
 
@@ -89,11 +86,9 @@ class BrandController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(int $brandId): JsonResponse
+    public function destroy(string $brandUuid): JsonResponse
     {
-        $brandDto = BrandIdDTO::fromId($brandId);
-
-        $this->deleteBrandUseCase->execute($brandDto);
+        $this->deleteBrandByUuidUseCase->execute($brandUuid);
 
         return response()->json([], 204);
     }

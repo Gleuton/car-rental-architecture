@@ -21,7 +21,7 @@ it('can delete brand', function () {
     $factoryBrand = Brand::factory()->create(['name' => 'Toyota', 'image' => 'brands/toyota.png']);
     Storage::disk('public')->put('brands/toyota.png', 'fake content');
 
-    $response = $this->deleteJson('/api/brands/'.$factoryBrand->id);
+    $response = $this->deleteJson('/api/brands/'.$factoryBrand->uuid);
 
     $response->assertStatus(204);
 
@@ -35,13 +35,13 @@ it('can delete brand', function () {
 it('returns 404 when deleting non-existent brand', function () {
     Auth::guard('api')->login(User::factory()->create());
 
-    $response = $this->deleteJson('/api/brands/999');
+    $response = $this->deleteJson('/api/brands/invalid-uuid');
 
     $response->assertStatus(404);
 });
 
 it('returns 401 when deleting a brand without authentication', function () {
     $brand = Brand::factory()->create(['name' => 'Toyota', 'image' => 'brands/toyota.png']);
-    $response = $this->deleteJson('/api/brands/'.$brand->id);
+    $response = $this->deleteJson('/api/brands/'.$brand->uuid);
     $response->assertStatus(401);
 });

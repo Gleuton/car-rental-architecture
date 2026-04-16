@@ -29,7 +29,7 @@ it('can update all data in brand', function () {
         'image' => $file,
     ];
 
-    $response = $this->putJson('/api/brands/'.$factoryBrand->id, $data);
+    $response = $this->putJson('/api/brands/'.$factoryBrand->uuid, $data);
 
     $response->assertStatus(200)
         ->assertJsonPath('data.id', $factoryBrand->id)
@@ -56,7 +56,7 @@ it('can update name only in brand', function () {
         'name' => 'Toyota',
     ];
 
-    $response = $this->putJson('/api/brands/'.$factoryBrand->id, $data);
+    $response = $this->putJson('/api/brands/'.$factoryBrand->uuid, $data);
 
     $response->assertStatus(200)
         ->assertJsonPath('data.id', $factoryBrand->id)
@@ -83,7 +83,7 @@ it('can update image only in brand', function () {
         'image' => $file,
     ];
 
-    $response = $this->putJson('/api/brands/'.$factoryBrand->id, $data);
+    $response = $this->putJson('/api/brands/'.$factoryBrand->uuid, $data);
 
     $response->assertStatus(200)
         ->assertJsonPath('data.id', $factoryBrand->id)
@@ -108,7 +108,7 @@ it('cannot update a brand with duplicate name', function () {
         'name' => 'Toyota',
     ];
 
-    $response = $this->putJson('/api/brands/'.$factoryBrand->id, $data);
+    $response = $this->putJson('/api/brands/'.$factoryBrand->uuid, $data);
 
     $response->assertStatus(409)
         ->assertJson([
@@ -132,6 +132,6 @@ it('returns 404 when updating non-existent brand', function () {
 
 it('returns 401 when updating a brand without authentication', function () {
     $brand = Brand::factory()->create(['name' => 'Toyota', 'image' => 'brands/old.png']);
-    $response = $this->putJson('/api/brands/'.$brand->id, ['name' => 'Updated']);
+    $response = $this->putJson('/api/brands/'.$brand->uuid, ['name' => 'Updated']);
     $response->assertStatus(401);
 });

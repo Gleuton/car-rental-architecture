@@ -14,7 +14,7 @@ it('can show a brand', function () {
     /** @var Brand $brand */
     $brand = Brand::factory()->create();
 
-    $response = $this->getJson("/api/brands/$brand->id");
+    $response = $this->getJson("/api/brands/$brand->uuid");
 
     $response->assertStatus(200)
         ->assertJsonPath('data.id', $brand->id)
@@ -26,13 +26,13 @@ it('can show a brand', function () {
 it('returns 404 when showing non-existent brand', function () {
     Auth::guard('api')->login(User::factory()->create());
 
-    $response = $this->getJson('/api/brands/999');
+    $response = $this->getJson('/api/brands/invalid-uuid');
 
     $response->assertStatus(404);
 });
 
 it('returns 401 when showing a brand without authentication', function () {
     $brand = Brand::factory()->create();
-    $response = $this->getJson("/api/brands/$brand->id");
+    $response = $this->getJson("/api/brands/$brand->uuid");
     $response->assertStatus(401);
 });

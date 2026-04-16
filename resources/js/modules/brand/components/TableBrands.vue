@@ -21,7 +21,7 @@ defineProps({
             <th>Ações</th>
         </tr>
         </thead>
-        <tbody v-for="brand in brands" :key="brand.id">
+        <tbody v-for="brand in brands" :key="brand.uuid">
         <tr>
             <td>{{ brand.name }}</td>
             <td class="text-center">
@@ -33,21 +33,21 @@ defineProps({
                         type="button"
                         class="btn btn-secondary"
                         data-bs-toggle="modal"
-                        @click="emit('details', brand.id)"
+                        @click="emit('details', brand.uuid)"
                         data-bs-target="#detailsBrand">
                         Detalhes
                     </button>
                     <button
                         type="button"
                         class="btn btn-primary"
-                        @click="emit('edit', brand.id)"
+                        @click="emit('edit', brand.uuid)"
                         data-bs-toggle="modal"
                         data-bs-target="#editBrand"
                     >Editar</button>
                     <button
                         type="button"
                         class="btn btn-danger"
-                        @click="emit('delete', brand.id)"
+                        @click="emit('delete', brand.uuid)"
                         data-bs-toggle="modal"
                         data-bs-target="#deleteBrand"
                     >Excluir</button>

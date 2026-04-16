@@ -22,9 +22,13 @@ interface BrandRepositoryInterface
 
     public function findById(int $id): Brand;
 
+    public function findByUuid(string $uuid): Brand;
+
     public function update(Brand $brand): Brand;
 
     public function delete(int $id): void;
+
+    public function deleteByUuid(string $uuid): void;
 
     public function exists(int $brandId): bool;
 }

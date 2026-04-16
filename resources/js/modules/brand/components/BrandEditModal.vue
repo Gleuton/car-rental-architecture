@@ -27,7 +27,7 @@ defineProps({
     >
         <template #body>
             <form>
-                <input type="hidden" name="brand_id" id="brand_id" v-model="detailsBrand.id">
+                <input type="hidden" name="brand_uuid" id="brand_uuid" v-model="detailsBrand.uuid">
                 <div class="mb-3">
                     <label for="brand_name_edt" class="form-label">Nome da Marca</label>
                     <input
@@ -62,7 +62,7 @@ defineProps({
                 @click="emit('close')"
                 data-bs-dismiss="modal">Fechar
             </button>
-            <button
+                <button
                 type="button"
                 @click="emit('confirm', detailsBrand)"
                 class="btn btn-primary">Salvar

@@ -15,7 +15,7 @@ defineProps({
         modalId="detailsBrand"
     >
         <template #body>
-            <div v-if="detailsBrand?.id">
+            <div v-if="detailsBrand?.uuid">
                 <div class="row">
                     <div class="col-md-6">
                         <label for="brand_name_dtl" class="form-label">Nome da Marca</label>

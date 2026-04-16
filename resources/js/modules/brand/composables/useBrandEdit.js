@@ -1,12 +1,12 @@
 import {reactive, ref} from "vue";
-import {getBrandDetails, putBrand} from "@modules/brand/services/brandApi.js";
+import {getBrandDetailsByUuid, putBrand} from "@modules/brand/services/brandApi.js";
 import {mapBrandApiError} from "@modules/brand/errors/brandApiErrorMapper.js";
 import {Modal} from "bootstrap";
 
 export function useBrandEdit({onSuccess} = {}) {
     const runOnSuccess = onSuccess ?? (() => {});
     const editInfo = reactive({
-        id: null,
+        uuid: null,
         name: '',
         img_url: '',
         image: null,
@@ -43,7 +43,7 @@ export function useBrandEdit({onSuccess} = {}) {
             formData.append('image', editInfo.image);
         }
 
-        return putBrand(brand.id, formData).then(() => {
+        return putBrand(brand.uuid, formData).then(() => {
             closeModal();
             runOnSuccess();
         }).catch((error) => {
@@ -58,10 +58,10 @@ export function useBrandEdit({onSuccess} = {}) {
         resetEditInfo();
     }
 
-    function getEditInfo(id) {
-        return getBrandDetails(id)
+    function getEditInfo(uuid) {
+        return getBrandDetailsByUuid(uuid)
             .then((response) => {
-                editInfo.id = response.data.data.id;
+                editInfo.uuid = response.data.data.uuid;
                 editInfo.name = response.data.data.name;
                 editInfo.img_url = '/storage/' + response.data.data.image;
                 previewEditImage.value = editInfo.img_url;
