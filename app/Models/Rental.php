@@ -13,6 +13,7 @@ class Rental extends Model
     use HasFactory;
 
     protected $fillable = [
+        'uuid',
         'car_id',
         'client_id',
         'start_date',

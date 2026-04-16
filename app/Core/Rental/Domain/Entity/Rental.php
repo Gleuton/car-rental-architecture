@@ -7,6 +7,7 @@ namespace App\Core\Rental\Domain\Entity;
 use App\Core\Rental\Domain\Errors\RentalError;
 use App\Core\Rental\Domain\Exceptions\RentalDomainException;
 use DateTimeImmutable;
+use Illuminate\Support\Str;
 
 class Rental
 {
@@ -21,6 +22,7 @@ class Rental
      */
     private function __construct(
         public readonly ?int $id,
+        public readonly string $uuid,
         public readonly int $carId,
         public readonly int $clientId,
         public readonly int $dayPriceCents,
@@ -52,6 +54,7 @@ class Rental
     ): self {
         return new self(
             null,
+            (string) Str::uuid(),
             $carId,
             $clientId,
             $dayPriceCents,
@@ -73,10 +76,11 @@ class Rental
         string $startDate,
         string $endDate,
         int $initialKm,
-        int $finalKm
+        int $finalKm, ?string $uuid = null,
     ): self {
         return new self(
             $id,
+            $uuid ?? (string) Str::uuid(),
             $carId,
             $clientId,
             $dayPriceCents,

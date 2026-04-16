@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Core\Rental\Domain\Entity\Rental;
 use App\Core\Rental\Domain\Errors\RentalError;
 use App\Core\Rental\Domain\Exceptions\RentalDomainException;
+use Illuminate\Support\Str;
 
 it('can create a Rental instance', function () {
     $rental = Rental::new(
@@ -24,7 +25,8 @@ it('can create a Rental instance', function () {
         ->and($rental->endDate)->toBe('2026-03-19 10:00:00')
         ->and($rental->initialKm)->toBe(1000)
         ->and($rental->finalKm)->toBe(1500)
-        ->and($rental->id)->toBeNull();
+        ->and($rental->id)->toBeNull()
+        ->and(Str::isUuid($rental->uuid))->toBeTrue();
 });
 
 it('can restore a Rental instance with ID', function () {
@@ -46,7 +48,8 @@ it('can restore a Rental instance with ID', function () {
         ->and($rental->startDate)->toBe('2026-03-09 10:00:00')
         ->and($rental->endDate)->toBe('2026-03-19 10:00:00')
         ->and($rental->initialKm)->toBe(1000)
-        ->and($rental->finalKm)->toBe(1500);
+        ->and($rental->finalKm)->toBe(1500)
+        ->and(Str::isUuid($rental->uuid))->toBeTrue();
 });
 
 it('throws RentalDomainException when start date has invalid format', function () {

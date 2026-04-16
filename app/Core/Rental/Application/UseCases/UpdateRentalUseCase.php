@@ -31,6 +31,7 @@ readonly class UpdateRentalUseCase
             endDate: $dto->endDate ?? $rental->endDate,
             initialKm: $dto->initialKm ?? $rental->initialKm,
             finalKm: $dto->finalKm ?? $rental->finalKm,
+            uuid: $rental->uuid,
         );
 
         return $this->repository->update($updatedRental);

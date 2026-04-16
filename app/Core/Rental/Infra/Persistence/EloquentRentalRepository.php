@@ -17,6 +17,7 @@ class EloquentRentalRepository implements RentalRepositoryInterface
     public function save(DomainRental $rental): DomainRental
     {
         $model = EloquentRental::create([
+            'uuid' => $rental->uuid,
             'car_id' => $rental->carId,
             'client_id' => $rental->clientId,
             'day_price_cents' => $rental->dayPriceCents,
@@ -89,6 +90,7 @@ class EloquentRentalRepository implements RentalRepositoryInterface
             $model->end_date->format('Y-m-d H:i:s'),
             $model->initial_km,
             $model->final_km,
+            $model->uuid,
         );
     }
 }

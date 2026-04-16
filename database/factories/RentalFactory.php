@@ -14,23 +14,25 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class RentalFactory extends Factory
 {
-    /**
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
         $startDate = $this->faker->dateTimeBetween('-30 days', '+30 days');
         $endDate = (clone $startDate)->modify('+1 day');
         $initialKm = $this->faker->numberBetween(0, 200000);
+        $car = Car::factory()->create();
+        $client = Client::factory()->create();
+        $dayPriceCents = $this->faker->numberBetween(1000, 10000);
+        $finalKm = $initialKm + $this->faker->numberBetween(0, 1000);
 
         return [
-            'car_id' => Car::factory(),
-            'client_id' => Client::factory(),
+            'uuid' => $this->faker->uuid(),
+            'car_id' => $car->id,
+            'client_id' => $client->id,
             'start_date' => $startDate,
             'end_date' => $endDate,
-            'day_price_cents' => $this->faker->numberBetween(1000, 10000),
+            'day_price_cents' => $dayPriceCents,
             'initial_km' => $initialKm,
-            'final_km' => $initialKm + $this->faker->numberBetween(0, 1000),
+            'final_km' => $finalKm,
         ];
     }
 }

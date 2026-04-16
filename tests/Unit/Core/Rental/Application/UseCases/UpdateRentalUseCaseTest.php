@@ -7,6 +7,7 @@ use App\Core\Rental\Application\UseCases\UpdateRentalUseCase;
 use App\Core\Rental\Domain\Entity\Rental;
 use App\Core\Rental\Domain\Repositories\RentalRepositoryInterface;
 use App\Http\Requests\Rental\UpdateRentalRequest;
+use Illuminate\Support\Str;
 
 it('updates a rental successfully', function () {
     $request = UpdateRentalRequest::create('/api/rentals/1', 'PUT', [
@@ -48,7 +49,9 @@ it('updates a rental successfully', function () {
         ->and($result->startDate)->toBe('2026-03-10 08:00:00')
         ->and($result->endDate)->toBe('2026-03-12 08:00:00')
         ->and($result->initialKm)->toBe(1000)
-        ->and($result->finalKm)->toBe(1500);
+        ->and($result->finalKm)->toBe(1500)
+        ->and($result->uuid)->toBe($existingRental->uuid)
+        ->and(Str::isUuid($result->uuid))->toBeTrue();
 });
 
 it('propagates exception when rental is not found during update', function () {

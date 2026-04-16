@@ -5,6 +5,8 @@ declare(strict_types=1);
 use App\Models\Car;
 use App\Models\Client;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 uses(RefreshDatabase::class);
 
@@ -50,6 +52,11 @@ it('can create a Rental', function () {
         'initial_km' => $initialKm,
         'final_km' => $finalKm,
     ]);
+
+    $rental = DB::table('rentals')->where('client_id', $cliente->id)->where('car_id', $car->id)->first();
+
+    expect($rental)->not->toBeNull()
+        ->and(Str::isUuid($rental->uuid))->toBeTrue();
 });
 
 it('returns 401 when creating a rental without authentication', function () {
