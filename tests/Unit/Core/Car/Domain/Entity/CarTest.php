@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Core\Car\Domain\Entity\Car;
 use App\Core\Car\Domain\Exceptions\CarDomainException;
+use Illuminate\Support\Str;
 
 it('can create a Car instance', function () {
     $car = Car::new(
@@ -19,7 +20,8 @@ it('can create a Car instance', function () {
         ->and($car->color())->toBe('Red')
         ->and($car->isAvailable())->toBeTrue()
         ->and($car->km())->toBe(10000)
-        ->and($car->id)->toBeNull();
+        ->and($car->id)->toBeNull()
+        ->and(Str::isUuid($car->uuid))->toBeTrue();
 });
 
 it('can restore a Car instance with ID', function () {
@@ -37,7 +39,8 @@ it('can restore a Car instance with ID', function () {
         ->and($car->licensePlate())->toBe('ABC-1234')
         ->and($car->color())->toBe('Red')
         ->and($car->isAvailable())->toBeTrue()
-        ->and($car->km())->toBe(10000);
+        ->and($car->km())->toBe(10000)
+        ->and(Str::isUuid($car->uuid))->toBeTrue();
 });
 
 it('can change license plate', function () {
@@ -55,7 +58,8 @@ it('can change license plate', function () {
         ->and($updatedCar->carModelId)->toBe(1)
         ->and($updatedCar->color())->toBe('Red')
         ->and($updatedCar->isAvailable())->toBeTrue()
-        ->and($updatedCar->km())->toBe(10000);
+        ->and($updatedCar->km())->toBe(10000)
+        ->and($updatedCar->uuid)->toBe($car->uuid);
 });
 
 it('can change color', function () {
@@ -73,7 +77,8 @@ it('can change color', function () {
         ->and($updatedCar->licensePlate())->toBe('ABC-1234')
         ->and($updatedCar->color())->toBe('Blue')
         ->and($updatedCar->isAvailable())->toBeTrue()
-        ->and($updatedCar->km())->toBe(10000);
+        ->and($updatedCar->km())->toBe(10000)
+        ->and($updatedCar->uuid)->toBe($car->uuid);
 });
 
 it('can mark a car as unavailable', function () {
@@ -88,6 +93,7 @@ it('can mark a car as unavailable', function () {
     $updatedCar = $car->markAsUnavailable();
 
     expect($updatedCar->isAvailable())->toBeFalse();
+    expect($updatedCar->uuid)->toBe($car->uuid);
 });
 
 it('can mark a car as available', function () {
@@ -102,6 +108,7 @@ it('can mark a car as available', function () {
     $updatedCar = $car->markAsAvailable();
 
     expect($updatedCar->isAvailable())->toBeTrue();
+    expect($updatedCar->uuid)->toBe($car->uuid);
 });
 
 it('throws exception when creating Car with empty license plate', function () {

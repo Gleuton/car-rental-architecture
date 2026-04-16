@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 use App\Models\CarModel;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 uses(RefreshDatabase::class);
 
@@ -25,6 +27,11 @@ it('can create a Car', function () {
     $response->assertJsonPath('data.licensePlate', 'ABC-1234');
 
     $response->assertJsonPath('data.id', fn ($id) => is_int($id));
+
+    $car = DB::table('cars')->where('license_plate', 'ABC-1234')->first();
+
+    expect($car)->not->toBeNull()
+        ->and(Str::isUuid($car->uuid))->toBeTrue();
 
     $this->assertDatabaseHas('cars', $data);
 });
@@ -164,6 +171,10 @@ it('creates a Car with default is_available and km values when not provided', fu
         'is_available' => true,
         'km' => 0,
     ]);
+
+    $car = DB::table('cars')->where('license_plate', 'ABC-1234')->first();
+    expect($car)->not->toBeNull()
+        ->and(Str::isUuid($car->uuid))->toBeTrue();
 });
 
 it('returns appropriate error when car_model_id does not exist', function () {

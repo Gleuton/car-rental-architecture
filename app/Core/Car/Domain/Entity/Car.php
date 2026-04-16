@@ -8,11 +8,13 @@ use App\Core\Car\Domain\Exceptions\CarDomainException;
 use App\Core\Car\Domain\ValueObjects\Color;
 use App\Core\Car\Domain\ValueObjects\LicensePlate;
 use App\Core\Car\Domain\ValueObjects\Mileage;
+use Illuminate\Support\Str;
 
 class Car
 {
     private function __construct(
         public readonly ?int $id,
+        public readonly string $uuid,
         public readonly int $carModelId,
         private LicensePlate $licensePlate,
         private Color $color,
@@ -25,7 +27,7 @@ class Car
      */
     public static function new(int $carModelId, string $licensePlate, string $color, bool $isAvailable, int $km): self
     {
-        return new self(null, $carModelId, new LicensePlate($licensePlate), new Color($color), $isAvailable, new Mileage($km));
+        return new self(null, (string) Str::uuid(), $carModelId, new LicensePlate($licensePlate), new Color($color), $isAvailable, new Mileage($km));
     }
 
     /**
@@ -37,9 +39,10 @@ class Car
         string $licensePlate,
         string $color,
         bool $isAvailable,
-        int $km
+        int $km,
+        ?string $uuid = null,
     ): self {
-        return new self($id, $carModelId, new LicensePlate($licensePlate), new Color($color), $isAvailable, new Mileage($km));
+        return new self($id, $uuid ?? (string) Str::uuid(), $carModelId, new LicensePlate($licensePlate), new Color($color), $isAvailable, new Mileage($km));
     }
 
     /**

@@ -16,13 +16,14 @@ class EloquentCarRepository implements CarRepositoryInterface
 {
     public function save(Car $car): Car
     {
-        $eloquentCar = EloquentCar::create([
-            'car_model_id' => $car->carModelId,
-            'license_plate' => $car->licensePlate(),
-            'color' => $car->color(),
-            'is_available' => $car->isAvailable(),
-            'km' => $car->km(),
-        ]);
+        $eloquentCar = new EloquentCar;
+        $eloquentCar->uuid = $car->uuid;
+        $eloquentCar->car_model_id = $car->carModelId;
+        $eloquentCar->license_plate = $car->licensePlate();
+        $eloquentCar->color = $car->color();
+        $eloquentCar->is_available = $car->isAvailable();
+        $eloquentCar->km = $car->km();
+        $eloquentCar->save();
 
         return $this->toDomainCar($eloquentCar);
     }
@@ -75,6 +76,7 @@ class EloquentCarRepository implements CarRepositoryInterface
             $eloquentCar->color,
             (bool) $eloquentCar->is_available,
             $eloquentCar->km,
+            $eloquentCar->uuid,
         );
     }
 

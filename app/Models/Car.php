@@ -12,7 +12,7 @@ class Car extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['car_model_id', 'license_plate', 'color', 'is_available', 'km'];
+    protected $fillable = ['uuid', 'car_model_id', 'license_plate', 'color', 'is_available', 'km'];
 
     public function carModel(): BelongsTo
     {
