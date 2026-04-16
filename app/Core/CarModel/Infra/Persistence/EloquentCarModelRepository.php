@@ -11,6 +11,7 @@ use App\Core\CarModel\Domain\Exceptions\CarModelDomainException;
 use App\Core\CarModel\Domain\Repositories\CarModelRepositoryInterface;
 use App\Core\Shared\Application\Pagination\PaginatedResult;
 use App\Core\Shared\Infra\Adapters\LaravelPaginatorAdapter;
+use App\Models\Brand as EloquentBrand;
 use App\Models\CarModel as EloquentCarModel;
 
 class EloquentCarModelRepository implements CarModelRepositoryInterface
@@ -40,16 +41,19 @@ class EloquentCarModelRepository implements CarModelRepositoryInterface
      */
     public function save(DomainCarModel $carModel): DomainCarModel
     {
-        $model = EloquentCarModel::create([
-            'uuid' => $carModel->uuid,
-            'brand_id' => $carModel->brandId,
-            'name' => $carModel->name,
-            'image' => $carModel->image,
-            'doors' => $carModel->doorsNumber,
-            'seats' => $carModel->seatsNumber,
-            'airbags' => $carModel->airbags,
-            'abs' => $carModel->abs,
-        ]);
+        $brandUuid = $this->findBrandUuidById($carModel->brandId);
+
+        $model = new EloquentCarModel;
+        $model->uuid = $carModel->uuid;
+        $model->brand_id = $carModel->brandId;
+        $model->brand_uuid = $brandUuid;
+        $model->name = $carModel->name;
+        $model->image = $carModel->image;
+        $model->doors = $carModel->doorsNumber;
+        $model->seats = $carModel->seatsNumber;
+        $model->airbags = $carModel->airbags;
+        $model->abs = $carModel->abs;
+        $model->save();
 
         return $this->toDomainCarModel($model);
     }
@@ -76,16 +80,18 @@ class EloquentCarModelRepository implements CarModelRepositoryInterface
      */
     public function update(DomainCarModel $carModel): DomainCarModel
     {
+        $brandUuid = $this->findBrandUuidById($carModel->brandId);
+
         $carModelEloquent = EloquentCarModel::findOrFail($carModel->id);
-        $carModelEloquent->update([
-            'name' => $carModel->name,
-            'brand_id' => $carModel->brandId,
-            'image' => $carModel->image,
-            'doors' => $carModel->doorsNumber,
-            'seats' => $carModel->seatsNumber,
-            'airbags' => $carModel->airbags,
-            'abs' => $carModel->abs,
-        ]);
+        $carModelEloquent->name = $carModel->name;
+        $carModelEloquent->brand_id = $carModel->brandId;
+        $carModelEloquent->brand_uuid = $brandUuid;
+        $carModelEloquent->image = $carModel->image;
+        $carModelEloquent->doors = $carModel->doorsNumber;
+        $carModelEloquent->seats = $carModel->seatsNumber;
+        $carModelEloquent->airbags = $carModel->airbags;
+        $carModelEloquent->abs = $carModel->abs;
+        $carModelEloquent->save();
 
         return $this->toDomainCarModel($carModelEloquent);
     }
@@ -111,5 +117,13 @@ class EloquentCarModelRepository implements CarModelRepositoryInterface
     public function delete(int $id): void
     {
         EloquentCarModel::findOrFail($id)->delete();
+    }
+
+    private function findBrandUuidById(int $brandId): string
+    {
+        /** @var EloquentBrand $brand */
+        $brand = EloquentBrand::query()->findOrFail($brandId);
+
+        return $brand->uuid;
     }
 }

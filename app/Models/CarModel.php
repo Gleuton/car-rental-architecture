@@ -13,7 +13,7 @@ class CarModel extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['uuid', 'brand_id', 'name', 'image', 'doors', 'seats', 'airbags', 'abs'];
+    protected $fillable = ['uuid', 'brand_id', 'brand_uuid', 'name', 'image', 'doors', 'seats', 'airbags', 'abs'];
 
     public function brand(): BelongsTo
     {

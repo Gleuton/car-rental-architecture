@@ -58,6 +58,7 @@ it('can create a CarModel', function () {
         'car_models',
         [
             'brand_id' => $brand->id,
+            'brand_uuid' => $brand->uuid,
             'name' => $carModelName,
             'doors' => 4,
             'seats' => 5,
