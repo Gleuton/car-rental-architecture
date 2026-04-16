@@ -17,6 +17,8 @@ it('can show a brand', function () {
     $response = $this->getJson("/api/brands/$brand->id");
 
     $response->assertStatus(200)
+        ->assertJsonPath('data.id', $brand->id)
+        ->assertJsonPath('data.uuid', $brand->uuid)
         ->assertJsonPath('data.name', $brand->name)
         ->assertJsonPath('data.image', $brand->image);
 });

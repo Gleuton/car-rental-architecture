@@ -28,7 +28,7 @@ it('can list all rentals returning with price calculated', function () {
         ->assertJsonCount(2, 'data')
         ->assertJsonStructure([
             'data' => [
-                '*' => ['id', 'carId', 'clientId', 'startDate', 'endDate', 'totalPrice', 'initialKm', 'finalKm'],
+                '*' => ['id', 'uuid', 'carId', 'clientId', 'startDate', 'endDate', 'totalPrice', 'initialKm', 'finalKm'],
             ],
             'meta' => [
                 'current_page',
@@ -37,6 +37,8 @@ it('can list all rentals returning with price calculated', function () {
                 'last_page',
             ],
         ]);
+
+    expect($response->json('data.0.uuid'))->not->toBeNull();
 
     $response->assertJsonPath('data.0.totalPrice', 200);
     $response->assertJsonPath('data.1.totalPrice', 100);

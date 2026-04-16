@@ -21,6 +21,7 @@ it('can list car models', function () {
             'data' => [
                 '*' => [
                     'id',
+                    'uuid',
                     'brandId',
                     'name',
                     'image',

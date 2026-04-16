@@ -25,6 +25,7 @@ it('can list cars one page', function () {
             'data' => [
                 '*' => [
                     'id',
+                    'uuid',
                     'licensePlate',
                     'color',
                     'km',
@@ -192,6 +193,7 @@ it('response contains all required car fields', function () {
             'data' => [
                 '*' => [
                     'id',
+                    'uuid',
                     'licensePlate',
                     'color',
                     'km',

@@ -20,6 +20,7 @@ it('can update client name', function () {
 
     $response->assertStatus(200)
         ->assertJsonPath('data.id', $client->id)
+        ->assertJsonPath('data.uuid', $client->uuid)
         ->assertJsonPath('data.name', 'John Updated');
 
     $this->assertDatabaseHas('clients', [

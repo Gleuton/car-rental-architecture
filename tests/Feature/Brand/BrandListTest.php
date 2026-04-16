@@ -18,7 +18,7 @@ it('can list brands', function () {
     $response->assertStatus(200)
         ->assertJsonStructure([
             'data' => [
-                '*' => ['name', 'image'],
+                '*' => ['id', 'uuid', 'name', 'image'],
             ],
             'meta' => [
                 'current_page',
@@ -28,6 +28,8 @@ it('can list brands', function () {
             ],
         ])
         ->assertJsonCount(3, 'data');
+
+    expect($response->json('data.0.uuid'))->not->toBeNull();
 });
 
 it('can filter brands by name', function () {

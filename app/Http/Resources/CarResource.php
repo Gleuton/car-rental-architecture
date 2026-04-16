@@ -14,6 +14,7 @@ class CarResource
     {
         return [
             'id' => $car->id,
+            'uuid' => $car->uuid,
             'licensePlate' => $car->licensePlate(),
             'color' => $car->color(),
             'isAvailable' => $car->isAvailable(),

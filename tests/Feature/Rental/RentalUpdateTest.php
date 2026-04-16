@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Models\Rental;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Str;
 
 uses(RefreshDatabase::class);
 
@@ -29,6 +30,7 @@ it('can update rental data', function () {
 
     $response->assertStatus(200)
         ->assertJsonPath('data.id', $rental->id)
+        ->assertJsonPath('data.uuid', fn ($uuid) => Str::isUuid($uuid))
         ->assertJsonPath('data.dayPriceCents', 7000)
         ->assertJsonPath('data.startDate', '2026-03-10 08:00:00')
         ->assertJsonPath('data.endDate', '2026-03-12 08:00:00')

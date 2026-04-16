@@ -19,8 +19,9 @@ it('can create a client', function () {
 
     $response->assertStatus(201)
         ->assertJsonStructure([
-            'data' => ['id', 'name'],
+            'data' => ['id', 'uuid', 'name'],
         ])
+        ->assertJsonPath('data.uuid', static fn (string $uuid): bool => Str::isUuid($uuid))
         ->assertJsonPath('data.name', 'John Doe');
 
     $client = Client::query()->where('name', 'John Doe')->firstOrFail();

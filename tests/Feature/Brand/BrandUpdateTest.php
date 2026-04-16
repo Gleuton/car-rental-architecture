@@ -32,6 +32,8 @@ it('can update all data in brand', function () {
     $response = $this->putJson('/api/brands/'.$factoryBrand->id, $data);
 
     $response->assertStatus(200)
+        ->assertJsonPath('data.id', $factoryBrand->id)
+        ->assertJsonPath('data.uuid', $factoryBrand->uuid)
         ->assertJsonPath('data.name', 'Toyota');
 
     $brand = Brand::find($factoryBrand->id);
@@ -57,6 +59,8 @@ it('can update name only in brand', function () {
     $response = $this->putJson('/api/brands/'.$factoryBrand->id, $data);
 
     $response->assertStatus(200)
+        ->assertJsonPath('data.id', $factoryBrand->id)
+        ->assertJsonPath('data.uuid', $factoryBrand->uuid)
         ->assertJsonPath('data.name', 'Toyota')
         ->assertJsonPath('data.image', 'brands/old.png');
 
@@ -82,6 +86,8 @@ it('can update image only in brand', function () {
     $response = $this->putJson('/api/brands/'.$factoryBrand->id, $data);
 
     $response->assertStatus(200)
+        ->assertJsonPath('data.id', $factoryBrand->id)
+        ->assertJsonPath('data.uuid', $factoryBrand->uuid)
         ->assertJsonPath('data.name', 'Toyota_old');
 
     $brand = Brand::find($factoryBrand->id);

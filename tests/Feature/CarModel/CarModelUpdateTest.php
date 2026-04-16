@@ -34,6 +34,8 @@ it('can update name and brand in model car', function () {
     $response = $this->putJson('/api/car-models/'.$factoryModelCar->id, $data);
 
     $response->assertStatus(200)
+        ->assertJsonPath('data.id', $factoryModelCar->id)
+        ->assertJsonPath('data.uuid', $factoryModelCar->uuid)
         ->assertJsonPath('data.name', $newModelName)
         ->assertJsonPath('data.brandId', $newBrand->id);
 
@@ -138,6 +140,8 @@ it('can update all data in model car', function () {
     $response = $this->putJson('/api/car-models/'.$factoryModelCar->id, $carModelDetails);
 
     $response->assertStatus(200)
+        ->assertJsonPath('data.id', $factoryModelCar->id)
+        ->assertJsonPath('data.uuid', $factoryModelCar->uuid)
         ->assertJsonPath('data.name', $carModelDetails['name'])
         ->assertJsonPath('data.brandId', $carModelDetails['brand_id']);
 
@@ -165,6 +169,8 @@ it('can send same name to update name in model car', function () {
     $response = $this->putJson('/api/car-models/'.$factoryModelCar->id, $data);
 
     $response->assertStatus(200)
+        ->assertJsonPath('data.id', $factoryModelCar->id)
+        ->assertJsonPath('data.uuid', $factoryModelCar->uuid)
         ->assertJsonPath('data.name', 'Corolla');
 
     $this->assertDatabaseHas('car_models', [
@@ -197,6 +203,8 @@ it('can update image only in model car', function () {
     $response = $this->putJson('/api/car-models/'.$factoryModelCar->id, $data);
 
     $response->assertStatus(200)
+        ->assertJsonPath('data.id', $factoryModelCar->id)
+        ->assertJsonPath('data.uuid', $factoryModelCar->uuid)
         ->assertJsonPath('data.name', 'Corolla');
 
     $carModel = CarModel::find($factoryModelCar->id);

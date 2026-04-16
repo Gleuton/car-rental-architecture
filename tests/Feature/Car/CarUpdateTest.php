@@ -20,6 +20,8 @@ it('can update allowed car data', function () {
     ]);
 
     $response->assertStatus(200)
+        ->assertJsonPath('data.id', $carEloquent->id)
+        ->assertJsonPath('data.uuid', $carEloquent->uuid)
         ->assertJsonPath('data.licensePlate', 'ABC-123')
         ->assertJsonPath('data.color', 'red')
         ->assertJsonPath('data.isAvailable', false)
@@ -51,6 +53,8 @@ it('can update license plate to the same value', function () {
     ]);
 
     $response->assertStatus(200)
+        ->assertJsonPath('data.id', $carEloquent->id)
+        ->assertJsonPath('data.uuid', $carEloquent->uuid)
         ->assertJsonPath('data.licensePlate', $licensePlate);
 
     $this->assertDatabaseHas('cars', [

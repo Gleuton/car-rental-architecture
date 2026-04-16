@@ -36,6 +36,7 @@ it('can create a CarModel', function () {
     $response = $this->postJson('/api/car-models', $data);
     $response->assertStatus(200)
         ->assertJsonPath('data.id', fn ($id) => is_int($id))
+        ->assertJsonPath('data.uuid', fn ($uuid) => Str::isUuid($uuid))
         ->assertJsonPath('data.brandId', $brand->id)
         ->assertJsonPath('data.name', $carModelName)
         ->assertJsonPath('data.image', 'car_models/toyota_corolla.png')

@@ -24,9 +24,13 @@ it('can create a Car', function () {
     ];
     $response = $this->postJson('/api/cars', $data);
     $response->assertStatus(200);
+    $response->assertJsonStructure([
+        'data' => ['id', 'uuid', 'licensePlate', 'color', 'km', 'carModelId'],
+    ]);
     $response->assertJsonPath('data.licensePlate', 'ABC-1234');
 
     $response->assertJsonPath('data.id', fn ($id) => is_int($id));
+    $response->assertJsonPath('data.uuid', fn ($uuid) => Str::isUuid($uuid));
 
     $car = DB::table('cars')->where('license_plate', 'ABC-1234')->first();
 

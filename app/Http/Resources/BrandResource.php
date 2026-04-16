@@ -14,6 +14,7 @@ class BrandResource
     {
         return [
             'id' => $brand->id(),
+            'uuid' => $brand->uuid(),
             'name' => $brand->name(),
             'image' => $brand->imagePath(),
         ];

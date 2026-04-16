@@ -37,6 +37,7 @@ it('can create a Rental', function () {
 
     $response->assertStatus(201)
         ->assertJsonPath('data.id', fn ($id) => is_int($id))
+        ->assertJsonPath('data.uuid', fn ($uuid) => Str::isUuid($uuid))
         ->assertJsonPath('data.startDate', $startDate->format('Y-m-d H:i:s'))
         ->assertJsonPath('data.endDate', $endDate->format('Y-m-d H:i:s'))
         ->assertJsonPath('data.dayPriceCents', $dayPrice)

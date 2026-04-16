@@ -18,9 +18,10 @@ it('can show a client by id', function () {
 
     $response->assertStatus(200)
         ->assertJsonStructure([
-            'data' => ['id', 'name'],
+            'data' => ['id', 'uuid', 'name'],
         ])
         ->assertJsonPath('data.id', $client->id)
+        ->assertJsonPath('data.uuid', $client->uuid)
         ->assertJsonPath('data.name', 'John Doe');
 });
 
