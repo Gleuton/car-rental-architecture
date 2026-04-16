@@ -19,9 +19,13 @@ class BrandFactory extends Factory
      */
     public function definition(): array
     {
+        $name = $this->faker->unique()->company();
+        $image = $this->faker->imageUrl();
+
         return [
-            'name' => $this->faker->unique()->company(),
-            'image' => $this->faker->imageUrl(),
+            'uuid' => $this->faker->uuid(),
+            'name' => $name,
+            'image' => $image,
         ];
     }
 }

@@ -6,6 +6,7 @@ use App\Models\Brand;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 uses(RefreshDatabase::class);
 
@@ -33,6 +34,8 @@ it('can create a brand', function () {
 
     $brand = Brand::where('name', 'Toyota')->first();
     expect($brand->image)->not->toBeEmpty();
+    expect($brand->uuid)->not->toBeNull()
+        ->and(Str::isUuid($brand->uuid))->toBeTrue();
     Storage::disk('public')->assertExists($brand->image);
 
     $this->assertDatabaseHas('brands', [

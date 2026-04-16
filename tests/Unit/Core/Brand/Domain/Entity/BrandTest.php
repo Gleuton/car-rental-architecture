@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 use App\Core\Brand\Domain\Entity\Brand;
 use App\Core\Brand\Domain\Exceptions\BrandDomainException;
+use Illuminate\Support\Str;
 
 it('can create a Brand instance', function () {
     $brand = Brand::new('Fiat', 'fiat.png');
 
     expect($brand->name())->toBe('Fiat')
         ->and($brand->imagePath())->toBe('fiat.png')
-        ->and($brand->id())->toBeNull();
+        ->and($brand->id())->toBeNull()
+        ->and(Str::isUuid($brand->uuid()))->toBeTrue();
 });
 
 it('can create a Brand instance with ID', function () {
@@ -18,7 +20,8 @@ it('can create a Brand instance with ID', function () {
 
     expect($brand->id())->toBe(1)
         ->and($brand->name())->toBe('Fiat')
-        ->and($brand->imagePath())->toBe('fiat.png');
+        ->and($brand->imagePath())->toBe('fiat.png')
+        ->and(Str::isUuid($brand->uuid()))->toBeTrue();
 });
 
 it('throws exception when creating a Brand instance with empty name', function () {
@@ -56,7 +59,8 @@ it('can update a Brand name keeping the image', function () {
 
     expect($updated->id())->toBe(1)
         ->and($updated->name())->toBe('Toyota')
-        ->and($updated->imagePath())->toBe('fiat.png');
+        ->and($updated->imagePath())->toBe('fiat.png')
+        ->and($updated->uuid())->toBe($brand->uuid());
 });
 
 it('can update a Brand image keeping the name', function () {
@@ -65,7 +69,8 @@ it('can update a Brand image keeping the name', function () {
 
     expect($updated->id())->toBe(1)
         ->and($updated->name())->toBe('Fiat')
-        ->and($updated->imagePath())->toBe('fiat_new.png');
+        ->and($updated->imagePath())->toBe('fiat_new.png')
+        ->and($updated->uuid())->toBe($brand->uuid());
 });
 
 it('can update a Brand name and image', function () {
@@ -75,7 +80,8 @@ it('can update a Brand name and image', function () {
 
     expect($updated->id())->toBe(1)
         ->and($updated->name())->toBe('Toyota')
-        ->and($updated->imagePath())->toBe('toyota.png');
+        ->and($updated->imagePath())->toBe('toyota.png')
+        ->and($updated->uuid())->toBe($brand->uuid());
 });
 
 it('throws exception when updating a Brand with invalid name', function () {

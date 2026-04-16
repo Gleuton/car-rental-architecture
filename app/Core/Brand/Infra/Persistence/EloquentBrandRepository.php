@@ -49,6 +49,7 @@ class EloquentBrandRepository implements BrandRepositoryInterface
     public function save(DomainBrand $brand): DomainBrand
     {
         $model = EloquentBrand::create([
+            'uuid' => $brand->uuid(),
             'name' => $brand->name(),
             'image' => $brand->imagePath(),
         ]);
@@ -100,7 +101,8 @@ class EloquentBrandRepository implements BrandRepositoryInterface
         return DomainBrand::restore(
             $model->id,
             $model->name,
-            $model->image
+            $model->image,
+            $model->uuid,
         );
     }
 }
