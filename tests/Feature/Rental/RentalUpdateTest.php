@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Models\Car;
+use App\Models\Client;
 use App\Models\Rental;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
@@ -67,6 +69,34 @@ it('can partially update rental data', function () {
         ->assertJsonPath('data.dayPriceCents', 8000)
         ->assertJsonPath('data.startDate', '2026-03-01 08:00:00')
         ->assertJsonPath('data.endDate', '2026-03-05 08:00:00');
+});
+
+it('can update rental using car_uuid and client_uuid', function () {
+    authenticateApi();
+
+    /** @var Rental $rental */
+    $rental = Rental::factory()->create();
+    /** @var Car $newCar */
+    $newCar = Car::factory()->create();
+    /** @var Client $newClient */
+    $newClient = Client::factory()->create();
+
+    $response = $this->putJson('/api/rentals/'.$rental->id, [
+        'car_uuid' => $newCar->uuid,
+        'client_uuid' => $newClient->uuid,
+    ]);
+
+    $response->assertStatus(200)
+        ->assertJsonPath('data.carId', $newCar->id)
+        ->assertJsonPath('data.clientId', $newClient->id);
+
+    $this->assertDatabaseHas('rentals', [
+        'id' => $rental->id,
+        'car_id' => $newCar->id,
+        'car_uuid' => $newCar->uuid,
+        'client_id' => $newClient->id,
+        'client_uuid' => $newClient->uuid,
+    ]);
 });
 
 it('returns 404 when updating non-existent rental', function () {

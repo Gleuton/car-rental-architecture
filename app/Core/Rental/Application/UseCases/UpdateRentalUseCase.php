@@ -8,6 +8,8 @@ use App\Core\Rental\Application\DTOs\UpdateRentalDTO;
 use App\Core\Rental\Domain\Entity\Rental;
 use App\Core\Rental\Domain\Exceptions\RentalDomainException;
 use App\Core\Rental\Domain\Repositories\RentalRepositoryInterface;
+use App\Models\Car as EloquentCar;
+use App\Models\Client as EloquentClient;
 
 readonly class UpdateRentalUseCase
 {
@@ -22,10 +24,13 @@ readonly class UpdateRentalUseCase
     {
         $rental = $this->repository->findById($dto->id);
 
+        $carId = $this->resolveCarId($dto);
+        $clientId = $this->resolveClientId($dto);
+
         $updatedRental = Rental::restore(
             id: $rental->id,
-            carId: $dto->carId ?? $rental->carId,
-            clientId: $dto->clientId ?? $rental->clientId,
+            carId: $carId ?? $rental->carId,
+            clientId: $clientId ?? $rental->clientId,
             dayPriceCents: $dto->dayPriceCents ?? $rental->dayPriceCents,
             startDate: $dto->startDate ?? $rental->startDate,
             endDate: $dto->endDate ?? $rental->endDate,
@@ -35,5 +40,35 @@ readonly class UpdateRentalUseCase
         );
 
         return $this->repository->update($updatedRental);
+    }
+
+    private function resolveCarId(UpdateRentalDTO $dto): ?int
+    {
+        if ($dto->carId !== null) {
+            return $dto->carId;
+        }
+
+        if ($dto->carUuid === null) {
+            return null;
+        }
+
+        $carId = EloquentCar::query()->where('uuid', $dto->carUuid)->value('id');
+
+        return $carId === null ? 0 : (int) $carId;
+    }
+
+    private function resolveClientId(UpdateRentalDTO $dto): ?int
+    {
+        if ($dto->clientId !== null) {
+            return $dto->clientId;
+        }
+
+        if ($dto->clientUuid === null) {
+            return null;
+        }
+
+        $clientId = EloquentClient::query()->where('uuid', $dto->clientUuid)->value('id');
+
+        return $clientId === null ? 0 : (int) $clientId;
     }
 }

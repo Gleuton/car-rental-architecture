@@ -29,7 +29,9 @@ it('creates a car successfully', function () {
 
     $km = 10000;
 
-    $request->shouldReceive('input')->with('car_model_id')->andReturn($carModelId);
+    $request->shouldReceive('has')->with('car_model_id')->andReturn(true);
+    $request->shouldReceive('integer')->with('car_model_id')->andReturn($carModelId);
+    $request->shouldReceive('input')->with('car_model_uuid')->andReturn(null);
     $request->shouldReceive('input')->with('license_plate')->andReturn($licensePlate);
     $request->shouldReceive('input')->with('color')->andReturn($color);
     $request->shouldReceive('input')->with('is_available')->andReturn(true);
@@ -77,7 +79,9 @@ it('throws exception when car with license plate already exists', function () {
     $request = Mockery::mock(StoreCarRequest::class);
     $licensePlate = 'ABC-1234';
 
-    $request->shouldReceive('input')->with('car_model_id')->andReturn(1);
+    $request->shouldReceive('has')->with('car_model_id')->andReturn(true);
+    $request->shouldReceive('integer')->with('car_model_id')->andReturn(1);
+    $request->shouldReceive('input')->with('car_model_uuid')->andReturn(null);
     $request->shouldReceive('input')->with('license_plate')->andReturn($licensePlate);
     $request->shouldReceive('input')->with('color')->andReturn('Red');
     $request->shouldReceive('input')->with('is_available')->andReturn(true);
@@ -101,7 +105,9 @@ it('validates license plate before creating car', function () {
     $request = Mockery::mock(StoreCarRequest::class);
     $licensePlate = 'ABC-1234';
 
-    $request->shouldReceive('input')->with('car_model_id')->andReturn(1);
+    $request->shouldReceive('has')->with('car_model_id')->andReturn(true);
+    $request->shouldReceive('integer')->with('car_model_id')->andReturn(1);
+    $request->shouldReceive('input')->with('car_model_uuid')->andReturn(null);
     $request->shouldReceive('input')->with('license_plate')->andReturn($licensePlate);
     $request->shouldReceive('input')->with('color')->andReturn('Red');
     $request->shouldReceive('input')->with('is_available')->andReturn(true);

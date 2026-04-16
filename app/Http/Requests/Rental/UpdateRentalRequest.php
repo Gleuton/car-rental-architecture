@@ -21,7 +21,9 @@ class UpdateRentalRequest extends FormRequest
     {
         return [
             'client_id' => ['nullable', 'integer'],
+            'client_uuid' => ['nullable', 'uuid'],
             'car_id' => ['nullable', 'integer'],
+            'car_uuid' => ['nullable', 'uuid'],
             'start_date' => ['nullable', 'date_format:Y-m-d H:i:s'],
             'end_date' => ['nullable', 'date_format:Y-m-d H:i:s'],
             'day_price_cents' => ['nullable', 'integer', 'min:0'],

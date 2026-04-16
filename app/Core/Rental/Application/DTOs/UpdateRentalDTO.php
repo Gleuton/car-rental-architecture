@@ -11,7 +11,9 @@ readonly class UpdateRentalDTO
     private function __construct(
         public int $id,
         public ?int $carId,
+        public ?string $carUuid,
         public ?int $clientId,
+        public ?string $clientUuid,
         public ?int $dayPriceCents,
         public ?string $startDate,
         public ?string $endDate,
@@ -23,13 +25,15 @@ readonly class UpdateRentalDTO
     {
         return new self(
             id: $rentalId,
-            carId: $request->input('car_id'),
-            clientId: $request->input('client_id'),
-            dayPriceCents: $request->input('day_price_cents'),
+            carId: $request->has('car_id') ? $request->integer('car_id') : null,
+            carUuid: $request->input('car_uuid'),
+            clientId: $request->has('client_id') ? $request->integer('client_id') : null,
+            clientUuid: $request->input('client_uuid'),
+            dayPriceCents: $request->has('day_price_cents') ? $request->integer('day_price_cents') : null,
             startDate: $request->input('start_date'),
             endDate: $request->input('end_date'),
-            initialKm: $request->input('initial_km'),
-            finalKm: $request->input('final_km'),
+            initialKm: $request->has('initial_km') ? $request->integer('initial_km') : null,
+            finalKm: $request->has('final_km') ? $request->integer('final_km') : null,
         );
     }
 }

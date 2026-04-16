@@ -41,6 +41,31 @@ it('can create a Car', function () {
     $this->assertDatabaseHas('cars', $data);
 });
 
+it('can create a Car using car_model_uuid', function () {
+    authenticateApi();
+
+    /** @var CarModel $carModel */
+    $carModel = CarModel::factory()->create();
+
+    $response = $this->postJson('/api/cars', [
+        'car_model_uuid' => $carModel->uuid,
+        'license_plate' => 'QWE-9876',
+        'color' => 'black',
+        'is_available' => true,
+        'km' => 10,
+    ]);
+
+    $response->assertStatus(200)
+        ->assertJsonPath('data.carModelId', $carModel->id)
+        ->assertJsonPath('data.licensePlate', 'QWE-9876');
+
+    $this->assertDatabaseHas('cars', [
+        'car_model_id' => $carModel->id,
+        'car_model_uuid' => $carModel->uuid,
+        'license_plate' => 'QWE-9876',
+    ]);
+});
+
 it('validates required fields when creating a Car', function () {
     authenticateApi();
 
@@ -183,7 +208,7 @@ it('creates a Car with default is_available and km values when not provided', fu
         ->and(Str::isUuid($car->uuid))->toBeTrue();
 });
 
-it('returns appropriate error when car_model_id does not exist', function () {
+it('returns 404 when car_model_id does not exist', function () {
     authenticateApi();
 
     $data = [
@@ -196,8 +221,7 @@ it('returns appropriate error when car_model_id does not exist', function () {
 
     $response = $this->postJson('/api/cars', $data);
 
-    $response->assertStatus(422)
-        ->assertJsonValidationErrors(['car_model_id']);
+    $response->assertStatus(404);
 });
 
 it('validates license_plate min length when creating a Car', function () {

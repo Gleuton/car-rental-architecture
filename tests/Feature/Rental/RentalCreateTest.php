@@ -64,6 +64,37 @@ it('can create a Rental', function () {
         ->and($rental->client_uuid)->toBe($cliente->uuid);
 });
 
+it('can create a Rental using car_uuid and client_uuid', function () {
+    authenticateApi();
+    /** @var Client $client */
+    $client = Client::factory()->create();
+    /** @var Car $car */
+    $car = Car::factory()->create();
+
+    $payload = [
+        'client_uuid' => $client->uuid,
+        'car_uuid' => $car->uuid,
+        'start_date' => now()->format('Y-m-d H:i:s'),
+        'end_date' => now()->addDay()->format('Y-m-d H:i:s'),
+        'day_price_cents' => 3500,
+        'initial_km' => 100,
+        'final_km' => 160,
+    ];
+
+    $response = $this->postJson('/api/rentals', $payload);
+
+    $response->assertStatus(201)
+        ->assertJsonPath('data.clientId', $client->id)
+        ->assertJsonPath('data.carId', $car->id);
+
+    $this->assertDatabaseHas('rentals', [
+        'client_id' => $client->id,
+        'client_uuid' => $client->uuid,
+        'car_id' => $car->id,
+        'car_uuid' => $car->uuid,
+    ]);
+});
+
 it('returns 401 when creating a rental without authentication', function () {
     $client = Client::factory()->create();
     $car = Car::factory()->create();
