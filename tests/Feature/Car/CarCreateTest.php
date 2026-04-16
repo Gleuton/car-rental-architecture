@@ -35,7 +35,8 @@ it('can create a Car', function () {
     $car = DB::table('cars')->where('license_plate', 'ABC-1234')->first();
 
     expect($car)->not->toBeNull()
-        ->and(Str::isUuid($car->uuid))->toBeTrue();
+        ->and(Str::isUuid($car->uuid))->toBeTrue()
+        ->and($car->car_model_uuid)->toBe($carModel->uuid);
 
     $this->assertDatabaseHas('cars', $data);
 });
@@ -170,6 +171,7 @@ it('creates a Car with default is_available and km values when not provided', fu
 
     $this->assertDatabaseHas('cars', [
         'car_model_id' => $carModel->id,
+        'car_model_uuid' => $carModel->uuid,
         'license_plate' => 'ABC-1234',
         'color' => 'red',
         'is_available' => true,

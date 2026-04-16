@@ -26,6 +26,7 @@ class CarFactory extends Factory
         return [
             'uuid' => DomainCar::new($carModel->id, $licensePlate, $color, $isAvailable, $km)->uuid,
             'car_model_id' => $carModel->id,
+            'car_model_uuid' => $carModel->uuid,
             'license_plate' => $licensePlate,
             'color' => $color,
             'is_available' => $isAvailable,

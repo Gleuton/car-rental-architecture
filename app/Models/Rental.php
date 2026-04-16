@@ -15,7 +15,9 @@ class Rental extends Model
     protected $fillable = [
         'uuid',
         'car_id',
+        'car_uuid',
         'client_id',
+        'client_uuid',
         'start_date',
         'end_date',
         'day_price_cents',

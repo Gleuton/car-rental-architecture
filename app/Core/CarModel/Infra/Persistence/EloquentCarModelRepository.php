@@ -43,19 +43,19 @@ class EloquentCarModelRepository implements CarModelRepositoryInterface
     {
         $brandUuid = $this->findBrandUuidById($carModel->brandId);
 
-        $model = new EloquentCarModel;
-        $model->uuid = $carModel->uuid;
-        $model->brand_id = $carModel->brandId;
-        $model->brand_uuid = $brandUuid;
-        $model->name = $carModel->name;
-        $model->image = $carModel->image;
-        $model->doors = $carModel->doorsNumber;
-        $model->seats = $carModel->seatsNumber;
-        $model->airbags = $carModel->airbags;
-        $model->abs = $carModel->abs;
-        $model->save();
+        $eloquentCarModel = EloquentCarModel::create([
+            'uuid' => $carModel->uuid,
+            'brand_id' => $carModel->brandId,
+            'brand_uuid' => $brandUuid,
+            'name' => $carModel->name,
+            'image' => $carModel->image,
+            'doors' => $carModel->doorsNumber,
+            'seats' => $carModel->seatsNumber,
+            'airbags' => $carModel->airbags,
+            'abs' => $carModel->abs,
+        ]);
 
-        return $this->toDomainCarModel($model);
+        return $this->toDomainCarModel($eloquentCarModel);
     }
 
     public function existsByNameAndBrandId(string $name, int $brandId): bool
@@ -83,15 +83,18 @@ class EloquentCarModelRepository implements CarModelRepositoryInterface
         $brandUuid = $this->findBrandUuidById($carModel->brandId);
 
         $carModelEloquent = EloquentCarModel::findOrFail($carModel->id);
-        $carModelEloquent->name = $carModel->name;
-        $carModelEloquent->brand_id = $carModel->brandId;
-        $carModelEloquent->brand_uuid = $brandUuid;
-        $carModelEloquent->image = $carModel->image;
-        $carModelEloquent->doors = $carModel->doorsNumber;
-        $carModelEloquent->seats = $carModel->seatsNumber;
-        $carModelEloquent->airbags = $carModel->airbags;
-        $carModelEloquent->abs = $carModel->abs;
-        $carModelEloquent->save();
+
+        $carModelEloquent->update([
+            'brand_id' => $carModel->brandId,
+            'brand_uuid' => $brandUuid,
+            'name' => $carModel->name,
+            'image' => $carModel->image,
+            'doors' => $carModel->doorsNumber,
+            'seats' => $carModel->seatsNumber,
+            'airbags' => $carModel->airbags,
+            'abs' => $carModel->abs,
+            'uuid' => $carModel->uuid,
+        ]);
 
         return $this->toDomainCarModel($carModelEloquent);
     }

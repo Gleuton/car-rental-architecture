@@ -46,7 +46,9 @@ it('can create a Rental', function () {
 
     $this->assertDatabaseHas('rentals', [
         'client_id' => $cliente->id,
+        'client_uuid' => $cliente->uuid,
         'car_id' => $car->id,
+        'car_uuid' => $car->uuid,
         'start_date' => $startDate,
         'end_date' => $endDate,
         'day_price_cents' => $dayPrice,
@@ -57,7 +59,9 @@ it('can create a Rental', function () {
     $rental = DB::table('rentals')->where('client_id', $cliente->id)->where('car_id', $car->id)->first();
 
     expect($rental)->not->toBeNull()
-        ->and(Str::isUuid($rental->uuid))->toBeTrue();
+        ->and(Str::isUuid($rental->uuid))->toBeTrue()
+        ->and($rental->car_uuid)->toBe($car->uuid)
+        ->and($rental->client_uuid)->toBe($cliente->uuid);
 });
 
 it('returns 401 when creating a rental without authentication', function () {

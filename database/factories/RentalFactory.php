@@ -27,7 +27,9 @@ class RentalFactory extends Factory
         return [
             'uuid' => $this->faker->uuid(),
             'car_id' => $car->id,
+            'car_uuid' => $car->uuid,
             'client_id' => $client->id,
+            'client_uuid' => $client->uuid,
             'start_date' => $startDate,
             'end_date' => $endDate,
             'day_price_cents' => $dayPriceCents,

@@ -31,6 +31,7 @@ it('can update allowed car data', function () {
     $this->assertDatabaseHas('cars', [
         'id' => $carEloquent->id,
         'car_model_id' => $carEloquent->car_model_id,
+        'car_model_uuid' => $carEloquent->carModel->uuid,
         'license_plate' => 'ABC-123',
         'color' => 'red',
         'is_available' => 0,

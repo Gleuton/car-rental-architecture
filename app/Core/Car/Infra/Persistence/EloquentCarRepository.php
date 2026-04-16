@@ -11,19 +11,22 @@ use App\Core\Car\Domain\Repositories\CarRepositoryInterface;
 use App\Core\Shared\Application\Pagination\PaginatedResult;
 use App\Core\Shared\Infra\Adapters\LaravelPaginatorAdapter;
 use App\Models\Car as EloquentCar;
+use App\Models\CarModel as EloquentCarModel;
 
 class EloquentCarRepository implements CarRepositoryInterface
 {
     public function save(Car $car): Car
     {
-        $eloquentCar = new EloquentCar;
-        $eloquentCar->uuid = $car->uuid;
-        $eloquentCar->car_model_id = $car->carModelId;
-        $eloquentCar->license_plate = $car->licensePlate();
-        $eloquentCar->color = $car->color();
-        $eloquentCar->is_available = $car->isAvailable();
-        $eloquentCar->km = $car->km();
-        $eloquentCar->save();
+        $carModelUuid = $this->findCarModelUuidById($car->carModelId);
+        $eloquentCar = EloquentCar::create([
+            'uuid' => $car->uuid,
+            'car_model_id' => $car->carModelId,
+            'car_model_uuid' => $carModelUuid,
+            'license_plate' => $car->licensePlate(),
+            'color' => $car->color(),
+            'is_available' => $car->isAvailable(),
+            'km' => $car->km(),
+        ]);
 
         return $this->toDomainCar($eloquentCar);
     }
@@ -82,10 +85,13 @@ class EloquentCarRepository implements CarRepositoryInterface
 
     public function update(Car $car): Car
     {
+        $carModelUuid = $this->findCarModelUuidById($car->carModelId);
+
         $eloquentCar = EloquentCar::findOrFail($car->id);
 
         $eloquentCar->update([
             'car_model_id' => $car->carModelId,
+            'car_model_uuid' => $carModelUuid,
             'license_plate' => $car->licensePlate(),
             'color' => $car->color(),
             'is_available' => $car->isAvailable(),
@@ -93,5 +99,13 @@ class EloquentCarRepository implements CarRepositoryInterface
         ]);
 
         return $this->toDomainCar($eloquentCar);
+    }
+
+    private function findCarModelUuidById(int $carModelId): string
+    {
+        /** @var EloquentCarModel $carModel */
+        $carModel = EloquentCarModel::query()->findOrFail($carModelId);
+
+        return $carModel->uuid;
     }
 }

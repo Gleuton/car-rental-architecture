@@ -39,6 +39,8 @@ it('can update rental data', function () {
 
     $this->assertDatabaseHas('rentals', [
         'id' => $rental->id,
+        'car_uuid' => $rental->car->uuid,
+        'client_uuid' => $rental->client->uuid,
         'day_price_cents' => 7000,
         'start_date' => '2026-03-10 08:00:00',
         'end_date' => '2026-03-12 08:00:00',
