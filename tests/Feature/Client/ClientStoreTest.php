@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
+use App\Models\Client;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 uses(RefreshDatabase::class);
 
@@ -20,6 +22,12 @@ it('can create a client', function () {
             'data' => ['id', 'name'],
         ])
         ->assertJsonPath('data.name', 'John Doe');
+
+    $client = Client::query()->where('name', 'John Doe')->firstOrFail();
+
+    expect($client->uuid)
+        ->not->toBeNull()
+        ->and(Str::isUuid($client->uuid))->toBeTrue();
 });
 
 it('returns validation error when name is missing', function () {

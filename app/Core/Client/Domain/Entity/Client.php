@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Core\Client\Domain\Entity;
 
 use App\Core\Client\Domain\Exceptions\ClientDomainException;
+use Illuminate\Support\Str;
 
 readonly class Client
 {
@@ -13,6 +14,7 @@ readonly class Client
      */
     private function __construct(
         public ?int $id,
+        public string $uuid,
         public string $name,
     ) {
         $this->validate($name);
@@ -23,15 +25,15 @@ readonly class Client
      */
     public static function new(string $name): self
     {
-        return new self(null, $name);
+        return new self(null, (string) Str::uuid(), $name);
     }
 
     /**
      * @throws ClientDomainException
      */
-    public static function restore(int $id, string $name): self
+    public static function restore(int $id, string $name, ?string $uuid = null): self
     {
-        return new self($id, $name);
+        return new self($id, $uuid ?? (string) Str::uuid(), $name);
     }
 
     /**
@@ -55,6 +57,6 @@ readonly class Client
     {
         $newName = $name ?? $this->name;
 
-        return new self($this->id, $newName);
+        return new self($this->id, $this->uuid, $newName);
     }
 }

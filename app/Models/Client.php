@@ -13,6 +13,7 @@ class Client extends Model
     use HasFactory;
 
     protected $fillable = [
+        'uuid',
         'name',
     ];
 

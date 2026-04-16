@@ -4,19 +4,22 @@ declare(strict_types=1);
 
 use App\Core\Client\Domain\Entity\Client;
 use App\Core\Client\Domain\Exceptions\ClientDomainException;
+use Illuminate\Support\Str;
 
 it('can create a Client instance', function () {
     $client = Client::new('John Doe');
 
     expect($client->name)->toBe('John Doe')
-        ->and($client->id)->toBeNull();
+        ->and($client->id)->toBeNull()
+        ->and(Str::isUuid($client->uuid))->toBeTrue();
 });
 
 it('can create a Client instance with ID', function () {
     $client = Client::restore(1, 'John Doe');
 
     expect($client->id)->toBe(1)
-        ->and($client->name)->toBe('John Doe');
+        ->and($client->name)->toBe('John Doe')
+        ->and(Str::isUuid($client->uuid))->toBeTrue();
 });
 
 it('throws exception when creating a Client instance with empty name', function () {
@@ -36,7 +39,8 @@ it('can create a Client with name at max length', function () {
     $client = Client::new($longName);
 
     expect($client->name)->toBe($longName)
-        ->and($client->id)->toBeNull();
+        ->and($client->id)->toBeNull()
+        ->and(Str::isUuid($client->uuid))->toBeTrue();
 });
 
 it('can update client name keeping same id', function () {
@@ -45,7 +49,8 @@ it('can update client name keeping same id', function () {
     $updated = $client->update('John Updated');
 
     expect($updated->id)->toBe(1)
-        ->and($updated->name)->toBe('John Updated');
+        ->and($updated->name)->toBe('John Updated')
+        ->and($updated->uuid)->toBe($client->uuid);
 });
 
 it('keeps current name when update receives null', function () {
@@ -54,5 +59,6 @@ it('keeps current name when update receives null', function () {
     $updated = $client->update(null);
 
     expect($updated->id)->toBe(1)
-        ->and($updated->name)->toBe('John Doe');
+        ->and($updated->name)->toBe('John Doe')
+        ->and($updated->uuid)->toBe($client->uuid);
 });

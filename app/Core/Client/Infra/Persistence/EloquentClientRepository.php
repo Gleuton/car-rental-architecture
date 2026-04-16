@@ -17,6 +17,7 @@ class EloquentClientRepository implements ClientRepositoryInterface
     public function save(DomainClient $client): DomainClient
     {
         $model = EloquentClient::create([
+            'uuid' => $client->uuid,
             'name' => $client->name,
         ]);
 
@@ -72,6 +73,7 @@ class EloquentClientRepository implements ClientRepositoryInterface
         return DomainClient::restore(
             $model->id,
             $model->name,
+            $model->uuid,
         );
     }
 }
