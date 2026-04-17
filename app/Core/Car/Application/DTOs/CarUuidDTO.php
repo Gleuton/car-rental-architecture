@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Core\Car\Application\DTOs;
 
-readonly class CarIdDTO
+readonly class CarUuidDTO
 {
     private function __construct(
         public string $uuid

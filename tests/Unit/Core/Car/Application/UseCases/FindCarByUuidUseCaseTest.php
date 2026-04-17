@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-use App\Core\Car\Application\DTOs\CarIdDTO;
-use App\Core\Car\Application\UseCases\FindCarUseCase;
+use App\Core\Car\Application\DTOs\CarUuidDTO;
+use App\Core\Car\Application\UseCases\FindCarByUuidUseCase;
 use App\Core\Car\Domain\Entity\Car;
 use App\Core\Car\Domain\Repositories\CarRepositoryInterface;
 
 it('finds a car by UUID successfully', function () {
     $carUuid = '11111111-1111-4111-8111-111111111111';
-    $dto = CarIdDTO::fromUuid($carUuid);
+    $dto = CarUuidDTO::fromUuid($carUuid);
 
     $repository = Mockery::mock(CarRepositoryInterface::class);
 
@@ -29,7 +29,7 @@ it('finds a car by UUID successfully', function () {
         ->once()
         ->andReturn($expectedCar);
 
-    $useCase = new FindCarUseCase($repository);
+    $useCase = new FindCarByUuidUseCase($repository);
     $result = $useCase->execute($dto);
 
     expect($result)->toBe($expectedCar);
@@ -37,7 +37,7 @@ it('finds a car by UUID successfully', function () {
 
 it('propagates exception when car is not found', function () {
     $carUuid = '99999999-9999-4999-8999-999999999999';
-    $dto = CarIdDTO::fromUuid($carUuid);
+    $dto = CarUuidDTO::fromUuid($carUuid);
 
     $repository = Mockery::mock(CarRepositoryInterface::class);
     $repository->shouldReceive('findByUuid')
@@ -45,7 +45,7 @@ it('propagates exception when car is not found', function () {
         ->once()
         ->andThrow(new RuntimeException('Car not found'));
 
-    $useCase = new FindCarUseCase($repository);
+    $useCase = new FindCarByUuidUseCase($repository);
 
     expect(fn () => $useCase->execute($dto))
         ->toThrow(RuntimeException::class);
