@@ -13,7 +13,6 @@ it('find Model Car successfully', function () {
     $repository = Mockery::mock(CarModelRepositoryInterface::class);
 
     $expectedModel = CarModel::restore(
-        42,
         '66666666-6666-4666-8666-666666666666',
         'Model S',
         'Toyota_Model_S_2020.jpg',

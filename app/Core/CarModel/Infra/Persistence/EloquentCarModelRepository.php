@@ -105,7 +105,6 @@ class EloquentCarModelRepository implements CarModelRepositoryInterface
     private function toDomainCarModel(EloquentCarModel $carModel): DomainCarModel
     {
         return DomainCarModel::restore(
-            $carModel->id,
             $carModel->brand_uuid,
             $carModel->name,
             $carModel->image,

@@ -75,8 +75,7 @@ it('creates a car model successfully', function () {
         ->once()
         ->with(
             Mockery::on(static function (DomainCarModel $carModel): bool {
-                return $carModel->id === null &&
-                    $carModel->brandUuid === '11111111-1111-4111-8111-111111111111' &&
+                return $carModel->brandUuid === '11111111-1111-4111-8111-111111111111' &&
                     $carModel->name === 'Civic' &&
                     $carModel->image === 'car_models/civic_stored.png' &&
                     $carModel->doorsNumber === 4 &&
@@ -89,8 +88,7 @@ it('creates a car model successfully', function () {
 
     $result = $this->useCase->execute($dto);
 
-    expect($result->id)->toBeNull()
-        ->and($result->brandUuid)->toBe('11111111-1111-4111-8111-111111111111')
+    expect($result->brandUuid)->toBe('11111111-1111-4111-8111-111111111111')
         ->and($result->name)->toBe('Civic')
         ->and($result->image)->toBe('car_models/civic_stored.png')
         ->and($result->doorsNumber)->toBe(4)

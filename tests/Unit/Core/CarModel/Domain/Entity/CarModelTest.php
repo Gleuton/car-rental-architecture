@@ -24,24 +24,23 @@ it('can create a CarModel instance', function () {
         ->and($carModel->doorsNumber)->toBe(4)
         ->and($carModel->seatsNumber)->toBe(5)
         ->and($carModel->airbags)->toBeTrue()
-        ->and($carModel->abs)->toBeTrue()
-        ->and($carModel->id)->toBeNull();
+        ->and($carModel->abs)->toBeTrue();
 });
 
-it('can create a CarModel instance with ID', function () {
+it('can restore a CarModel instance with uuid', function () {
+    $uuid = (string) Str::uuid();
     $carModel = CarModel::restore(
-        id: 1,
         brandUuid: '11111111-1111-4111-8111-111111111111',
         name: 'Civic',
         image: 'civic.png',
         doorsNumber: 4,
         seatsNumber: 5,
         airbags: true,
-        abs: true
+        abs: true,
+        uuid: $uuid,
     );
 
-    expect($carModel->id)->toBe(1)
-        ->and(Str::isUuid($carModel->uuid))->toBeTrue()
+    expect($carModel->uuid)->toBe($uuid)
         ->and($carModel->brandUuid)->toBe('11111111-1111-4111-8111-111111111111')
         ->and($carModel->name)->toBe('Civic')
         ->and($carModel->image)->toBe('civic.png')
@@ -133,7 +132,6 @@ it('allows creating CarModel with maximum valid values', function () {
 
 it('can update all fields of a CarModel', function () {
     $carModel = CarModel::restore(
-        id: 1,
         brandUuid: '11111111-1111-4111-8111-111111111111',
         name: 'Civic',
         image: 'civic.png',
@@ -153,8 +151,7 @@ it('can update all fields of a CarModel', function () {
         abs: false
     );
 
-    expect($updated->id)->toBe(1)
-        ->and($updated->uuid)->toBe($carModel->uuid)
+    expect($updated->uuid)->toBe($carModel->uuid)
         ->and($updated->brandUuid)->toBe('22222222-2222-4222-8222-222222222222')
         ->and($updated->name)->toBe('Corolla')
         ->and($updated->image)->toBe('corolla.png')
@@ -166,7 +163,6 @@ it('can update all fields of a CarModel', function () {
 
 it('can update CarModel partially keeping other fields', function () {
     $carModel = CarModel::restore(
-        id: 1,
         brandUuid: '11111111-1111-4111-8111-111111111111',
         name: 'Civic',
         image: 'civic.png',
@@ -186,8 +182,7 @@ it('can update CarModel partially keeping other fields', function () {
         abs: null
     );
 
-    expect($updated->id)->toBe(1)
-        ->and($updated->uuid)->toBe($carModel->uuid)
+    expect($updated->uuid)->toBe($carModel->uuid)
         ->and($updated->brandUuid)->toBe('11111111-1111-4111-8111-111111111111')
         ->and($updated->name)->toBe('Civic Sport')
         ->and($updated->image)->toBe('civic_sport.png')
@@ -199,7 +194,6 @@ it('can update CarModel partially keeping other fields', function () {
 
 it('throws exception when updating CarModel with invalid doors number', function () {
     $carModel = CarModel::restore(
-        id: 1,
         brandUuid: '11111111-1111-4111-8111-111111111111',
         name: 'Civic',
         image: 'civic.png',
@@ -222,7 +216,6 @@ it('throws exception when updating CarModel with invalid doors number', function
 
 it('throws exception when updating CarModel with invalid seats number', function () {
     $carModel = CarModel::restore(
-        id: 1,
         brandUuid: '11111111-1111-4111-8111-111111111111',
         name: 'Civic',
         image: 'civic.png',

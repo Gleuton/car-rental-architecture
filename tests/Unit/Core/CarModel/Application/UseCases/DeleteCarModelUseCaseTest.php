@@ -13,7 +13,6 @@ it('deletes a car model successfully', function () {
     $dto = CarModelUuidDTO::fromUuid($uuid);
 
     $carModel = CarModel::restore(
-        id: 1,
         brandUuid: '22222222-2222-4222-8222-222222222222',
         name: 'Corolla',
         image: 'car_models/corolla.png',

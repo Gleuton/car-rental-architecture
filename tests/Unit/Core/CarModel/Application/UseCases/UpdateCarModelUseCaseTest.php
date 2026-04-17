@@ -32,7 +32,6 @@ beforeEach(function () {
     );
 
     $this->existingCarModel = DomainCarModel::restore(
-        id: 1,
         brandUuid: '11111111-1111-4111-8111-111111111111',
         name: 'Civic',
         image: 'car_models/civic.png',

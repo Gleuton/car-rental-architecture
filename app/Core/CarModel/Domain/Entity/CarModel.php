@@ -14,7 +14,6 @@ class CarModel
      * @throws CarModelDomainException
      */
     private function __construct(
-        public readonly ?int $id,
         public readonly string $uuid,
         public readonly string $brandUuid,
         public readonly string $name,
@@ -40,14 +39,13 @@ class CarModel
         bool $airbags,
         bool $abs
     ): self {
-        return new self(null, (string) Str::uuid(), $brandUuid, $name, $image, $doorsNumber, $seatsNumber, $airbags, $abs);
+        return new self((string) Str::uuid(), $brandUuid, $name, $image, $doorsNumber, $seatsNumber, $airbags, $abs);
     }
 
     /**
      * @throws CarModelDomainException
      */
     public static function restore(
-        int $id,
         string $brandUuid,
         string $name,
         string $image,
@@ -57,7 +55,7 @@ class CarModel
         bool $abs,
         ?string $uuid = null,
     ): self {
-        return new self($id, $uuid ?? (string) Str::uuid(), $brandUuid, $name, $image, $doorsNumber, $seatsNumber, $airbags, $abs);
+        return new self($uuid ?? (string) Str::uuid(), $brandUuid, $name, $image, $doorsNumber, $seatsNumber, $airbags, $abs);
     }
 
     /**
@@ -80,7 +78,6 @@ class CarModel
         $newAbs = $abs ?? $this->abs;
 
         return new self(
-            $this->id,
             $this->uuid,
             $newBrandUuid,
             $newName,
