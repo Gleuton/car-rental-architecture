@@ -7,6 +7,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Str;
 
 class Car extends Model
 {
@@ -14,9 +15,23 @@ class Car extends Model
 
     protected $fillable = ['uuid', 'car_model_id', 'car_model_uuid', 'license_plate', 'color', 'is_available', 'km'];
 
+    protected static function booted(): void
+    {
+        static::creating(static function (self $car): void {
+            if (empty($car->uuid)) {
+                $car->uuid = (string) Str::uuid();
+            }
+        });
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'uuid';
+    }
+
     public function carModel(): BelongsTo
     {
-        return $this->belongsTo(CarModel::class);
+        return $this->belongsTo(CarModel::class, 'car_model_uuid', 'uuid');
     }
 
     protected $casts = [
