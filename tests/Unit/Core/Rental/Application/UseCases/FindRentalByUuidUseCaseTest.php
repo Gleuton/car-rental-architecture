@@ -15,10 +15,7 @@ it('finds a rental by UUID successfully', function () {
     $repository = Mockery::mock(RentalRepositoryInterface::class);
 
     $expectedRental = Rental::restore(
-        1,
-        1,
         (string) Str::uuid(),
-        1,
         (string) Str::uuid(),
         5000,
         '2026-03-01 08:00:00',

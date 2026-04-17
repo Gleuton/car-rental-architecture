@@ -20,10 +20,7 @@ it('updates a rental successfully', function () {
     $dto = UpdateRentalDTO::fromRequest($request, $uuid);
 
     $existingRental = Rental::restore(
-        1,
-        1,
         (string) Str::uuid(),
-        1,
         (string) Str::uuid(),
         5000,
         '2026-03-01 08:00:00',
@@ -47,8 +44,7 @@ it('updates a rental successfully', function () {
     $useCase = new UpdateRentalUseCase($repository);
     $result = $useCase->execute($dto);
 
-    expect($result->id)->toBe(1)
-        ->and($result->dayPriceCents)->toBe(7000)
+    expect($result->dayPriceCents)->toBe(7000)
         ->and($result->startDate)->toBe('2026-03-10 08:00:00')
         ->and($result->endDate)->toBe('2026-03-12 08:00:00')
         ->and($result->initialKm)->toBe(1000)

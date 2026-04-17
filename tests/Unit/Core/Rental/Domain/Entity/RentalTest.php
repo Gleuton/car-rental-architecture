@@ -9,9 +9,7 @@ use Illuminate\Support\Str;
 
 it('can create a Rental instance', function () {
     $rental = Rental::new(
-        carId: 1,
         carUuid: (string) Str::uuid(),
-        clientId: 1,
         clientUuid: (string) Str::uuid(),
         dayPriceCents: 5000,
         startDate: '2026-03-09 10:00:00',
@@ -20,47 +18,38 @@ it('can create a Rental instance', function () {
         finalKm: 1500,
     );
 
-    expect($rental->carId)->toBe(1)
-        ->and($rental->clientId)->toBe(1)
-        ->and($rental->dayPriceCents)->toBe(5000)
+    expect($rental->dayPriceCents)->toBe(5000)
         ->and($rental->startDate)->toBe('2026-03-09 10:00:00')
         ->and($rental->endDate)->toBe('2026-03-19 10:00:00')
         ->and($rental->initialKm)->toBe(1000)
         ->and($rental->finalKm)->toBe(1500)
-        ->and($rental->id)->toBeNull()
         ->and(Str::isUuid($rental->uuid))->toBeTrue();
 });
 
-it('can restore a Rental instance with ID', function () {
+it('can restore a Rental instance with uuid', function () {
+    $uuid = (string) Str::uuid();
     $rental = Rental::restore(
-        id: 1,
-        carId: 1,
         carUuid: (string) Str::uuid(),
-        clientId: 1,
         clientUuid: (string) Str::uuid(),
         dayPriceCents: 5000,
         startDate: '2026-03-09 10:00:00',
         endDate: '2026-03-19 10:00:00',
         initialKm: 1000,
         finalKm: 1500,
+        uuid: $uuid,
     );
 
-    expect($rental->id)->toBe(1)
-        ->and($rental->carId)->toBe(1)
-        ->and($rental->clientId)->toBe(1)
+    expect($rental->uuid)->toBe($uuid)
         ->and($rental->dayPriceCents)->toBe(5000)
         ->and($rental->startDate)->toBe('2026-03-09 10:00:00')
         ->and($rental->endDate)->toBe('2026-03-19 10:00:00')
         ->and($rental->initialKm)->toBe(1000)
-        ->and($rental->finalKm)->toBe(1500)
-        ->and(Str::isUuid($rental->uuid))->toBeTrue();
+        ->and($rental->finalKm)->toBe(1500);
 });
 
 it('throws RentalDomainException when start date has invalid format', function () {
     Rental::new(
-        carId: 1,
         carUuid: (string) Str::uuid(),
-        clientId: 1,
         clientUuid: (string) Str::uuid(),
         dayPriceCents: 5000,
         startDate: '2026-03-09',
@@ -76,9 +65,7 @@ it('throws RentalDomainException when start date has invalid format', function (
 
 it('throws RentalDomainException when end date has invalid format', function () {
     Rental::new(
-        carId: 1,
         carUuid: (string) Str::uuid(),
-        clientId: 1,
         clientUuid: (string) Str::uuid(),
         dayPriceCents: 5000,
         startDate: '2026-03-09 10:00:00',
@@ -94,9 +81,7 @@ it('throws RentalDomainException when end date has invalid format', function () 
 
 it('throws RentalDomainException when date is semantically invalid', function () {
     Rental::new(
-        carId: 1,
         carUuid: (string) Str::uuid(),
-        clientId: 1,
         clientUuid: (string) Str::uuid(),
         dayPriceCents: 5000,
         startDate: '2026-02-30 10:00:00',
@@ -112,9 +97,7 @@ it('throws RentalDomainException when date is semantically invalid', function ()
 
 it('throws RentalDomainException when end date is before start date', function () {
     Rental::new(
-        carId: 1,
         carUuid: (string) Str::uuid(),
-        clientId: 1,
         clientUuid: (string) Str::uuid(),
         dayPriceCents: 5000,
         startDate: '2026-03-19 10:00:00',
@@ -130,9 +113,7 @@ it('throws RentalDomainException when end date is before start date', function (
 
 it('allows same date for start and end', function () {
     $rental = Rental::new(
-        carId: 1,
         carUuid: (string) Str::uuid(),
-        clientId: 1,
         clientUuid: (string) Str::uuid(),
         dayPriceCents: 5000,
         startDate: '2026-03-09 10:00:00',
@@ -147,9 +128,7 @@ it('allows same date for start and end', function () {
 
 it('throws RentalDomainException when day price is negative', function () {
     Rental::new(
-        carId: 1,
         carUuid: (string) Str::uuid(),
-        clientId: 1,
         clientUuid: (string) Str::uuid(),
         dayPriceCents: -1,
         startDate: '2026-03-09 10:00:00',
@@ -165,9 +144,7 @@ it('throws RentalDomainException when day price is negative', function () {
 
 it('throws RentalDomainException when initial km is negative', function () {
     Rental::new(
-        carId: 1,
         carUuid: (string) Str::uuid(),
-        clientId: 1,
         clientUuid: (string) Str::uuid(),
         dayPriceCents: 5000,
         startDate: '2026-03-09 10:00:00',
@@ -183,9 +160,7 @@ it('throws RentalDomainException when initial km is negative', function () {
 
 it('throws RentalDomainException when final km is negative', function () {
     Rental::new(
-        carId: 1,
         carUuid: (string) Str::uuid(),
-        clientId: 1,
         clientUuid: (string) Str::uuid(),
         dayPriceCents: 5000,
         startDate: '2026-03-09 10:00:00',
@@ -201,9 +176,7 @@ it('throws RentalDomainException when final km is negative', function () {
 
 it('throws RentalDomainException when final km is less than initial km', function () {
     Rental::new(
-        carId: 1,
         carUuid: (string) Str::uuid(),
-        clientId: 1,
         clientUuid: (string) Str::uuid(),
         dayPriceCents: 5000,
         startDate: '2026-03-09 10:00:00',

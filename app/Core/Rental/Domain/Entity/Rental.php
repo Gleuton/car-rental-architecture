@@ -21,11 +21,8 @@ class Rental
      * @throws RentalDomainException
      */
     private function __construct(
-        public readonly ?int $id,
         public readonly string $uuid,
-        public readonly int $carId,
         public readonly string $carUuid,
-        public readonly int $clientId,
         public readonly string $clientUuid,
         public readonly int $dayPriceCents,
         public readonly string $startDate,
@@ -46,9 +43,7 @@ class Rental
      * @throws RentalDomainException
      */
     public static function new(
-        int $carId,
         string $carUuid,
-        int $clientId,
         string $clientUuid,
         int $dayPriceCents,
         string $startDate,
@@ -57,11 +52,8 @@ class Rental
         int $finalKm,
     ): self {
         return new self(
-            null,
             (string) Str::uuid(),
-            $carId,
             $carUuid,
-            $clientId,
             $clientUuid,
             $dayPriceCents,
             $startDate,
@@ -75,10 +67,7 @@ class Rental
      * @throws RentalDomainException
      */
     public static function restore(
-        int $id,
-        int $carId,
         string $carUuid,
-        int $clientId,
         string $clientUuid,
         int $dayPriceCents,
         string $startDate,
@@ -87,11 +76,8 @@ class Rental
         int $finalKm, ?string $uuid = null,
     ): self {
         return new self(
-            $id,
             $uuid ?? (string) Str::uuid(),
-            $carId,
             $carUuid,
-            $clientId,
             $clientUuid,
             $dayPriceCents,
             $startDate,
