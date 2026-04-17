@@ -16,7 +16,7 @@ class CarModel
     private function __construct(
         public readonly ?int $id,
         public readonly string $uuid,
-        public readonly int $brandId,
+        public readonly string $brandUuid,
         public readonly string $name,
         public readonly string $image,
         public readonly int $doorsNumber,
@@ -32,7 +32,7 @@ class CarModel
      * @throws CarModelDomainException
      */
     public static function new(
-        int $brandId,
+        string $brandUuid,
         string $name,
         string $image,
         int $doorsNumber,
@@ -40,7 +40,7 @@ class CarModel
         bool $airbags,
         bool $abs
     ): self {
-        return new self(null, (string) Str::uuid(), $brandId, $name, $image, $doorsNumber, $seatsNumber, $airbags, $abs);
+        return new self(null, (string) Str::uuid(), $brandUuid, $name, $image, $doorsNumber, $seatsNumber, $airbags, $abs);
     }
 
     /**
@@ -48,7 +48,7 @@ class CarModel
      */
     public static function restore(
         int $id,
-        int $brandId,
+        string $brandUuid,
         string $name,
         string $image,
         int $doorsNumber,
@@ -57,14 +57,14 @@ class CarModel
         bool $abs,
         ?string $uuid = null,
     ): self {
-        return new self($id, $uuid ?? (string) Str::uuid(), $brandId, $name, $image, $doorsNumber, $seatsNumber, $airbags, $abs);
+        return new self($id, $uuid ?? (string) Str::uuid(), $brandUuid, $name, $image, $doorsNumber, $seatsNumber, $airbags, $abs);
     }
 
     /**
      * @throws CarModelDomainException
      */
     public function update(
-        ?int $brandId,
+        ?string $brandUuid,
         ?string $name,
         string $image,
         ?int $doorsNumber,
@@ -72,7 +72,7 @@ class CarModel
         ?bool $airbags,
         ?bool $abs
     ): self {
-        $newBrandId = $brandId ?? $this->brandId;
+        $newBrandUuid = $brandUuid ?? $this->brandUuid;
         $newName = $name ?? $this->name;
         $newDoorsNumber = $doorsNumber ?? $this->doorsNumber;
         $newSeatsNumber = $seatsNumber ?? $this->seatsNumber;
@@ -82,7 +82,7 @@ class CarModel
         return new self(
             $this->id,
             $this->uuid,
-            $newBrandId,
+            $newBrandUuid,
             $newName,
             $image,
             $newDoorsNumber,

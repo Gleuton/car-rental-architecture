@@ -15,9 +15,9 @@ class ExistsBrandRole
     /**
      * @throws BrandDomainException
      */
-    public function validate(int $brandId): void
+    public function validate(string $brandUuid): void
     {
-        if (! $this->repository->exists($brandId)) {
+        if (! $this->repository->existsByUuid($brandUuid)) {
             throw new BrandDomainException(BrandError::NOT_FOUND);
         }
     }

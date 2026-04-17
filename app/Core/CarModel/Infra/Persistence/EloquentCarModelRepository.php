@@ -41,12 +41,12 @@ class EloquentCarModelRepository implements CarModelRepositoryInterface
      */
     public function save(DomainCarModel $carModel): DomainCarModel
     {
-        $brandUuid = $this->findBrandUuidById($carModel->brandId);
+        $brandId = $this->findBrandIdByUuid($carModel->brandUuid);
 
         $eloquentCarModel = EloquentCarModel::create([
             'uuid' => $carModel->uuid,
-            'brand_id' => $carModel->brandId,
-            'brand_uuid' => $brandUuid,
+            'brand_id' => $brandId,
+            'brand_uuid' => $carModel->brandUuid,
             'name' => $carModel->name,
             'image' => $carModel->image,
             'doors' => $carModel->doorsNumber,
@@ -58,19 +58,27 @@ class EloquentCarModelRepository implements CarModelRepositoryInterface
         return $this->toDomainCarModel($eloquentCarModel);
     }
 
-    public function existsByNameAndBrandId(string $name, int $brandId): bool
+    public function existsByNameAndBrandUuid(string $name, string $brandUuid): bool
     {
+        $brandId = EloquentBrand::query()->where('uuid', $brandUuid)->value('id');
+
         return EloquentCarModel::where('name', $name)
-            ->where('brand_id', $brandId)
+            ->where(static function ($query) use ($brandUuid, $brandId) {
+                $query->where('brand_uuid', $brandUuid);
+
+                if ($brandId !== null) {
+                    $query->orWhere('brand_id', (int) $brandId);
+                }
+            })
             ->exists();
     }
 
     /**
      * @throws CarModelDomainException
      */
-    public function findById(int $id): DomainCarModel
+    public function findByUuid(string $uuid): DomainCarModel
     {
-        $modelEloquent = EloquentCarModel::findOrFail($id);
+        $modelEloquent = EloquentCarModel::query()->where('uuid', $uuid)->firstOrFail();
 
         return $this->toDomainCarModel($modelEloquent);
     }
@@ -80,13 +88,13 @@ class EloquentCarModelRepository implements CarModelRepositoryInterface
      */
     public function update(DomainCarModel $carModel): DomainCarModel
     {
-        $brandUuid = $this->findBrandUuidById($carModel->brandId);
+        $brandId = $this->findBrandIdByUuid($carModel->brandUuid);
 
-        $carModelEloquent = EloquentCarModel::findOrFail($carModel->id);
+        $carModelEloquent = EloquentCarModel::query()->where('uuid', $carModel->uuid)->firstOrFail();
 
         $carModelEloquent->update([
-            'brand_id' => $carModel->brandId,
-            'brand_uuid' => $brandUuid,
+            'brand_id' => $brandId,
+            'brand_uuid' => $carModel->brandUuid,
             'name' => $carModel->name,
             'image' => $carModel->image,
             'doors' => $carModel->doorsNumber,
@@ -106,7 +114,7 @@ class EloquentCarModelRepository implements CarModelRepositoryInterface
     {
         return DomainCarModel::restore(
             $carModel->id,
-            $carModel->brand_id,
+            $carModel->brand_uuid,
             $carModel->name,
             $carModel->image,
             $carModel->doors,
@@ -117,16 +125,16 @@ class EloquentCarModelRepository implements CarModelRepositoryInterface
         );
     }
 
-    public function delete(int $id): void
+    public function deleteByUuid(string $uuid): void
     {
-        EloquentCarModel::findOrFail($id)->delete();
+        EloquentCarModel::query()->where('uuid', $uuid)->firstOrFail()->delete();
     }
 
-    private function findBrandUuidById(int $brandId): string
+    private function findBrandIdByUuid(string $brandUuid): int
     {
         /** @var EloquentBrand $brand */
-        $brand = EloquentBrand::query()->findOrFail($brandId);
+        $brand = EloquentBrand::query()->where('uuid', $brandUuid)->firstOrFail();
 
-        return $brand->uuid;
+        return $brand->id;
     }
 }

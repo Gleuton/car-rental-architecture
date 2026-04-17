@@ -20,9 +20,8 @@ it('can list car models', function () {
         ->assertJsonStructure([
             'data' => [
                 '*' => [
-                    'id',
                     'uuid',
-                    'brandId',
+                    'brandUuid',
                     'name',
                     'image',
                     'doorsNumber',

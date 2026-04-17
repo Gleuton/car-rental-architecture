@@ -17,10 +17,10 @@ readonly class DeleteCarModelUseCase
 
     public function execute(CarModelIdDTO $brandDto): void
     {
-        $brand = $this->repository->findById($brandDto->id);
+        $brand = $this->repository->findByUuid($brandDto->uuid);
 
         $this->storage->delete($brand->image);
 
-        $this->repository->delete($brandDto->id);
+        $this->repository->deleteByUuid($brandDto->uuid);
     }
 }

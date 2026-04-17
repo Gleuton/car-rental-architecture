@@ -24,19 +24,19 @@ it('can dele a model car', function () {
 
     Storage::disk('public')->put($imagePath, 'fake content');
 
-    $response = $this->deleteJson('/api/car-models/'.$carModel->id);
+    $response = $this->deleteJson('/api/car-models/'.$carModel->uuid);
 
     Storage::disk('public')->assertMissing($imagePath);
 
     $response->assertStatus(204);
 
     $this->assertDatabaseMissing('car_models', [
-        'id' => $carModel->id,
+        'uuid' => $carModel->uuid,
     ]);
 });
 
 it('returns 401 when deleting a car model without authentication', function () {
     $carModel = CarModel::factory()->create();
-    $response = $this->deleteJson('/api/car-models/'.$carModel->id);
+    $response = $this->deleteJson('/api/car-models/'.$carModel->uuid);
     $response->assertStatus(401);
 });

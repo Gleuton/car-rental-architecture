@@ -16,6 +16,6 @@ readonly class FindCarModelByIdUseCase
 
     public function execute(CarModelIdDTO $idDTO): CarModel
     {
-        return $this->repository->findById($idDTO->id);
+        return $this->repository->findByUuid($idDTO->uuid);
     }
 }

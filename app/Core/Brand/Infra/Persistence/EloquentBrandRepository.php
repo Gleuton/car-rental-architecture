@@ -106,6 +106,11 @@ class EloquentBrandRepository implements BrandRepositoryInterface
         return EloquentBrand::whereKey($brandId)->exists();
     }
 
+    public function existsByUuid(string $brandUuid): bool
+    {
+        return EloquentBrand::query()->where('uuid', $brandUuid)->exists();
+    }
+
     /**
      * @throws BrandDomainException
      */

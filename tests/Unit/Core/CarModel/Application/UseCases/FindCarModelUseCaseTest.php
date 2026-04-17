@@ -8,22 +8,24 @@ use App\Core\CarModel\Domain\Entity\CarModel;
 use App\Core\CarModel\Domain\Repositories\CarModelRepositoryInterface;
 
 it('find Model Car successfully', function () {
-    $dto = CarModelIdDTO::fromId(42);
+    $uuid = '11111111-1111-4111-8111-111111111111';
+    $dto = CarModelIdDTO::fromUuid($uuid);
     $repository = Mockery::mock(CarModelRepositoryInterface::class);
 
     $expectedModel = CarModel::restore(
         42,
-        66,
+        '66666666-6666-4666-8666-666666666666',
         'Model S',
         'Toyota_Model_S_2020.jpg',
         2,
         2,
         true,
-        true
+        true,
+        $uuid,
     );
 
-    $repository->shouldReceive('findById')
-        ->with(42)
+    $repository->shouldReceive('findByUuid')
+        ->with($uuid)
         ->once()
         ->andReturn($expectedModel);
 
@@ -34,11 +36,12 @@ it('find Model Car successfully', function () {
 });
 
 it('propagates exception when model car is not found', function () {
-    $dto = CarModelIdDTO::fromId(999);
+    $uuid = '99999999-9999-4999-8999-999999999999';
+    $dto = CarModelIdDTO::fromUuid($uuid);
 
     $repository = Mockery::mock(CarModelRepositoryInterface::class);
-    $repository->shouldReceive('findById')
-        ->with(999)
+    $repository->shouldReceive('findByUuid')
+        ->with($uuid)
         ->once()
         ->andThrow(
             new RuntimeException('Car Model not found')

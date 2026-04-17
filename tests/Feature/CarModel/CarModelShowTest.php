@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Models\CarModel;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Str;
 
 uses(RefreshDatabase::class);
 
@@ -12,12 +13,11 @@ it('can show a model car', function () {
     /** @var CarModel $carModel */
     $carModel = CarModel::factory()->create();
 
-    $response = $this->getJson("/api/car-models/$carModel->id");
+    $response = $this->getJson("/api/car-models/$carModel->uuid");
 
     $response->assertStatus(200)
-        ->assertJsonPath('data.id', fn ($id) => is_int($id))
         ->assertJsonPath('data.uuid', fn ($uuid) => is_string($uuid))
-        ->assertJsonPath('data.brandId', $carModel->brand_id)
+        ->assertJsonPath('data.brandUuid', $carModel->brand_uuid)
         ->assertJsonPath('data.name', $carModel->name)
         ->assertJsonPath('data.image', $carModel->image)
         ->assertJsonPath('data.doorsNumber', $carModel->doors)
@@ -28,13 +28,13 @@ it('can show a model car', function () {
 
 it('returns 404 when tray show non-existent ModelCar', function () {
     authenticateApi();
-    $response = $this->getJson('/api/car-models/999');
+    $response = $this->getJson('/api/car-models/'.(string) Str::uuid());
 
     $response->assertStatus(404);
 });
 
 it('returns 401 when showing a car model without authentication', function () {
     $carModel = CarModel::factory()->create();
-    $response = $this->getJson("/api/car-models/$carModel->id");
+    $response = $this->getJson("/api/car-models/$carModel->uuid");
     $response->assertStatus(401);
 });

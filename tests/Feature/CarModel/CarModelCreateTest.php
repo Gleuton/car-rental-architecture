@@ -24,7 +24,7 @@ it('can create a CarModel', function () {
     $file = UploadedFile::fake()->create('toyota_corolla.png', 100, 'image/png');
     $carModelName = 'Corolla';
     $data = [
-        'brand_id' => $brand->id,
+        'brand_uuid' => $brand->uuid,
         'name' => $carModelName,
         'image' => $file,
         'doors_number' => 4,
@@ -35,9 +35,8 @@ it('can create a CarModel', function () {
 
     $response = $this->postJson('/api/car-models', $data);
     $response->assertStatus(200)
-        ->assertJsonPath('data.id', fn ($id) => is_int($id))
         ->assertJsonPath('data.uuid', fn ($uuid) => Str::isUuid($uuid))
-        ->assertJsonPath('data.brandId', $brand->id)
+        ->assertJsonPath('data.brandUuid', $brand->uuid)
         ->assertJsonPath('data.name', $carModelName)
         ->assertJsonPath('data.image', 'car_models/toyota_corolla.png')
         ->assertJsonPath('data.doorsNumber', 4)
@@ -74,7 +73,7 @@ it('validates required fields when creating a CarModel', function () {
 
     $response->assertStatus(422)
         ->assertJsonValidationErrors([
-            'brand_id',
+            'brand_uuid',
             'name',
             'image',
             'doors_number',
@@ -91,7 +90,7 @@ it('validates doors_number range when creating a CarModel', function () {
     $file = UploadedFile::fake()->create('toyota_corolla.png', 100, 'image/png');
 
     $data = [
-        'brand_id' => $brand->id,
+        'brand_uuid' => $brand->uuid,
         'name' => 'Corolla',
         'image' => $file,
         'doors_number' => 1,
@@ -113,7 +112,7 @@ it('validates seats_number range when creating a CarModel', function () {
     $file = UploadedFile::fake()->create('toyota_corolla.png', 100, 'image/png');
 
     $data = [
-        'brand_id' => $brand->id,
+        'brand_uuid' => $brand->uuid,
         'name' => 'Corolla',
         'image' => $file,
         'doors_number' => 4,
@@ -135,7 +134,7 @@ it('validates image type when creating a CarModel', function () {
     $file = UploadedFile::fake()->create('manual.pdf', 100, 'application/pdf');
 
     $data = [
-        'brand_id' => $brand->id,
+        'brand_uuid' => $brand->uuid,
         'name' => 'Corolla',
         'image' => $file,
         'doors_number' => 4,
@@ -155,7 +154,7 @@ it('returns domain error when brand does not exist', function () {
     $file = UploadedFile::fake()->create('toyota_corolla.png', 100, 'image/png');
 
     $data = [
-        'brand_id' => 999,
+        'brand_uuid' => (string) Str::uuid(),
         'name' => 'Corolla',
         'image' => $file,
         'doors_number' => 4,
@@ -182,6 +181,7 @@ it('returns domain error when car model already exists for the brand', function 
 
     CarModel::create([
         'brand_id' => $brand->id,
+        'brand_uuid' => $brand->uuid,
         'name' => 'Corolla',
         'image' => 'car_models/corolla.png',
         'doors' => 4,
@@ -193,7 +193,7 @@ it('returns domain error when car model already exists for the brand', function 
     $file = UploadedFile::fake()->create('toyota_corolla.png', 100, 'image/png');
 
     $data = [
-        'brand_id' => $brand->id,
+        'brand_uuid' => $brand->uuid,
         'name' => 'Corolla',
         'image' => $file,
         'doors_number' => 4,
@@ -217,7 +217,7 @@ it('returns 401 when creating a car model without authentication', function () {
     $brand = Brand::factory()->create();
     $file = UploadedFile::fake()->create('corolla.png', 100, 'image/png');
     $response = $this->postJson('/api/car-models', [
-        'brand_id' => $brand->id,
+        'brand_uuid' => $brand->uuid,
         'name' => 'Corolla',
         'image' => $file,
         'doors_number' => 4,

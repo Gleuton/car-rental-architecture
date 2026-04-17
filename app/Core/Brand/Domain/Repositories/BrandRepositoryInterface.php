@@ -31,4 +31,6 @@ interface BrandRepositoryInterface
     public function deleteByUuid(string $uuid): void;
 
     public function exists(int $brandId): bool;
+
+    public function existsByUuid(string $brandUuid): bool;
 }

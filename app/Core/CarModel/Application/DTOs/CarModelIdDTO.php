@@ -7,11 +7,11 @@ namespace App\Core\CarModel\Application\DTOs;
 readonly class CarModelIdDTO
 {
     private function __construct(
-        public int $id
+        public string $uuid
     ) {}
 
-    public static function fromId(int $id): self
+    public static function fromUuid(string $uuid): self
     {
-        return new self($id);
+        return new self($uuid);
     }
 }

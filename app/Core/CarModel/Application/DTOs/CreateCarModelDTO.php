@@ -10,7 +10,7 @@ use Illuminate\Http\UploadedFile;
 readonly class CreateCarModelDTO
 {
     private function __construct(
-        public int $brandId,
+        public string $brandUuid,
         public string $name,
         public UploadedFile $image,
         public int $doorsNumber,
@@ -22,7 +22,7 @@ readonly class CreateCarModelDTO
     public static function fromRequest(StoreCarModelRequest $request): self
     {
         return new self(
-            $request->input('brand_id'),
+            $request->input('brand_uuid'),
             $request->input('name'),
             $request->file('image'),
             $request->input('doors_number'),
