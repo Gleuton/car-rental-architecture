@@ -13,7 +13,6 @@ class BrandResource
     public static function BrandToArray(Brand $brand): array
     {
         return [
-            'id' => $brand->id(),
             'uuid' => $brand->uuid(),
             'name' => $brand->name(),
             'image' => $brand->imagePath(),

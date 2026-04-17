@@ -31,10 +31,11 @@ it('can create a brand', function () {
 
     $response->assertStatus(201)
         ->assertJsonStructure([
-            'data' => ['id', 'uuid', 'name', 'image'],
+            'data' => ['uuid', 'name', 'image'],
         ])
         ->assertJsonPath('data.uuid', static fn (string $uuid): bool => Str::isUuid($uuid))
-        ->assertJsonPath('data.name', 'Toyota');
+        ->assertJsonPath('data.name', 'Toyota')
+        ->assertJsonMissingPath('data.id');
 
     $brand = Brand::where('name', 'Toyota')->first();
     expect($brand->image)->not->toBeEmpty();

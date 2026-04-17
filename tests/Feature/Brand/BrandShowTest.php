@@ -17,10 +17,10 @@ it('can show a brand', function () {
     $response = $this->getJson("/api/brands/$brand->uuid");
 
     $response->assertStatus(200)
-        ->assertJsonPath('data.id', $brand->id)
         ->assertJsonPath('data.uuid', $brand->uuid)
         ->assertJsonPath('data.name', $brand->name)
-        ->assertJsonPath('data.image', $brand->image);
+        ->assertJsonPath('data.image', $brand->image)
+        ->assertJsonMissingPath('data.id');
 });
 
 it('returns 404 when showing non-existent brand', function () {
