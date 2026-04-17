@@ -28,8 +28,6 @@ it('updates license plate, color and availability', function () {
     $newIsAvailable = false;
 
     $existingCar = DomainCar::restore(
-        1,
-        1,
         '22222222-2222-4222-8222-222222222222',
         'ABC-1234',
         'Red',
@@ -60,7 +58,7 @@ it('updates license plate, color and availability', function () {
         ->with(
             Mockery::on(static function (DomainCar $car) use ($carUuid, $newLicensePlate, $newColor, $newIsAvailable): bool {
                 return $car->uuid === $carUuid &&
-                    $car->carModelId === 1 &&
+                    $car->carModelUuid === '22222222-2222-4222-8222-222222222222' &&
                     $car->licensePlate() === $newLicensePlate &&
                     $car->color() === $newColor &&
                     $car->isAvailable() === $newIsAvailable &&
@@ -68,8 +66,6 @@ it('updates license plate, color and availability', function () {
             })
         )
         ->andReturn(DomainCar::restore(
-            1,
-            1,
             '22222222-2222-4222-8222-222222222222',
             $newLicensePlate,
             $newColor,
@@ -83,7 +79,7 @@ it('updates license plate, color and availability', function () {
     expect($result->licensePlate())->toBe($newLicensePlate)
         ->and($result->color())->toBe($newColor)
         ->and($result->isAvailable())->toBe($newIsAvailable)
-        ->and($result->carModelId)->toBe(1)
+        ->and($result->carModelUuid)->toBe('22222222-2222-4222-8222-222222222222')
         ->and($result->km())->toBe(10000);
 });
 
@@ -92,8 +88,6 @@ it('does not validate license plate when it remains the same', function () {
     $existingLicensePlate = 'ABC-1234';
 
     $existingCar = DomainCar::restore(
-        1,
-        1,
         '22222222-2222-4222-8222-222222222222',
         $existingLicensePlate,
         'Red',
@@ -120,8 +114,6 @@ it('does not validate license plate when it remains the same', function () {
     $this->repository->shouldReceive('update')
         ->once()
         ->andReturn(DomainCar::restore(
-            1,
-            1,
             '22222222-2222-4222-8222-222222222222',
             $existingLicensePlate,
             'Blue',
@@ -140,8 +132,6 @@ it('throws exception when new license plate already exists', function () {
     $newLicensePlate = 'XYZ-9876';
 
     $existingCar = DomainCar::restore(
-        1,
-        1,
         '22222222-2222-4222-8222-222222222222',
         'ABC-1234',
         'Red',
@@ -181,8 +171,6 @@ it('updates only color when other fields are null', function () {
     $newColor = 'Green';
 
     $existingCar = DomainCar::restore(
-        1,
-        1,
         '22222222-2222-4222-8222-222222222222',
         'ABC-1234',
         'Red',
@@ -214,13 +202,11 @@ it('updates only color when other fields are null', function () {
                     $car->licensePlate() === 'ABC-1234' &&
                     $car->color() === $newColor &&
                     $car->km() === 10000 &&
-                    $car->carModelId === 1 &&
+                    $car->carModelUuid === '22222222-2222-4222-8222-222222222222' &&
                     $car->isAvailable() === true;
             })
         )
         ->andReturn(DomainCar::restore(
-            1,
-            1,
             '22222222-2222-4222-8222-222222222222',
             'ABC-1234',
             $newColor,
@@ -241,8 +227,6 @@ it('updates availability status successfully', function () {
     $newIsAvailable = false;
 
     $existingCar = DomainCar::restore(
-        1,
-        1,
         '22222222-2222-4222-8222-222222222222',
         'ABC-1234',
         'Red',
@@ -269,8 +253,6 @@ it('updates availability status successfully', function () {
     $this->repository->shouldReceive('update')
         ->once()
         ->andReturn(DomainCar::restore(
-            1,
-            1,
             '22222222-2222-4222-8222-222222222222',
             'ABC-1234',
             'Red',

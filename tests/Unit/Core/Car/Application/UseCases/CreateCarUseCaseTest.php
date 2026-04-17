@@ -63,7 +63,6 @@ beforeEach(function () {
 it('creates a car successfully', function () {
     $request = Mockery::mock(StoreCarRequest::class);
     $carModel = createPersistedCarModelForTests();
-    $carModelId = $carModel->id;
     $licensePlate = 'ABC-1234';
     $color = 'Red';
 
@@ -85,10 +84,8 @@ it('creates a car successfully', function () {
     $this->repository->shouldReceive('save')
         ->once()
         ->with(
-            Mockery::on(static function (DomainCar $car) use ($carModel, $carModelId, $licensePlate, $color, $km): bool {
-                return $car->id === null &&
-                    $car->carModelId === $carModelId &&
-                    $car->carModelUuid === $carModel->uuid &&
+            Mockery::on(static function (DomainCar $car) use ($carModel, $licensePlate, $color, $km): bool {
+                return $car->carModelUuid === $carModel->uuid &&
                     $car->licensePlate() === $licensePlate &&
                     $car->color() === $color &&
                     $car->isAvailable() === true &&
@@ -96,8 +93,6 @@ it('creates a car successfully', function () {
             })
         )
         ->andReturn(DomainCar::restore(
-            1,
-            $carModelId,
             $carModel->uuid,
             $licensePlate,
             $color,
@@ -107,8 +102,7 @@ it('creates a car successfully', function () {
 
     $result = $this->useCase->execute($dto);
 
-    expect($result->id)->toBe(1)
-        ->and($result->carModelId)->toBe($carModelId)
+    expect($result->carModelUuid)->toBe($carModel->uuid)
         ->and($result->licensePlate())->toBe($licensePlate)
         ->and($result->color())->toBe($color)
         ->and($result->isAvailable())->toBe(true)

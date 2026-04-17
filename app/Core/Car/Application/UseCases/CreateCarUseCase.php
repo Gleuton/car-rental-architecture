@@ -9,7 +9,6 @@ use App\Core\Car\Domain\Entity\Car;
 use App\Core\Car\Domain\Exceptions\CarDomainException;
 use App\Core\Car\Domain\Repositories\CarRepositoryInterface;
 use App\Core\Car\Domain\Roles\CarAlreadyExistsRole;
-use App\Models\CarModel as EloquentCarModel;
 
 readonly class CreateCarUseCase
 {
@@ -25,10 +24,7 @@ readonly class CreateCarUseCase
     {
         $this->carAlreadyExistsRole->validate($dto->licensePlate);
 
-        $carModelId = $this->resolveCarModelId($dto);
-
         $car = Car::new(
-            $carModelId,
             $dto->carModelUuid,
             $dto->licensePlate,
             $dto->color,
@@ -37,15 +33,5 @@ readonly class CreateCarUseCase
         );
 
         return $this->repository->save($car);
-    }
-
-    private function resolveCarModelId(CreateCarDTO $dto): int
-    {
-        /** @var EloquentCarModel $carModel */
-        $carModel = EloquentCarModel::query()
-            ->where('uuid', $dto->carModelUuid)
-            ->firstOrFail();
-
-        return $carModel->id;
     }
 }

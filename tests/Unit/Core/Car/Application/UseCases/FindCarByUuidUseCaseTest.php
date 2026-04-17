@@ -14,8 +14,6 @@ it('finds a car by UUID successfully', function () {
     $repository = Mockery::mock(CarRepositoryInterface::class);
 
     $expectedCar = Car::restore(
-        1,
-        1,
         '22222222-2222-4222-8222-222222222222',
         'ABC-1234',
         'Red',

@@ -13,9 +13,7 @@ use Illuminate\Support\Str;
 class Car
 {
     private function __construct(
-        public readonly ?int $id,
         public readonly string $uuid,
-        public readonly int $carModelId,
         public readonly string $carModelUuid,
         private LicensePlate $licensePlate,
         private Color $color,
@@ -26,17 +24,15 @@ class Car
     /**
      * @throws CarDomainException
      */
-    public static function new(int $carModelId, string $carModelUuid, string $licensePlate, string $color, bool $isAvailable, int $km): self
+    public static function new(string $carModelUuid, string $licensePlate, string $color, bool $isAvailable, int $km): self
     {
-        return new self(null, (string) Str::uuid(), $carModelId, $carModelUuid, new LicensePlate($licensePlate), new Color($color), $isAvailable, new Mileage($km));
+        return new self((string) Str::uuid(), $carModelUuid, new LicensePlate($licensePlate), new Color($color), $isAvailable, new Mileage($km));
     }
 
     /**
      * @throws CarDomainException
      */
     public static function restore(
-        int $id,
-        int $carModelId,
         string $carModelUuid,
         string $licensePlate,
         string $color,
@@ -44,7 +40,7 @@ class Car
         int $km,
         ?string $uuid = null,
     ): self {
-        return new self($id, $uuid ?? (string) Str::uuid(), $carModelId, $carModelUuid, new LicensePlate($licensePlate), new Color($color), $isAvailable, new Mileage($km));
+        return new self($uuid ?? (string) Str::uuid(), $carModelUuid, new LicensePlate($licensePlate), new Color($color), $isAvailable, new Mileage($km));
     }
 
     /**
