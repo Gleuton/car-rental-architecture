@@ -21,7 +21,7 @@ class IndexClientRequest extends FormRequest
     {
         return [
             'search' => ['nullable', 'string', 'max:255'],
-            'order_by' => ['nullable', 'in:name,created_at,id'],
+            'order_by' => ['nullable', 'in:name,created_at'],
             'direction' => ['nullable', 'in:asc,desc'],
             'per_page' => ['nullable', 'integer', 'min:1', 'max:100'],
             'page' => ['nullable', 'integer', 'min:1'],
