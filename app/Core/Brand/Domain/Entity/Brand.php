@@ -12,16 +12,10 @@ use Illuminate\Support\Str;
 class Brand
 {
     private function __construct(
-        private readonly ?int $id,
         private readonly string $uuid,
         private BrandName $name,
         private BrandLogo $image
     ) {}
-
-    public function id(): ?int
-    {
-        return $this->id;
-    }
 
     public function uuid(): string
     {
@@ -63,24 +57,14 @@ class Brand
      */
     public static function new(string $name, string $image): self
     {
-        return new self(
-            null,
-            (string) Str::uuid(),
-            new BrandName($name),
-            new BrandLogo($image)
-        );
+        return new self((string) Str::uuid(), new BrandName($name), new BrandLogo($image));
     }
 
     /**
      * @throws BrandDomainException
      */
-    public static function restore(int $id, string $name, string $image, ?string $uuid = null): self
+    public static function restore(string $name, string $image, ?string $uuid = null): self
     {
-        return new self(
-            $id,
-            $uuid ?? (string) Str::uuid(),
-            new BrandName($name),
-            new BrandLogo($image)
-        );
+        return new self($uuid ?? (string) Str::uuid(), new BrandName($name), new BrandLogo($image));
     }
 }

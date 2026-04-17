@@ -28,7 +28,7 @@ it('can delete brand', function () {
     Storage::disk('public')->assertMissing('brands/toyota.png');
 
     $this->assertDatabaseMissing('brands', [
-        'id' => $factoryBrand->id,
+        'uuid' => $factoryBrand->uuid,
     ]);
 });
 

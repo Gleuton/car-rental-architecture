@@ -25,7 +25,7 @@ beforeEach(function () {
         $this->logoService
     );
 
-    $this->existingBrand = Brand::restore(1, 'Fiat', 'brands/fiat.png', $this->brandUuid);
+    $this->existingBrand = Brand::restore('Fiat', 'brands/fiat.png', $this->brandUuid);
 });
 
 it('updates a brand with name and image successfully', function () {
@@ -49,7 +49,7 @@ it('updates a brand with name and image successfully', function () {
         ->once()
         ->andReturn('brands/fiat_updated.png');
 
-    $updatedBrand = Brand::restore(1, 'Fiat Updated', 'brands/fiat_updated.png', $this->brandUuid);
+    $updatedBrand = Brand::restore('Fiat Updated', 'brands/fiat_updated.png', $this->brandUuid);
 
     $this->repository->shouldReceive('update')
         ->with(Mockery::type(Brand::class))
@@ -79,7 +79,7 @@ it('updates a brand name only without changing image', function () {
 
     $this->logoService->shouldNotReceive('replace');
 
-    $updatedBrand = Brand::restore(1, 'Toyota', 'brands/fiat.png', $this->brandUuid);
+    $updatedBrand = Brand::restore('Toyota', 'brands/fiat.png', $this->brandUuid);
 
     $this->repository->shouldReceive('update')
         ->with(Mockery::type(Brand::class))
@@ -113,7 +113,7 @@ it('updates a brand image only without validating name uniqueness', function () 
         ->once()
         ->andReturn('brands/fiat_new.png');
 
-    $updatedBrand = Brand::restore(1, 'Fiat', 'brands/fiat_new.png', $this->brandUuid);
+    $updatedBrand = Brand::restore('Fiat', 'brands/fiat_new.png', $this->brandUuid);
 
     $this->repository->shouldReceive('update')
         ->with(Mockery::type(Brand::class))

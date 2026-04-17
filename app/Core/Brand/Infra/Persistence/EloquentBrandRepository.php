@@ -69,7 +69,7 @@ class EloquentBrandRepository implements BrandRepositoryInterface
      */
     public function update(DomainBrand $brand): DomainBrand
     {
-        $model = EloquentBrand::findOrFail($brand->id());
+        $model = EloquentBrand::query()->where('uuid', $brand->uuid())->firstOrFail();
 
         $model->update([
             'name' => $brand->name(),
@@ -96,7 +96,6 @@ class EloquentBrandRepository implements BrandRepositoryInterface
     private function toDomainBrand(EloquentBrand $model): DomainBrand
     {
         return DomainBrand::restore(
-            $model->id,
             $model->name,
             $model->image,
             $model->uuid,
