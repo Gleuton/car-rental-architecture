@@ -19,7 +19,7 @@ it('creates a client successfully', function () {
 
     $repository = Mockery::mock(ClientRepositoryInterface::class);
 
-    $expectedClient = Client::restore(1, 'John Doe');
+    $expectedClient = Client::restore('John Doe');
 
     $repository->shouldReceive('save')
         ->once()
@@ -32,6 +32,5 @@ it('creates a client successfully', function () {
     $result = $useCase->execute($dto);
 
     expect($result)->toBe($expectedClient)
-        ->and($result->id)->toBe(1)
         ->and($result->name)->toBe('John Doe');
 });

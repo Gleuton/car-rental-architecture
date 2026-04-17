@@ -13,7 +13,6 @@ readonly class Client
      * @throws ClientDomainException
      */
     private function __construct(
-        public ?int $id,
         public string $uuid,
         public string $name,
     ) {
@@ -25,15 +24,15 @@ readonly class Client
      */
     public static function new(string $name): self
     {
-        return new self(null, (string) Str::uuid(), $name);
+        return new self((string) Str::uuid(), $name);
     }
 
     /**
      * @throws ClientDomainException
      */
-    public static function restore(int $id, string $name, ?string $uuid = null): self
+    public static function restore(string $name, ?string $uuid = null): self
     {
-        return new self($id, $uuid ?? (string) Str::uuid(), $name);
+        return new self($uuid ?? (string) Str::uuid(), $name);
     }
 
     /**
@@ -57,6 +56,6 @@ readonly class Client
     {
         $newName = $name ?? $this->name;
 
-        return new self($this->id, $this->uuid, $newName);
+        return new self($this->uuid, $newName);
     }
 }

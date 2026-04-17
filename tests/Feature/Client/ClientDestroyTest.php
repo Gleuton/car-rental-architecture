@@ -18,7 +18,7 @@ it('can delete a client', function () {
 
     $response->assertStatus(204);
 
-    $this->assertDatabaseMissing('clients', ['id' => $client->id]);
+    $this->assertDatabaseMissing('clients', ['uuid' => $client->uuid]);
 });
 
 it('returns 404 when trying to delete non-existent client', function () {
@@ -43,9 +43,9 @@ it('deletes client and can list remaining clients', function () {
     $response->assertStatus(200)
         ->assertJsonCount(2, 'data');
 
-    $this->assertDatabaseHas('clients', ['id' => $client1->id]);
-    $this->assertDatabaseMissing('clients', ['id' => $client2->id]);
-    $this->assertDatabaseHas('clients', ['id' => $client3->id]);
+    $this->assertDatabaseHas('clients', ['uuid' => $client1->uuid]);
+    $this->assertDatabaseMissing('clients', ['uuid' => $client2->uuid]);
+    $this->assertDatabaseHas('clients', ['uuid' => $client3->uuid]);
 });
 
 it('returns 401 when deleting a client without authentication', function () {

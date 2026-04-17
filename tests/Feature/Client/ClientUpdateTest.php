@@ -24,7 +24,7 @@ it('can update client name', function () {
         ->assertJsonMissingPath('data.id');
 
     $this->assertDatabaseHas('clients', [
-        'id' => $client->id,
+        'uuid' => $client->uuid,
         'name' => 'John Updated',
     ]);
 });

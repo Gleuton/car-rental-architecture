@@ -18,8 +18,8 @@ it('updates a client name successfully', function () {
     $dto = UpdateClientDTO::fromRequest($request, $uuid);
 
     $repository = Mockery::mock(ClientRepositoryInterface::class);
-    $existingClient = Client::restore(1, 'John Doe');
-    $updatedClient = Client::restore(1, 'John Updated');
+    $existingClient = Client::restore('John Doe', $uuid);
+    $updatedClient = Client::restore('John Updated', $uuid);
 
     $repository->shouldReceive('findByUuid')
         ->with($uuid)
@@ -28,7 +28,7 @@ it('updates a client name successfully', function () {
 
     $repository->shouldReceive('update')
         ->with(Mockery::on(static function (Client $client) {
-            return $client->id === 1 && $client->name === 'John Updated';
+            return $client->name === 'John Updated';
         }))
         ->once()
         ->andReturn($updatedClient);
@@ -37,7 +37,7 @@ it('updates a client name successfully', function () {
     $result = $useCase->execute($dto);
 
     expect($result->name)->toBe('John Updated')
-        ->and($result->id)->toBe(1);
+        ->and($result->uuid)->toBe($uuid);
 });
 
 it('propagates exception when client is not found during update', function () {

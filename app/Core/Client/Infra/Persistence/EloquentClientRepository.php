@@ -53,7 +53,7 @@ class EloquentClientRepository implements ClientRepositoryInterface
 
     public function update(DomainClient $client): DomainClient
     {
-        $model = EloquentClient::findOrFail($client->id);
+        $model = EloquentClient::query()->where('uuid', $client->uuid)->firstOrFail();
 
         $model->update([
             'name' => $client->name,
@@ -71,7 +71,6 @@ class EloquentClientRepository implements ClientRepositoryInterface
     private function toDomainClient(EloquentClient $model): DomainClient
     {
         return DomainClient::restore(
-            $model->id,
             $model->name,
             $model->uuid,
         );
