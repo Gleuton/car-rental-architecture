@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Core\Client\Application\DTOs;
 
-readonly class ClientIdDTO
+readonly class ClientUuidDTO
 {
     private function __construct(
         public string $uuid,

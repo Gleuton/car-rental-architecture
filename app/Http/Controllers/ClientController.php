@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Core\Client\Application\DTOs\ClientIdDTO;
+use App\Core\Client\Application\DTOs\ClientUuidDTO;
 use App\Core\Client\Application\DTOs\CreateClientDTO;
 use App\Core\Client\Application\DTOs\FilterClientDTO;
 use App\Core\Client\Application\DTOs\UpdateClientDTO;
 use App\Core\Client\Application\UseCases\CreateClientUseCase;
-use App\Core\Client\Application\UseCases\DeleteClientUseCase;
-use App\Core\Client\Application\UseCases\FindClientByIdUseCase;
+use App\Core\Client\Application\UseCases\DeleteClientByUuidUseCase;
+use App\Core\Client\Application\UseCases\FindClientByUuidUseCase;
 use App\Core\Client\Application\UseCases\ListClientsUseCase;
 use App\Core\Client\Application\UseCases\UpdateClientUseCase;
 use App\Core\Client\Domain\Exceptions\ClientDomainException;
@@ -25,8 +25,8 @@ class ClientController extends Controller
     public function __construct(
         private readonly ListClientsUseCase $listClientsUseCase,
         private readonly CreateClientUseCase $createClientUseCase,
-        private readonly FindClientByIdUseCase $findClientByIdUseCase,
-        private readonly DeleteClientUseCase $deleteClientUseCase,
+        private readonly FindClientByUuidUseCase $findClientByUuidUseCase,
+        private readonly DeleteClientByUuidUseCase $deleteClientUseCase,
         private readonly UpdateClientUseCase $updateClientUseCase,
     ) {}
 
@@ -69,9 +69,9 @@ class ClientController extends Controller
      */
     public function show(string $client): JsonResponse
     {
-        $dto = ClientIdDTO::fromUuid($client);
+        $dto = ClientUuidDTO::fromUuid($client);
 
-        $foundClient = $this->findClientByIdUseCase->execute($dto);
+        $foundClient = $this->findClientByUuidUseCase->execute($dto);
 
         return response()->json(['data' => ClientResource::toArray($foundClient)]);
     }
@@ -95,7 +95,7 @@ class ClientController extends Controller
      */
     public function destroy(string $client): JsonResponse
     {
-        $dto = ClientIdDTO::fromUuid($client);
+        $dto = ClientUuidDTO::fromUuid($client);
 
         $this->deleteClientUseCase->execute($dto);
 

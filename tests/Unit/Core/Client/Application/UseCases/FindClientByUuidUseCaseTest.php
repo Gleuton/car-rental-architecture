@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-use App\Core\Client\Application\DTOs\ClientIdDTO;
-use App\Core\Client\Application\UseCases\FindClientByIdUseCase;
+use App\Core\Client\Application\DTOs\ClientUuidDTO;
+use App\Core\Client\Application\UseCases\FindClientByUuidUseCase;
 use App\Core\Client\Domain\Entity\Client;
 use App\Core\Client\Domain\Repositories\ClientRepositoryInterface;
 use Illuminate\Support\Str;
 
 it('finds a client by UUID successfully', function () {
     $uuid = (string) Str::uuid();
-    $dto = ClientIdDTO::fromUuid($uuid);
+    $dto = ClientUuidDTO::fromUuid($uuid);
 
     $repository = Mockery::mock(ClientRepositoryInterface::class);
 
@@ -20,7 +20,7 @@ it('finds a client by UUID successfully', function () {
         ->once()
         ->andReturn($expectedClient);
 
-    $useCase = new FindClientByIdUseCase($repository);
+    $useCase = new FindClientByUuidUseCase($repository);
     $result = $useCase->execute($dto);
 
     expect($result)->toBe($expectedClient);
@@ -28,7 +28,7 @@ it('finds a client by UUID successfully', function () {
 
 it('propagates exception when client is not found', function () {
     $uuid = (string) Str::uuid();
-    $dto = ClientIdDTO::fromUuid($uuid);
+    $dto = ClientUuidDTO::fromUuid($uuid);
 
     $repository = Mockery::mock(ClientRepositoryInterface::class);
     $repository->shouldReceive('findByUuid')
@@ -36,7 +36,7 @@ it('propagates exception when client is not found', function () {
         ->once()
         ->andThrow(new RuntimeException('Client not found'));
 
-    $useCase = new FindClientByIdUseCase($repository);
+    $useCase = new FindClientByUuidUseCase($repository);
 
     expect(fn () => $useCase->execute($dto))
         ->toThrow(RuntimeException::class);
