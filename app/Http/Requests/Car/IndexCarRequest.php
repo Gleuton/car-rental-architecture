@@ -21,7 +21,7 @@ class IndexCarRequest extends FormRequest
     {
         return [
             'license_plate' => ['nullable', 'string', 'max:255'],
-            'order_by' => ['nullable', 'in:name,created_at,id'],
+            'order_by' => ['nullable', 'in:license_plate,created_at,uuid'],
             'direction' => ['nullable', 'in:asc,desc'],
             'per_page' => ['nullable', 'integer', 'min:1', 'max:100'],
             'page' => ['nullable', 'integer', 'min:1'],
@@ -31,7 +31,7 @@ class IndexCarRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'order_by' => $this->order_by ?? 'name',
+            'order_by' => $this->order_by ?? 'license_plate',
             'direction' => $this->direction ?? 'asc',
             'per_page' => $this->per_page ?? 15,
         ]);

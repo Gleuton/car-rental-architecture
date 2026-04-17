@@ -11,17 +11,15 @@ use App\Core\Car\Domain\Repositories\CarRepositoryInterface;
 use App\Core\Shared\Application\Pagination\PaginatedResult;
 use App\Core\Shared\Infra\Adapters\LaravelPaginatorAdapter;
 use App\Models\Car as EloquentCar;
-use App\Models\CarModel as EloquentCarModel;
 
 class EloquentCarRepository implements CarRepositoryInterface
 {
     public function save(Car $car): Car
     {
-        $carModelUuid = $this->findCarModelUuidById($car->carModelId);
         $eloquentCar = EloquentCar::create([
             'uuid' => $car->uuid,
             'car_model_id' => $car->carModelId,
-            'car_model_uuid' => $carModelUuid,
+            'car_model_uuid' => $car->carModelUuid,
             'license_plate' => $car->licensePlate(),
             'color' => $car->color(),
             'is_available' => $car->isAvailable(),
@@ -36,9 +34,9 @@ class EloquentCarRepository implements CarRepositoryInterface
         return EloquentCar::where('license_plate', $licensePlate)->exists();
     }
 
-    public function findById(int $id): Car
+    public function findByUuid(string $uuid): Car
     {
-        $eloquentCar = EloquentCar::findOrFail($id);
+        $eloquentCar = EloquentCar::query()->where('uuid', $uuid)->firstOrFail();
 
         return $this->toDomainCar($eloquentCar);
     }
@@ -65,9 +63,9 @@ class EloquentCarRepository implements CarRepositoryInterface
         );
     }
 
-    public function delete(int $id): void
+    public function deleteByUuid(string $uuid): void
     {
-        EloquentCar::findOrFail($id)->delete();
+        EloquentCar::query()->where('uuid', $uuid)->firstOrFail()->delete();
     }
 
     private function toDomainCar(EloquentCar $eloquentCar): Car
@@ -75,6 +73,7 @@ class EloquentCarRepository implements CarRepositoryInterface
         return Car::restore(
             $eloquentCar->id,
             $eloquentCar->car_model_id,
+            $eloquentCar->car_model_uuid,
             $eloquentCar->license_plate,
             $eloquentCar->color,
             (bool) $eloquentCar->is_available,
@@ -85,13 +84,11 @@ class EloquentCarRepository implements CarRepositoryInterface
 
     public function update(Car $car): Car
     {
-        $carModelUuid = $this->findCarModelUuidById($car->carModelId);
-
-        $eloquentCar = EloquentCar::findOrFail($car->id);
+        $eloquentCar = EloquentCar::query()->where('uuid', $car->uuid)->firstOrFail();
 
         $eloquentCar->update([
             'car_model_id' => $car->carModelId,
-            'car_model_uuid' => $carModelUuid,
+            'car_model_uuid' => $car->carModelUuid,
             'license_plate' => $car->licensePlate(),
             'color' => $car->color(),
             'is_available' => $car->isAvailable(),
@@ -99,13 +96,5 @@ class EloquentCarRepository implements CarRepositoryInterface
         ]);
 
         return $this->toDomainCar($eloquentCar);
-    }
-
-    private function findCarModelUuidById(int $carModelId): string
-    {
-        /** @var EloquentCarModel $carModel */
-        $carModel = EloquentCarModel::query()->findOrFail($carModelId);
-
-        return $carModel->uuid;
     }
 }

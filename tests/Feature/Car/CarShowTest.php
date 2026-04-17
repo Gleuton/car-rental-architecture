@@ -20,15 +20,14 @@ it('can show a car', function () {
         'km' => 1000,
     ]);
 
-    $response = $this->getJson('/api/cars/'.$car->id);
+    $response = $this->getJson('/api/cars/'.$car->uuid);
     $response->assertStatus(200)
-        ->assertJsonPath('data.id', $car->id)
         ->assertJsonPath('data.uuid', $car->uuid)
         ->assertJsonPath('data.licensePlate', 'ABC-1234');
 });
 
 it('returns 401 when showing a car without authentication', function () {
     $car = Car::factory()->create();
-    $response = $this->getJson('/api/cars/'.$car->id);
+    $response = $this->getJson('/api/cars/'.$car->uuid);
     $response->assertStatus(401);
 });

@@ -16,6 +16,7 @@ class Car
         public readonly ?int $id,
         public readonly string $uuid,
         public readonly int $carModelId,
+        public readonly string $carModelUuid,
         private LicensePlate $licensePlate,
         private Color $color,
         private bool $available,
@@ -25,9 +26,9 @@ class Car
     /**
      * @throws CarDomainException
      */
-    public static function new(int $carModelId, string $licensePlate, string $color, bool $isAvailable, int $km): self
+    public static function new(int $carModelId, string $carModelUuid, string $licensePlate, string $color, bool $isAvailable, int $km): self
     {
-        return new self(null, (string) Str::uuid(), $carModelId, new LicensePlate($licensePlate), new Color($color), $isAvailable, new Mileage($km));
+        return new self(null, (string) Str::uuid(), $carModelId, $carModelUuid, new LicensePlate($licensePlate), new Color($color), $isAvailable, new Mileage($km));
     }
 
     /**
@@ -36,13 +37,14 @@ class Car
     public static function restore(
         int $id,
         int $carModelId,
+        string $carModelUuid,
         string $licensePlate,
         string $color,
         bool $isAvailable,
         int $km,
         ?string $uuid = null,
     ): self {
-        return new self($id, $uuid ?? (string) Str::uuid(), $carModelId, new LicensePlate($licensePlate), new Color($color), $isAvailable, new Mileage($km));
+        return new self($id, $uuid ?? (string) Str::uuid(), $carModelId, $carModelUuid, new LicensePlate($licensePlate), new Color($color), $isAvailable, new Mileage($km));
     }
 
     /**

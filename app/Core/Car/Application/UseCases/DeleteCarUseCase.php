@@ -15,6 +15,6 @@ readonly class DeleteCarUseCase
 
     public function execute(CarIdDTO $carDto): void
     {
-        $this->repository->delete($carDto->id);
+        $this->repository->deleteByUuid($carDto->uuid);
     }
 }

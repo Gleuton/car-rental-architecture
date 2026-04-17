@@ -29,6 +29,7 @@ readonly class CreateCarUseCase
 
         $car = Car::new(
             $carModelId,
+            $dto->carModelUuid,
             $dto->licensePlate,
             $dto->color,
             $dto->isAvailable,
@@ -40,18 +41,11 @@ readonly class CreateCarUseCase
 
     private function resolveCarModelId(CreateCarDTO $dto): int
     {
-        if ($dto->carModelId !== null) {
-            return $dto->carModelId;
-        }
-
-        if ($dto->carModelUuid === null) {
-            return 0;
-        }
-
-        $carModelId = EloquentCarModel::query()
+        /** @var EloquentCarModel $carModel */
+        $carModel = EloquentCarModel::query()
             ->where('uuid', $dto->carModelUuid)
-            ->value('id');
+            ->firstOrFail();
 
-        return $carModelId === null ? 0 : (int) $carModelId;
+        return $carModel->id;
     }
 }

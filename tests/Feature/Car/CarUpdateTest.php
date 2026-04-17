@@ -13,19 +13,18 @@ it('can update allowed car data', function () {
     /** @var Car $carEloquent */
     $carEloquent = Car::factory()->create();
 
-    $response = $this->patchJson('/api/cars/'.$carEloquent->id, [
+    $response = $this->patchJson('/api/cars/'.$carEloquent->uuid, [
         'license_plate' => 'ABC-123',
         'color' => 'red',
         'is_available' => false,
     ]);
 
     $response->assertStatus(200)
-        ->assertJsonPath('data.id', $carEloquent->id)
         ->assertJsonPath('data.uuid', $carEloquent->uuid)
         ->assertJsonPath('data.licensePlate', 'ABC-123')
         ->assertJsonPath('data.color', 'red')
         ->assertJsonPath('data.isAvailable', false)
-        ->assertJsonPath('data.carModelId', $carEloquent->car_model_id)
+        ->assertJsonPath('data.carModelUuid', $carEloquent->car_model_uuid)
         ->assertJsonPath('data.km', $carEloquent->km);
 
     $this->assertDatabaseHas('cars', [
@@ -49,12 +48,11 @@ it('can update license plate to the same value', function () {
         'license_plate' => $licensePlate,
     ]);
 
-    $response = $this->patchJson('/api/cars/'.$carEloquent->id, [
+    $response = $this->patchJson('/api/cars/'.$carEloquent->uuid, [
         'license_plate' => $licensePlate,
     ]);
 
     $response->assertStatus(200)
-        ->assertJsonPath('data.id', $carEloquent->id)
         ->assertJsonPath('data.uuid', $carEloquent->uuid)
         ->assertJsonPath('data.licensePlate', $licensePlate);
 
@@ -74,7 +72,7 @@ it('cant update the license plate to one that is already in use.', function () {
 
     Car::factory()->create(['license_plate' => $newLicensePlate]);
 
-    $response = $this->patchJson('/api/cars/'.$carEloquent->id, [
+    $response = $this->patchJson('/api/cars/'.$carEloquent->uuid, [
         'license_plate' => $newLicensePlate,
     ]);
 
@@ -90,6 +88,6 @@ it('cant update the license plate to one that is already in use.', function () {
 
 it('returns 401 when updating a car without authentication', function () {
     $car = Car::factory()->create();
-    $response = $this->patchJson('/api/cars/'.$car->id, ['color' => 'blue']);
+    $response = $this->patchJson('/api/cars/'.$car->uuid, ['color' => 'blue']);
     $response->assertStatus(401);
 });

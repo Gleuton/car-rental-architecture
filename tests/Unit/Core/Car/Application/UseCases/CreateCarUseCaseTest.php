@@ -10,6 +10,45 @@ use App\Core\Car\Domain\Exceptions\CarDomainException;
 use App\Core\Car\Domain\Repositories\CarRepositoryInterface;
 use App\Core\Car\Domain\Roles\CarAlreadyExistsRole;
 use App\Http\Requests\Car\StoreCarRequest;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Tests\TestCase;
+
+uses(TestCase::class, RefreshDatabase::class);
+
+function createPersistedCarModelForTests(): object
+{
+    $brandUuid = (string) Str::uuid();
+    $carModelUuid = (string) Str::uuid();
+
+    $brandId = DB::table('brands')->insertGetId([
+        'uuid' => $brandUuid,
+        'name' => 'Brand '.substr($brandUuid, 0, 8),
+        'image' => 'brands/test.png',
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]);
+
+    $carModelId = DB::table('car_models')->insertGetId([
+        'uuid' => $carModelUuid,
+        'brand_id' => $brandId,
+        'brand_uuid' => $brandUuid,
+        'name' => 'Model '.substr($carModelUuid, 0, 8),
+        'image' => 'car_models/test.png',
+        'doors' => 4,
+        'seats' => 5,
+        'airbags' => true,
+        'abs' => true,
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]);
+
+    return (object) [
+        'id' => $carModelId,
+        'uuid' => $carModelUuid,
+    ];
+}
 
 beforeEach(function () {
     $this->repository = Mockery::mock(CarRepositoryInterface::class);
@@ -23,15 +62,14 @@ beforeEach(function () {
 
 it('creates a car successfully', function () {
     $request = Mockery::mock(StoreCarRequest::class);
-    $carModelId = 1;
+    $carModel = createPersistedCarModelForTests();
+    $carModelId = $carModel->id;
     $licensePlate = 'ABC-1234';
     $color = 'Red';
 
     $km = 10000;
 
-    $request->shouldReceive('has')->with('car_model_id')->andReturn(true);
-    $request->shouldReceive('integer')->with('car_model_id')->andReturn($carModelId);
-    $request->shouldReceive('input')->with('car_model_uuid')->andReturn(null);
+    $request->shouldReceive('input')->with('car_model_uuid')->andReturn($carModel->uuid);
     $request->shouldReceive('input')->with('license_plate')->andReturn($licensePlate);
     $request->shouldReceive('input')->with('color')->andReturn($color);
     $request->shouldReceive('input')->with('is_available')->andReturn(true);
@@ -47,9 +85,10 @@ it('creates a car successfully', function () {
     $this->repository->shouldReceive('save')
         ->once()
         ->with(
-            Mockery::on(static function (DomainCar $car) use ($carModelId, $licensePlate, $color, $km): bool {
+            Mockery::on(static function (DomainCar $car) use ($carModel, $carModelId, $licensePlate, $color, $km): bool {
                 return $car->id === null &&
                     $car->carModelId === $carModelId &&
+                    $car->carModelUuid === $carModel->uuid &&
                     $car->licensePlate() === $licensePlate &&
                     $car->color() === $color &&
                     $car->isAvailable() === true &&
@@ -59,6 +98,7 @@ it('creates a car successfully', function () {
         ->andReturn(DomainCar::restore(
             1,
             $carModelId,
+            $carModel->uuid,
             $licensePlate,
             $color,
             true,
@@ -77,11 +117,10 @@ it('creates a car successfully', function () {
 
 it('throws exception when car with license plate already exists', function () {
     $request = Mockery::mock(StoreCarRequest::class);
+    $carModel = createPersistedCarModelForTests();
     $licensePlate = 'ABC-1234';
 
-    $request->shouldReceive('has')->with('car_model_id')->andReturn(true);
-    $request->shouldReceive('integer')->with('car_model_id')->andReturn(1);
-    $request->shouldReceive('input')->with('car_model_uuid')->andReturn(null);
+    $request->shouldReceive('input')->with('car_model_uuid')->andReturn($carModel->uuid);
     $request->shouldReceive('input')->with('license_plate')->andReturn($licensePlate);
     $request->shouldReceive('input')->with('color')->andReturn('Red');
     $request->shouldReceive('input')->with('is_available')->andReturn(true);
@@ -103,11 +142,10 @@ it('throws exception when car with license plate already exists', function () {
 
 it('validates license plate before creating car', function () {
     $request = Mockery::mock(StoreCarRequest::class);
+    $carModel = createPersistedCarModelForTests();
     $licensePlate = 'ABC-1234';
 
-    $request->shouldReceive('has')->with('car_model_id')->andReturn(true);
-    $request->shouldReceive('integer')->with('car_model_id')->andReturn(1);
-    $request->shouldReceive('input')->with('car_model_uuid')->andReturn(null);
+    $request->shouldReceive('input')->with('car_model_uuid')->andReturn($carModel->uuid);
     $request->shouldReceive('input')->with('license_plate')->andReturn($licensePlate);
     $request->shouldReceive('input')->with('color')->andReturn('Red');
     $request->shouldReceive('input')->with('is_available')->andReturn(true);

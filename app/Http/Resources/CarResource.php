@@ -13,12 +13,11 @@ class CarResource
     public static function CarToArray(Car $car): array
     {
         return [
-            'id' => $car->id,
             'uuid' => $car->uuid,
             'licensePlate' => $car->licensePlate(),
             'color' => $car->color(),
             'isAvailable' => $car->isAvailable(),
-            'carModelId' => $car->carModelId,
+            'carModelUuid' => $car->carModelUuid,
             'km' => $car->km(),
         ];
     }

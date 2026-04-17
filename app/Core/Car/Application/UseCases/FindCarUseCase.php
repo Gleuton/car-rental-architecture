@@ -16,6 +16,6 @@ readonly class FindCarUseCase
 
     public function execute(CarIdDTO $carDto): Car
     {
-        return $this->repository->findById($carDto->id);
+        return $this->repository->findByUuid($carDto->uuid);
     }
 }

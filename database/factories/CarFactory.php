@@ -24,7 +24,7 @@ class CarFactory extends Factory
         $km = $this->faker->numberBetween(1, 100);
 
         return [
-            'uuid' => DomainCar::new($carModel->id, $licensePlate, $color, $isAvailable, $km)->uuid,
+            'uuid' => DomainCar::new($carModel->id, $carModel->uuid, $licensePlate, $color, $isAvailable, $km)->uuid,
             'car_model_id' => $carModel->id,
             'car_model_uuid' => $carModel->uuid,
             'license_plate' => $licensePlate,

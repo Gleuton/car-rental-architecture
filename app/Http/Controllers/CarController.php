@@ -57,9 +57,9 @@ class CarController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(int $carId): JsonResponse
+    public function show(string $carUuid): JsonResponse
     {
-        $carDto = CarIdDTO::fromId($carId);
+        $carDto = CarIdDTO::fromUuid($carUuid);
         $car = $this->findCar->execute($carDto);
 
         return response()->json(['data' => CarResource::CarToArray($car)]);
@@ -70,9 +70,9 @@ class CarController extends Controller
      *
      * @throws CarDomainException
      */
-    public function update(UpdateCarRequest $request, int $carId): JsonResponse
+    public function update(UpdateCarRequest $request, string $carUuid): JsonResponse
     {
-        $carDto = UpdateCarDto::fromRequest($request, $carId);
+        $carDto = UpdateCarDto::fromRequest($request, $carUuid);
         $car = $this->updateCar->execute($carDto);
 
         return response()->json([
@@ -83,9 +83,9 @@ class CarController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(int $carId): JsonResponse
+    public function destroy(string $carUuid): JsonResponse
     {
-        $carDto = CarIdDTO::fromId($carId);
+        $carDto = CarIdDTO::fromUuid($carUuid);
 
         $this->deleteCar->execute($carDto);
 

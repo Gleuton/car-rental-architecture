@@ -7,11 +7,12 @@ use App\Core\Car\Application\UseCases\DeleteCarUseCase;
 use App\Core\Car\Domain\Repositories\CarRepositoryInterface;
 
 it('deletes a car successfully', function () {
-    $dto = CarIdDTO::fromId(1);
+    $carUuid = '11111111-1111-4111-8111-111111111111';
+    $dto = CarIdDTO::fromUuid($carUuid);
 
     $repository = Mockery::mock(CarRepositoryInterface::class);
-    $repository->shouldReceive('delete')
-        ->with(1)
+    $repository->shouldReceive('deleteByUuid')
+        ->with($carUuid)
         ->once();
 
     $useCase = new DeleteCarUseCase($repository);
@@ -21,11 +22,12 @@ it('deletes a car successfully', function () {
 });
 
 it('propagates exception when car is not found during delete', function () {
-    $dto = CarIdDTO::fromId(999);
+    $carUuid = '99999999-9999-4999-8999-999999999999';
+    $dto = CarIdDTO::fromUuid($carUuid);
 
     $repository = Mockery::mock(CarRepositoryInterface::class);
-    $repository->shouldReceive('delete')
-        ->with(999)
+    $repository->shouldReceive('deleteByUuid')
+        ->with($carUuid)
         ->once()
         ->andThrow(new RuntimeException('Car not found'));
 
