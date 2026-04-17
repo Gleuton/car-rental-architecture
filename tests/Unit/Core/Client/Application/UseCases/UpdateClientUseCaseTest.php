@@ -7,20 +7,22 @@ use App\Core\Client\Application\UseCases\UpdateClientUseCase;
 use App\Core\Client\Domain\Entity\Client;
 use App\Core\Client\Domain\Repositories\ClientRepositoryInterface;
 use App\Http\Requests\Client\UpdateClientRequest;
+use Illuminate\Support\Str;
 
 it('updates a client name successfully', function () {
     $request = Mockery::mock(UpdateClientRequest::class);
 
     $request->shouldReceive('input')->with('name')->andReturn('John Updated');
 
-    $dto = UpdateClientDTO::fromRequest($request, 1);
+    $uuid = (string) Str::uuid();
+    $dto = UpdateClientDTO::fromRequest($request, $uuid);
 
     $repository = Mockery::mock(ClientRepositoryInterface::class);
     $existingClient = Client::restore(1, 'John Doe');
     $updatedClient = Client::restore(1, 'John Updated');
 
-    $repository->shouldReceive('findById')
-        ->with(1)
+    $repository->shouldReceive('findByUuid')
+        ->with($uuid)
         ->once()
         ->andReturn($existingClient);
 
@@ -43,11 +45,12 @@ it('propagates exception when client is not found during update', function () {
 
     $request->shouldReceive('input')->with('name')->andReturn('John Updated');
 
-    $dto = UpdateClientDTO::fromRequest($request, 999);
+    $uuid = (string) Str::uuid();
+    $dto = UpdateClientDTO::fromRequest($request, $uuid);
 
     $repository = Mockery::mock(ClientRepositoryInterface::class);
-    $repository->shouldReceive('findById')
-        ->with(999)
+    $repository->shouldReceive('findByUuid')
+        ->with($uuid)
         ->once()
         ->andThrow(new RuntimeException('Client not found'));
 

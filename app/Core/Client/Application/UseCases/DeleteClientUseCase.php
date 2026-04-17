@@ -15,6 +15,6 @@ readonly class DeleteClientUseCase
 
     public function execute(ClientIdDTO $dto): void
     {
-        $this->repository->delete($dto->id);
+        $this->repository->deleteByUuid($dto->uuid);
     }
 }

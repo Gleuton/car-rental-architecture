@@ -14,7 +14,7 @@ it('can delete a client', function () {
 
     $client = Client::factory()->create(['name' => 'John Doe']);
 
-    $response = $this->deleteJson("/api/clients/{$client->id}");
+    $response = $this->deleteJson("/api/clients/{$client->uuid}");
 
     $response->assertStatus(204);
 
@@ -24,7 +24,7 @@ it('can delete a client', function () {
 it('returns 404 when trying to delete non-existent client', function () {
     Auth::guard('api')->login(User::factory()->create());
 
-    $response = $this->deleteJson('/api/clients/999999');
+    $response = $this->deleteJson('/api/clients/not-found-uuid');
 
     $response->assertStatus(404);
 });
@@ -36,7 +36,7 @@ it('deletes client and can list remaining clients', function () {
     $client2 = Client::factory()->create(['name' => 'Client 2']);
     $client3 = Client::factory()->create(['name' => 'Client 3']);
 
-    $this->deleteJson("/api/clients/{$client2->id}");
+    $this->deleteJson("/api/clients/{$client2->uuid}");
 
     $response = $this->getJson('/api/clients');
 
@@ -50,6 +50,6 @@ it('deletes client and can list remaining clients', function () {
 
 it('returns 401 when deleting a client without authentication', function () {
     $client = Client::factory()->create();
-    $response = $this->deleteJson("/api/clients/{$client->id}");
+    $response = $this->deleteJson("/api/clients/{$client->uuid}");
     $response->assertStatus(401);
 });

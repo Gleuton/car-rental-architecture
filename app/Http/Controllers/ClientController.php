@@ -17,6 +17,7 @@ use App\Core\Client\Domain\Exceptions\ClientDomainException;
 use App\Http\Requests\Client\IndexClientRequest;
 use App\Http\Requests\Client\StoreClientRequest;
 use App\Http\Requests\Client\UpdateClientRequest;
+use App\Http\Resources\ClientResource;
 use Illuminate\Http\JsonResponse;
 
 class ClientController extends Controller
@@ -39,7 +40,7 @@ class ClientController extends Controller
         $clients = $this->listClientsUseCase->execute($filters);
 
         return response()->json([
-            'data' => $clients->items,
+            'data' => array_map(static fn ($client) => ClientResource::toArray($client), $clients->items->all()),
             'meta' => [
                 'current_page' => $clients->page,
                 'per_page' => $clients->perPage,
@@ -60,19 +61,19 @@ class ClientController extends Controller
 
         $client = $this->createClientUseCase->execute($dto);
 
-        return response()->json(['data' => $client], 201);
+        return response()->json(['data' => ClientResource::toArray($client)], 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(int $clientId): JsonResponse
+    public function show(string $client): JsonResponse
     {
-        $dto = ClientIdDTO::fromId($clientId);
+        $dto = ClientIdDTO::fromUuid($client);
 
-        $client = $this->findClientByIdUseCase->execute($dto);
+        $foundClient = $this->findClientByIdUseCase->execute($dto);
 
-        return response()->json(['data' => $client]);
+        return response()->json(['data' => ClientResource::toArray($foundClient)]);
     }
 
     /**
@@ -80,21 +81,21 @@ class ClientController extends Controller
      *
      * @throws ClientDomainException
      */
-    public function update(UpdateClientRequest $request, int $clientId): JsonResponse
+    public function update(UpdateClientRequest $request, string $client): JsonResponse
     {
-        $dto = UpdateClientDTO::fromRequest($request, $clientId);
+        $dto = UpdateClientDTO::fromRequest($request, $client);
 
-        $client = $this->updateClientUseCase->execute($dto);
+        $updatedClient = $this->updateClientUseCase->execute($dto);
 
-        return response()->json(['data' => $client]);
+        return response()->json(['data' => ClientResource::toArray($updatedClient)]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(int $clientId): JsonResponse
+    public function destroy(string $client): JsonResponse
     {
-        $dto = ClientIdDTO::fromId($clientId);
+        $dto = ClientIdDTO::fromUuid($client);
 
         $this->deleteClientUseCase->execute($dto);
 

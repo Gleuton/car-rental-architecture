@@ -44,9 +44,9 @@ class EloquentClientRepository implements ClientRepositoryInterface
         );
     }
 
-    public function findById(int $id): DomainClient
+    public function findByUuid(string $uuid): DomainClient
     {
-        $model = EloquentClient::findOrFail($id);
+        $model = EloquentClient::query()->where('uuid', $uuid)->firstOrFail();
 
         return $this->toDomainClient($model);
     }
@@ -62,9 +62,9 @@ class EloquentClientRepository implements ClientRepositoryInterface
         return $this->toDomainClient($model);
     }
 
-    public function delete(int $id): void
+    public function deleteByUuid(string $uuid): void
     {
-        $model = EloquentClient::findOrFail($id);
+        $model = EloquentClient::query()->where('uuid', $uuid)->firstOrFail();
         $model->delete();
     }
 

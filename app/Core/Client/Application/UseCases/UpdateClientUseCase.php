@@ -20,7 +20,7 @@ readonly class UpdateClientUseCase
      */
     public function execute(UpdateClientDTO $dto): Client
     {
-        $client = $this->repository->findById($dto->id);
+        $client = $this->repository->findByUuid($dto->uuid);
         $updatedClient = $client->update($dto->name);
 
         return $this->repository->update($updatedClient);

@@ -18,9 +18,9 @@ interface ClientRepositoryInterface
      */
     public function findByFilters(ClientFilter $filters): PaginatedResult;
 
-    public function findById(int $id): Client;
+    public function findByUuid(string $uuid): Client;
 
     public function update(Client $client): Client;
 
-    public function delete(int $id): void;
+    public function deleteByUuid(string $uuid): void;
 }

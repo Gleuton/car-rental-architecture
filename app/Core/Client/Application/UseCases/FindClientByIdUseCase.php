@@ -16,6 +16,6 @@ readonly class FindClientByIdUseCase
 
     public function execute(ClientIdDTO $dto): Client
     {
-        return $this->repository->findById($dto->id);
+        return $this->repository->findByUuid($dto->uuid);
     }
 }
