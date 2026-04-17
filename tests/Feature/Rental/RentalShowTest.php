@@ -16,8 +16,8 @@ it('can show a rental by uuid', function () {
     $response = $this->getJson("/api/rentals/{$rental->uuid}");
 
     $response->assertOk()
-        ->assertJsonPath('data.id', $rental->id)
-        ->assertJsonPath('data.uuid', fn ($uuid) => Str::isUuid($uuid));
+        ->assertJsonPath('data.uuid', fn ($uuid) => Str::isUuid($uuid))
+        ->assertJsonMissingPath('data.id');
 });
 
 it('returns 404 when rental is not found', function () {

@@ -28,7 +28,7 @@ it('can list all rentals returning with price calculated', function () {
         ->assertJsonCount(2, 'data')
         ->assertJsonStructure([
             'data' => [
-                '*' => ['id', 'uuid', 'carId', 'clientId', 'startDate', 'endDate', 'totalPrice', 'initialKm', 'finalKm'],
+                '*' => ['uuid', 'carId', 'clientId', 'dayPriceCents', 'startDate', 'endDate', 'totalPrice', 'initialKm', 'finalKm'],
             ],
             'meta' => [
                 'current_page',
@@ -42,6 +42,7 @@ it('can list all rentals returning with price calculated', function () {
 
     $response->assertJsonPath('data.0.totalPrice', 200);
     $response->assertJsonPath('data.1.totalPrice', 100);
+    $response->assertJsonMissingPath('data.0.id');
 });
 
 it('filters rentals by start_date range', function () {
@@ -81,8 +82,8 @@ it('applies default ordering by start_date', function () {
 
     $response->assertOk();
 
-    expect($response->json('data.0.id'))->toBe($earlyRental->id)
-        ->and($response->json('data.1.id'))->toBe($lateRental->id);
+    expect($response->json('data.0.uuid'))->toBe($earlyRental->uuid)
+        ->and($response->json('data.1.uuid'))->toBe($lateRental->uuid);
 });
 
 it('can paginate rentals', function () {

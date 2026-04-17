@@ -16,6 +16,7 @@ use App\Core\Rental\Application\UseCases\UpdateRentalUseCase;
 use App\Http\Requests\Rental\IndexRentalRequest;
 use App\Http\Requests\Rental\StoreRentalRequest;
 use App\Http\Requests\Rental\UpdateRentalRequest;
+use App\Http\Resources\RentalResource;
 use Illuminate\Http\JsonResponse;
 
 class RentalController extends Controller
@@ -36,15 +37,7 @@ class RentalController extends Controller
         $filters = FilterRentalDTO::fromRequest($request);
         $rentals = $this->listRentalsUseCase->execute($filters);
 
-        return response()->json([
-            'data' => $rentals->items,
-            'meta' => [
-                'current_page' => $rentals->page,
-                'per_page' => $rentals->perPage,
-                'total' => $rentals->total,
-                'last_page' => $rentals->lastPage,
-            ],
-        ]);
+        return response()->json(RentalResource::PaginatedToArray($rentals));
     }
 
     /**
@@ -55,7 +48,7 @@ class RentalController extends Controller
         $dto = CreateRentalDTO::fromRequest($request);
         $rental = $this->createRentalUseCase->execute($dto);
 
-        return response()->json(['data' => $rental], 201);
+        return response()->json(['data' => RentalResource::toArray($rental)], 201);
     }
 
     /**
@@ -66,7 +59,7 @@ class RentalController extends Controller
         $dto = RentalIdDTO::fromUuid($rental);
         $foundRental = $this->findRentalByIdUseCase->execute($dto);
 
-        return response()->json(['data' => $foundRental]);
+        return response()->json(['data' => RentalResource::toArray($foundRental)]);
     }
 
     /**
@@ -77,7 +70,7 @@ class RentalController extends Controller
         $dto = UpdateRentalDTO::fromRequest($request, $rental);
         $updatedRental = $this->updateRentalUseCase->execute($dto);
 
-        return response()->json(['data' => $updatedRental]);
+        return response()->json(['data' => RentalResource::toArray($updatedRental)]);
     }
 
     /**

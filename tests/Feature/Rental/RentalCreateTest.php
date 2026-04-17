@@ -36,13 +36,13 @@ it('can create a Rental', function () {
     $response = $this->postJson('/api/rentals', $data);
 
     $response->assertStatus(201)
-        ->assertJsonPath('data.id', fn ($id) => is_int($id))
         ->assertJsonPath('data.uuid', fn ($uuid) => Str::isUuid($uuid))
         ->assertJsonPath('data.startDate', $startDate->format('Y-m-d H:i:s'))
         ->assertJsonPath('data.endDate', $endDate->format('Y-m-d H:i:s'))
         ->assertJsonPath('data.dayPriceCents', $dayPrice)
         ->assertJsonPath('data.initialKm', $initialKm)
-        ->assertJsonPath('data.finalKm', $finalKm);
+        ->assertJsonPath('data.finalKm', $finalKm)
+        ->assertJsonMissingPath('data.id');
 
     $this->assertDatabaseHas('rentals', [
         'client_id' => $cliente->id,
