@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Core\CarModel\Application\DTOs\CarModelIdDTO;
+use App\Core\CarModel\Application\DTOs\CarModelUuidDTO;
 use App\Core\CarModel\Application\UseCases\DeleteCarModelUseCase;
 use App\Core\CarModel\Domain\Entity\CarModel;
 use App\Core\CarModel\Domain\Repositories\CarModelRepositoryInterface;
@@ -10,7 +10,7 @@ use App\Core\Shared\Domain\Storage\FileStorageInterface;
 
 it('deletes a car model successfully', function () {
     $uuid = '11111111-1111-4111-8111-111111111111';
-    $dto = CarModelIdDTO::fromUuid($uuid);
+    $dto = CarModelUuidDTO::fromUuid($uuid);
 
     $carModel = CarModel::restore(
         id: 1,
@@ -47,7 +47,7 @@ it('deletes a car model successfully', function () {
 
 it('propagates exception when car model is not found during delete', function () {
     $uuid = '99999999-9999-4999-8999-999999999999';
-    $dto = CarModelIdDTO::fromUuid($uuid);
+    $dto = CarModelUuidDTO::fromUuid($uuid);
 
     $repository = Mockery::mock(CarModelRepositoryInterface::class);
     $repository->shouldReceive('findByUuid')

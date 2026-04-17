@@ -60,16 +60,8 @@ class EloquentCarModelRepository implements CarModelRepositoryInterface
 
     public function existsByNameAndBrandUuid(string $name, string $brandUuid): bool
     {
-        $brandId = EloquentBrand::query()->where('uuid', $brandUuid)->value('id');
-
         return EloquentCarModel::where('name', $name)
-            ->where(static function ($query) use ($brandUuid, $brandId) {
-                $query->where('brand_uuid', $brandUuid);
-
-                if ($brandId !== null) {
-                    $query->orWhere('brand_id', (int) $brandId);
-                }
-            })
+            ->where('brand_uuid', $brandUuid)
             ->exists();
     }
 
