@@ -10,9 +10,7 @@ readonly class UpdateRentalDTO
 {
     private function __construct(
         public string $uuid,
-        public ?int $carId,
         public ?string $carUuid,
-        public ?int $clientId,
         public ?string $clientUuid,
         public ?int $dayPriceCents,
         public ?string $startDate,
@@ -25,9 +23,7 @@ readonly class UpdateRentalDTO
     {
         return new self(
             uuid: $rental,
-            carId: $request->has('car_id') ? $request->integer('car_id') : null,
             carUuid: $request->input('car_uuid'),
-            clientId: $request->has('client_id') ? $request->integer('client_id') : null,
             clientUuid: $request->input('client_uuid'),
             dayPriceCents: $request->has('day_price_cents') ? $request->integer('day_price_cents') : null,
             startDate: $request->input('start_date'),

@@ -57,16 +57,6 @@ class EloquentBrandRepository implements BrandRepositoryInterface
         return $this->toDomainBrand($model);
     }
 
-    /**
-     * @throws BrandDomainException
-     */
-    public function findById(int $id): DomainBrand
-    {
-        $model = EloquentBrand::findOrFail($id);
-
-        return $this->toDomainBrand($model);
-    }
-
     public function findByUuid(string $uuid): DomainBrand
     {
         $model = EloquentBrand::query()->where('uuid', $uuid)->firstOrFail();
@@ -89,21 +79,10 @@ class EloquentBrandRepository implements BrandRepositoryInterface
         return $this->toDomainBrand($model);
     }
 
-    public function delete(int $id): void
-    {
-        $model = EloquentBrand::findOrFail($id);
-        $model->delete();
-    }
-
     public function deleteByUuid(string $uuid): void
     {
         $model = EloquentBrand::query()->where('uuid', $uuid)->firstOrFail();
         $model->delete();
-    }
-
-    public function exists(int $brandId): bool
-    {
-        return EloquentBrand::whereKey($brandId)->exists();
     }
 
     public function existsByUuid(string $brandUuid): bool

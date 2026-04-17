@@ -10,7 +10,9 @@ use Illuminate\Support\Str;
 it('can create a Rental instance', function () {
     $rental = Rental::new(
         carId: 1,
+        carUuid: (string) Str::uuid(),
         clientId: 1,
+        clientUuid: (string) Str::uuid(),
         dayPriceCents: 5000,
         startDate: '2026-03-09 10:00:00',
         endDate: '2026-03-19 10:00:00',
@@ -33,7 +35,9 @@ it('can restore a Rental instance with ID', function () {
     $rental = Rental::restore(
         id: 1,
         carId: 1,
+        carUuid: (string) Str::uuid(),
         clientId: 1,
+        clientUuid: (string) Str::uuid(),
         dayPriceCents: 5000,
         startDate: '2026-03-09 10:00:00',
         endDate: '2026-03-19 10:00:00',
@@ -55,7 +59,9 @@ it('can restore a Rental instance with ID', function () {
 it('throws RentalDomainException when start date has invalid format', function () {
     Rental::new(
         carId: 1,
+        carUuid: (string) Str::uuid(),
         clientId: 1,
+        clientUuid: (string) Str::uuid(),
         dayPriceCents: 5000,
         startDate: '2026-03-09',
         endDate: '2026-03-19 10:00:00',
@@ -71,7 +77,9 @@ it('throws RentalDomainException when start date has invalid format', function (
 it('throws RentalDomainException when end date has invalid format', function () {
     Rental::new(
         carId: 1,
+        carUuid: (string) Str::uuid(),
         clientId: 1,
+        clientUuid: (string) Str::uuid(),
         dayPriceCents: 5000,
         startDate: '2026-03-09 10:00:00',
         endDate: '2026-03-19',
@@ -87,7 +95,9 @@ it('throws RentalDomainException when end date has invalid format', function () 
 it('throws RentalDomainException when date is semantically invalid', function () {
     Rental::new(
         carId: 1,
+        carUuid: (string) Str::uuid(),
         clientId: 1,
+        clientUuid: (string) Str::uuid(),
         dayPriceCents: 5000,
         startDate: '2026-02-30 10:00:00',
         endDate: '2026-03-19 10:00:00',
@@ -103,7 +113,9 @@ it('throws RentalDomainException when date is semantically invalid', function ()
 it('throws RentalDomainException when end date is before start date', function () {
     Rental::new(
         carId: 1,
+        carUuid: (string) Str::uuid(),
         clientId: 1,
+        clientUuid: (string) Str::uuid(),
         dayPriceCents: 5000,
         startDate: '2026-03-19 10:00:00',
         endDate: '2026-03-09 10:00:00',
@@ -119,7 +131,9 @@ it('throws RentalDomainException when end date is before start date', function (
 it('allows same date for start and end', function () {
     $rental = Rental::new(
         carId: 1,
+        carUuid: (string) Str::uuid(),
         clientId: 1,
+        clientUuid: (string) Str::uuid(),
         dayPriceCents: 5000,
         startDate: '2026-03-09 10:00:00',
         endDate: '2026-03-09 10:00:00',
@@ -134,7 +148,9 @@ it('allows same date for start and end', function () {
 it('throws RentalDomainException when day price is negative', function () {
     Rental::new(
         carId: 1,
+        carUuid: (string) Str::uuid(),
         clientId: 1,
+        clientUuid: (string) Str::uuid(),
         dayPriceCents: -1,
         startDate: '2026-03-09 10:00:00',
         endDate: '2026-03-10 10:00:00',
@@ -150,7 +166,9 @@ it('throws RentalDomainException when day price is negative', function () {
 it('throws RentalDomainException when initial km is negative', function () {
     Rental::new(
         carId: 1,
+        carUuid: (string) Str::uuid(),
         clientId: 1,
+        clientUuid: (string) Str::uuid(),
         dayPriceCents: 5000,
         startDate: '2026-03-09 10:00:00',
         endDate: '2026-03-10 10:00:00',
@@ -166,7 +184,9 @@ it('throws RentalDomainException when initial km is negative', function () {
 it('throws RentalDomainException when final km is negative', function () {
     Rental::new(
         carId: 1,
+        carUuid: (string) Str::uuid(),
         clientId: 1,
+        clientUuid: (string) Str::uuid(),
         dayPriceCents: 5000,
         startDate: '2026-03-09 10:00:00',
         endDate: '2026-03-10 10:00:00',
@@ -182,7 +202,9 @@ it('throws RentalDomainException when final km is negative', function () {
 it('throws RentalDomainException when final km is less than initial km', function () {
     Rental::new(
         carId: 1,
+        carUuid: (string) Str::uuid(),
         clientId: 1,
+        clientUuid: (string) Str::uuid(),
         dayPriceCents: 5000,
         startDate: '2026-03-09 10:00:00',
         endDate: '2026-03-10 10:00:00',

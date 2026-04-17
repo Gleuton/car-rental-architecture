@@ -24,8 +24,8 @@ it('can create a Rental', function () {
     $finalKm = 1500;
 
     $data = [
-        'client_id' => $cliente->id,
-        'car_id' => $car->id,
+        'client_uuid' => $cliente->uuid,
+        'car_uuid' => $car->uuid,
         'start_date' => $startDate->format('Y-m-d H:i:s'),
         'end_date' => $endDate->format('Y-m-d H:i:s'),
         'day_price_cents' => $dayPrice,
@@ -42,12 +42,12 @@ it('can create a Rental', function () {
         ->assertJsonPath('data.dayPriceCents', $dayPrice)
         ->assertJsonPath('data.initialKm', $initialKm)
         ->assertJsonPath('data.finalKm', $finalKm)
+        ->assertJsonPath('data.clientUuid', $cliente->uuid)
+        ->assertJsonPath('data.carUuid', $car->uuid)
         ->assertJsonMissingPath('data.id');
 
     $this->assertDatabaseHas('rentals', [
-        'client_id' => $cliente->id,
         'client_uuid' => $cliente->uuid,
-        'car_id' => $car->id,
         'car_uuid' => $car->uuid,
         'start_date' => $startDate,
         'end_date' => $endDate,
@@ -56,7 +56,7 @@ it('can create a Rental', function () {
         'final_km' => $finalKm,
     ]);
 
-    $rental = DB::table('rentals')->where('client_id', $cliente->id)->where('car_id', $car->id)->first();
+    $rental = DB::table('rentals')->where('client_uuid', $cliente->uuid)->where('car_uuid', $car->uuid)->first();
 
     expect($rental)->not->toBeNull()
         ->and(Str::isUuid($rental->uuid))->toBeTrue()
@@ -84,13 +84,11 @@ it('can create a Rental using car_uuid and client_uuid', function () {
     $response = $this->postJson('/api/rentals', $payload);
 
     $response->assertStatus(201)
-        ->assertJsonPath('data.clientId', $client->id)
-        ->assertJsonPath('data.carId', $car->id);
+        ->assertJsonPath('data.clientUuid', $client->uuid)
+        ->assertJsonPath('data.carUuid', $car->uuid);
 
     $this->assertDatabaseHas('rentals', [
-        'client_id' => $client->id,
         'client_uuid' => $client->uuid,
-        'car_id' => $car->id,
         'car_uuid' => $car->uuid,
     ]);
 });
@@ -99,8 +97,8 @@ it('returns 401 when creating a rental without authentication', function () {
     $client = Client::factory()->create();
     $car = Car::factory()->create();
     $response = $this->postJson('/api/rentals', [
-        'client_id' => $client->id,
-        'car_id' => $car->id,
+        'client_uuid' => $client->uuid,
+        'car_uuid' => $car->uuid,
         'start_date' => now()->format('Y-m-d H:i:s'),
         'end_date' => now()->addDays(1)->format('Y-m-d H:i:s'),
         'day_price_cents' => 5000,

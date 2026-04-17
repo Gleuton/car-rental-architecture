@@ -9,10 +9,8 @@ use App\Http\Requests\Rental\StoreRentalRequest;
 readonly class CreateRentalDTO
 {
     private function __construct(
-        public ?int $carId,
-        public ?string $carUuid,
-        public ?int $clientId,
-        public ?string $clientUuid,
+        public string $carUuid,
+        public string $clientUuid,
         public int $dayPriceCents,
         public string $startDate,
         public string $endDate,
@@ -23,10 +21,8 @@ readonly class CreateRentalDTO
     public static function fromRequest(StoreRentalRequest $request): self
     {
         return new self(
-            $request->has('car_id') ? $request->integer('car_id') : null,
-            $request->input('car_uuid'),
-            $request->has('client_id') ? $request->integer('client_id') : null,
-            $request->input('client_uuid'),
+            $request->string('car_uuid')->toString(),
+            $request->string('client_uuid')->toString(),
             $request->integer('day_price_cents'),
             $request->input('start_date'),
             $request->input('end_date'),

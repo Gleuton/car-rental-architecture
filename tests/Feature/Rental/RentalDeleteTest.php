@@ -18,7 +18,7 @@ it('can delete a rental', function () {
     $response->assertStatus(204);
 
     $this->assertDatabaseMissing('rentals', [
-        'id' => $rental->id,
+        'uuid' => $rental->uuid,
     ]);
 });
 

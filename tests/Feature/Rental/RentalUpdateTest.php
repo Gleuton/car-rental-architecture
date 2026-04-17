@@ -40,7 +40,7 @@ it('can update rental data', function () {
         ->assertJsonMissingPath('data.id');
 
     $this->assertDatabaseHas('rentals', [
-        'id' => $rental->id,
+        'uuid' => $rental->uuid,
         'car_uuid' => $rental->car->uuid,
         'client_uuid' => $rental->client->uuid,
         'day_price_cents' => 7000,
@@ -87,14 +87,12 @@ it('can update rental using car_uuid and client_uuid', function () {
     ]);
 
     $response->assertStatus(200)
-        ->assertJsonPath('data.carId', $newCar->id)
-        ->assertJsonPath('data.clientId', $newClient->id);
+        ->assertJsonPath('data.carUuid', $newCar->uuid)
+        ->assertJsonPath('data.clientUuid', $newClient->uuid);
 
     $this->assertDatabaseHas('rentals', [
-        'id' => $rental->id,
-        'car_id' => $newCar->id,
+        'uuid' => $rental->uuid,
         'car_uuid' => $newCar->uuid,
-        'client_id' => $newClient->id,
         'client_uuid' => $newClient->uuid,
     ]);
 });

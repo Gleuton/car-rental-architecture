@@ -22,7 +22,9 @@ it('updates a rental successfully', function () {
     $existingRental = Rental::restore(
         1,
         1,
+        (string) Str::uuid(),
         1,
+        (string) Str::uuid(),
         5000,
         '2026-03-01 08:00:00',
         '2026-03-05 08:00:00',

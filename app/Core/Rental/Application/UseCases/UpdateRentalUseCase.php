@@ -30,7 +30,9 @@ readonly class UpdateRentalUseCase
         $updatedRental = Rental::restore(
             id: $rental->id,
             carId: $carId ?? $rental->carId,
+            carUuid: $dto->carUuid ?? $rental->carUuid,
             clientId: $clientId ?? $rental->clientId,
+            clientUuid: $dto->clientUuid ?? $rental->clientUuid,
             dayPriceCents: $dto->dayPriceCents ?? $rental->dayPriceCents,
             startDate: $dto->startDate ?? $rental->startDate,
             endDate: $dto->endDate ?? $rental->endDate,
@@ -44,10 +46,6 @@ readonly class UpdateRentalUseCase
 
     private function resolveCarId(UpdateRentalDTO $dto): ?int
     {
-        if ($dto->carId !== null) {
-            return $dto->carId;
-        }
-
         if ($dto->carUuid === null) {
             return null;
         }
@@ -59,9 +57,6 @@ readonly class UpdateRentalUseCase
 
     private function resolveClientId(UpdateRentalDTO $dto): ?int
     {
-        if ($dto->clientId !== null) {
-            return $dto->clientId;
-        }
 
         if ($dto->clientUuid === null) {
             return null;

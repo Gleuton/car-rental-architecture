@@ -14,8 +14,8 @@ class RentalResource
     {
         return [
             'uuid' => $rental->uuid,
-            'carId' => $rental->carId,
-            'clientId' => $rental->clientId,
+            'carUuid' => $rental->carUuid,
+            'clientUuid' => $rental->clientUuid,
             'dayPriceCents' => $rental->dayPriceCents,
             'startDate' => $rental->startDate,
             'endDate' => $rental->endDate,

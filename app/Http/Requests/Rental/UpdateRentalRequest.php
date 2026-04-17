@@ -20,9 +20,7 @@ class UpdateRentalRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'client_id' => ['nullable', 'integer'],
             'client_uuid' => ['nullable', 'uuid'],
-            'car_id' => ['nullable', 'integer'],
             'car_uuid' => ['nullable', 'uuid'],
             'start_date' => ['nullable', 'date_format:Y-m-d H:i:s'],
             'end_date' => ['nullable', 'date_format:Y-m-d H:i:s'],

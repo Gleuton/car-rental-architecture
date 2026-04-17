@@ -10,23 +10,18 @@ use App\Core\Rental\Domain\Entity\RentalFilter;
 use App\Core\Rental\Domain\Repositories\RentalRepositoryInterface;
 use App\Core\Shared\Application\Pagination\PaginatedResult;
 use App\Core\Shared\Infra\Adapters\LaravelPaginatorAdapter;
-use App\Models\Car as EloquentCar;
-use App\Models\Client as EloquentClient;
 use App\Models\Rental as EloquentRental;
 
 class EloquentRentalRepository implements RentalRepositoryInterface
 {
     public function save(DomainRental $rental): DomainRental
     {
-        $carUuid = $this->findCarUuidById($rental->carId);
-        $clientUuid = $this->findClientUuidById($rental->clientId);
-
         $model = EloquentRental::create([
             'uuid' => $rental->uuid,
             'car_id' => $rental->carId,
-            'car_uuid' => $carUuid,
+            'car_uuid' => $rental->carUuid,
             'client_id' => $rental->clientId,
-            'client_uuid' => $clientUuid,
+            'client_uuid' => $rental->clientUuid,
             'day_price_cents' => $rental->dayPriceCents,
             'start_date' => $rental->startDate,
             'end_date' => $rental->endDate,
@@ -51,16 +46,13 @@ class EloquentRentalRepository implements RentalRepositoryInterface
 
     public function update(DomainRental $rental): DomainRental
     {
-        $carUuid = $this->findCarUuidById($rental->carId);
-        $clientUuid = $this->findClientUuidById($rental->clientId);
-
-        $model = EloquentRental::findOrFail($rental->id);
+        $model = EloquentRental::query()->where('uuid', $rental->uuid)->firstOrFail();
 
         $model->update([
             'car_id' => $rental->carId,
-            'car_uuid' => $carUuid,
+            'car_uuid' => $rental->carUuid,
             'client_id' => $rental->clientId,
-            'client_uuid' => $clientUuid,
+            'client_uuid' => $rental->clientUuid,
             'day_price_cents' => $rental->dayPriceCents,
             'start_date' => $rental->startDate,
             'end_date' => $rental->endDate,
@@ -96,7 +88,9 @@ class EloquentRentalRepository implements RentalRepositoryInterface
         return DomainRental::restore(
             $model->id,
             $model->car_id,
+            $model->car_uuid,
             $model->client_id,
+            $model->client_uuid,
             $model->day_price_cents,
             $model->start_date->format('Y-m-d H:i:s'),
             $model->end_date->format('Y-m-d H:i:s'),
@@ -104,21 +98,5 @@ class EloquentRentalRepository implements RentalRepositoryInterface
             $model->final_km,
             $model->uuid,
         );
-    }
-
-    private function findCarUuidById(int $carId): string
-    {
-        /** @var EloquentCar $car */
-        $car = EloquentCar::query()->findOrFail($carId);
-
-        return $car->uuid;
-    }
-
-    private function findClientUuidById(int $clientId): string
-    {
-        /** @var EloquentClient $client */
-        $client = EloquentClient::query()->findOrFail($clientId);
-
-        return $client->uuid;
     }
 }

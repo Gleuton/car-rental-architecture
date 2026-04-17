@@ -25,10 +25,8 @@ class StoreRentalRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'client_id' => 'required_without:client_uuid|integer',
-            'client_uuid' => 'required_without:client_id|uuid',
-            'car_id' => 'required_without:car_uuid|integer',
-            'car_uuid' => 'required_without:car_id|uuid',
+            'client_uuid' => 'required|uuid',
+            'car_uuid' => 'required|uuid',
             'start_date' => 'required|string',
             'end_date' => 'required|string',
             'day_price_cents' => 'required|integer',

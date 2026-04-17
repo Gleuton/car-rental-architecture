@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Core\Rental\Application\DTOs;
 
-readonly class RentalIdDTO
+readonly class RentalUuidDTO
 {
     private function __construct(
         public string $uuid,

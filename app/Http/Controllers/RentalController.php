@@ -6,11 +6,11 @@ namespace App\Http\Controllers;
 
 use App\Core\Rental\Application\DTOs\CreateRentalDTO;
 use App\Core\Rental\Application\DTOs\FilterRentalDTO;
-use App\Core\Rental\Application\DTOs\RentalIdDTO;
+use App\Core\Rental\Application\DTOs\RentalUuidDTO;
 use App\Core\Rental\Application\DTOs\UpdateRentalDTO;
 use App\Core\Rental\Application\UseCases\CreateRentalUseCase;
 use App\Core\Rental\Application\UseCases\DeleteRentalUseCase;
-use App\Core\Rental\Application\UseCases\FindRentalByIdUseCase;
+use App\Core\Rental\Application\UseCases\FindRentalByUuidUseCase;
 use App\Core\Rental\Application\UseCases\ListRentalsUseCase;
 use App\Core\Rental\Application\UseCases\UpdateRentalUseCase;
 use App\Http\Requests\Rental\IndexRentalRequest;
@@ -24,7 +24,7 @@ class RentalController extends Controller
     public function __construct(
         private readonly CreateRentalUseCase $createRentalUseCase,
         private readonly ListRentalsUseCase $listRentalsUseCase,
-        private readonly FindRentalByIdUseCase $findRentalByIdUseCase,
+        private readonly FindRentalByUuidUseCase $findRentalByUuidUseCase,
         private readonly DeleteRentalUseCase $deleteRentalUseCase,
         private readonly UpdateRentalUseCase $updateRentalUseCase,
     ) {}
@@ -56,8 +56,8 @@ class RentalController extends Controller
      */
     public function show(string $rental): JsonResponse
     {
-        $dto = RentalIdDTO::fromUuid($rental);
-        $foundRental = $this->findRentalByIdUseCase->execute($dto);
+        $dto = RentalUuidDTO::fromUuid($rental);
+        $foundRental = $this->findRentalByUuidUseCase->execute($dto);
 
         return response()->json(['data' => RentalResource::toArray($foundRental)]);
     }
@@ -78,7 +78,7 @@ class RentalController extends Controller
      */
     public function destroy(string $rental): JsonResponse
     {
-        $dto = RentalIdDTO::fromUuid($rental);
+        $dto = RentalUuidDTO::fromUuid($rental);
 
         $this->deleteRentalUseCase->execute($dto);
 

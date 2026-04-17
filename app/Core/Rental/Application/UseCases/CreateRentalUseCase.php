@@ -27,7 +27,9 @@ readonly class CreateRentalUseCase
 
         $rental = Rental::new(
             $carId,
+            $dto->carUuid,
             $clientId,
+            $dto->clientUuid,
             $dto->dayPriceCents,
             $dto->startDate,
             $dto->endDate,
@@ -40,14 +42,6 @@ readonly class CreateRentalUseCase
 
     private function resolveCarId(CreateRentalDTO $dto): int
     {
-        if ($dto->carId !== null) {
-            return $dto->carId;
-        }
-
-        if ($dto->carUuid === null) {
-            return 0;
-        }
-
         $carId = EloquentCar::query()->where('uuid', $dto->carUuid)->value('id');
 
         return $carId === null ? 0 : (int) $carId;
@@ -55,13 +49,6 @@ readonly class CreateRentalUseCase
 
     private function resolveClientId(CreateRentalDTO $dto): int
     {
-        if ($dto->clientId !== null) {
-            return $dto->clientId;
-        }
-
-        if ($dto->clientUuid === null) {
-            return 0;
-        }
 
         $clientId = EloquentClient::query()->where('uuid', $dto->clientUuid)->value('id');
 

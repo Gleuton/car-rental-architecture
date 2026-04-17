@@ -28,7 +28,7 @@ it('can list all rentals returning with price calculated', function () {
         ->assertJsonCount(2, 'data')
         ->assertJsonStructure([
             'data' => [
-                '*' => ['uuid', 'carId', 'clientId', 'dayPriceCents', 'startDate', 'endDate', 'totalPrice', 'initialKm', 'finalKm'],
+                '*' => ['uuid', 'carUuid', 'clientUuid', 'dayPriceCents', 'startDate', 'endDate', 'totalPrice', 'initialKm', 'finalKm'],
             ],
             'meta' => [
                 'current_page',
