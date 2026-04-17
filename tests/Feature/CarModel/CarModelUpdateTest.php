@@ -37,7 +37,8 @@ it('can update name and brand in model car', function () {
     $response->assertStatus(200)
         ->assertJsonPath('data.uuid', $factoryModelCar->uuid)
         ->assertJsonPath('data.name', $newModelName)
-        ->assertJsonPath('data.brandUuid', $newBrand->uuid);
+        ->assertJsonPath('data.brandUuid', $newBrand->uuid)
+        ->assertJsonMissingPath('data.id');
 
     $this->assertDatabaseHas('car_models', [
         'id' => $factoryModelCar->id,
@@ -150,7 +151,8 @@ it('can update all data in model car', function () {
     $response->assertStatus(200)
         ->assertJsonPath('data.uuid', $factoryModelCar->uuid)
         ->assertJsonPath('data.name', $carModelDetails['name'])
-        ->assertJsonPath('data.brandUuid', $carModelDetails['brand_uuid']);
+        ->assertJsonPath('data.brandUuid', $carModelDetails['brand_uuid'])
+        ->assertJsonMissingPath('data.id');
 
     $this->assertDatabaseHas('car_models', [
         'id' => $factoryModelCar->id,
@@ -178,7 +180,8 @@ it('can send same name to update name in model car', function () {
 
     $response->assertStatus(200)
         ->assertJsonPath('data.uuid', $factoryModelCar->uuid)
-        ->assertJsonPath('data.name', 'Corolla');
+        ->assertJsonPath('data.name', 'Corolla')
+        ->assertJsonMissingPath('data.id');
 
     $this->assertDatabaseHas('car_models', [
         'id' => $factoryModelCar->id,
@@ -212,7 +215,8 @@ it('can update image only in model car', function () {
 
     $response->assertStatus(200)
         ->assertJsonPath('data.uuid', $factoryModelCar->uuid)
-        ->assertJsonPath('data.name', 'Corolla');
+        ->assertJsonPath('data.name', 'Corolla')
+        ->assertJsonMissingPath('data.id');
 
     $carModel = CarModel::find($factoryModelCar->id);
     expect($carModel?->image)->not->toBe('car_models/corolla.png');

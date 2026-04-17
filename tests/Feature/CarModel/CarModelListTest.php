@@ -36,7 +36,8 @@ it('can list car models', function () {
                 'total',
                 'last_page',
             ],
-        ]);
+        ])
+        ->assertJsonMissingPath('data.0.id');
 });
 
 it('can search car models by name', function () {

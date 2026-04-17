@@ -23,7 +23,8 @@ it('can show a model car', function () {
         ->assertJsonPath('data.doorsNumber', $carModel->doors)
         ->assertJsonPath('data.seatsNumber', $carModel->seats)
         ->assertJsonPath('data.airbags', $carModel->airbags)
-        ->assertJsonPath('data.abs', $carModel->abs);
+        ->assertJsonPath('data.abs', $carModel->abs)
+        ->assertJsonMissingPath('data.id');
 });
 
 it('returns 404 when tray show non-existent ModelCar', function () {

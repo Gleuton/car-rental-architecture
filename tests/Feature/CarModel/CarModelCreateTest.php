@@ -42,7 +42,8 @@ it('can create a CarModel', function () {
         ->assertJsonPath('data.doorsNumber', 4)
         ->assertJsonPath('data.seatsNumber', 5)
         ->assertJsonPath('data.airbags', true)
-        ->assertJsonPath('data.abs', true);
+        ->assertJsonPath('data.abs', true)
+        ->assertJsonMissingPath('data.id');
 
     $carModel = CarModel::where('name', $carModelName)->first();
 
