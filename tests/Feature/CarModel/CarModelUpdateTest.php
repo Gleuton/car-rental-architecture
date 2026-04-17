@@ -41,9 +41,8 @@ it('can update name and brand in model car', function () {
         ->assertJsonMissingPath('data.id');
 
     $this->assertDatabaseHas('car_models', [
-        'id' => $factoryModelCar->id,
+        'uuid' => $factoryModelCar->uuid,
         'name' => $newModelName,
-        'brand_id' => $newBrand->id,
         'brand_uuid' => $newBrand->uuid,
         'doors' => $factoryModelCar->doors,
         'seats' => $factoryModelCar->seats,
@@ -58,10 +57,9 @@ it('cant update name if other model has the same name in model car', function ()
     /** @var CarModel $modelCar */
     $modelCar = CarModel::factory()->create(['name' => 'Yaris']);
 
-    CarModel::create([
+    CarModel::factory()->create([
         'uuid' => (string) Str::uuid(),
         'name' => 'Corolla',
-        'brand_id' => $modelCar->brand_id,
         'brand_uuid' => $modelCar->brand_uuid,
         'image' => 'car_models/corolla.png',
         'doors' => 4,
@@ -95,7 +93,6 @@ it('cant update model car with a invalid brand', function () {
     /** @var CarModel $otherModelCar */
     CarModel::factory()->create([
         'name' => 'Corolla',
-        'brand_id' => $modelCar->brand_id,
         'brand_uuid' => $modelCar->brand_uuid,
     ]);
 
@@ -131,7 +128,7 @@ it('can update all data in model car', function () {
         'airbags' => false,
         'abs' => false,
         'image' => 'car_models/corolla.png',
-        'brand_id' => $oldBrand->id,
+        'brand_uuid' => $oldBrand->uuid,
     ]);
 
     $file = UploadedFile::fake()->create('yaris.png', 100, 'image/png');
@@ -155,9 +152,8 @@ it('can update all data in model car', function () {
         ->assertJsonMissingPath('data.id');
 
     $this->assertDatabaseHas('car_models', [
-        'id' => $factoryModelCar->id,
+        'uuid' => $factoryModelCar->uuid,
         'name' => $carModelDetails['name'],
-        'brand_id' => $newBrand->id,
         'brand_uuid' => $newBrand->uuid,
         'doors' => $carModelDetails['doors_number'],
         'seats' => $carModelDetails['seats_number'],
@@ -184,9 +180,8 @@ it('can send same name to update name in model car', function () {
         ->assertJsonMissingPath('data.id');
 
     $this->assertDatabaseHas('car_models', [
-        'id' => $factoryModelCar->id,
+        'uuid' => $factoryModelCar->uuid,
         'name' => 'Corolla',
-        'brand_id' => $factoryModelCar->brand_id,
         'brand_uuid' => $factoryModelCar->brand->uuid,
         'doors' => $factoryModelCar->doors,
         'seats' => $factoryModelCar->seats,
@@ -218,7 +213,7 @@ it('can update image only in model car', function () {
         ->assertJsonPath('data.name', 'Corolla')
         ->assertJsonMissingPath('data.id');
 
-    $carModel = CarModel::find($factoryModelCar->id);
+    $carModel = CarModel::query()->where('uuid', $factoryModelCar->uuid)->first();
     expect($carModel?->image)->not->toBe('car_models/corolla.png');
     Storage::disk('public')->assertExists($carModel?->image);
     Storage::disk('public')->assertMissing('car_models/corolla.png');

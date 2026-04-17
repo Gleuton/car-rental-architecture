@@ -28,8 +28,7 @@ it('can update allowed car data', function () {
         ->assertJsonPath('data.km', $carEloquent->km);
 
     $this->assertDatabaseHas('cars', [
-        'id' => $carEloquent->id,
-        'car_model_id' => $carEloquent->car_model_id,
+        'uuid' => $carEloquent->uuid,
         'car_model_uuid' => $carEloquent->carModel->uuid,
         'license_plate' => 'ABC-123',
         'color' => 'red',
@@ -57,7 +56,7 @@ it('can update license plate to the same value', function () {
         ->assertJsonPath('data.licensePlate', $licensePlate);
 
     $this->assertDatabaseHas('cars', [
-        'id' => $carEloquent->id,
+        'uuid' => $carEloquent->uuid,
         'license_plate' => $licensePlate,
     ]);
 });

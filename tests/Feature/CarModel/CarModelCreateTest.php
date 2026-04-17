@@ -47,7 +47,7 @@ it('can create a CarModel', function () {
 
     $carModel = CarModel::where('name', $carModelName)->first();
 
-    expect($carModel)->not->toBeNull()->and($carModel->brand_id)->toBe($brand->id)->and(
+    expect($carModel)->not->toBeNull()->and($carModel->brand_uuid)->toBe($brand->uuid)->and(
         $carModel->image
     )->not->toBeEmpty()
         ->and($carModel->uuid)->not->toBeNull()
@@ -57,7 +57,7 @@ it('can create a CarModel', function () {
     $this->assertDatabaseHas(
         'car_models',
         [
-            'brand_id' => $brand->id,
+            'uuid' => $carModel->uuid,
             'brand_uuid' => $brand->uuid,
             'name' => $carModelName,
             'doors' => 4,
@@ -180,8 +180,7 @@ it('returns domain error when car model already exists for the brand', function 
     /** @var Brand $brand */
     $brand = Brand::factory()->create();
 
-    CarModel::create([
-        'brand_id' => $brand->id,
+    CarModel::factory()->create([
         'brand_uuid' => $brand->uuid,
         'name' => 'Corolla',
         'image' => 'car_models/corolla.png',
