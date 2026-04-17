@@ -22,7 +22,7 @@ it('can update rental data', function () {
         'final_km' => 1500,
     ]);
 
-    $response = $this->putJson('/api/rentals/'.$rental->id, [
+    $response = $this->putJson('/api/rentals/'.$rental->uuid, [
         'day_price_cents' => 7000,
         'start_date' => '2026-03-10 08:00:00',
         'end_date' => '2026-03-12 08:00:00',
@@ -61,7 +61,7 @@ it('can partially update rental data', function () {
         'end_date' => '2026-03-05 08:00:00',
     ]);
 
-    $response = $this->putJson('/api/rentals/'.$rental->id, [
+    $response = $this->putJson('/api/rentals/'.$rental->uuid, [
         'day_price_cents' => 8000,
     ]);
 
@@ -81,7 +81,7 @@ it('can update rental using car_uuid and client_uuid', function () {
     /** @var Client $newClient */
     $newClient = Client::factory()->create();
 
-    $response = $this->putJson('/api/rentals/'.$rental->id, [
+    $response = $this->putJson('/api/rentals/'.$rental->uuid, [
         'car_uuid' => $newCar->uuid,
         'client_uuid' => $newClient->uuid,
     ]);
@@ -102,7 +102,7 @@ it('can update rental using car_uuid and client_uuid', function () {
 it('returns 404 when updating non-existent rental', function () {
     authenticateApi();
 
-    $response = $this->putJson('/api/rentals/999999', [
+    $response = $this->putJson('/api/rentals/'.(string) Str::uuid(), [
         'day_price_cents' => 7000,
     ]);
 
@@ -115,7 +115,7 @@ it('returns validation error for invalid update payload', function () {
     /** @var Rental $rental */
     $rental = Rental::factory()->create();
 
-    $response = $this->putJson('/api/rentals/'.$rental->id, [
+    $response = $this->putJson('/api/rentals/'.$rental->uuid, [
         'start_date' => 'invalid-date',
     ]);
 
@@ -125,6 +125,6 @@ it('returns validation error for invalid update payload', function () {
 
 it('returns 401 when updating a rental without authentication', function () {
     $rental = Rental::factory()->create();
-    $response = $this->putJson('/api/rentals/'.$rental->id, ['day_price_cents' => 7000]);
+    $response = $this->putJson('/api/rentals/'.$rental->uuid, ['day_price_cents' => 7000]);
     $response->assertStatus(401);
 });

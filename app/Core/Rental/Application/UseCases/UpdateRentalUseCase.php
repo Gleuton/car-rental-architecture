@@ -22,7 +22,7 @@ readonly class UpdateRentalUseCase
      */
     public function execute(UpdateRentalDTO $dto): Rental
     {
-        $rental = $this->repository->findById($dto->id);
+        $rental = $this->repository->findByUuid($dto->uuid);
 
         $carId = $this->resolveCarId($dto);
         $clientId = $this->resolveClientId($dto);

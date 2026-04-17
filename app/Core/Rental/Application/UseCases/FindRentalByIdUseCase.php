@@ -16,6 +16,6 @@ readonly class FindRentalByIdUseCase
 
     public function execute(RentalIdDTO $dto): Rental
     {
-        return $this->repository->findById($dto->id);
+        return $this->repository->findByUuid($dto->uuid);
     }
 }

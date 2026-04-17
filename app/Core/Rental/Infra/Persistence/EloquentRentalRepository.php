@@ -37,16 +37,16 @@ class EloquentRentalRepository implements RentalRepositoryInterface
         return $this->toDomain($model);
     }
 
-    public function findById(int $id): DomainRental
+    public function findByUuid(string $uuid): DomainRental
     {
-        $model = EloquentRental::findOrFail($id);
+        $model = EloquentRental::query()->where('uuid', $uuid)->firstOrFail();
 
         return $this->toDomain($model);
     }
 
-    public function delete(int $id): void
+    public function deleteByUuid(string $uuid): void
     {
-        EloquentRental::findOrFail($id)->delete();
+        EloquentRental::query()->where('uuid', $uuid)->firstOrFail()->delete();
     }
 
     public function update(DomainRental $rental): DomainRental

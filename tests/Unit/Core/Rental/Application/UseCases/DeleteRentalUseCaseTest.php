@@ -5,13 +5,15 @@ declare(strict_types=1);
 use App\Core\Rental\Application\DTOs\RentalIdDTO;
 use App\Core\Rental\Application\UseCases\DeleteRentalUseCase;
 use App\Core\Rental\Domain\Repositories\RentalRepositoryInterface;
+use Illuminate\Support\Str;
 
 it('deletes a rental successfully', function () {
-    $dto = RentalIdDTO::fromId(1);
+    $uuid = (string) Str::uuid();
+    $dto = RentalIdDTO::fromUuid($uuid);
 
     $repository = Mockery::mock(RentalRepositoryInterface::class);
-    $repository->shouldReceive('delete')
-        ->with(1)
+    $repository->shouldReceive('deleteByUuid')
+        ->with($uuid)
         ->once();
 
     $useCase = new DeleteRentalUseCase($repository);
@@ -21,11 +23,12 @@ it('deletes a rental successfully', function () {
 });
 
 it('propagates exception when rental is not found during delete', function () {
-    $dto = RentalIdDTO::fromId(999);
+    $uuid = (string) Str::uuid();
+    $dto = RentalIdDTO::fromUuid($uuid);
 
     $repository = Mockery::mock(RentalRepositoryInterface::class);
-    $repository->shouldReceive('delete')
-        ->with(999)
+    $repository->shouldReceive('deleteByUuid')
+        ->with($uuid)
         ->once()
         ->andThrow(new RuntimeException('Rental not found'));
 

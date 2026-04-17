@@ -6,9 +6,11 @@ use App\Core\Rental\Application\DTOs\RentalIdDTO;
 use App\Core\Rental\Application\UseCases\FindRentalByIdUseCase;
 use App\Core\Rental\Domain\Entity\Rental;
 use App\Core\Rental\Domain\Repositories\RentalRepositoryInterface;
+use Illuminate\Support\Str;
 
-it('finds a rental by ID successfully', function () {
-    $dto = RentalIdDTO::fromId(1);
+it('finds a rental by UUID successfully', function () {
+    $uuid = (string) Str::uuid();
+    $dto = RentalIdDTO::fromUuid($uuid);
 
     $repository = Mockery::mock(RentalRepositoryInterface::class);
 
@@ -23,8 +25,8 @@ it('finds a rental by ID successfully', function () {
         1500,
     );
 
-    $repository->shouldReceive('findById')
-        ->with(1)
+    $repository->shouldReceive('findByUuid')
+        ->with($uuid)
         ->once()
         ->andReturn($expectedRental);
 
@@ -35,11 +37,12 @@ it('finds a rental by ID successfully', function () {
 });
 
 it('propagates exception when rental is not found', function () {
-    $dto = RentalIdDTO::fromId(999);
+    $uuid = (string) Str::uuid();
+    $dto = RentalIdDTO::fromUuid($uuid);
 
     $repository = Mockery::mock(RentalRepositoryInterface::class);
-    $repository->shouldReceive('findById')
-        ->with(999)
+    $repository->shouldReceive('findByUuid')
+        ->with($uuid)
         ->once()
         ->andThrow(new RuntimeException('Rental not found'));
 

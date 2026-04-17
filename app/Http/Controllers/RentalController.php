@@ -61,31 +61,31 @@ class RentalController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(int $rentalId): JsonResponse
+    public function show(string $rental): JsonResponse
     {
-        $dto = RentalIdDTO::fromId($rentalId);
-        $rental = $this->findRentalByIdUseCase->execute($dto);
+        $dto = RentalIdDTO::fromUuid($rental);
+        $foundRental = $this->findRentalByIdUseCase->execute($dto);
 
-        return response()->json(['data' => $rental]);
+        return response()->json(['data' => $foundRental]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateRentalRequest $request, int $rentalId): JsonResponse
+    public function update(UpdateRentalRequest $request, string $rental): JsonResponse
     {
-        $dto = UpdateRentalDTO::fromRequest($request, $rentalId);
-        $rental = $this->updateRentalUseCase->execute($dto);
+        $dto = UpdateRentalDTO::fromRequest($request, $rental);
+        $updatedRental = $this->updateRentalUseCase->execute($dto);
 
-        return response()->json(['data' => $rental]);
+        return response()->json(['data' => $updatedRental]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(int $rentalId): JsonResponse
+    public function destroy(string $rental): JsonResponse
     {
-        $dto = RentalIdDTO::fromId($rentalId);
+        $dto = RentalIdDTO::fromUuid($rental);
 
         $this->deleteRentalUseCase->execute($dto);
 

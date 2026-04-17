@@ -9,7 +9,7 @@ use App\Http\Requests\Rental\UpdateRentalRequest;
 readonly class UpdateRentalDTO
 {
     private function __construct(
-        public int $id,
+        public string $uuid,
         public ?int $carId,
         public ?string $carUuid,
         public ?int $clientId,
@@ -21,10 +21,10 @@ readonly class UpdateRentalDTO
         public ?int $finalKm,
     ) {}
 
-    public static function fromRequest(UpdateRentalRequest $request, int $rentalId): self
+    public static function fromRequest(UpdateRentalRequest $request, string $rental): self
     {
         return new self(
-            id: $rentalId,
+            uuid: $rental,
             carId: $request->has('car_id') ? $request->integer('car_id') : null,
             carUuid: $request->input('car_uuid'),
             clientId: $request->has('client_id') ? $request->integer('client_id') : null,

@@ -10,13 +10,14 @@ use App\Http\Requests\Rental\UpdateRentalRequest;
 use Illuminate\Support\Str;
 
 it('updates a rental successfully', function () {
+    $uuid = (string) Str::uuid();
     $request = UpdateRentalRequest::create('/api/rentals/1', 'PUT', [
         'day_price_cents' => 7000,
         'start_date' => '2026-03-10 08:00:00',
         'end_date' => '2026-03-12 08:00:00',
     ]);
 
-    $dto = UpdateRentalDTO::fromRequest($request, 1);
+    $dto = UpdateRentalDTO::fromRequest($request, $uuid);
 
     $existingRental = Rental::restore(
         1,
@@ -30,8 +31,8 @@ it('updates a rental successfully', function () {
     );
 
     $repository = Mockery::mock(RentalRepositoryInterface::class);
-    $repository->shouldReceive('findById')
-        ->with(1)
+    $repository->shouldReceive('findByUuid')
+        ->with($uuid)
         ->once()
         ->andReturn($existingRental);
 
@@ -55,15 +56,16 @@ it('updates a rental successfully', function () {
 });
 
 it('propagates exception when rental is not found during update', function () {
+    $uuid = (string) Str::uuid();
     $request = UpdateRentalRequest::create('/api/rentals/999', 'PUT', [
         'day_price_cents' => 7000,
     ]);
 
-    $dto = UpdateRentalDTO::fromRequest($request, 999);
+    $dto = UpdateRentalDTO::fromRequest($request, $uuid);
 
     $repository = Mockery::mock(RentalRepositoryInterface::class);
-    $repository->shouldReceive('findById')
-        ->with(999)
+    $repository->shouldReceive('findByUuid')
+        ->with($uuid)
         ->once()
         ->andThrow(new RuntimeException('Rental not found'));
 
