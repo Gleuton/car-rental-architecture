@@ -7,18 +7,19 @@ namespace App\Core\Brand\Domain\Entity;
 use App\Core\Brand\Domain\Exceptions\BrandDomainException;
 use App\Core\Brand\Domain\ValueObjects\BrandLogo;
 use App\Core\Brand\Domain\ValueObjects\BrandName;
+use Illuminate\Support\Str;
 
 class Brand
 {
     private function __construct(
-        private readonly ?int $id,
+        private readonly string $uuid,
         private BrandName $name,
         private BrandLogo $image
     ) {}
 
-    public function id(): ?int
+    public function uuid(): string
     {
-        return $this->id;
+        return $this->uuid;
     }
 
     public function name(): string
@@ -56,22 +57,14 @@ class Brand
      */
     public static function new(string $name, string $image): self
     {
-        return new self(
-            null,
-            new BrandName($name),
-            new BrandLogo($image)
-        );
+        return new self((string) Str::uuid(), new BrandName($name), new BrandLogo($image));
     }
 
     /**
      * @throws BrandDomainException
      */
-    public static function restore(int $id, string $name, string $image): self
+    public static function restore(string $name, string $image, ?string $uuid = null): self
     {
-        return new self(
-            $id,
-            new BrandName($name),
-            new BrandLogo($image)
-        );
+        return new self($uuid ?? (string) Str::uuid(), new BrandName($name), new BrandLogo($image));
     }
 }

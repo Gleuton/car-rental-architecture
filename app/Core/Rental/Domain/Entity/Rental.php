@@ -7,6 +7,7 @@ namespace App\Core\Rental\Domain\Entity;
 use App\Core\Rental\Domain\Errors\RentalError;
 use App\Core\Rental\Domain\Exceptions\RentalDomainException;
 use DateTimeImmutable;
+use Illuminate\Support\Str;
 
 class Rental
 {
@@ -20,9 +21,9 @@ class Rental
      * @throws RentalDomainException
      */
     private function __construct(
-        public readonly ?int $id,
-        public readonly int $carId,
-        public readonly int $clientId,
+        public readonly string $uuid,
+        public readonly string $carUuid,
+        public readonly string $clientUuid,
         public readonly int $dayPriceCents,
         public readonly string $startDate,
         public readonly string $endDate,
@@ -42,8 +43,8 @@ class Rental
      * @throws RentalDomainException
      */
     public static function new(
-        int $carId,
-        int $clientId,
+        string $carUuid,
+        string $clientUuid,
         int $dayPriceCents,
         string $startDate,
         string $endDate,
@@ -51,9 +52,9 @@ class Rental
         int $finalKm,
     ): self {
         return new self(
-            null,
-            $carId,
-            $clientId,
+            (string) Str::uuid(),
+            $carUuid,
+            $clientUuid,
             $dayPriceCents,
             $startDate,
             $endDate,
@@ -66,19 +67,18 @@ class Rental
      * @throws RentalDomainException
      */
     public static function restore(
-        int $id,
-        int $carId,
-        int $clientId,
+        string $carUuid,
+        string $clientUuid,
         int $dayPriceCents,
         string $startDate,
         string $endDate,
         int $initialKm,
-        int $finalKm
+        int $finalKm, ?string $uuid = null,
     ): self {
         return new self(
-            $id,
-            $carId,
-            $clientId,
+            $uuid ?? (string) Str::uuid(),
+            $carUuid,
+            $clientUuid,
             $dayPriceCents,
             $startDate,
             $endDate,

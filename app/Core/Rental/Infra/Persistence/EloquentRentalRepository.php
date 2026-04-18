@@ -17,8 +17,9 @@ class EloquentRentalRepository implements RentalRepositoryInterface
     public function save(DomainRental $rental): DomainRental
     {
         $model = EloquentRental::create([
-            'car_id' => $rental->carId,
-            'client_id' => $rental->clientId,
+            'uuid' => $rental->uuid,
+            'car_uuid' => $rental->carUuid,
+            'client_uuid' => $rental->clientUuid,
             'day_price_cents' => $rental->dayPriceCents,
             'start_date' => $rental->startDate,
             'end_date' => $rental->endDate,
@@ -29,25 +30,25 @@ class EloquentRentalRepository implements RentalRepositoryInterface
         return $this->toDomain($model);
     }
 
-    public function findById(int $id): DomainRental
+    public function findByUuid(string $uuid): DomainRental
     {
-        $model = EloquentRental::findOrFail($id);
+        $model = EloquentRental::query()->where('uuid', $uuid)->firstOrFail();
 
         return $this->toDomain($model);
     }
 
-    public function delete(int $id): void
+    public function deleteByUuid(string $uuid): void
     {
-        EloquentRental::findOrFail($id)->delete();
+        EloquentRental::query()->where('uuid', $uuid)->firstOrFail()->delete();
     }
 
     public function update(DomainRental $rental): DomainRental
     {
-        $model = EloquentRental::findOrFail($rental->id);
+        $model = EloquentRental::query()->where('uuid', $rental->uuid)->firstOrFail();
 
         $model->update([
-            'car_id' => $rental->carId,
-            'client_id' => $rental->clientId,
+            'car_uuid' => $rental->carUuid,
+            'client_uuid' => $rental->clientUuid,
             'day_price_cents' => $rental->dayPriceCents,
             'start_date' => $rental->startDate,
             'end_date' => $rental->endDate,
@@ -81,14 +82,14 @@ class EloquentRentalRepository implements RentalRepositoryInterface
     private function toDomain(EloquentRental $model): DomainRental
     {
         return DomainRental::restore(
-            $model->id,
-            $model->car_id,
-            $model->client_id,
+            $model->car_uuid,
+            $model->client_uuid,
             $model->day_price_cents,
             $model->start_date->format('Y-m-d H:i:s'),
             $model->end_date->format('Y-m-d H:i:s'),
             $model->initial_km,
             $model->final_km,
+            $model->uuid,
         );
     }
 }

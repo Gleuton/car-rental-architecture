@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Models\Car;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Str;
 
 uses(RefreshDatabase::class);
 
@@ -12,24 +13,24 @@ it('can delete a car', function () {
     /** @var Car $car */
     $car = Car::factory()->create();
 
-    $response = $this->deleteJson('/api/cars/'.$car->id);
+    $response = $this->deleteJson('/api/cars/'.$car->uuid);
 
     $response->assertStatus(204);
 
     $this->assertDatabaseMissing('cars', [
-        'id' => $car->id,
+        'uuid' => $car->uuid,
     ]);
 });
 
 it('returns 404 when deleting a non-existent car', function () {
     authenticateApi();
-    $response = $this->deleteJson('/api/cars/999');
+    $response = $this->deleteJson('/api/cars/'.(string) Str::uuid());
 
     $response->assertStatus(404);
 });
 
 it('returns 401 when deleting a car without authentication', function () {
     $car = Car::factory()->create();
-    $response = $this->deleteJson('/api/cars/'.$car->id);
+    $response = $this->deleteJson('/api/cars/'.$car->uuid);
     $response->assertStatus(401);
 });

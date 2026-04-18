@@ -25,7 +25,7 @@ class StoreCarModelRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'brand_id' => 'required|integer',
+            'brand_uuid' => 'required|uuid',
             'name' => 'required|min:3',
             'image' => 'required|file|mimes:png,jpeg,jpg',
             'doors_number' => 'required|integer|between:2,5',

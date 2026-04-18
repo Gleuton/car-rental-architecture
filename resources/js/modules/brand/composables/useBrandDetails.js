@@ -1,27 +1,27 @@
 import {reactive} from 'vue';
-import {getBrandDetails} from '@modules/brand/services/brandApi.js';
+import {getBrandDetailsByUuid} from '@modules/brand/services/brandApi.js';
 
 export function useBrandDetails() {
     const detailsBrand = reactive({
-        id: null,
+        uuid: null,
         name: '',
         image: null,
         img_url: '',
     });
 
     function resetDetailsInfo() {
-        detailsBrand.id = null;
+        detailsBrand.uuid = null;
         detailsBrand.name = '';
         detailsBrand.image = null;
         detailsBrand.img_url = '';
     }
 
-    function getDetailsInfo(id) {
+    function getDetailsInfo(uuid) {
         resetDetailsInfo();
 
-        return getBrandDetails(id)
+        return getBrandDetailsByUuid(uuid)
             .then((response) => {
-                detailsBrand.id = response.data.data.id;
+                detailsBrand.uuid = response.data.data.uuid;
                 detailsBrand.name = response.data.data.name;
                 detailsBrand.image = response.data.data.image;
                 detailsBrand.img_url = '/storage/' + response.data.data.image;

@@ -13,9 +13,9 @@ interface RentalRepositoryInterface
 {
     public function save(Rental $rental): Rental;
 
-    public function findById(int $id): Rental;
+    public function findByUuid(string $uuid): Rental;
 
-    public function delete(int $id): void;
+    public function deleteByUuid(string $uuid): void;
 
     public function update(Rental $rental): Rental;
 

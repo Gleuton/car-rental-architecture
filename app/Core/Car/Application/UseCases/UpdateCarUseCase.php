@@ -22,7 +22,7 @@ readonly class UpdateCarUseCase
      */
     public function execute(UpdateCarDto $dto): Car
     {
-        $car = $this->repository->findById($dto->id);
+        $car = $this->repository->findByUuid($dto->uuid);
 
         if ($dto->licensePlate && ($car->licensePlate() !== $dto->licensePlate)) {
             $this->carAlreadyExistsRole->validate($dto->licensePlate);

@@ -12,25 +12,27 @@ beforeEach(function () {
 });
 
 it('does not throw exception when brand exists', function () {
-    $this->repository->shouldReceive('exists')
-        ->with(1)
+    $brandUuid = '11111111-1111-4111-8111-111111111111';
+
+    $this->repository->shouldReceive('existsByUuid')
+        ->with($brandUuid)
         ->once()
         ->andReturn(true);
 
-    $this->role->validate(1);
+    $this->role->validate($brandUuid);
 
     expect(true)->toBeTrue();
 });
 
 it('throws BrandDomainException with NOT_FOUND error when brand does not exist', function () {
-    $brandId = 1;
+    $brandUuid = '11111111-1111-4111-8111-111111111111';
     $this->repository
-        ->shouldReceive('exists')
-        ->with($brandId)
+        ->shouldReceive('existsByUuid')
+        ->with($brandUuid)
         ->once()
         ->andReturn(false);
 
-    $this->role->validate($brandId);
+    $this->role->validate($brandUuid);
 
 })->throws(
     BrandDomainException::class,

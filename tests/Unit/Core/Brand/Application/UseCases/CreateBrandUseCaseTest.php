@@ -49,9 +49,9 @@ it('creates a brand successfully when name is unique', function () {
         ->andReturn('brands/fiat_stored.png');
 
     $expectedBrand = DomainBrand::restore(
-        1,
         'Fiat',
-        'brands/fiat_stored.png'
+        'brands/fiat_stored.png',
+        '11111111-1111-4111-8111-111111111111'
     );
 
     $this->repository->shouldReceive('save')
@@ -60,8 +60,8 @@ it('creates a brand successfully when name is unique', function () {
 
     $result = $this->useCase->execute($dto);
 
-    expect($result->id())->toBe(1)
-        ->and($result->name())->toBe('Fiat')
+    expect($result->name())->toBe('Fiat')
+        ->and($result->uuid())->toBe($expectedBrand->uuid())
         ->and($result->imagePath())->toBe('brands/fiat_stored.png');
 });
 

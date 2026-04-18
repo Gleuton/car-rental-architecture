@@ -17,9 +17,9 @@ class CarModelAlreadyExistsRole
     /**
      * @throws CarModelDomainException
      */
-    public function validate(string $name, int $brandId): void
+    public function validate(string $name, string $brandUuid): void
     {
-        if ($this->repository->existsByNameAndBrandId($name, $brandId)) {
+        if ($this->repository->existsByNameAndBrandUuid($name, $brandUuid)) {
             throw new CarModelDomainException(CarModelError::ALREADY_EXISTS);
         }
     }

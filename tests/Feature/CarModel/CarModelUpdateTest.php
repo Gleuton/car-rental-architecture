@@ -9,6 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 uses(RefreshDatabase::class);
 
@@ -28,19 +29,21 @@ it('can update name and brand in model car', function () {
     $newModelName = 'Corolla';
     $data = [
         'name' => $newModelName,
-        'brand_id' => $newBrand->id,
+        'brand_uuid' => $newBrand->uuid,
     ];
 
-    $response = $this->putJson('/api/car-models/'.$factoryModelCar->id, $data);
+    $response = $this->putJson('/api/car-models/'.$factoryModelCar->uuid, $data);
 
     $response->assertStatus(200)
+        ->assertJsonPath('data.uuid', $factoryModelCar->uuid)
         ->assertJsonPath('data.name', $newModelName)
-        ->assertJsonPath('data.brandId', $newBrand->id);
+        ->assertJsonPath('data.brandUuid', $newBrand->uuid)
+        ->assertJsonMissingPath('data.id');
 
     $this->assertDatabaseHas('car_models', [
-        'id' => $factoryModelCar->id,
+        'uuid' => $factoryModelCar->uuid,
         'name' => $newModelName,
-        'brand_id' => $newBrand->id,
+        'brand_uuid' => $newBrand->uuid,
         'doors' => $factoryModelCar->doors,
         'seats' => $factoryModelCar->seats,
         'airbags' => (int) $factoryModelCar->airbags,
@@ -54,10 +57,15 @@ it('cant update name if other model has the same name in model car', function ()
     /** @var CarModel $modelCar */
     $modelCar = CarModel::factory()->create(['name' => 'Yaris']);
 
-    /** @var CarModel $otherModelCar */
     CarModel::factory()->create([
+        'uuid' => (string) Str::uuid(),
         'name' => 'Corolla',
-        'brand_id' => $modelCar->brand_id,
+        'brand_uuid' => $modelCar->brand_uuid,
+        'image' => 'car_models/corolla.png',
+        'doors' => 4,
+        'seats' => 5,
+        'airbags' => true,
+        'abs' => true,
     ]);
 
     $newModelName = 'Corolla';
@@ -65,7 +73,7 @@ it('cant update name if other model has the same name in model car', function ()
         'name' => $newModelName,
     ];
 
-    $response = $this->putJson('/api/car-models/'.$modelCar->id, $data);
+    $response = $this->putJson('/api/car-models/'.$modelCar->uuid, $data);
 
     $response->assertStatus(409)
         ->assertJson([
@@ -85,14 +93,14 @@ it('cant update model car with a invalid brand', function () {
     /** @var CarModel $otherModelCar */
     CarModel::factory()->create([
         'name' => 'Corolla',
-        'brand_id' => $modelCar->brand_id,
+        'brand_uuid' => $modelCar->brand_uuid,
     ]);
 
     $data = [
-        'brand_id' => 999,
+        'brand_uuid' => '99999999-9999-4999-8999-999999999999',
     ];
 
-    $response = $this->putJson('/api/car-models/'.$modelCar->id, $data);
+    $response = $this->putJson('/api/car-models/'.$modelCar->uuid, $data);
 
     $response->assertStatus(409)
         ->assertJson([
@@ -120,14 +128,14 @@ it('can update all data in model car', function () {
         'airbags' => false,
         'abs' => false,
         'image' => 'car_models/corolla.png',
-        'brand_id' => $oldBrand->id,
+        'brand_uuid' => $oldBrand->uuid,
     ]);
 
     $file = UploadedFile::fake()->create('yaris.png', 100, 'image/png');
 
     $carModelDetails = [
         'name' => 'Yaris',
-        'brand_id' => $newBrand->id,
+        'brand_uuid' => $newBrand->uuid,
         'doors_number' => 4,
         'seats_number' => 5,
         'airbags' => true,
@@ -135,16 +143,18 @@ it('can update all data in model car', function () {
         'image' => $file,
     ];
 
-    $response = $this->putJson('/api/car-models/'.$factoryModelCar->id, $carModelDetails);
+    $response = $this->putJson('/api/car-models/'.$factoryModelCar->uuid, $carModelDetails);
 
     $response->assertStatus(200)
+        ->assertJsonPath('data.uuid', $factoryModelCar->uuid)
         ->assertJsonPath('data.name', $carModelDetails['name'])
-        ->assertJsonPath('data.brandId', $carModelDetails['brand_id']);
+        ->assertJsonPath('data.brandUuid', $carModelDetails['brand_uuid'])
+        ->assertJsonMissingPath('data.id');
 
     $this->assertDatabaseHas('car_models', [
-        'id' => $factoryModelCar->id,
+        'uuid' => $factoryModelCar->uuid,
         'name' => $carModelDetails['name'],
-        'brand_id' => $carModelDetails['brand_id'],
+        'brand_uuid' => $newBrand->uuid,
         'doors' => $carModelDetails['doors_number'],
         'seats' => $carModelDetails['seats_number'],
         'airbags' => (int) $carModelDetails['airbags'],
@@ -162,15 +172,17 @@ it('can send same name to update name in model car', function () {
         'name' => 'Corolla',
     ];
 
-    $response = $this->putJson('/api/car-models/'.$factoryModelCar->id, $data);
+    $response = $this->putJson('/api/car-models/'.$factoryModelCar->uuid, $data);
 
     $response->assertStatus(200)
-        ->assertJsonPath('data.name', 'Corolla');
+        ->assertJsonPath('data.uuid', $factoryModelCar->uuid)
+        ->assertJsonPath('data.name', 'Corolla')
+        ->assertJsonMissingPath('data.id');
 
     $this->assertDatabaseHas('car_models', [
-        'id' => $factoryModelCar->id,
+        'uuid' => $factoryModelCar->uuid,
         'name' => 'Corolla',
-        'brand_id' => $factoryModelCar->brand_id,
+        'brand_uuid' => $factoryModelCar->brand->uuid,
         'doors' => $factoryModelCar->doors,
         'seats' => $factoryModelCar->seats,
         'airbags' => (int) $factoryModelCar->airbags,
@@ -194,12 +206,14 @@ it('can update image only in model car', function () {
         'image' => $file,
     ];
 
-    $response = $this->putJson('/api/car-models/'.$factoryModelCar->id, $data);
+    $response = $this->putJson('/api/car-models/'.$factoryModelCar->uuid, $data);
 
     $response->assertStatus(200)
-        ->assertJsonPath('data.name', 'Corolla');
+        ->assertJsonPath('data.uuid', $factoryModelCar->uuid)
+        ->assertJsonPath('data.name', 'Corolla')
+        ->assertJsonMissingPath('data.id');
 
-    $carModel = CarModel::find($factoryModelCar->id);
+    $carModel = CarModel::query()->where('uuid', $factoryModelCar->uuid)->first();
     expect($carModel?->image)->not->toBe('car_models/corolla.png');
     Storage::disk('public')->assertExists($carModel?->image);
     Storage::disk('public')->assertMissing('car_models/corolla.png');
@@ -219,6 +233,6 @@ it('returns 404 when updating non-existent model car', function () {
 
 it('returns 401 when updating a car model without authentication', function () {
     $carModel = CarModel::factory()->create();
-    $response = $this->putJson('/api/car-models/'.$carModel->id, ['name' => 'Updated']);
+    $response = $this->putJson('/api/car-models/'.$carModel->uuid, ['name' => 'Updated']);
     $response->assertStatus(401);
 });

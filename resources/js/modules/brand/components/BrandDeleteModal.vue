@@ -16,9 +16,9 @@ defineProps({
         modalId="deleteBrand"
     >
         <template #body>
-            <div v-if="deleteInfo?.id">
+            <div v-if="deleteInfo?.uuid">
                 <p>Tem certeza que deseja deletar a marca <b>{{ deleteInfo.name }}</b>?</p>
-                <input type="hidden" name="brand_id" id="brand_id" :value="deleteInfo.id">
+                <input type="hidden" name="brand_uuid" id="brand_uuid" :value="deleteInfo.uuid">
             </div>
         </template>
         <template #footer>
@@ -31,10 +31,10 @@ defineProps({
                     <span>Não</span>
                 </button>
             </div>
-            <div v-if="deleteInfo?.id">
+            <div v-if="deleteInfo?.uuid">
                 <button
                     type="button"
-                    @click="emit('confirm', deleteInfo.id)"
+                    @click="emit('confirm', deleteInfo.uuid)"
                     class="btn btn-danger">
                     <span>Sim</span>
                 </button>

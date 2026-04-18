@@ -25,7 +25,7 @@ class StoreCarRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'car_model_id' => 'required|integer|exists:car_models,id',
+            'car_model_uuid' => 'required|uuid',
             'license_plate' => 'required|string|max:10',
             'color' => 'required|string|max:255',
             'is_available' => 'boolean',

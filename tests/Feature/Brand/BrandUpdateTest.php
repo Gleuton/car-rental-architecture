@@ -8,6 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 uses(RefreshDatabase::class);
 
@@ -29,12 +30,14 @@ it('can update all data in brand', function () {
         'image' => $file,
     ];
 
-    $response = $this->putJson('/api/brands/'.$factoryBrand->id, $data);
+    $response = $this->putJson('/api/brands/'.$factoryBrand->uuid, $data);
 
     $response->assertStatus(200)
-        ->assertJsonPath('data.name', 'Toyota');
+        ->assertJsonPath('data.uuid', $factoryBrand->uuid)
+        ->assertJsonPath('data.name', 'Toyota')
+        ->assertJsonMissingPath('data.id');
 
-    $brand = Brand::find($factoryBrand->id);
+    $brand = Brand::query()->where('uuid', $factoryBrand->uuid)->first();
     expect($brand?->image)->not->toBe('brands/old.png');
     Storage::disk('public')->assertExists($brand?->image);
     Storage::disk('public')->assertMissing('brands/old.png');
@@ -54,11 +57,13 @@ it('can update name only in brand', function () {
         'name' => 'Toyota',
     ];
 
-    $response = $this->putJson('/api/brands/'.$factoryBrand->id, $data);
+    $response = $this->putJson('/api/brands/'.$factoryBrand->uuid, $data);
 
     $response->assertStatus(200)
+        ->assertJsonPath('data.uuid', $factoryBrand->uuid)
         ->assertJsonPath('data.name', 'Toyota')
-        ->assertJsonPath('data.image', 'brands/old.png');
+        ->assertJsonPath('data.image', 'brands/old.png')
+        ->assertJsonMissingPath('data.id');
 
     $this->assertDatabaseHas('brands', [
         'name' => 'Toyota',
@@ -79,12 +84,14 @@ it('can update image only in brand', function () {
         'image' => $file,
     ];
 
-    $response = $this->putJson('/api/brands/'.$factoryBrand->id, $data);
+    $response = $this->putJson('/api/brands/'.$factoryBrand->uuid, $data);
 
     $response->assertStatus(200)
-        ->assertJsonPath('data.name', 'Toyota_old');
+        ->assertJsonPath('data.uuid', $factoryBrand->uuid)
+        ->assertJsonPath('data.name', 'Toyota_old')
+        ->assertJsonMissingPath('data.id');
 
-    $brand = Brand::find($factoryBrand->id);
+    $brand = Brand::query()->where('uuid', $factoryBrand->uuid)->first();
     expect($brand?->image)->not->toBe('brands/old.png');
     Storage::disk('public')->assertExists($brand?->image);
     Storage::disk('public')->assertMissing('brands/old.png');
@@ -102,7 +109,7 @@ it('cannot update a brand with duplicate name', function () {
         'name' => 'Toyota',
     ];
 
-    $response = $this->putJson('/api/brands/'.$factoryBrand->id, $data);
+    $response = $this->putJson('/api/brands/'.$factoryBrand->uuid, $data);
 
     $response->assertStatus(409)
         ->assertJson([
@@ -119,13 +126,13 @@ it('returns 404 when updating non-existent brand', function () {
         'name' => 'Toyota',
     ];
 
-    $response = $this->putJson('/api/brands/999', $data);
+    $response = $this->putJson('/api/brands/'.(string) Str::uuid(), $data);
 
     $response->assertStatus(404);
 });
 
 it('returns 401 when updating a brand without authentication', function () {
     $brand = Brand::factory()->create(['name' => 'Toyota', 'image' => 'brands/old.png']);
-    $response = $this->putJson('/api/brands/'.$brand->id, ['name' => 'Updated']);
+    $response = $this->putJson('/api/brands/'.$brand->uuid, ['name' => 'Updated']);
     $response->assertStatus(401);
 });

@@ -17,6 +17,7 @@ class EloquentClientRepository implements ClientRepositoryInterface
     public function save(DomainClient $client): DomainClient
     {
         $model = EloquentClient::create([
+            'uuid' => $client->uuid,
             'name' => $client->name,
         ]);
 
@@ -43,16 +44,16 @@ class EloquentClientRepository implements ClientRepositoryInterface
         );
     }
 
-    public function findById(int $id): DomainClient
+    public function findByUuid(string $uuid): DomainClient
     {
-        $model = EloquentClient::findOrFail($id);
+        $model = EloquentClient::query()->where('uuid', $uuid)->firstOrFail();
 
         return $this->toDomainClient($model);
     }
 
     public function update(DomainClient $client): DomainClient
     {
-        $model = EloquentClient::findOrFail($client->id);
+        $model = EloquentClient::query()->where('uuid', $client->uuid)->firstOrFail();
 
         $model->update([
             'name' => $client->name,
@@ -61,17 +62,17 @@ class EloquentClientRepository implements ClientRepositoryInterface
         return $this->toDomainClient($model);
     }
 
-    public function delete(int $id): void
+    public function deleteByUuid(string $uuid): void
     {
-        $model = EloquentClient::findOrFail($id);
+        $model = EloquentClient::query()->where('uuid', $uuid)->firstOrFail();
         $model->delete();
     }
 
     private function toDomainClient(EloquentClient $model): DomainClient
     {
         return DomainClient::restore(
-            $model->id,
             $model->name,
+            $model->uuid,
         );
     }
 }

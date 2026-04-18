@@ -20,8 +20,8 @@ it('can list car models', function () {
         ->assertJsonStructure([
             'data' => [
                 '*' => [
-                    'id',
-                    'brandId',
+                    'uuid',
+                    'brandUuid',
                     'name',
                     'image',
                     'doorsNumber',
@@ -36,7 +36,8 @@ it('can list car models', function () {
                 'total',
                 'last_page',
             ],
-        ]);
+        ])
+        ->assertJsonMissingPath('data.0.id');
 });
 
 it('can search car models by name', function () {

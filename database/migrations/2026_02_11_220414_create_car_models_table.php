@@ -14,9 +14,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('car_models', static function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('brand_id')
-                ->constrained()
+            $table->uuid('uuid')->primary();
+            $table->foreignUuid('brand_uuid')
+                ->constrained('brands', 'uuid')
                 ->restrictOnDelete();
 
             $table->string('name');
@@ -27,6 +27,8 @@ return new class extends Migration
             $table->boolean('abs')->default(false);
 
             $table->timestamps();
+
+            $table->index('brand_uuid');
         });
     }
 

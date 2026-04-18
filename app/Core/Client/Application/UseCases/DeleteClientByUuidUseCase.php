@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace App\Core\Client\Application\UseCases;
 
-use App\Core\Client\Application\DTOs\ClientIdDTO;
+use App\Core\Client\Application\DTOs\ClientUuidDTO;
 use App\Core\Client\Domain\Repositories\ClientRepositoryInterface;
 
-readonly class DeleteClientUseCase
+readonly class DeleteClientByUuidUseCase
 {
     public function __construct(
         private ClientRepositoryInterface $repository
     ) {}
 
-    public function execute(ClientIdDTO $dto): void
+    public function execute(ClientUuidDTO $dto): void
     {
-        $this->repository->delete($dto->id);
+        $this->repository->deleteByUuid($dto->uuid);
     }
 }

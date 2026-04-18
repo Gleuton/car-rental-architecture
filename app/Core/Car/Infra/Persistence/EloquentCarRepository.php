@@ -17,7 +17,8 @@ class EloquentCarRepository implements CarRepositoryInterface
     public function save(Car $car): Car
     {
         $eloquentCar = EloquentCar::create([
-            'car_model_id' => $car->carModelId,
+            'uuid' => $car->uuid,
+            'car_model_uuid' => $car->carModelUuid,
             'license_plate' => $car->licensePlate(),
             'color' => $car->color(),
             'is_available' => $car->isAvailable(),
@@ -32,9 +33,9 @@ class EloquentCarRepository implements CarRepositoryInterface
         return EloquentCar::where('license_plate', $licensePlate)->exists();
     }
 
-    public function findById(int $id): Car
+    public function findByUuid(string $uuid): Car
     {
-        $eloquentCar = EloquentCar::findOrFail($id);
+        $eloquentCar = EloquentCar::query()->where('uuid', $uuid)->firstOrFail();
 
         return $this->toDomainCar($eloquentCar);
     }
@@ -61,29 +62,29 @@ class EloquentCarRepository implements CarRepositoryInterface
         );
     }
 
-    public function delete(int $id): void
+    public function deleteByUuid(string $uuid): void
     {
-        EloquentCar::findOrFail($id)->delete();
+        EloquentCar::query()->where('uuid', $uuid)->firstOrFail()->delete();
     }
 
     private function toDomainCar(EloquentCar $eloquentCar): Car
     {
         return Car::restore(
-            $eloquentCar->id,
-            $eloquentCar->car_model_id,
+            $eloquentCar->car_model_uuid,
             $eloquentCar->license_plate,
             $eloquentCar->color,
             (bool) $eloquentCar->is_available,
             $eloquentCar->km,
+            $eloquentCar->uuid,
         );
     }
 
     public function update(Car $car): Car
     {
-        $eloquentCar = EloquentCar::findOrFail($car->id);
+        $eloquentCar = EloquentCar::query()->where('uuid', $car->uuid)->firstOrFail();
 
         $eloquentCar->update([
-            'car_model_id' => $car->carModelId,
+            'car_model_uuid' => $car->carModelUuid,
             'license_plate' => $car->licensePlate(),
             'color' => $car->color(),
             'is_available' => $car->isAvailable(),

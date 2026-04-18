@@ -19,8 +19,11 @@ class ClientFactory extends Factory
      */
     public function definition(): array
     {
+        $name = $this->faker->name();
+
         return [
-            'name' => $this->faker->name(),
+            'uuid' => $this->faker->uuid(),
+            'name' => $name,
         ];
     }
 }

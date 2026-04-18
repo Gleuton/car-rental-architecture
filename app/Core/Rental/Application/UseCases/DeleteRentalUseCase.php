@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Core\Rental\Application\UseCases;
 
-use App\Core\Rental\Application\DTOs\RentalIdDTO;
+use App\Core\Rental\Application\DTOs\RentalUuidDTO;
 use App\Core\Rental\Domain\Repositories\RentalRepositoryInterface;
 
 readonly class DeleteRentalUseCase
@@ -13,8 +13,8 @@ readonly class DeleteRentalUseCase
         private RentalRepositoryInterface $repository,
     ) {}
 
-    public function execute(RentalIdDTO $dto): void
+    public function execute(RentalUuidDTO $dto): void
     {
-        $this->repository->delete($dto->id);
+        $this->repository->deleteByUuid($dto->uuid);
     }
 }

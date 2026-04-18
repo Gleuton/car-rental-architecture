@@ -49,6 +49,7 @@ class EloquentBrandRepository implements BrandRepositoryInterface
     public function save(DomainBrand $brand): DomainBrand
     {
         $model = EloquentBrand::create([
+            'uuid' => $brand->uuid(),
             'name' => $brand->name(),
             'image' => $brand->imagePath(),
         ]);
@@ -56,12 +57,9 @@ class EloquentBrandRepository implements BrandRepositoryInterface
         return $this->toDomainBrand($model);
     }
 
-    /**
-     * @throws BrandDomainException
-     */
-    public function findById(int $id): DomainBrand
+    public function findByUuid(string $uuid): DomainBrand
     {
-        $model = EloquentBrand::findOrFail($id);
+        $model = EloquentBrand::query()->where('uuid', $uuid)->firstOrFail();
 
         return $this->toDomainBrand($model);
     }
@@ -71,7 +69,7 @@ class EloquentBrandRepository implements BrandRepositoryInterface
      */
     public function update(DomainBrand $brand): DomainBrand
     {
-        $model = EloquentBrand::findOrFail($brand->id());
+        $model = EloquentBrand::query()->where('uuid', $brand->uuid())->firstOrFail();
 
         $model->update([
             'name' => $brand->name(),
@@ -81,15 +79,15 @@ class EloquentBrandRepository implements BrandRepositoryInterface
         return $this->toDomainBrand($model);
     }
 
-    public function delete(int $id): void
+    public function deleteByUuid(string $uuid): void
     {
-        $model = EloquentBrand::findOrFail($id);
+        $model = EloquentBrand::query()->where('uuid', $uuid)->firstOrFail();
         $model->delete();
     }
 
-    public function exists(int $brandId): bool
+    public function existsByUuid(string $brandUuid): bool
     {
-        return EloquentBrand::whereKey($brandId)->exists();
+        return EloquentBrand::query()->where('uuid', $brandUuid)->exists();
     }
 
     /**
@@ -98,9 +96,9 @@ class EloquentBrandRepository implements BrandRepositoryInterface
     private function toDomainBrand(EloquentBrand $model): DomainBrand
     {
         return DomainBrand::restore(
-            $model->id,
             $model->name,
-            $model->image
+            $model->image,
+            $model->uuid,
         );
     }
 }

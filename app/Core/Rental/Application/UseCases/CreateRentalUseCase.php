@@ -21,8 +21,8 @@ readonly class CreateRentalUseCase
     public function execute(CreateRentalDTO $dto): Rental
     {
         $rental = Rental::new(
-            $dto->carId,
-            $dto->clientId,
+            $dto->carUuid,
+            $dto->clientUuid,
             $dto->dayPriceCents,
             $dto->startDate,
             $dto->endDate,

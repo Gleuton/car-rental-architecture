@@ -22,18 +22,18 @@ beforeEach(function () {
 });
 
 it('updates license plate, color and availability', function () {
-    $carId = 1;
+    $carUuid = '11111111-1111-4111-8111-111111111111';
     $newLicensePlate = 'XYZ-9876';
     $newColor = 'Blue';
     $newIsAvailable = false;
 
     $existingCar = DomainCar::restore(
-        $carId,
-        1,
+        '22222222-2222-4222-8222-222222222222',
         'ABC-1234',
         'Red',
         true,
-        10000
+        10000,
+        $carUuid,
     );
 
     $request = Mockery::mock(UpdateCarRequest::class);
@@ -41,10 +41,10 @@ it('updates license plate, color and availability', function () {
     $request->shouldReceive('input')->with('color')->andReturn($newColor);
     $request->shouldReceive('input')->with('is_available')->andReturn($newIsAvailable);
 
-    $dto = UpdateCarDto::fromRequest($request, $carId);
+    $dto = UpdateCarDto::fromRequest($request, $carUuid);
 
-    $this->repository->shouldReceive('findById')
-        ->with($carId)
+    $this->repository->shouldReceive('findByUuid')
+        ->with($carUuid)
         ->once()
         ->andReturn($existingCar);
 
@@ -56,9 +56,9 @@ it('updates license plate, color and availability', function () {
     $this->repository->shouldReceive('update')
         ->once()
         ->with(
-            Mockery::on(static function (DomainCar $car) use ($carId, $newLicensePlate, $newColor, $newIsAvailable): bool {
-                return $car->id === $carId &&
-                    $car->carModelId === 1 &&
+            Mockery::on(static function (DomainCar $car) use ($carUuid, $newLicensePlate, $newColor, $newIsAvailable): bool {
+                return $car->uuid === $carUuid &&
+                    $car->carModelUuid === '22222222-2222-4222-8222-222222222222' &&
                     $car->licensePlate() === $newLicensePlate &&
                     $car->color() === $newColor &&
                     $car->isAvailable() === $newIsAvailable &&
@@ -66,12 +66,12 @@ it('updates license plate, color and availability', function () {
             })
         )
         ->andReturn(DomainCar::restore(
-            $carId,
-            1,
+            '22222222-2222-4222-8222-222222222222',
             $newLicensePlate,
             $newColor,
             $newIsAvailable,
-            10000
+            10000,
+            $carUuid,
         ));
 
     $result = $this->useCase->execute($dto);
@@ -79,21 +79,21 @@ it('updates license plate, color and availability', function () {
     expect($result->licensePlate())->toBe($newLicensePlate)
         ->and($result->color())->toBe($newColor)
         ->and($result->isAvailable())->toBe($newIsAvailable)
-        ->and($result->carModelId)->toBe(1)
+        ->and($result->carModelUuid)->toBe('22222222-2222-4222-8222-222222222222')
         ->and($result->km())->toBe(10000);
 });
 
 it('does not validate license plate when it remains the same', function () {
-    $carId = 1;
+    $carUuid = '11111111-1111-4111-8111-111111111111';
     $existingLicensePlate = 'ABC-1234';
 
     $existingCar = DomainCar::restore(
-        $carId,
-        1,
+        '22222222-2222-4222-8222-222222222222',
         $existingLicensePlate,
         'Red',
         true,
-        10000
+        10000,
+        $carUuid,
     );
 
     $request = Mockery::mock(UpdateCarRequest::class);
@@ -101,10 +101,10 @@ it('does not validate license plate when it remains the same', function () {
     $request->shouldReceive('input')->with('color')->andReturn('Blue');
     $request->shouldReceive('input')->with('is_available')->andReturn(null);
 
-    $dto = UpdateCarDto::fromRequest($request, $carId);
+    $dto = UpdateCarDto::fromRequest($request, $carUuid);
 
-    $this->repository->shouldReceive('findById')
-        ->with($carId)
+    $this->repository->shouldReceive('findByUuid')
+        ->with($carUuid)
         ->once()
         ->andReturn($existingCar);
 
@@ -114,12 +114,12 @@ it('does not validate license plate when it remains the same', function () {
     $this->repository->shouldReceive('update')
         ->once()
         ->andReturn(DomainCar::restore(
-            $carId,
-            1,
+            '22222222-2222-4222-8222-222222222222',
             $existingLicensePlate,
             'Blue',
             true,
-            10000
+            10000,
+            $carUuid,
         ));
 
     $result = $this->useCase->execute($dto);
@@ -128,16 +128,16 @@ it('does not validate license plate when it remains the same', function () {
 });
 
 it('throws exception when new license plate already exists', function () {
-    $carId = 1;
+    $carUuid = '11111111-1111-4111-8111-111111111111';
     $newLicensePlate = 'XYZ-9876';
 
     $existingCar = DomainCar::restore(
-        $carId,
-        1,
+        '22222222-2222-4222-8222-222222222222',
         'ABC-1234',
         'Red',
         true,
-        10000
+        10000,
+        $carUuid,
     );
 
     $request = Mockery::mock(UpdateCarRequest::class);
@@ -145,10 +145,10 @@ it('throws exception when new license plate already exists', function () {
     $request->shouldReceive('input')->with('color')->andReturn(null);
     $request->shouldReceive('input')->with('is_available')->andReturn(null);
 
-    $dto = UpdateCarDto::fromRequest($request, $carId);
+    $dto = UpdateCarDto::fromRequest($request, $carUuid);
 
-    $this->repository->shouldReceive('findById')
-        ->with($carId)
+    $this->repository->shouldReceive('findByUuid')
+        ->with($carUuid)
         ->once()
         ->andReturn($existingCar);
 
@@ -167,16 +167,16 @@ it('throws exception when new license plate already exists', function () {
 );
 
 it('updates only color when other fields are null', function () {
-    $carId = 1;
+    $carUuid = '11111111-1111-4111-8111-111111111111';
     $newColor = 'Green';
 
     $existingCar = DomainCar::restore(
-        $carId,
-        1,
+        '22222222-2222-4222-8222-222222222222',
         'ABC-1234',
         'Red',
         true,
-        10000
+        10000,
+        $carUuid,
     );
 
     $request = Mockery::mock(UpdateCarRequest::class);
@@ -184,10 +184,10 @@ it('updates only color when other fields are null', function () {
     $request->shouldReceive('input')->with('color')->andReturn($newColor);
     $request->shouldReceive('input')->with('is_available')->andReturn(null);
 
-    $dto = UpdateCarDto::fromRequest($request, $carId);
+    $dto = UpdateCarDto::fromRequest($request, $carUuid);
 
-    $this->repository->shouldReceive('findById')
-        ->with($carId)
+    $this->repository->shouldReceive('findByUuid')
+        ->with($carUuid)
         ->once()
         ->andReturn($existingCar);
 
@@ -197,22 +197,22 @@ it('updates only color when other fields are null', function () {
     $this->repository->shouldReceive('update')
         ->once()
         ->with(
-            Mockery::on(static function (DomainCar $car) use ($carId, $newColor): bool {
-                return $car->id === $carId &&
+            Mockery::on(static function (DomainCar $car) use ($carUuid, $newColor): bool {
+                return $car->uuid === $carUuid &&
                     $car->licensePlate() === 'ABC-1234' &&
                     $car->color() === $newColor &&
                     $car->km() === 10000 &&
-                    $car->carModelId === 1 &&
+                    $car->carModelUuid === '22222222-2222-4222-8222-222222222222' &&
                     $car->isAvailable() === true;
             })
         )
         ->andReturn(DomainCar::restore(
-            $carId,
-            1,
+            '22222222-2222-4222-8222-222222222222',
             'ABC-1234',
             $newColor,
             true,
-            10000
+            10000,
+            $carUuid,
         ));
 
     $result = $this->useCase->execute($dto);
@@ -223,16 +223,16 @@ it('updates only color when other fields are null', function () {
 });
 
 it('updates availability status successfully', function () {
-    $carId = 1;
+    $carUuid = '11111111-1111-4111-8111-111111111111';
     $newIsAvailable = false;
 
     $existingCar = DomainCar::restore(
-        $carId,
-        1,
+        '22222222-2222-4222-8222-222222222222',
         'ABC-1234',
         'Red',
         true,
-        10000
+        10000,
+        $carUuid,
     );
 
     $request = Mockery::mock(UpdateCarRequest::class);
@@ -240,10 +240,10 @@ it('updates availability status successfully', function () {
     $request->shouldReceive('input')->with('color')->andReturn(null);
     $request->shouldReceive('input')->with('is_available')->andReturn($newIsAvailable);
 
-    $dto = UpdateCarDto::fromRequest($request, $carId);
+    $dto = UpdateCarDto::fromRequest($request, $carUuid);
 
-    $this->repository->shouldReceive('findById')
-        ->with($carId)
+    $this->repository->shouldReceive('findByUuid')
+        ->with($carUuid)
         ->once()
         ->andReturn($existingCar);
 
@@ -253,12 +253,12 @@ it('updates availability status successfully', function () {
     $this->repository->shouldReceive('update')
         ->once()
         ->andReturn(DomainCar::restore(
-            $carId,
-            1,
+            '22222222-2222-4222-8222-222222222222',
             'ABC-1234',
             'Red',
             $newIsAvailable,
-            10000
+            10000,
+            $carUuid,
         ));
 
     $result = $this->useCase->execute($dto);

@@ -10,8 +10,8 @@ use Illuminate\Http\UploadedFile;
 readonly class UpdateCarModelDTO
 {
     private function __construct(
-        public int $id,
-        public ?int $brandId,
+        public string $uuid,
+        public ?string $brandUuid,
         public ?string $name,
         public ?UploadedFile $image,
         public ?int $doorsNumber,
@@ -20,11 +20,11 @@ readonly class UpdateCarModelDTO
         public ?bool $abs,
     ) {}
 
-    public static function fromRequest(UpdateCarModelRequest $request, int $id): self
+    public static function fromRequest(UpdateCarModelRequest $request, string $uuid): self
     {
         return new self(
-            $id,
-            $request->input('brand_id'),
+            $uuid,
+            $request->input('brand_uuid'),
             $request->input('name'),
             $request->file('image'),
             $request->input('doors_number'),

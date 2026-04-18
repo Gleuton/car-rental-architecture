@@ -24,7 +24,7 @@ class IndexRentalRequest extends FormRequest
             'start_date_to' => ['nullable', 'date_format:Y-m-d H:i:s'],
             'end_date_from' => ['nullable', 'date_format:Y-m-d H:i:s'],
             'end_date_to' => ['nullable', 'date_format:Y-m-d H:i:s'],
-            'order_by' => ['nullable', 'in:start_date,end_date,created_at,id'],
+            'order_by' => ['nullable', 'in:start_date,end_date,created_at'],
             'direction' => ['nullable', 'in:asc,desc'],
             'per_page' => ['nullable', 'integer', 'min:1', 'max:100'],
             'page' => ['nullable', 'integer', 'min:1'],

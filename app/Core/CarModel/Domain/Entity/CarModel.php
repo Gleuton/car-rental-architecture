@@ -6,6 +6,7 @@ namespace App\Core\CarModel\Domain\Entity;
 
 use App\Core\CarModel\Domain\Errors\CarModelError;
 use App\Core\CarModel\Domain\Exceptions\CarModelDomainException;
+use Illuminate\Support\Str;
 
 class CarModel
 {
@@ -13,8 +14,8 @@ class CarModel
      * @throws CarModelDomainException
      */
     private function __construct(
-        public readonly ?int $id,
-        public readonly int $brandId,
+        public readonly string $uuid,
+        public readonly string $brandUuid,
         public readonly string $name,
         public readonly string $image,
         public readonly int $doorsNumber,
@@ -30,7 +31,7 @@ class CarModel
      * @throws CarModelDomainException
      */
     public static function new(
-        int $brandId,
+        string $brandUuid,
         string $name,
         string $image,
         int $doorsNumber,
@@ -38,30 +39,30 @@ class CarModel
         bool $airbags,
         bool $abs
     ): self {
-        return new self(null, $brandId, $name, $image, $doorsNumber, $seatsNumber, $airbags, $abs);
+        return new self((string) Str::uuid(), $brandUuid, $name, $image, $doorsNumber, $seatsNumber, $airbags, $abs);
     }
 
     /**
      * @throws CarModelDomainException
      */
     public static function restore(
-        int $id,
-        int $brandId,
+        string $brandUuid,
         string $name,
         string $image,
         int $doorsNumber,
         int $seatsNumber,
         bool $airbags,
-        bool $abs
+        bool $abs,
+        ?string $uuid = null,
     ): self {
-        return new self($id, $brandId, $name, $image, $doorsNumber, $seatsNumber, $airbags, $abs);
+        return new self($uuid ?? (string) Str::uuid(), $brandUuid, $name, $image, $doorsNumber, $seatsNumber, $airbags, $abs);
     }
 
     /**
      * @throws CarModelDomainException
      */
     public function update(
-        ?int $brandId,
+        ?string $brandUuid,
         ?string $name,
         string $image,
         ?int $doorsNumber,
@@ -69,7 +70,7 @@ class CarModel
         ?bool $airbags,
         ?bool $abs
     ): self {
-        $newBrandId = $brandId ?? $this->brandId;
+        $newBrandUuid = $brandUuid ?? $this->brandUuid;
         $newName = $name ?? $this->name;
         $newDoorsNumber = $doorsNumber ?? $this->doorsNumber;
         $newSeatsNumber = $seatsNumber ?? $this->seatsNumber;
@@ -77,8 +78,8 @@ class CarModel
         $newAbs = $abs ?? $this->abs;
 
         return new self(
-            $this->id,
-            $newBrandId,
+            $this->uuid,
+            $newBrandUuid,
             $newName,
             $image,
             $newDoorsNumber,

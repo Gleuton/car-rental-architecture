@@ -14,6 +14,7 @@ use App\Http\Requests\Brand\UpdateBrandRequest;
 use Illuminate\Http\UploadedFile;
 
 beforeEach(function () {
+    $this->brandUuid = '11111111-1111-4111-8111-111111111111';
     $this->repository = Mockery::mock(BrandRepositoryInterface::class);
     $this->logoService = Mockery::mock(BrandLogoService::class);
     $this->uniqueRule = Mockery::mock(UniqueBrandNameRule::class);
@@ -24,7 +25,7 @@ beforeEach(function () {
         $this->logoService
     );
 
-    $this->existingBrand = Brand::restore(1, 'Fiat', 'brands/fiat.png');
+    $this->existingBrand = Brand::restore('Fiat', 'brands/fiat.png', $this->brandUuid);
 });
 
 it('updates a brand with name and image successfully', function () {
@@ -34,12 +35,12 @@ it('updates a brand with name and image successfully', function () {
     $requestMock->shouldReceive('file')->with('image')->andReturn($file);
     $requestMock->shouldReceive('input')->with('name')->andReturn('Fiat Updated');
 
-    $dto = UpdateBrandDTO::fromRequestId($requestMock, 1);
+    $dto = UpdateBrandDTO::fromRequestUuid($requestMock, $this->brandUuid);
 
     $this->uniqueRule->shouldReceive('validate')->with('Fiat Updated')->once();
 
-    $this->repository->shouldReceive('findById')
-        ->with(1)
+    $this->repository->shouldReceive('findByUuid')
+        ->with($this->brandUuid)
         ->once()
         ->andReturn($this->existingBrand);
 
@@ -48,7 +49,7 @@ it('updates a brand with name and image successfully', function () {
         ->once()
         ->andReturn('brands/fiat_updated.png');
 
-    $updatedBrand = Brand::restore(1, 'Fiat Updated', 'brands/fiat_updated.png');
+    $updatedBrand = Brand::restore('Fiat Updated', 'brands/fiat_updated.png', $this->brandUuid);
 
     $this->repository->shouldReceive('update')
         ->with(Mockery::type(Brand::class))
@@ -67,18 +68,18 @@ it('updates a brand name only without changing image', function () {
     $requestMock->shouldReceive('file')->with('image')->andReturn(null);
     $requestMock->shouldReceive('input')->with('name')->andReturn('Toyota');
 
-    $dto = UpdateBrandDTO::fromRequestId($requestMock, 1);
+    $dto = UpdateBrandDTO::fromRequestUuid($requestMock, $this->brandUuid);
 
     $this->uniqueRule->shouldReceive('validate')->with('Toyota')->once();
 
-    $this->repository->shouldReceive('findById')
-        ->with(1)
+    $this->repository->shouldReceive('findByUuid')
+        ->with($this->brandUuid)
         ->once()
         ->andReturn($this->existingBrand);
 
     $this->logoService->shouldNotReceive('replace');
 
-    $updatedBrand = Brand::restore(1, 'Toyota', 'brands/fiat.png');
+    $updatedBrand = Brand::restore('Toyota', 'brands/fiat.png', $this->brandUuid);
 
     $this->repository->shouldReceive('update')
         ->with(Mockery::type(Brand::class))
@@ -98,12 +99,12 @@ it('updates a brand image only without validating name uniqueness', function () 
     $requestMock->shouldReceive('file')->with('image')->andReturn($file);
     $requestMock->shouldReceive('input')->with('name')->andReturn(null);
 
-    $dto = UpdateBrandDTO::fromRequestId($requestMock, 1);
+    $dto = UpdateBrandDTO::fromRequestUuid($requestMock, $this->brandUuid);
 
     $this->uniqueRule->shouldNotReceive('validate');
 
-    $this->repository->shouldReceive('findById')
-        ->with(1)
+    $this->repository->shouldReceive('findByUuid')
+        ->with($this->brandUuid)
         ->once()
         ->andReturn($this->existingBrand);
 
@@ -112,7 +113,7 @@ it('updates a brand image only without validating name uniqueness', function () 
         ->once()
         ->andReturn('brands/fiat_new.png');
 
-    $updatedBrand = Brand::restore(1, 'Fiat', 'brands/fiat_new.png');
+    $updatedBrand = Brand::restore('Fiat', 'brands/fiat_new.png', $this->brandUuid);
 
     $this->repository->shouldReceive('update')
         ->with(Mockery::type(Brand::class))
@@ -131,10 +132,10 @@ it('throws exception when updating brand with duplicate name', function () {
     $requestMock->shouldReceive('file')->with('image')->andReturn(null);
     $requestMock->shouldReceive('input')->with('name')->andReturn('Toyota');
 
-    $dto = UpdateBrandDTO::fromRequestId($requestMock, 1);
+    $dto = UpdateBrandDTO::fromRequestUuid($requestMock, $this->brandUuid);
 
-    $this->repository->shouldReceive('findById')
-        ->with(1)
+    $this->repository->shouldReceive('findByUuid')
+        ->with($this->brandUuid)
         ->once()
         ->andReturn($this->existingBrand);
 
@@ -153,10 +154,10 @@ it('propagates exception when brand is not found during update', function () {
     $requestMock->shouldReceive('file')->with('image')->andReturn(null);
     $requestMock->shouldReceive('input')->with('name')->andReturn(null);
 
-    $dto = UpdateBrandDTO::fromRequestId($requestMock, 999);
+    $dto = UpdateBrandDTO::fromRequestUuid($requestMock, '99999999-9999-4999-8999-999999999999');
 
-    $this->repository->shouldReceive('findById')
-        ->with(999)
+    $this->repository->shouldReceive('findByUuid')
+        ->with('99999999-9999-4999-8999-999999999999')
         ->once()
         ->andThrow(new RuntimeException('Brand not found'));
 

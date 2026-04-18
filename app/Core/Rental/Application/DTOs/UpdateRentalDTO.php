@@ -9,9 +9,9 @@ use App\Http\Requests\Rental\UpdateRentalRequest;
 readonly class UpdateRentalDTO
 {
     private function __construct(
-        public int $id,
-        public ?int $carId,
-        public ?int $clientId,
+        public string $uuid,
+        public ?string $carUuid,
+        public ?string $clientUuid,
         public ?int $dayPriceCents,
         public ?string $startDate,
         public ?string $endDate,
@@ -19,17 +19,17 @@ readonly class UpdateRentalDTO
         public ?int $finalKm,
     ) {}
 
-    public static function fromRequest(UpdateRentalRequest $request, int $rentalId): self
+    public static function fromRequest(UpdateRentalRequest $request, string $rental): self
     {
         return new self(
-            id: $rentalId,
-            carId: $request->input('car_id'),
-            clientId: $request->input('client_id'),
-            dayPriceCents: $request->input('day_price_cents'),
+            uuid: $rental,
+            carUuid: $request->input('car_uuid'),
+            clientUuid: $request->input('client_uuid'),
+            dayPriceCents: $request->has('day_price_cents') ? $request->integer('day_price_cents') : null,
             startDate: $request->input('start_date'),
             endDate: $request->input('end_date'),
-            initialKm: $request->input('initial_km'),
-            finalKm: $request->input('final_km'),
+            initialKm: $request->has('initial_km') ? $request->integer('initial_km') : null,
+            finalKm: $request->has('final_km') ? $request->integer('final_km') : null,
         );
     }
 }

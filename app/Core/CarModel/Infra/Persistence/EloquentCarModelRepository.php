@@ -40,8 +40,9 @@ class EloquentCarModelRepository implements CarModelRepositoryInterface
      */
     public function save(DomainCarModel $carModel): DomainCarModel
     {
-        $model = EloquentCarModel::create([
-            'brand_id' => $carModel->brandId,
+        $eloquentCarModel = EloquentCarModel::create([
+            'uuid' => $carModel->uuid,
+            'brand_uuid' => $carModel->brandUuid,
             'name' => $carModel->name,
             'image' => $carModel->image,
             'doors' => $carModel->doorsNumber,
@@ -50,22 +51,27 @@ class EloquentCarModelRepository implements CarModelRepositoryInterface
             'abs' => $carModel->abs,
         ]);
 
-        return $this->toDomainCarModel($model);
+        return $this->toDomainCarModel($eloquentCarModel);
     }
 
-    public function existsByNameAndBrandId(string $name, int $brandId): bool
+    public function existsByNameAndBrandUuid(string $name, string $brandUuid): bool
     {
         return EloquentCarModel::where('name', $name)
-            ->where('brand_id', $brandId)
+            ->where('brand_uuid', $brandUuid)
             ->exists();
+    }
+
+    public function existsByUuid(string $uuid): bool
+    {
+        return EloquentCarModel::where('uuid', $uuid)->exists();
     }
 
     /**
      * @throws CarModelDomainException
      */
-    public function findById(int $id): DomainCarModel
+    public function findByUuid(string $uuid): DomainCarModel
     {
-        $modelEloquent = EloquentCarModel::findOrFail($id);
+        $modelEloquent = EloquentCarModel::query()->where('uuid', $uuid)->firstOrFail();
 
         return $this->toDomainCarModel($modelEloquent);
     }
@@ -75,15 +81,17 @@ class EloquentCarModelRepository implements CarModelRepositoryInterface
      */
     public function update(DomainCarModel $carModel): DomainCarModel
     {
-        $carModelEloquent = EloquentCarModel::findOrFail($carModel->id);
+        $carModelEloquent = EloquentCarModel::query()->where('uuid', $carModel->uuid)->firstOrFail();
+
         $carModelEloquent->update([
+            'brand_uuid' => $carModel->brandUuid,
             'name' => $carModel->name,
-            'brand_id' => $carModel->brandId,
             'image' => $carModel->image,
             'doors' => $carModel->doorsNumber,
             'seats' => $carModel->seatsNumber,
             'airbags' => $carModel->airbags,
             'abs' => $carModel->abs,
+            'uuid' => $carModel->uuid,
         ]);
 
         return $this->toDomainCarModel($carModelEloquent);
@@ -95,19 +103,19 @@ class EloquentCarModelRepository implements CarModelRepositoryInterface
     private function toDomainCarModel(EloquentCarModel $carModel): DomainCarModel
     {
         return DomainCarModel::restore(
-            $carModel->id,
-            $carModel->brand_id,
+            $carModel->brand_uuid,
             $carModel->name,
             $carModel->image,
             $carModel->doors,
             $carModel->seats,
             (bool) $carModel->airbags,
-            (bool) $carModel->abs
+            (bool) $carModel->abs,
+            $carModel->uuid,
         );
     }
 
-    public function delete(int $id): void
+    public function deleteByUuid(string $uuid): void
     {
-        EloquentCarModel::findOrFail($id)->delete();
+        EloquentCarModel::query()->where('uuid', $uuid)->firstOrFail()->delete();
     }
 }

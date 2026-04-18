@@ -24,11 +24,11 @@ it('can list cars one page', function () {
         ->assertJsonStructure([
             'data' => [
                 '*' => [
-                    'id',
+                    'uuid',
                     'licensePlate',
                     'color',
                     'km',
-                    'carModelId',
+                    'carModelUuid',
                 ],
             ],
             'meta' => [
@@ -103,21 +103,21 @@ it('returns empty when filtering by non-existent license plate', function () {
 it('can order cars by different fields', function () {
     Auth::guard('api')->login(User::factory()->create());
     CarModel::factory()->create();
-    Car::factory()->create(['id' => 1, 'license_plate' => 'ZZZ-9999']);
-    Car::factory()->create(['id' => 2, 'license_plate' => 'AAA-1111']);
-    Car::factory()->create(['id' => 3, 'license_plate' => 'MMM-5555']);
+    Car::factory()->create(['license_plate' => 'ZZZ-9999']);
+    Car::factory()->create(['license_plate' => 'AAA-1111']);
+    Car::factory()->create(['license_plate' => 'MMM-5555']);
 
-    $response = $this->getJson('/api/cars?order_by=id&direction=asc');
+    $response = $this->getJson('/api/cars?order_by=license_plate&direction=asc');
     $response->assertStatus(200)
-        ->assertJsonPath('data.0.id', 1)
-        ->assertJsonPath('data.1.id', 2)
-        ->assertJsonPath('data.2.id', 3);
+        ->assertJsonPath('data.0.licensePlate', 'AAA-1111')
+        ->assertJsonPath('data.1.licensePlate', 'MMM-5555')
+        ->assertJsonPath('data.2.licensePlate', 'ZZZ-9999');
 
-    $response = $this->getJson('/api/cars?order_by=id&direction=desc');
+    $response = $this->getJson('/api/cars?order_by=license_plate&direction=desc');
     $response->assertStatus(200)
-        ->assertJsonPath('data.0.id', 3)
-        ->assertJsonPath('data.1.id', 2)
-        ->assertJsonPath('data.2.id', 1);
+        ->assertJsonPath('data.0.licensePlate', 'ZZZ-9999')
+        ->assertJsonPath('data.1.licensePlate', 'MMM-5555')
+        ->assertJsonPath('data.2.licensePlate', 'AAA-1111');
 });
 
 it('uses default sorting when order_by is not provided', function () {
@@ -191,11 +191,11 @@ it('response contains all required car fields', function () {
         ->assertJsonStructure([
             'data' => [
                 '*' => [
-                    'id',
+                    'uuid',
                     'licensePlate',
                     'color',
                     'km',
-                    'carModelId',
+                    'carModelUuid',
                 ],
             ],
         ]);
@@ -219,7 +219,7 @@ it('can combine filter with sorting', function () {
     Car::factory()->create(['license_plate' => 'SORT-0003']);
     Car::factory()->count(10)->create();
 
-    $response = $this->getJson('/api/cars?license_plate=SORT&order_by=id&direction=desc');
+    $response = $this->getJson('/api/cars?license_plate=SORT&order_by=license_plate&direction=desc');
     $response->assertStatus(200)
         ->assertJsonCount(3, 'data')
         ->assertJsonPath('meta.total', 3);
@@ -311,13 +311,13 @@ it('returns correct total count with filters applied', function () {
         ->assertJsonPath('meta.total', 1);
 });
 
-it('can order by name field', function () {
+it('can order by license_plate field', function () {
     Auth::guard('api')->login(User::factory()->create());
     Car::factory()->create(['license_plate' => 'Z-PLATE']);
     Car::factory()->create(['license_plate' => 'A-PLATE']);
     Car::factory()->create(['license_plate' => 'M-PLATE']);
 
-    $response = $this->getJson('/api/cars?order_by=name&direction=asc');
+    $response = $this->getJson('/api/cars?order_by=license_plate&direction=asc');
     $response->assertStatus(200)
         ->assertJsonCount(3, 'data');
 });
@@ -339,10 +339,10 @@ it('first page shows different data than second page', function () {
     $response1 = $this->getJson('/api/cars?per_page=2&page=1');
     $response2 = $this->getJson('/api/cars?per_page=2&page=2');
 
-    $firstPageIds = array_map(static fn ($car) => $car['id'], $response1->json('data'));
-    $secondPageIds = array_map(static fn ($car) => $car['id'], $response2->json('data'));
+    $firstPageUuids = array_map(static fn ($car) => $car['uuid'], $response1->json('data'));
+    $secondPageUuids = array_map(static fn ($car) => $car['uuid'], $response2->json('data'));
 
-    expect($firstPageIds)->not->toBe($secondPageIds);
+    expect($firstPageUuids)->not->toBe($secondPageUuids);
 });
 
 it('provides pagination metadata for single item per page', function () {

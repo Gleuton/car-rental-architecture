@@ -35,14 +35,14 @@ beforeEach(function () {
 it('creates a car model successfully', function () {
     $file = UploadedFile::fake()->create('civic.png', 120);
     $request = Mockery::mock(StoreCarModelRequest::class);
-    $brandId = 1;
+    $brandUuid = '11111111-1111-4111-8111-111111111111';
     $modelName = 'Civic';
 
     $request->shouldReceive('file')
         ->with('image')
         ->andReturn($file);
 
-    $request->shouldReceive('input')->with('brand_id')->andReturn($brandId);
+    $request->shouldReceive('input')->with('brand_uuid')->andReturn($brandUuid);
     $request->shouldReceive('input')->with('name')->andReturn($modelName);
     $request->shouldReceive('input')->with('doors_number')->andReturn(4);
     $request->shouldReceive('input')->with('seats_number')->andReturn(5);
@@ -51,12 +51,12 @@ it('creates a car model successfully', function () {
 
     $this->existsBrand
         ->shouldReceive('validate')
-        ->with($brandId)
+        ->with($brandUuid)
         ->once();
 
     $this->carModelAlreadyRole
         ->shouldReceive('validate')
-        ->with($modelName, $brandId)
+        ->with($modelName, $brandUuid)
         ->once();
 
     $dto = CreateCarModelDTO::fromRequest($request);
@@ -75,8 +75,7 @@ it('creates a car model successfully', function () {
         ->once()
         ->with(
             Mockery::on(static function (DomainCarModel $carModel): bool {
-                return $carModel->id === null &&
-                    $carModel->brandId === 1 &&
+                return $carModel->brandUuid === '11111111-1111-4111-8111-111111111111' &&
                     $carModel->name === 'Civic' &&
                     $carModel->image === 'car_models/civic_stored.png' &&
                     $carModel->doorsNumber === 4 &&
@@ -89,8 +88,7 @@ it('creates a car model successfully', function () {
 
     $result = $this->useCase->execute($dto);
 
-    expect($result->id)->toBeNull()
-        ->and($result->brandId)->toBe(1)
+    expect($result->brandUuid)->toBe('11111111-1111-4111-8111-111111111111')
         ->and($result->name)->toBe('Civic')
         ->and($result->image)->toBe('car_models/civic_stored.png')
         ->and($result->doorsNumber)->toBe(4)
@@ -102,12 +100,12 @@ it('creates a car model successfully', function () {
 it('creates a car model with invalid brand', function () {
     $file = UploadedFile::fake()->create('civic.png', 120);
     $request = Mockery::mock(StoreCarModelRequest::class);
-    $brandId = 1;
+    $brandUuid = '11111111-1111-4111-8111-111111111111';
     $request->shouldReceive('file')
         ->with('image')
         ->andReturn($file);
 
-    $request->shouldReceive('input')->with('brand_id')->andReturn($brandId);
+    $request->shouldReceive('input')->with('brand_uuid')->andReturn($brandUuid);
     $request->shouldReceive('input')->with('name')->andReturn('Civic');
     $request->shouldReceive('input')->with('doors_number')->andReturn(4);
     $request->shouldReceive('input')->with('seats_number')->andReturn(5);
@@ -116,7 +114,7 @@ it('creates a car model with invalid brand', function () {
 
     $this->existsBrand
         ->shouldReceive('validate')
-        ->with($brandId)
+        ->with($brandUuid)
         ->once()
         ->andThrow(new BrandDomainException(BrandError::NOT_FOUND));
 
@@ -128,13 +126,13 @@ it('creates a car model with invalid brand', function () {
 it('creates a car model when car model already exists', function () {
     $file = UploadedFile::fake()->create('civic.png', 120);
     $request = Mockery::mock(StoreCarModelRequest::class);
-    $brandId = 1;
+    $brandUuid = '11111111-1111-4111-8111-111111111111';
     $name = 'Civic';
     $request->shouldReceive('file')
         ->with('image')
         ->andReturn($file);
 
-    $request->shouldReceive('input')->with('brand_id')->andReturn($brandId);
+    $request->shouldReceive('input')->with('brand_uuid')->andReturn($brandUuid);
     $request->shouldReceive('input')->with('name')->andReturn($name);
     $request->shouldReceive('input')->with('doors_number')->andReturn(4);
     $request->shouldReceive('input')->with('seats_number')->andReturn(5);
@@ -143,12 +141,12 @@ it('creates a car model when car model already exists', function () {
 
     $this->existsBrand
         ->shouldReceive('validate')
-        ->with($brandId)
+        ->with($brandUuid)
         ->once();
 
     $this->carModelAlreadyRole
         ->shouldReceive('validate')
-        ->with($name, $brandId)
+        ->with($name, $brandUuid)
         ->once()
         ->andThrow(new CarModelDomainException(CarModelError::ALREADY_EXISTS));
 
@@ -164,14 +162,14 @@ it('creates a car model when car model already exists', function () {
 it('creates a car model with a wrong seats number', function (int $seatsNumber) {
     $file = UploadedFile::fake()->create('civic.png', 120);
     $request = Mockery::mock(StoreCarModelRequest::class);
-    $brandId = 1;
+    $brandUuid = '11111111-1111-4111-8111-111111111111';
     $name = 'Civic';
 
     $request->shouldReceive('file')
         ->with('image')
         ->andReturn($file);
 
-    $request->shouldReceive('input')->with('brand_id')->andReturn($brandId);
+    $request->shouldReceive('input')->with('brand_uuid')->andReturn($brandUuid);
     $request->shouldReceive('input')->with('name')->andReturn($name);
     $request->shouldReceive('input')->with('doors_number')->andReturn(4);
     $request->shouldReceive('input')->with('seats_number')->andReturn($seatsNumber);
@@ -180,12 +178,12 @@ it('creates a car model with a wrong seats number', function (int $seatsNumber) 
 
     $this->existsBrand
         ->shouldReceive('validate')
-        ->with($brandId)
+        ->with($brandUuid)
         ->once();
 
     $this->carModelAlreadyRole
         ->shouldReceive('validate')
-        ->with($name, $brandId)
+        ->with($name, $brandUuid)
         ->once();
 
     $dto = CreateCarModelDTO::fromRequest($request);
@@ -219,14 +217,14 @@ it('creates a car model with a wrong seats number', function (int $seatsNumber) 
 it('creates a car model with a wrong doors number', function (int $doorsNumber) {
     $file = UploadedFile::fake()->create('civic.png', 120);
     $request = Mockery::mock(StoreCarModelRequest::class);
-    $brandId = 1;
+    $brandUuid = '11111111-1111-4111-8111-111111111111';
     $name = 'Civic';
 
     $request->shouldReceive('file')
         ->with('image')
         ->andReturn($file);
 
-    $request->shouldReceive('input')->with('brand_id')->andReturn($brandId);
+    $request->shouldReceive('input')->with('brand_uuid')->andReturn($brandUuid);
     $request->shouldReceive('input')->with('name')->andReturn($name);
     $request->shouldReceive('input')->with('doors_number')->andReturn($doorsNumber);
     $request->shouldReceive('input')->with('seats_number')->andReturn(7);
@@ -235,12 +233,12 @@ it('creates a car model with a wrong doors number', function (int $doorsNumber) 
 
     $this->existsBrand
         ->shouldReceive('validate')
-        ->with($brandId)
+        ->with($brandUuid)
         ->once();
 
     $this->carModelAlreadyRole
         ->shouldReceive('validate')
-        ->with($name, $brandId)
+        ->with($name, $brandUuid)
         ->once();
 
     $dto = CreateCarModelDTO::fromRequest($request);

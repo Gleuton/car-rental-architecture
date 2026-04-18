@@ -20,17 +20,17 @@ readonly class UpdateRentalUseCase
      */
     public function execute(UpdateRentalDTO $dto): Rental
     {
-        $rental = $this->repository->findById($dto->id);
+        $rental = $this->repository->findByUuid($dto->uuid);
 
         $updatedRental = Rental::restore(
-            id: $rental->id,
-            carId: $dto->carId ?? $rental->carId,
-            clientId: $dto->clientId ?? $rental->clientId,
+            carUuid: $dto->carUuid ?? $rental->carUuid,
+            clientUuid: $dto->clientUuid ?? $rental->clientUuid,
             dayPriceCents: $dto->dayPriceCents ?? $rental->dayPriceCents,
             startDate: $dto->startDate ?? $rental->startDate,
             endDate: $dto->endDate ?? $rental->endDate,
             initialKm: $dto->initialKm ?? $rental->initialKm,
             finalKm: $dto->finalKm ?? $rental->finalKm,
+            uuid: $rental->uuid,
         );
 
         return $this->repository->update($updatedRental);

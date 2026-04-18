@@ -25,7 +25,7 @@ class UpdateCarModelRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'brand_id' => 'nullable|integer',
+            'brand_uuid' => 'nullable|uuid',
             'name' => 'nullable|min:3',
             'image' => 'nullable|file|mimes:png,jpeg,jpg',
             'doors_number' => 'nullable|integer|between:2,5',

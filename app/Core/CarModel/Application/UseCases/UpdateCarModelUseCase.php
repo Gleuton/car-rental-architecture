@@ -28,20 +28,20 @@ readonly class UpdateCarModelUseCase
      */
     public function execute(UpdateCarModelDTO $dto): CarModel
     {
-        if ($dto->brandId) {
-            $this->existeBrandRole->validate($dto->brandId);
+        if ($dto->brandUuid) {
+            $this->existeBrandRole->validate($dto->brandUuid);
         }
 
-        $carModel = $this->repository->findById($dto->id);
+        $carModel = $this->repository->findByUuid($dto->uuid);
 
         if ($dto->name && ($dto->name !== $carModel->name)) {
-            $this->carModelAlreadyRole->validate($dto->name, $dto->brandId ?? $carModel->brandId);
+            $this->carModelAlreadyRole->validate($dto->name, $dto->brandUuid ?? $carModel->brandUuid);
         }
 
         $imagePath = $this->updateImage($dto, $carModel, $carModel->image);
 
         $newCarModel = $carModel->update(
-            $dto->brandId,
+            $dto->brandUuid,
             $dto->name,
             $imagePath,
             $dto->doorsNumber,

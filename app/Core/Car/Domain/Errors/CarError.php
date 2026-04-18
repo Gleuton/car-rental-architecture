@@ -15,6 +15,7 @@ enum CarError: int
     case INVALID_KM = 6007;
     case NOT_FOUND = 6008;
     case ALREADY_EXISTS = 6009;
+    case MODEL_NOT_FOUND = 6010;
 
     public function message(): string
     {
@@ -28,6 +29,7 @@ enum CarError: int
             self::INVALID_KM => 'Kilometers must be zero or positive',
             self::NOT_FOUND => 'Car not found',
             self::ALREADY_EXISTS => 'Car with this license plate already exists',
+            self::MODEL_NOT_FOUND => 'Car model not found',
         };
     }
 }

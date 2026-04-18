@@ -9,16 +9,16 @@ use App\Http\Requests\Car\UpdateCarRequest;
 readonly class UpdateCarDto
 {
     private function __construct(
-        public int $id,
+        public string $uuid,
         public ?string $licensePlate,
         public ?string $color,
         public ?bool $isAvailable,
     ) {}
 
-    public static function fromRequest(UpdateCarRequest $request, int $carId): self
+    public static function fromRequest(UpdateCarRequest $request, string $carUuid): self
     {
         return new self(
-            $carId,
+            $carUuid,
             $request->input('license_plate'),
             $request->input('color'),
             $request->input('is_available'),

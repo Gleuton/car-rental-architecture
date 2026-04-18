@@ -15,14 +15,14 @@ interface CarRepositoryInterface
 
     public function existsByLicensePlate(string $licensePlate): bool;
 
-    public function findById(int $id): Car;
+    public function findByUuid(string $uuid): Car;
 
     /**
      * @return PaginatedResult<CarCollection>
      */
     public function listCars(CarFilter $filter): PaginatedResult;
 
-    public function delete(int $id): void;
+    public function deleteByUuid(string $uuid): void;
 
     public function update(Car $car): Car;
 }

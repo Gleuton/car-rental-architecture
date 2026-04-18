@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Core\CarModel\Application\UseCases;
 
-use App\Core\CarModel\Application\DTOs\CarModelIdDTO;
+use App\Core\CarModel\Application\DTOs\CarModelUuidDTO;
 use App\Core\CarModel\Domain\Repositories\CarModelRepositoryInterface;
 use App\Core\Shared\Domain\Storage\FileStorageInterface;
 
@@ -15,12 +15,12 @@ readonly class DeleteCarModelUseCase
         private FileStorageInterface $storage
     ) {}
 
-    public function execute(CarModelIdDTO $brandDto): void
+    public function execute(CarModelUuidDTO $carModelDto): void
     {
-        $brand = $this->repository->findById($brandDto->id);
+        $carModel = $this->repository->findByUuid($carModelDto->uuid);
 
-        $this->storage->delete($brand->image);
+        $this->storage->delete($carModel->image);
 
-        $this->repository->delete($brandDto->id);
+        $this->repository->deleteByUuid($carModelDto->uuid);
     }
 }

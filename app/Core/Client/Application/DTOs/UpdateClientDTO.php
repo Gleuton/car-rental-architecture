@@ -9,14 +9,14 @@ use App\Http\Requests\Client\UpdateClientRequest;
 readonly class UpdateClientDTO
 {
     private function __construct(
-        public int $id,
+        public string $uuid,
         public ?string $name,
     ) {}
 
-    public static function fromRequest(UpdateClientRequest $request, int $clientId): self
+    public static function fromRequest(UpdateClientRequest $request, string $client): self
     {
         return new self(
-            id: $clientId,
+            uuid: $client,
             name: $request->input('name'),
         );
     }

@@ -24,7 +24,7 @@ readonly class UpdateBrandUseCase
      */
     public function execute(UpdateBrandDTO $brandDto): Brand
     {
-        $brand = $this->repository->findById($brandDto->id);
+        $brand = $this->repository->findByUuid($brandDto->uuid);
 
         if ($brandDto->name && $brandDto->name !== $brand->name()) {
             $this->uniqueBrandNameRule->validate($brandDto->name);

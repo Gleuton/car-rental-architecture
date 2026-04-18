@@ -5,19 +5,20 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Core\Brand\Domain\Exceptions\BrandDomainException;
-use App\Core\CarModel\Application\DTOs\CarModelIdDTO;
+use App\Core\CarModel\Application\DTOs\CarModelUuidDTO;
 use App\Core\CarModel\Application\DTOs\CreateCarModelDTO;
 use App\Core\CarModel\Application\DTOs\FilterCarModelDTO;
 use App\Core\CarModel\Application\DTOs\UpdateCarModelDTO;
 use App\Core\CarModel\Application\UseCases\CreateCarModelUseCase;
 use App\Core\CarModel\Application\UseCases\DeleteCarModelUseCase;
-use App\Core\CarModel\Application\UseCases\FindCarModelByIdUseCase;
+use App\Core\CarModel\Application\UseCases\FindCarModelByUuidUseCase;
 use App\Core\CarModel\Application\UseCases\ListCarModelsUseCase;
 use App\Core\CarModel\Application\UseCases\UpdateCarModelUseCase;
 use App\Core\CarModel\Domain\Exceptions\CarModelDomainException;
 use App\Http\Requests\CarModel\IndexCarModelRequest;
 use App\Http\Requests\CarModel\StoreCarModelRequest;
 use App\Http\Requests\CarModel\UpdateCarModelRequest;
+use App\Http\Resources\CarModelResource;
 use Illuminate\Http\JsonResponse;
 
 class CarModelController extends Controller
@@ -26,7 +27,7 @@ class CarModelController extends Controller
         private readonly ListCarModelsUseCase $listCarModels,
         private readonly CreateCarModelUseCase $createCarModel,
         private readonly UpdateCarModelUseCase $updateCarModel,
-        private readonly FindCarModelByIdUseCase $findCarModel,
+        private readonly FindCarModelByUuidUseCase $findCarModel,
         private readonly DeleteCarModelUseCase $deleteCarModel,
     ) {}
 
@@ -40,7 +41,7 @@ class CarModelController extends Controller
         $carModels = $this->listCarModels->execute($filters);
 
         return response()->json([
-            'data' => $carModels->items,
+            'data' => array_map(static fn ($carModel) => CarModelResource::toArray($carModel), $carModels->items->all()),
             'meta' => [
                 'current_page' => $carModels->page,
                 'per_page' => $carModels->perPage,
@@ -58,18 +59,18 @@ class CarModelController extends Controller
         $carModelDTO = CreateCarModelDTO::fromRequest($request);
         $carModel = $this->createCarModel->execute($carModelDTO);
 
-        return response()->json(['data' => $carModel]);
+        return response()->json(['data' => CarModelResource::toArray($carModel)]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(int $carModelId): JsonResponse
+    public function show(string $carModelUuid): JsonResponse
     {
-        $idDTO = CarModelIdDTO::fromId($carModelId);
-        $carModel = $this->findCarModel->execute($idDTO);
+        $uuidDTO = CarModelUuidDTO::fromUuid($carModelUuid);
+        $carModel = $this->findCarModel->execute($uuidDTO);
 
-        return response()->json(['data' => $carModel]);
+        return response()->json(['data' => CarModelResource::toArray($carModel)]);
     }
 
     /**
@@ -77,22 +78,22 @@ class CarModelController extends Controller
      *
      * @throws BrandDomainException|CarModelDomainException
      */
-    public function update(UpdateCarModelRequest $request, int $carModelId): JsonResponse
+    public function update(UpdateCarModelRequest $request, string $carModelUuid): JsonResponse
     {
-        $carModelDTO = UpdateCarModelDTO::fromRequest($request, $carModelId);
+        $carModelDTO = UpdateCarModelDTO::fromRequest($request, $carModelUuid);
         $carModel = $this->updateCarModel->execute($carModelDTO);
 
-        return response()->json(['data' => $carModel]);
+        return response()->json(['data' => CarModelResource::toArray($carModel)]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(int $carModelId): JsonResponse
+    public function destroy(string $carModelUuid): JsonResponse
     {
-        $idDTO = CarModelIdDTO::fromId($carModelId);
+        $uuidDTO = CarModelUuidDTO::fromUuid($carModelUuid);
 
-        $this->deleteCarModel->execute($idDTO);
+        $this->deleteCarModel->execute($uuidDTO);
 
         return response()->json([], 204);
     }

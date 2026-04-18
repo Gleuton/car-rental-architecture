@@ -8,12 +8,13 @@ use App\Core\Car\Domain\Exceptions\CarDomainException;
 use App\Core\Car\Domain\ValueObjects\Color;
 use App\Core\Car\Domain\ValueObjects\LicensePlate;
 use App\Core\Car\Domain\ValueObjects\Mileage;
+use Illuminate\Support\Str;
 
 class Car
 {
     private function __construct(
-        public readonly ?int $id,
-        public readonly int $carModelId,
+        public readonly string $uuid,
+        public readonly string $carModelUuid,
         private LicensePlate $licensePlate,
         private Color $color,
         private bool $available,
@@ -23,23 +24,23 @@ class Car
     /**
      * @throws CarDomainException
      */
-    public static function new(int $carModelId, string $licensePlate, string $color, bool $isAvailable, int $km): self
+    public static function new(string $carModelUuid, string $licensePlate, string $color, bool $isAvailable, int $km): self
     {
-        return new self(null, $carModelId, new LicensePlate($licensePlate), new Color($color), $isAvailable, new Mileage($km));
+        return new self((string) Str::uuid(), $carModelUuid, new LicensePlate($licensePlate), new Color($color), $isAvailable, new Mileage($km));
     }
 
     /**
      * @throws CarDomainException
      */
     public static function restore(
-        int $id,
-        int $carModelId,
+        string $carModelUuid,
         string $licensePlate,
         string $color,
         bool $isAvailable,
-        int $km
+        int $km,
+        ?string $uuid = null,
     ): self {
-        return new self($id, $carModelId, new LicensePlate($licensePlate), new Color($color), $isAvailable, new Mileage($km));
+        return new self($uuid ?? (string) Str::uuid(), $carModelUuid, new LicensePlate($licensePlate), new Color($color), $isAvailable, new Mileage($km));
     }
 
     /**

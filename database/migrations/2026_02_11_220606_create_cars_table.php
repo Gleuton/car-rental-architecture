@@ -14,9 +14,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('cars', static function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('car_model_id')
-                ->constrained()
+            $table->uuid('uuid')->primary();
+            $table->foreignUuid('car_model_uuid')
+                ->constrained('car_models', 'uuid')
                 ->restrictOnDelete();
 
             $table->string('license_plate');
@@ -26,7 +26,7 @@ return new class extends Migration
 
             $table->timestamps();
 
-            $table->index('car_model_id');
+            $table->index('car_model_uuid');
             $table->index('license_plate');
             $table->index('color');
         });

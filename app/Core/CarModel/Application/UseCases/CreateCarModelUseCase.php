@@ -28,15 +28,15 @@ readonly class CreateCarModelUseCase
      */
     public function execute(CreateCarModelDTO $dto): CarModel
     {
-        $this->existeBrandRole->validate($dto->brandId);
-        $this->carModelAlreadyRole->validate($dto->name, $dto->brandId);
+        $this->existeBrandRole->validate($dto->brandUuid);
+        $this->carModelAlreadyRole->validate($dto->name, $dto->brandUuid);
 
         $image = LaravelUploadedFileAdapter::adapt($dto->image);
         $imagePath = $this->storage->upload($image, 'car_models')->path;
 
         try {
             $carModel = CarModel::new(
-                $dto->brandId,
+                $dto->brandUuid,
                 $dto->name,
                 $imagePath,
                 $dto->doorsNumber,

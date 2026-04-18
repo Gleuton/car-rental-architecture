@@ -10,15 +10,15 @@ use Illuminate\Http\UploadedFile;
 readonly class UpdateBrandDTO
 {
     private function __construct(
-        public int $id,
+        public string $uuid,
         public ?string $name,
         public ?UploadedFile $imageFile = null
     ) {}
 
-    public static function fromRequestId(UpdateBrandRequest $request, int $brandId): self
+    public static function fromRequestUuid(UpdateBrandRequest $request, string $brandUuid): self
     {
         return new self(
-            id: $brandId,
+            uuid: $brandUuid,
             name: $request->input('name'),
             imageFile: $request->file('image')
         );
