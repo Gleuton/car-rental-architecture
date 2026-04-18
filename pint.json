@@ -10,6 +10,8 @@
         "phpdoc_align": false,
         "phpdoc_separation": true,
         "phpdoc_trim": true,
-        "single_quote": true
+        "single_quote": true,
+        "no_empty_statement": false,
+        "new_with_parentheses": true
     }
 }

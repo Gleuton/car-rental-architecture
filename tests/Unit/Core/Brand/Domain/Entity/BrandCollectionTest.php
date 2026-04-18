@@ -22,12 +22,12 @@ it('throws exception when adding invalid item to BrandCollection in constructor'
 })->throws(InvalidArgumentException::class, 'A BrandCollection só aceita instâncias de App\\Core\\Brand\\Domain\\Entity\\Brand.');
 
 it('throws exception when using add with invalid item', function () {
-    $collection = new BrandCollection;
+    $collection = new BrandCollection();
     $collection->add('invalid');
 })->throws(InvalidArgumentException::class, 'A BrandCollection só aceita instâncias de App\\Core\\Brand\\Domain\\Entity\\Brand.');
 
 it('can add a valid Brand to BrandCollection', function () {
-    $collection = new BrandCollection;
+    $collection = new BrandCollection();
     $brand = Brand::new('Fiat', 'fiat.png');
     $collection->add($brand);
 
@@ -36,7 +36,7 @@ it('can add a valid Brand to BrandCollection', function () {
 });
 
 it('returns true for isEmpty when BrandCollection is empty', function () {
-    $collection = new BrandCollection;
+    $collection = new BrandCollection();
 
     expect($collection->isEmpty())->toBeTrue();
 });
