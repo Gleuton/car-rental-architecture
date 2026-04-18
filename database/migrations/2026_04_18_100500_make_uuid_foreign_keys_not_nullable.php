@@ -18,18 +18,29 @@ return new class extends Migration
         $this->backfillCarCarModelUuid();
         $this->backfillRentalUuids();
 
-        Schema::table('car_models', static function (Blueprint $table): void {
-            $table->uuid('brand_uuid')->nullable(false)->change();
-        });
+        if (Schema::hasColumn('car_models', 'brand_uuid')) {
+            Schema::table('car_models', static function (Blueprint $table): void {
+                $table->uuid('brand_uuid')->nullable(false)->change();
+            });
+        }
 
-        Schema::table('cars', static function (Blueprint $table): void {
-            $table->uuid('car_model_uuid')->nullable(false)->change();
-        });
+        if (Schema::hasColumn('cars', 'car_model_uuid')) {
+            Schema::table('cars', static function (Blueprint $table): void {
+                $table->uuid('car_model_uuid')->nullable(false)->change();
+            });
+        }
 
-        Schema::table('rentals', static function (Blueprint $table): void {
-            $table->uuid('car_uuid')->nullable(false)->change();
-            $table->uuid('client_uuid')->nullable(false)->change();
-        });
+        if (Schema::hasColumn('rentals', 'car_uuid') || Schema::hasColumn('rentals', 'client_uuid')) {
+            Schema::table('rentals', static function (Blueprint $table): void {
+                if (Schema::hasColumn('rentals', 'car_uuid')) {
+                    $table->uuid('car_uuid')->nullable(false)->change();
+                }
+
+                if (Schema::hasColumn('rentals', 'client_uuid')) {
+                    $table->uuid('client_uuid')->nullable(false)->change();
+                }
+            });
+        }
     }
 
     /**
@@ -37,22 +48,37 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('car_models', static function (Blueprint $table): void {
-            $table->uuid('brand_uuid')->nullable()->change();
-        });
+        if (Schema::hasColumn('car_models', 'brand_uuid')) {
+            Schema::table('car_models', static function (Blueprint $table): void {
+                $table->uuid('brand_uuid')->nullable()->change();
+            });
+        }
 
-        Schema::table('cars', static function (Blueprint $table): void {
-            $table->uuid('car_model_uuid')->nullable()->change();
-        });
+        if (Schema::hasColumn('cars', 'car_model_uuid')) {
+            Schema::table('cars', static function (Blueprint $table): void {
+                $table->uuid('car_model_uuid')->nullable()->change();
+            });
+        }
 
-        Schema::table('rentals', static function (Blueprint $table): void {
-            $table->uuid('car_uuid')->nullable()->change();
-            $table->uuid('client_uuid')->nullable()->change();
-        });
+        if (Schema::hasColumn('rentals', 'car_uuid') || Schema::hasColumn('rentals', 'client_uuid')) {
+            Schema::table('rentals', static function (Blueprint $table): void {
+                if (Schema::hasColumn('rentals', 'car_uuid')) {
+                    $table->uuid('car_uuid')->nullable()->change();
+                }
+
+                if (Schema::hasColumn('rentals', 'client_uuid')) {
+                    $table->uuid('client_uuid')->nullable()->change();
+                }
+            });
+        }
     }
 
     private function backfillCarModelBrandUuid(): void
     {
+        if (! Schema::hasColumn('car_models', 'brand_id') || ! Schema::hasColumn('car_models', 'brand_uuid')) {
+            return;
+        }
+
         DB::table('car_models')
             ->select('id', 'brand_id')
             ->whereNull('brand_uuid')
@@ -78,6 +104,10 @@ return new class extends Migration
 
     private function backfillCarCarModelUuid(): void
     {
+        if (! Schema::hasColumn('cars', 'car_model_id') || ! Schema::hasColumn('cars', 'car_model_uuid')) {
+            return;
+        }
+
         DB::table('cars')
             ->select('id', 'car_model_id')
             ->whereNull('car_model_uuid')
@@ -103,6 +133,10 @@ return new class extends Migration
 
     private function backfillRentalUuids(): void
     {
+        if (! Schema::hasColumn('rentals', 'car_id') || ! Schema::hasColumn('rentals', 'client_id') || ! Schema::hasColumn('rentals', 'car_uuid') || ! Schema::hasColumn('rentals', 'client_uuid')) {
+            return;
+        }
+
         DB::table('rentals')
             ->select('id', 'car_id', 'client_id')
             ->where(function ($query): void {

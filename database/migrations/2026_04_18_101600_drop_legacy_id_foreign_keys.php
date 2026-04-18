@@ -16,10 +16,6 @@ return new class extends Migration
     {
         $driver = DB::getDriverName();
 
-        if ($driver === 'sqlite') {
-            return;
-        }
-
         if (Schema::hasColumn('car_models', 'brand_id')) {
             Schema::table('car_models', static function (Blueprint $table) use ($driver): void {
                 if ($driver !== 'sqlite') {

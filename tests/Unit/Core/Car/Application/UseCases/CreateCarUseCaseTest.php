@@ -9,6 +9,7 @@ use App\Core\Car\Domain\Errors\CarError;
 use App\Core\Car\Domain\Exceptions\CarDomainException;
 use App\Core\Car\Domain\Repositories\CarRepositoryInterface;
 use App\Core\Car\Domain\Roles\CarAlreadyExistsRole;
+use App\Core\Car\Domain\Roles\ExistsCarModelRole;
 use App\Http\Requests\Car\StoreCarRequest;
 use App\Models\Brand;
 use App\Models\CarModel;
@@ -48,10 +49,12 @@ function createPersistedCarModelForTests(): object
 beforeEach(function () {
     $this->repository = Mockery::mock(CarRepositoryInterface::class);
     $this->carAlreadyExistsRole = Mockery::mock(CarAlreadyExistsRole::class);
+    $this->existsCarModelRole = Mockery::mock(ExistsCarModelRole::class);
 
     $this->useCase = new CreateCarUseCase(
         $this->repository,
-        $this->carAlreadyExistsRole
+        $this->carAlreadyExistsRole,
+        $this->existsCarModelRole
     );
 });
 
@@ -72,6 +75,11 @@ it('creates a car successfully', function () {
     $this->carAlreadyExistsRole
         ->shouldReceive('validate')
         ->with($licensePlate)
+        ->once();
+
+    $this->existsCarModelRole
+        ->shouldReceive('validate')
+        ->with($carModel->uuid)
         ->once();
 
     $dto = CreateCarDTO::fromRequest($request);
@@ -121,6 +129,8 @@ it('throws exception when car with license plate already exists', function () {
         ->once()
         ->andThrow(new CarDomainException(CarError::ALREADY_EXISTS));
 
+    $this->existsCarModelRole->shouldNotReceive('validate');
+
     $dto = CreateCarDTO::fromRequest($request);
 
     $this->useCase->execute($dto);
@@ -145,6 +155,8 @@ it('validates license plate before creating car', function () {
         ->with($licensePlate)
         ->once()
         ->andThrow(new CarDomainException(CarError::ALREADY_EXISTS));
+
+    $this->existsCarModelRole->shouldNotReceive('validate');
 
     $this->repository->shouldNotReceive('save');
 

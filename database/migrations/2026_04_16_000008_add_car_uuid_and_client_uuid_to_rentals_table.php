@@ -14,11 +14,23 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (
+            (Schema::hasColumn('rentals', 'car_uuid') && Schema::hasColumn('rentals', 'client_uuid'))
+            || (! Schema::hasColumn('rentals', 'car_id') && ! Schema::hasColumn('rentals', 'client_id'))
+        ) {
+            return;
+        }
+
         Schema::table('rentals', static function (Blueprint $table): void {
-            $table->uuid('car_uuid')->nullable()->after('car_id');
-            $table->uuid('client_uuid')->nullable()->after('client_id');
-            $table->index('car_uuid');
-            $table->index('client_uuid');
+            if (! Schema::hasColumn('rentals', 'car_uuid')) {
+                $table->uuid('car_uuid')->nullable()->after('car_id');
+                $table->index('car_uuid');
+            }
+
+            if (! Schema::hasColumn('rentals', 'client_uuid')) {
+                $table->uuid('client_uuid')->nullable()->after('client_id');
+                $table->index('client_uuid');
+            }
         });
 
         DB::table('rentals')
@@ -76,12 +88,34 @@ return new class extends Migration
      */
     public function down(): void
     {
+        if (! Schema::hasColumn('rentals', 'car_uuid') && ! Schema::hasColumn('rentals', 'client_uuid')) {
+            return;
+        }
+
         Schema::table('rentals', static function (Blueprint $table): void {
-            $table->dropForeign(['car_uuid']);
-            $table->dropForeign(['client_uuid']);
-            $table->dropIndex(['car_uuid']);
-            $table->dropIndex(['client_uuid']);
-            $table->dropColumn(['car_uuid', 'client_uuid']);
+            if (Schema::hasColumn('rentals', 'car_uuid')) {
+                $table->dropForeign(['car_uuid']);
+                $table->dropIndex(['car_uuid']);
+            }
+
+            if (Schema::hasColumn('rentals', 'client_uuid')) {
+                $table->dropForeign(['client_uuid']);
+                $table->dropIndex(['client_uuid']);
+            }
+
+            $columns = [];
+
+            if (Schema::hasColumn('rentals', 'car_uuid')) {
+                $columns[] = 'car_uuid';
+            }
+
+            if (Schema::hasColumn('rentals', 'client_uuid')) {
+                $columns[] = 'client_uuid';
+            }
+
+            if ($columns !== []) {
+                $table->dropColumn($columns);
+            }
         });
     }
 };

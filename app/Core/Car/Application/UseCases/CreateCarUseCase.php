@@ -9,12 +9,14 @@ use App\Core\Car\Domain\Entity\Car;
 use App\Core\Car\Domain\Exceptions\CarDomainException;
 use App\Core\Car\Domain\Repositories\CarRepositoryInterface;
 use App\Core\Car\Domain\Roles\CarAlreadyExistsRole;
+use App\Core\Car\Domain\Roles\ExistsCarModelRole;
 
 readonly class CreateCarUseCase
 {
     public function __construct(
         private CarRepositoryInterface $repository,
         private CarAlreadyExistsRole $carAlreadyExistsRole,
+        private ExistsCarModelRole $existsCarModelRole,
     ) {}
 
     /**
@@ -23,6 +25,7 @@ readonly class CreateCarUseCase
     public function execute(CreateCarDTO $dto): Car
     {
         $this->carAlreadyExistsRole->validate($dto->licensePlate);
+        $this->existsCarModelRole->validate($dto->carModelUuid);
 
         $car = Car::new(
             $dto->carModelUuid,

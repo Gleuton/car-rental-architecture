@@ -61,6 +61,11 @@ class EloquentCarModelRepository implements CarModelRepositoryInterface
             ->exists();
     }
 
+    public function existsByUuid(string $uuid): bool
+    {
+        return EloquentCarModel::where('uuid', $uuid)->exists();
+    }
+
     /**
      * @throws CarModelDomainException
      */

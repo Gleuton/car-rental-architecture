@@ -14,7 +14,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('clients', static function (Blueprint $table) {
-            $table->id();
+            $table->uuid('uuid')->primary();
             $table->string('name');
             $table->timestamps();
         });

@@ -205,7 +205,7 @@ it('creates a Car with default is_available and km values when not provided', fu
         ->and(Str::isUuid($car->uuid))->toBeTrue();
 });
 
-it('returns 404 when car_model_uuid does not exist', function () {
+it('throw a error when car_model_uuid does not exist', function () {
     authenticateApi();
 
     $data = [
@@ -218,7 +218,14 @@ it('returns 404 when car_model_uuid does not exist', function () {
 
     $response = $this->postJson('/api/cars', $data);
 
-    $response->assertStatus(404);
+    $response->assertStatus(409)
+        ->assertJson([
+            'type' => 'DOMAIN_ERROR',
+            'domain' => 'car',
+            'code' => 'MODEL_NOT_FOUND',
+            'app_code' => 6010,
+            'message' => 'Car model not found',
+        ]);
 });
 
 it('validates license_plate min length when creating a Car', function () {

@@ -14,12 +14,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('rentals', static function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('car_id')
-                ->constrained()
+            $table->uuid('uuid')->primary();
+            $table->foreignUuid('car_uuid')
+                ->constrained('cars', 'uuid')
                 ->restrictOnDelete();
-            $table->foreignId('client_id')
-                ->constrained()
+            $table->foreignUuid('client_uuid')
+                ->constrained('clients', 'uuid')
                 ->restrictOnDelete();
 
             $table->dateTime('start_date');
@@ -30,8 +30,8 @@ return new class extends Migration
 
             $table->timestamps();
 
-            $table->index('car_id');
-            $table->index('client_id');
+            $table->index('car_uuid');
+            $table->index('client_uuid');
             $table->index('start_date');
             $table->index('end_date');
         });

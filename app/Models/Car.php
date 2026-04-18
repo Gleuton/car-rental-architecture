@@ -7,12 +7,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
 class Car extends Model
 {
     use HasFactory;
+
+    protected $primaryKey = 'uuid';
+
+    public $incrementing = false;
+
+    protected $keyType = 'string';
 
     protected $fillable = ['uuid', 'car_model_uuid', 'license_plate', 'color', 'is_available', 'km'];
 
@@ -22,17 +27,6 @@ class Car extends Model
             if (empty($car->uuid)) {
                 $car->uuid = (string) Str::uuid();
             }
-        });
-
-        static::saving(static function (self $car): void {
-            if (! Schema::hasColumn('cars', 'car_model_id') || empty($car->car_model_uuid)) {
-                return;
-            }
-
-            $car->car_model_id = CarModel::query()
-                ->where('uuid', $car->car_model_uuid)
-                ->firstOrFail()
-                ->id;
         });
     }
 

@@ -7,12 +7,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
 class Rental extends Model
 {
     use HasFactory;
+
+    protected $primaryKey = 'uuid';
+
+    public $incrementing = false;
+
+    protected $keyType = 'string';
 
     protected $fillable = [
         'uuid',
@@ -30,22 +35,6 @@ class Rental extends Model
         static::creating(static function (self $rental): void {
             if (empty($rental->uuid)) {
                 $rental->uuid = (string) Str::uuid();
-            }
-        });
-
-        static::saving(static function (self $rental): void {
-            if (Schema::hasColumn('rentals', 'car_id') && ! empty($rental->car_uuid)) {
-                $rental->car_id = Car::query()
-                    ->where('uuid', $rental->car_uuid)
-                    ->firstOrFail()
-                    ->id;
-            }
-
-            if (Schema::hasColumn('rentals', 'client_id') && ! empty($rental->client_uuid)) {
-                $rental->client_id = Client::query()
-                    ->where('uuid', $rental->client_uuid)
-                    ->firstOrFail()
-                    ->id;
             }
         });
     }

@@ -22,6 +22,8 @@ interface CarModelRepositoryInterface
 
     public function existsByNameAndBrandUuid(string $name, string $brandUuid): bool;
 
+    public function existsByUuid(string $uuid): bool;
+
     public function findByUuid(string $uuid): CarModel;
 
     public function deleteByUuid(string $uuid): void;

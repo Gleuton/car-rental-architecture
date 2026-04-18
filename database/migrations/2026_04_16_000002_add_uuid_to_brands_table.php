@@ -15,6 +15,10 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (Schema::hasColumn('brands', 'uuid')) {
+            return;
+        }
+
         Schema::table('brands', static function (Blueprint $table): void {
             $table->uuid('uuid')->nullable()->unique();
         });
@@ -38,6 +42,10 @@ return new class extends Migration
      */
     public function down(): void
     {
+        if (! Schema::hasColumn('brands', 'uuid')) {
+            return;
+        }
+
         Schema::table('brands', static function (Blueprint $table): void {
             $table->dropUnique('brands_uuid_unique');
             $table->dropColumn('uuid');

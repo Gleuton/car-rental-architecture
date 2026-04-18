@@ -14,6 +14,10 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (Schema::hasColumn('cars', 'car_model_uuid') || ! Schema::hasColumn('cars', 'car_model_id')) {
+            return;
+        }
+
         Schema::table('cars', static function (Blueprint $table): void {
             $table->uuid('car_model_uuid')->nullable()->after('car_model_id');
             $table->index('car_model_uuid');
@@ -54,6 +58,10 @@ return new class extends Migration
      */
     public function down(): void
     {
+        if (! Schema::hasColumn('cars', 'car_model_uuid')) {
+            return;
+        }
+
         Schema::table('cars', static function (Blueprint $table): void {
             $table->dropForeign(['car_model_uuid']);
             $table->dropIndex(['car_model_uuid']);
