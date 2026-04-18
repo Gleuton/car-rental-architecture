@@ -11,7 +11,6 @@ use App\Core\CarModel\Domain\Exceptions\CarModelDomainException;
 use App\Core\CarModel\Domain\Repositories\CarModelRepositoryInterface;
 use App\Core\Shared\Application\Pagination\PaginatedResult;
 use App\Core\Shared\Infra\Adapters\LaravelPaginatorAdapter;
-use App\Models\Brand as EloquentBrand;
 use App\Models\CarModel as EloquentCarModel;
 
 class EloquentCarModelRepository implements CarModelRepositoryInterface
@@ -41,11 +40,8 @@ class EloquentCarModelRepository implements CarModelRepositoryInterface
      */
     public function save(DomainCarModel $carModel): DomainCarModel
     {
-        $brandId = $this->findBrandIdByUuid($carModel->brandUuid);
-
         $eloquentCarModel = EloquentCarModel::create([
             'uuid' => $carModel->uuid,
-            'brand_id' => $brandId,
             'brand_uuid' => $carModel->brandUuid,
             'name' => $carModel->name,
             'image' => $carModel->image,
@@ -80,12 +76,9 @@ class EloquentCarModelRepository implements CarModelRepositoryInterface
      */
     public function update(DomainCarModel $carModel): DomainCarModel
     {
-        $brandId = $this->findBrandIdByUuid($carModel->brandUuid);
-
         $carModelEloquent = EloquentCarModel::query()->where('uuid', $carModel->uuid)->firstOrFail();
 
         $carModelEloquent->update([
-            'brand_id' => $brandId,
             'brand_uuid' => $carModel->brandUuid,
             'name' => $carModel->name,
             'image' => $carModel->image,
@@ -119,13 +112,5 @@ class EloquentCarModelRepository implements CarModelRepositoryInterface
     public function deleteByUuid(string $uuid): void
     {
         EloquentCarModel::query()->where('uuid', $uuid)->firstOrFail()->delete();
-    }
-
-    private function findBrandIdByUuid(string $brandUuid): int
-    {
-        /** @var EloquentBrand $brand */
-        $brand = EloquentBrand::query()->where('uuid', $brandUuid)->firstOrFail();
-
-        return $brand->id;
     }
 }

@@ -13,7 +13,7 @@ class Car extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['uuid', 'car_model_id', 'car_model_uuid', 'license_plate', 'color', 'is_available', 'km'];
+    protected $fillable = ['uuid', 'car_model_uuid', 'license_plate', 'color', 'is_available', 'km'];
 
     protected static function booted(): void
     {
@@ -21,6 +21,17 @@ class Car extends Model
             if (empty($car->uuid)) {
                 $car->uuid = (string) Str::uuid();
             }
+        });
+
+        static::saving(static function (self $car): void {
+            if (empty($car->car_model_uuid)) {
+                return;
+            }
+
+            $car->car_model_id = CarModel::query()
+                ->where('uuid', $car->car_model_uuid)
+                ->firstOrFail()
+                ->id;
         });
     }
 

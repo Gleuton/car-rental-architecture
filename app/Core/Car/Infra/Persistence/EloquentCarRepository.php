@@ -11,17 +11,13 @@ use App\Core\Car\Domain\Repositories\CarRepositoryInterface;
 use App\Core\Shared\Application\Pagination\PaginatedResult;
 use App\Core\Shared\Infra\Adapters\LaravelPaginatorAdapter;
 use App\Models\Car as EloquentCar;
-use App\Models\CarModel as EloquentCarModel;
 
 class EloquentCarRepository implements CarRepositoryInterface
 {
     public function save(Car $car): Car
     {
-        $carModelId = $this->findCarModelIdByUuid($car->carModelUuid);
-
         $eloquentCar = EloquentCar::create([
             'uuid' => $car->uuid,
-            'car_model_id' => $carModelId,
             'car_model_uuid' => $car->carModelUuid,
             'license_plate' => $car->licensePlate(),
             'color' => $car->color(),
@@ -85,12 +81,9 @@ class EloquentCarRepository implements CarRepositoryInterface
 
     public function update(Car $car): Car
     {
-        $carModelId = $this->findCarModelIdByUuid($car->carModelUuid);
-
         $eloquentCar = EloquentCar::query()->where('uuid', $car->uuid)->firstOrFail();
 
         $eloquentCar->update([
-            'car_model_id' => $carModelId,
             'car_model_uuid' => $car->carModelUuid,
             'license_plate' => $car->licensePlate(),
             'color' => $car->color(),
@@ -99,13 +92,5 @@ class EloquentCarRepository implements CarRepositoryInterface
         ]);
 
         return $this->toDomainCar($eloquentCar);
-    }
-
-    private function findCarModelIdByUuid(string $carModelUuid): int
-    {
-        /** @var EloquentCarModel $carModel */
-        $carModel = EloquentCarModel::query()->where('uuid', $carModelUuid)->firstOrFail();
-
-        return $carModel->id;
     }
 }

@@ -15,9 +15,7 @@ class Rental extends Model
 
     protected $fillable = [
         'uuid',
-        'car_id',
         'car_uuid',
-        'client_id',
         'client_uuid',
         'start_date',
         'end_date',
@@ -31,6 +29,22 @@ class Rental extends Model
         static::creating(static function (self $rental): void {
             if (empty($rental->uuid)) {
                 $rental->uuid = (string) Str::uuid();
+            }
+        });
+
+        static::saving(static function (self $rental): void {
+            if (! empty($rental->car_uuid)) {
+                $rental->car_id = Car::query()
+                    ->where('uuid', $rental->car_uuid)
+                    ->firstOrFail()
+                    ->id;
+            }
+
+            if (! empty($rental->client_uuid)) {
+                $rental->client_id = Client::query()
+                    ->where('uuid', $rental->client_uuid)
+                    ->firstOrFail()
+                    ->id;
             }
         });
     }
