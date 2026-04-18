@@ -10,8 +10,9 @@ use App\Core\Car\Domain\Exceptions\CarDomainException;
 use App\Core\Car\Domain\Repositories\CarRepositoryInterface;
 use App\Core\Car\Domain\Roles\CarAlreadyExistsRole;
 use App\Http\Requests\Car\StoreCarRequest;
+use App\Models\Brand;
+use App\Models\CarModel;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
@@ -22,31 +23,25 @@ function createPersistedCarModelForTests(): object
     $brandUuid = (string) Str::uuid();
     $carModelUuid = (string) Str::uuid();
 
-    $brandId = DB::table('brands')->insertGetId([
+    $brand = Brand::factory()->create([
         'uuid' => $brandUuid,
         'name' => 'Brand '.substr($brandUuid, 0, 8),
         'image' => 'brands/test.png',
-        'created_at' => now(),
-        'updated_at' => now(),
     ]);
 
-    $carModelId = DB::table('car_models')->insertGetId([
+    $carModel = CarModel::factory()->create([
         'uuid' => $carModelUuid,
-        'brand_id' => $brandId,
-        'brand_uuid' => $brandUuid,
+        'brand_uuid' => $brand->uuid,
         'name' => 'Model '.substr($carModelUuid, 0, 8),
         'image' => 'car_models/test.png',
         'doors' => 4,
         'seats' => 5,
         'airbags' => true,
         'abs' => true,
-        'created_at' => now(),
-        'updated_at' => now(),
     ]);
 
     return (object) [
-        'id' => $carModelId,
-        'uuid' => $carModelUuid,
+        'uuid' => $carModel->uuid,
     ];
 }
 
