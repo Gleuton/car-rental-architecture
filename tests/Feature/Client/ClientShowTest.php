@@ -6,6 +6,7 @@ use App\Models\Client;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 uses(RefreshDatabase::class);
 
@@ -28,7 +29,7 @@ it('can show a client by uuid', function () {
 it('returns 404 when client is not found', function () {
     Auth::guard('api')->login(User::factory()->create());
 
-    $response = $this->getJson('/api/clients/not-found-uuid');
+    $response = $this->getJson('/api/clients/'.(string) Str::uuid());
 
     $response->assertStatus(404);
 });

@@ -6,6 +6,7 @@ use App\Models\Client;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 uses(RefreshDatabase::class);
 
@@ -32,7 +33,7 @@ it('can update client name', function () {
 it('returns 404 when updating non-existent client', function () {
     Auth::guard('api')->login(User::factory()->create());
 
-    $response = $this->putJson('/api/clients/not-found-uuid', [
+    $response = $this->putJson('/api/clients/'.(string) Str::uuid(), [
         'name' => 'John Updated',
     ]);
 
