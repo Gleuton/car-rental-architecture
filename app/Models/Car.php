@@ -7,6 +7,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
 class Car extends Model
@@ -24,7 +25,7 @@ class Car extends Model
         });
 
         static::saving(static function (self $car): void {
-            if (empty($car->car_model_uuid)) {
+            if (! Schema::hasColumn('cars', 'car_model_id') || empty($car->car_model_uuid)) {
                 return;
             }
 

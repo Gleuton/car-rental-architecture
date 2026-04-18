@@ -7,6 +7,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
 class Rental extends Model
@@ -33,14 +34,14 @@ class Rental extends Model
         });
 
         static::saving(static function (self $rental): void {
-            if (! empty($rental->car_uuid)) {
+            if (Schema::hasColumn('rentals', 'car_id') && ! empty($rental->car_uuid)) {
                 $rental->car_id = Car::query()
                     ->where('uuid', $rental->car_uuid)
                     ->firstOrFail()
                     ->id;
             }
 
-            if (! empty($rental->client_uuid)) {
+            if (Schema::hasColumn('rentals', 'client_id') && ! empty($rental->client_uuid)) {
                 $rental->client_id = Client::query()
                     ->where('uuid', $rental->client_uuid)
                     ->firstOrFail()
