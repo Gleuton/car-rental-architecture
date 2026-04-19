@@ -7,8 +7,8 @@ use App\Core\Brand\Domain\Entity\BrandCollection;
 
 it('can create a BrandCollection with valid items', function () {
     $brands = [
-        Brand::new('Fiat', 'fiat.png'),
-        Brand::new('BMW', 'BMW.png'),
+        Brand::create('Fiat', 'fiat.png'),
+        Brand::create('BMW', 'BMW.png'),
     ];
 
     $collection = new BrandCollection($brands);
@@ -28,7 +28,7 @@ it('throws exception when using add with invalid item', function () {
 
 it('can add a valid Brand to BrandCollection', function () {
     $collection = new BrandCollection();
-    $brand = Brand::new('Fiat', 'fiat.png');
+    $brand = Brand::create('Fiat', 'fiat.png');
     $collection->add($brand);
 
     expect($collection)->toHaveCount(1)
@@ -42,7 +42,7 @@ it('returns true for isEmpty when BrandCollection is empty', function () {
 });
 
 it('returns false for isEmpty when BrandCollection has items', function () {
-    $brand = Brand::new('Fiat', 'fiat.png');
+    $brand = Brand::create('Fiat', 'fiat.png');
     $collection = new BrandCollection([$brand]);
 
     expect($collection->isEmpty())->toBeFalse();
@@ -50,8 +50,8 @@ it('returns false for isEmpty when BrandCollection has items', function () {
 
 it('can iterate over BrandCollection', function () {
     $brands = [
-        Brand::new('Fiat', 'fiat.png'),
-        Brand::new('BMW', 'bmw.png'),
+        Brand::create('Fiat', 'fiat.png'),
+        Brand::create('BMW', 'bmw.png'),
     ];
     $collection = new BrandCollection($brands);
 

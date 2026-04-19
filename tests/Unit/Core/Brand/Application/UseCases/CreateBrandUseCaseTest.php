@@ -48,7 +48,7 @@ it('creates a brand successfully when name is unique', function () {
         ->once()
         ->andReturn('brands/fiat_stored.png');
 
-    $expectedBrand = DomainBrand::restore(
+    $expectedBrand = DomainBrand::create(
         'Fiat',
         'brands/fiat_stored.png',
         '11111111-1111-4111-8111-111111111111'

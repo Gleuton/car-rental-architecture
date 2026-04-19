@@ -38,8 +38,8 @@ it('can create a brand', function () {
         ->assertJsonMissingPath('data.id');
 
     $brand = Brand::where('name', 'Toyota')->first();
-    expect($brand->image)->not->toBeEmpty();
-    expect($brand->uuid)->not->toBeNull()
+    expect($brand->image)->not->toBeEmpty()
+        ->and($brand->uuid)->not->toBeNull()
         ->and(Str::isUuid($brand->uuid))->toBeTrue();
     Storage::disk('public')->assertExists($brand->image);
 

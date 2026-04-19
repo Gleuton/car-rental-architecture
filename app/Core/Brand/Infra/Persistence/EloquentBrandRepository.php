@@ -95,7 +95,7 @@ class EloquentBrandRepository implements BrandRepositoryInterface
      */
     private function toDomainBrand(EloquentBrand $model): DomainBrand
     {
-        return DomainBrand::restore(
+        return DomainBrand::create(
             $model->name,
             $model->image,
             $model->uuid,

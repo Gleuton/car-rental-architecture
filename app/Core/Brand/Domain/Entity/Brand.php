@@ -55,16 +55,12 @@ class Brand
     /**
      * @throws BrandDomainException
      */
-    public static function new(string $name, string $image): self
+    public static function create(string $name, string $image, ?string $uuid = null): self
     {
-        return new self(new BrandUuid(), new BrandName($name), new BrandLogo($image));
-    }
-
-    /**
-     * @throws BrandDomainException
-     */
-    public static function restore(string $name, string $image, ?string $uuid = null): self
-    {
-        return new self(new BrandUuid($uuid), new BrandName($name), new BrandLogo($image));
+        return new self(
+            new BrandUuid($uuid),
+            new BrandName($name),
+            new BrandLogo($image)
+        );
     }
 }
