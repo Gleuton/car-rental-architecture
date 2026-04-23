@@ -13,16 +13,8 @@ export function listBrands({page = 1, search = ''} = {}) {
     });
 }
 
-export function getBrandDetails(id) {
-    return httpClient.get(`/api/brands/${id}`);
-}
-
 export function getBrandDetailsByUuid(uuid) {
     return httpClient.get(`/api/brands/${uuid}`);
-}
-
-export function deleteBrand(id) {
-    return httpClient.delete(`/api/brands/${id}`);
 }
 
 export function deleteBrandByUuid(uuid) {
