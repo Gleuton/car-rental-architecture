@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-use App\Core\Brand\Application\DTOs\CreateBrandDTO;
-use App\Core\Brand\Application\Services\BrandLogoService;
 use App\Core\Brand\Application\UseCases\CreateBrandUseCase;
 use App\Core\Brand\Domain\Entity\Brand as DomainBrand;
 use App\Core\Brand\Domain\Exceptions\BrandDomainException;
 use App\Core\Brand\Domain\Repositories\BrandRepositoryInterface;
 use App\Core\Brand\Domain\Roles\UniqueBrandNameRule;
+use App\Core\Car\Application\DTOs\Brand\CreateBrandDTO;
+use App\Core\Car\Application\Services\BrandLogoService;
 use App\Http\Requests\Brand\StoreBrandRequest;
 use Illuminate\Http\UploadedFile;
 

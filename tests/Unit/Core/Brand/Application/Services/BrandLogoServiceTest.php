@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Core\Brand\Application\Services\BrandLogoService;
+use App\Core\Car\Application\Services\BrandLogoService;
 use App\Core\Shared\Domain\Storage\DomainFile;
 use App\Core\Shared\Domain\Storage\FileStorageInterface;
 use App\Core\Shared\Domain\Storage\StoredFile;

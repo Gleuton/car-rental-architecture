@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Core\Brand\Application\DTOs;
+namespace App\Core\Car\Application\DTOs\Brand;
 
 use App\Http\Requests\Brand\UpdateBrandRequest;
 use Illuminate\Http\UploadedFile;

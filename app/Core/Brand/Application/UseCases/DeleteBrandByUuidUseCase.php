@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Core\Brand\Application\UseCases;
 
-use App\Core\Brand\Application\Services\BrandLogoService;
 use App\Core\Brand\Domain\Repositories\BrandRepositoryInterface;
+use App\Core\Car\Application\Services\BrandLogoService;
 
 readonly class DeleteBrandByUuidUseCase
 {

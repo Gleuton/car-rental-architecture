@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Core\Brand\Application\Services;
+namespace App\Core\Car\Application\Services;
 
 use App\Core\Shared\Domain\Storage\FileStorageInterface;
 use App\Core\Shared\Infra\Adapters\LaravelUploadedFileAdapter;

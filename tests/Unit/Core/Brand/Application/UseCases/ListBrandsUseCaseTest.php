@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use App\Core\Brand\Application\DTOs\FilterBrandDTO;
 use App\Core\Brand\Application\UseCases\ListBrandsUseCase;
 use App\Core\Brand\Domain\Query\BrandQueryFilter;
 use App\Core\Brand\Domain\Repositories\BrandRepositoryInterface;
+use App\Core\Car\Application\DTOs\Brand\FilterBrandDTO;
 use App\Core\Shared\Application\Pagination\PaginatedResult;
 use App\Http\Requests\Brand\IndexBrandRequest;
 
