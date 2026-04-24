@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Resources;
 
+use App\Core\Brand\Domain\Collection\BrandCollection;
 use App\Core\Brand\Domain\Entity\Brand;
-use App\Core\Brand\Domain\Entity\BrandCollection;
 use App\Core\Shared\Application\Pagination\PaginatedResult;
 
 class BrandResource
