@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Core\Car\Domain\Entity;
+namespace App\Core\Car\Domain\Queries;
 
-readonly class CarFilter
+readonly class CarQueryFilter
 {
     private function __construct(
         public ?string $licensePlate,

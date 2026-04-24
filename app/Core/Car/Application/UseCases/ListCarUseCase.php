@@ -6,7 +6,7 @@ namespace App\Core\Car\Application\UseCases;
 
 use App\Core\Car\Application\DTOs\ListCarDTO;
 use App\Core\Car\Domain\Collection\CarCollection;
-use App\Core\Car\Domain\Entity\CarFilter;
+use App\Core\Car\Domain\Queries\CarQueryFilter;
 use App\Core\Car\Domain\Repositories\CarRepositoryInterface;
 use App\Core\Shared\Application\Pagination\PaginatedResult;
 
@@ -21,7 +21,7 @@ readonly class ListCarUseCase
      */
     public function execute(ListCarDTO $dto): PaginatedResult
     {
-        $filters = CarFilter::create(
+        $filters = CarQueryFilter::create(
             $dto->licensePlate,
             $dto->orderBy,
             $dto->direction,

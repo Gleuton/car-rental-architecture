@@ -6,7 +6,7 @@ namespace App\Core\Car\Domain\Repositories;
 
 use App\Core\Car\Domain\Collection\CarCollection;
 use App\Core\Car\Domain\Entity\Car;
-use App\Core\Car\Domain\Entity\CarFilter;
+use App\Core\Car\Domain\Queries\CarQueryFilter;
 use App\Core\Shared\Application\Pagination\PaginatedResult;
 
 interface CarRepositoryInterface
@@ -20,7 +20,7 @@ interface CarRepositoryInterface
     /**
      * @return PaginatedResult<CarCollection>
      */
-    public function listCars(CarFilter $filter): PaginatedResult;
+    public function listCars(CarQueryFilter $filter): PaginatedResult;
 
     public function deleteByUuid(string $uuid): void;
 
