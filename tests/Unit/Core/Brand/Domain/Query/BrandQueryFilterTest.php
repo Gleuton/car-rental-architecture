@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Core\Brand\Domain\Query\BrandQueryFilter;
+use App\Core\Car\Domain\Queries\BrandQueryFilter;
 
 it('can create a BrandQueryFilter', function () {
     $filter = BrandQueryFilter::create('Fiat', 'name', 'asc', 15, 1);

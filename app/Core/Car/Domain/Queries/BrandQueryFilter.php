@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Core\Brand\Domain\Query;
+namespace App\Core\Car\Domain\Queries;
 
 readonly class BrandQueryFilter
 {
