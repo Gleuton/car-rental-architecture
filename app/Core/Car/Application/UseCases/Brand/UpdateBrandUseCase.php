@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Core\Car\Application\UseCases\Brand;
 
-use App\Core\Brand\Domain\Repositories\BrandRepositoryInterface;
 use App\Core\Brand\Domain\Roles\UniqueBrandNameRule;
 use App\Core\Car\Application\DTOs\Brand\UpdateBrandDTO;
 use App\Core\Car\Application\Services\BrandLogoService;
 use App\Core\Car\Domain\Entities\Brand;
 use App\Core\Car\Domain\Exceptions\BrandDomainException;
+use App\Core\Car\Domain\Repositories\BrandRepositoryInterface;
 
 readonly class UpdateBrandUseCase
 {

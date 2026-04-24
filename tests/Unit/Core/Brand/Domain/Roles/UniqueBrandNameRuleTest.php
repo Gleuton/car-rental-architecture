@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use App\Core\Brand\Domain\Repositories\BrandRepositoryInterface;
 use App\Core\Brand\Domain\Roles\UniqueBrandNameRule;
 use App\Core\Car\Domain\Exceptions\BrandDomainException;
+use App\Core\Car\Domain\Repositories\BrandRepositoryInterface;
 
 it('validates successfully when the brand name is unique', function () {
     $repository = Mockery::mock(BrandRepositoryInterface::class);

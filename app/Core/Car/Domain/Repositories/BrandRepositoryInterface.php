@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Core\Brand\Domain\Repositories;
+namespace App\Core\Car\Domain\Repositories;
 
 use App\Core\Car\Domain\Collection\BrandCollection;
 use App\Core\Car\Domain\Entities\Brand;
