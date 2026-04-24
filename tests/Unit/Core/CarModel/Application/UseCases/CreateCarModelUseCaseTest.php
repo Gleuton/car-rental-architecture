@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use App\Core\Brand\Domain\Errors\BrandError;
 use App\Core\Brand\Domain\Exceptions\BrandDomainException;
 use App\Core\Car\Application\DTOs\CarModel\CreateCarModelDTO;
 use App\Core\Car\Application\UseCases\CarModel\CreateCarModelUseCase;
 use App\Core\Car\Domain\Entities\CarModel as DomainCarModel;
+use App\Core\Car\Domain\Errors\BrandError;
 use App\Core\Car\Domain\Errors\CarModelError;
 use App\Core\Car\Domain\Exceptions\CarModelDomainException;
 use App\Core\Car\Domain\Repositories\CarModelRepositoryInterface;

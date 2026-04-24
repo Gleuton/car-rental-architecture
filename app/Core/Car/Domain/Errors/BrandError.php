@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Core\Brand\Domain\Errors;
+namespace App\Core\Car\Domain\Errors;
 
 enum BrandError: int
 {

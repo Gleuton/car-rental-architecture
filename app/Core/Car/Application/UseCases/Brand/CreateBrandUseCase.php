@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Core\Car\Application\UseCases\Brand;
 
-use App\Core\Brand\Domain\Entity\Brand as DomainBrand;
 use App\Core\Brand\Domain\Exceptions\BrandDomainException;
 use App\Core\Brand\Domain\Repositories\BrandRepositoryInterface;
 use App\Core\Brand\Domain\Roles\UniqueBrandNameRule;
 use App\Core\Car\Application\DTOs\Brand\CreateBrandDTO;
 use App\Core\Car\Application\Services\BrandLogoService;
+use App\Core\Car\Domain\Entities\Brand as DomainBrand;
 
 readonly class CreateBrandUseCase
 {

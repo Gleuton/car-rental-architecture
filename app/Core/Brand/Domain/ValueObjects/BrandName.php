@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Core\Brand\Domain\ValueObjects;
 
-use App\Core\Brand\Domain\Errors\BrandError;
 use App\Core\Brand\Domain\Exceptions\BrandDomainException;
+use App\Core\Car\Domain\Errors\BrandError;
 
 readonly class BrandName
 {
