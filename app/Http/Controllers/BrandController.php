@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Core\Brand\Application\UseCases\CreateBrandUseCase;
-use App\Core\Brand\Application\UseCases\DeleteBrandByUuidUseCase;
-use App\Core\Brand\Application\UseCases\FindBrandByUuidUseCase;
-use App\Core\Brand\Application\UseCases\ListBrandsUseCase;
-use App\Core\Brand\Application\UseCases\UpdateBrandUseCase;
 use App\Core\Brand\Domain\Exceptions\BrandDomainException;
 use App\Core\Car\Application\DTOs\Brand\CreateBrandDTO;
 use App\Core\Car\Application\DTOs\Brand\FilterBrandDTO;
 use App\Core\Car\Application\DTOs\Brand\UpdateBrandDTO;
+use App\Core\Car\Application\UseCases\Brand\CreateBrandUseCase;
+use App\Core\Car\Application\UseCases\Brand\DeleteBrandByUuidUseCase;
+use App\Core\Car\Application\UseCases\Brand\FindBrandByUuidUseCase;
+use App\Core\Car\Application\UseCases\Brand\ListBrandsUseCase;
+use App\Core\Car\Application\UseCases\Brand\UpdateBrandUseCase;
 use App\Http\Requests\Brand\IndexBrandRequest;
 use App\Http\Requests\Brand\StoreBrandRequest;
 use App\Http\Requests\Brand\UpdateBrandRequest;

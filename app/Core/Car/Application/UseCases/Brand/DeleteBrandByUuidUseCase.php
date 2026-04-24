@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Core\Brand\Application\UseCases;
+namespace App\Core\Car\Application\UseCases\Brand;
 
 use App\Core\Brand\Domain\Repositories\BrandRepositoryInterface;
 use App\Core\Car\Application\Services\BrandLogoService;
