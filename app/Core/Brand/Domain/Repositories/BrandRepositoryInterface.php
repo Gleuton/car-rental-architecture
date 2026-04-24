@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Core\Brand\Domain\Repositories;
 
-use App\Core\Brand\Domain\Collection\BrandCollection;
 use App\Core\Brand\Domain\Entity\Brand;
 use App\Core\Brand\Domain\Query\BrandQueryFilter;
+use App\Core\Car\Domain\Collection\BrandCollection;
 use App\Core\Shared\Application\Pagination\PaginatedResult;
 
 interface BrandRepositoryInterface

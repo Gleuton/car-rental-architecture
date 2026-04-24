@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Core\Brand\Domain\Collection;
+namespace App\Core\Car\Domain\Collection;
 
 use App\Core\Brand\Domain\Entity\Brand;
 use App\Core\Shared\Domain\Collection\DomainCollectionInterface;
