@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Core\Car\Domain\Entity;
+namespace App\Core\Car\Domain\Entities;
 
 use App\Core\Car\Domain\Exceptions\CarDomainException;
 use App\Core\Car\Domain\ValueObjects\Color;
