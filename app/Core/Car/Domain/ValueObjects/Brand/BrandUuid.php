@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Core\Brand\Domain\ValueObjects;
+namespace App\Core\Car\Domain\ValueObjects\Brand;
 
 use Illuminate\Support\Str;
 
