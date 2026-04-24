@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Core\Brand\Domain\Exceptions;
+namespace App\Core\Car\Domain\Exceptions;
 
 use App\Core\Car\Domain\Errors\BrandError;
 use App\Core\Shared\Domain\DomainException;

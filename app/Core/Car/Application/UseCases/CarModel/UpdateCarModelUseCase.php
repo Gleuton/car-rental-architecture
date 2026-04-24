@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Core\Car\Application\UseCases\CarModel;
 
-use App\Core\Brand\Domain\Exceptions\BrandDomainException;
 use App\Core\Car\Application\DTOs\CarModel\UpdateCarModelDTO;
 use App\Core\Car\Domain\Entities\CarModel;
+use App\Core\Car\Domain\Exceptions\BrandDomainException;
 use App\Core\Car\Domain\Exceptions\CarModelDomainException;
 use App\Core\Car\Domain\Repositories\CarModelRepositoryInterface;
 use App\Core\Car\Domain\Roles\CarModelAlreadyExistsRole;

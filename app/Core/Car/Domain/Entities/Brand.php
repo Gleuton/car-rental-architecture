@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Core\Car\Domain\Entities;
 
-use App\Core\Brand\Domain\Exceptions\BrandDomainException;
 use App\Core\Brand\Domain\ValueObjects\BrandLogo;
 use App\Core\Brand\Domain\ValueObjects\BrandName;
 use App\Core\Brand\Domain\ValueObjects\BrandUuid;
+use App\Core\Car\Domain\Exceptions\BrandDomainException;
 
 class Brand
 {

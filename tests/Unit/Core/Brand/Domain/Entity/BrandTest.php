@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use App\Core\Brand\Domain\Exceptions\BrandDomainException;
 use App\Core\Car\Domain\Entities\Brand;
+use App\Core\Car\Domain\Exceptions\BrandDomainException;
 use Illuminate\Support\Str;
 
 it('can create a Brand instance', function () {

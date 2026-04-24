@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Core\Brand\Domain\Exceptions\BrandDomainException;
 use App\Core\Car\Application\DTOs\CarModel\CarModelUuidDTO;
 use App\Core\Car\Application\DTOs\CarModel\CreateCarModelDTO;
 use App\Core\Car\Application\DTOs\CarModel\FilterCarModelDTO;
@@ -14,6 +13,7 @@ use App\Core\Car\Application\UseCases\CarModel\DeleteCarModelUseCase;
 use App\Core\Car\Application\UseCases\CarModel\FindCarModelByUuidUseCase;
 use App\Core\Car\Application\UseCases\CarModel\ListCarModelsUseCase;
 use App\Core\Car\Application\UseCases\CarModel\UpdateCarModelUseCase;
+use App\Core\Car\Domain\Exceptions\BrandDomainException;
 use App\Core\Car\Domain\Exceptions\CarModelDomainException;
 use App\Http\Requests\CarModel\IndexCarModelRequest;
 use App\Http\Requests\CarModel\StoreCarModelRequest;

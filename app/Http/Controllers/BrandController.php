@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Core\Brand\Domain\Exceptions\BrandDomainException;
 use App\Core\Car\Application\DTOs\Brand\CreateBrandDTO;
 use App\Core\Car\Application\DTOs\Brand\FilterBrandDTO;
 use App\Core\Car\Application\DTOs\Brand\UpdateBrandDTO;
@@ -13,6 +12,7 @@ use App\Core\Car\Application\UseCases\Brand\DeleteBrandByUuidUseCase;
 use App\Core\Car\Application\UseCases\Brand\FindBrandByUuidUseCase;
 use App\Core\Car\Application\UseCases\Brand\ListBrandsUseCase;
 use App\Core\Car\Application\UseCases\Brand\UpdateBrandUseCase;
+use App\Core\Car\Domain\Exceptions\BrandDomainException;
 use App\Http\Requests\Brand\IndexBrandRequest;
 use App\Http\Requests\Brand\StoreBrandRequest;
 use App\Http\Requests\Brand\UpdateBrandRequest;

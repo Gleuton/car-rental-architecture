@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Core\Brand\Infra\Persistence;
 
-use App\Core\Brand\Domain\Exceptions\BrandDomainException;
 use App\Core\Brand\Domain\Query\BrandQueryFilter;
 use App\Core\Brand\Domain\Repositories\BrandRepositoryInterface;
 use App\Core\Car\Domain\Collection\BrandCollection;
 use App\Core\Car\Domain\Entities\Brand as DomainBrand;
+use App\Core\Car\Domain\Exceptions\BrandDomainException;
 use App\Core\Shared\Application\Pagination\PaginatedResult;
 use App\Core\Shared\Infra\Adapters\LaravelPaginatorAdapter;
 use App\Models\Brand as EloquentBrand;
