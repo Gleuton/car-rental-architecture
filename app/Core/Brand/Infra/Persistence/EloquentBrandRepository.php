@@ -6,8 +6,8 @@ namespace App\Core\Brand\Infra\Persistence;
 
 use App\Core\Brand\Domain\Entity\Brand as DomainBrand;
 use App\Core\Brand\Domain\Entity\BrandCollection;
-use App\Core\Brand\Domain\Entity\BrandFilter;
 use App\Core\Brand\Domain\Exceptions\BrandDomainException;
+use App\Core\Brand\Domain\Query\BrandQueryFilter;
 use App\Core\Brand\Domain\Repositories\BrandRepositoryInterface;
 use App\Core\Shared\Application\Pagination\PaginatedResult;
 use App\Core\Shared\Infra\Adapters\LaravelPaginatorAdapter;
@@ -26,7 +26,7 @@ class EloquentBrandRepository implements BrandRepositoryInterface
     /**
      * @return PaginatedResult<BrandCollection>
      */
-    public function findByFilters(BrandFilter $filters): PaginatedResult
+    public function findByFilters(BrandQueryFilter $filters): PaginatedResult
     {
         $paginator = EloquentBrand::query()
             ->when(

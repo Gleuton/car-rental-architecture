@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Core\Brand\Domain\Entity;
+namespace App\Core\Brand\Domain\Query;
 
-readonly class BrandFilter
+readonly class BrandQueryFilter
 {
     private function __construct(
         public ?string $search,

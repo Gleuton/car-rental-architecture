@@ -6,7 +6,7 @@ namespace App\Core\Brand\Domain\Repositories;
 
 use App\Core\Brand\Domain\Entity\Brand;
 use App\Core\Brand\Domain\Entity\BrandCollection;
-use App\Core\Brand\Domain\Entity\BrandFilter;
+use App\Core\Brand\Domain\Query\BrandQueryFilter;
 use App\Core\Shared\Application\Pagination\PaginatedResult;
 
 interface BrandRepositoryInterface
@@ -18,7 +18,7 @@ interface BrandRepositoryInterface
     /**
      * @return PaginatedResult<BrandCollection>
      */
-    public function findByFilters(BrandFilter $filters): PaginatedResult;
+    public function findByFilters(BrandQueryFilter $filters): PaginatedResult;
 
     public function findByUuid(string $uuid): Brand;
 
