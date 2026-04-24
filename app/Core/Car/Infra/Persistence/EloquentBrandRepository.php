@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Core\Brand\Infra\Persistence;
+namespace App\Core\Car\Infra\Persistence;
 
 use App\Core\Car\Domain\Collection\BrandCollection;
 use App\Core\Car\Domain\Entities\Brand as DomainBrand;
