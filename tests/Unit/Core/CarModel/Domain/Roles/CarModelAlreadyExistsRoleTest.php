@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use App\Core\CarModel\Domain\Exceptions\CarModelDomainException;
-use App\Core\CarModel\Domain\Repositories\CarModelRepositoryInterface;
-use App\Core\CarModel\Domain\Roles\CarModelAlreadyExistsRole;
+use App\Core\Car\Domain\Exceptions\CarModelDomainException;
+use App\Core\Car\Domain\Repositories\CarModelRepositoryInterface;
+use App\Core\Car\Domain\Roles\CarModelAlreadyExistsRole;
 
 beforeEach(function () {
     $this->repository = Mockery::mock(CarModelRepositoryInterface::class);

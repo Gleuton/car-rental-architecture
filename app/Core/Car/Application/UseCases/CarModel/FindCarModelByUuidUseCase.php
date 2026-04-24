@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Core\CarModel\Application\UseCases;
+namespace App\Core\Car\Application\UseCases\CarModel;
 
-use App\Core\CarModel\Application\DTOs\CarModelUuidDTO;
-use App\Core\CarModel\Domain\Entity\CarModel;
-use App\Core\CarModel\Domain\Repositories\CarModelRepositoryInterface;
+use App\Core\Car\Application\DTOs\CarModel\CarModelUuidDTO;
+use App\Core\Car\Domain\Entities\CarModel;
+use App\Core\Car\Domain\Repositories\CarModelRepositoryInterface;
 
 readonly class FindCarModelByUuidUseCase
 {

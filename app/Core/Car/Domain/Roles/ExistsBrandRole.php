@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Core\CarModel\Domain\Roles;
+namespace App\Core\Car\Domain\Roles;
 
 use App\Core\Brand\Domain\Errors\BrandError;
 use App\Core\Brand\Domain\Exceptions\BrandDomainException;

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Core\CarModel\Infra\Persistence;
+namespace App\Core\Car\Infra\Persistence;
 
-use App\Core\CarModel\Domain\Entity\CarModel as DomainCarModel;
-use App\Core\CarModel\Domain\Entity\CarModelCollection;
-use App\Core\CarModel\Domain\Entity\CarModelFilter;
-use App\Core\CarModel\Domain\Exceptions\CarModelDomainException;
-use App\Core\CarModel\Domain\Repositories\CarModelRepositoryInterface;
+use App\Core\Car\Domain\Collection\CarModelCollection;
+use App\Core\Car\Domain\Entities\CarModel as DomainCarModel;
+use App\Core\Car\Domain\Exceptions\CarModelDomainException;
+use App\Core\Car\Domain\Queries\CarModelQueryFilter;
+use App\Core\Car\Domain\Repositories\CarModelRepositoryInterface;
 use App\Core\Shared\Application\Pagination\PaginatedResult;
 use App\Core\Shared\Infra\Adapters\LaravelPaginatorAdapter;
 use App\Models\CarModel as EloquentCarModel;
@@ -18,7 +18,7 @@ class EloquentCarModelRepository implements CarModelRepositoryInterface
     /**
      * @return PaginatedResult<CarModelCollection>
      */
-    public function findByFilters(CarModelFilter $filters): PaginatedResult
+    public function findByFilters(CarModelQueryFilter $filters): PaginatedResult
     {
         $paginator = EloquentCarModel::query()
             ->when(

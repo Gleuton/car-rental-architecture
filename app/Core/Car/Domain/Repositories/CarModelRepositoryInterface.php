@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Core\CarModel\Domain\Repositories;
+namespace App\Core\Car\Domain\Repositories;
 
-use App\Core\CarModel\Domain\Entity\CarModel;
-use App\Core\CarModel\Domain\Entity\CarModelCollection;
-use App\Core\CarModel\Domain\Entity\CarModelFilter;
+use App\Core\Car\Domain\Collection\CarModelCollection;
+use App\Core\Car\Domain\Entities\CarModel;
+use App\Core\Car\Domain\Queries\CarModelQueryFilter;
 use App\Core\Shared\Application\Pagination\PaginatedResult;
 
 interface CarModelRepositoryInterface
@@ -18,7 +18,7 @@ interface CarModelRepositoryInterface
     /**
      * @return PaginatedResult<CarModelCollection>
      */
-    public function findByFilters(CarModelFilter $filters): PaginatedResult;
+    public function findByFilters(CarModelQueryFilter $filters): PaginatedResult;
 
     public function existsByNameAndBrandUuid(string $name, string $brandUuid): bool;
 

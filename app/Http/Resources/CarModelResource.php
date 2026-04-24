@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Resources;
 
-use App\Core\CarModel\Domain\Entity\CarModel;
+use App\Core\Car\Domain\Entities\CarModel;
 
 class CarModelResource
 {

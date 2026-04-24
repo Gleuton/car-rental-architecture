@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use App\Core\CarModel\Application\DTOs\FilterCarModelDTO;
-use App\Core\CarModel\Application\UseCases\ListCarModelsUseCase;
-use App\Core\CarModel\Domain\Entity\CarModelFilter;
-use App\Core\CarModel\Domain\Repositories\CarModelRepositoryInterface;
+use App\Core\Car\Application\DTOs\CarModel\FilterCarModelDTO;
+use App\Core\Car\Application\UseCases\CarModel\ListCarModelsUseCase;
+use App\Core\Car\Domain\Queries\CarModelQueryFilter;
+use App\Core\Car\Domain\Repositories\CarModelRepositoryInterface;
 use App\Core\Shared\Application\Pagination\PaginatedResult;
 use App\Http\Requests\CarModel\IndexCarModelRequest;
 
@@ -31,7 +31,7 @@ it('lists car models successfully', function () {
 
     $repository->shouldReceive('findByFilters')
         ->once()
-        ->with(Mockery::on(static function (CarModelFilter $filter) {
+        ->with(Mockery::on(static function (CarModelQueryFilter $filter) {
             return $filter->search === 'Corolla' &&
                    $filter->orderBy === 'name' &&
                    $filter->direction === 'asc' &&
@@ -73,7 +73,7 @@ it('lists car models successfully with page', function () {
 
     $repository->shouldReceive('findByFilters')
         ->once()
-        ->with(Mockery::on(static function (CarModelFilter $filter) {
+        ->with(Mockery::on(static function (CarModelQueryFilter $filter) {
             return $filter->search === 'Civic' &&
                 $filter->orderBy === 'name' &&
                 $filter->direction === 'desc' &&

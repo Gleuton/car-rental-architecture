@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Core\CarModel\Application\DTOs;
+namespace App\Core\Car\Application\DTOs\CarModel;
 
 use App\Http\Requests\CarModel\StoreCarModelRequest;
 use Illuminate\Http\UploadedFile;

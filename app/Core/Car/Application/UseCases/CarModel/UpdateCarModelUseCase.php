@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Core\CarModel\Application\UseCases;
+namespace App\Core\Car\Application\UseCases\CarModel;
 
 use App\Core\Brand\Domain\Exceptions\BrandDomainException;
-use App\Core\CarModel\Application\DTOs\UpdateCarModelDTO;
-use App\Core\CarModel\Domain\Entity\CarModel;
-use App\Core\CarModel\Domain\Exceptions\CarModelDomainException;
-use App\Core\CarModel\Domain\Repositories\CarModelRepositoryInterface;
-use App\Core\CarModel\Domain\Roles\CarModelAlreadyExistsRole;
-use App\Core\CarModel\Domain\Roles\ExistsBrandRole;
+use App\Core\Car\Application\DTOs\CarModel\UpdateCarModelDTO;
+use App\Core\Car\Domain\Entities\CarModel;
+use App\Core\Car\Domain\Exceptions\CarModelDomainException;
+use App\Core\Car\Domain\Repositories\CarModelRepositoryInterface;
+use App\Core\Car\Domain\Roles\CarModelAlreadyExistsRole;
+use App\Core\Car\Domain\Roles\ExistsBrandRole;
 use App\Core\Shared\Domain\Storage\FileStorageInterface;
 use App\Core\Shared\Infra\Adapters\LaravelUploadedFileAdapter;
 

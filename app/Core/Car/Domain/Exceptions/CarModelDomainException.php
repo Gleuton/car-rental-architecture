@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Core\CarModel\Domain\Exceptions;
+namespace App\Core\Car\Domain\Exceptions;
 
-use App\Core\CarModel\Domain\Errors\CarModelError;
+use App\Core\Car\Domain\Errors\CarModelError;
 use App\Core\Shared\Domain\DomainException;
 
 class CarModelDomainException extends DomainException

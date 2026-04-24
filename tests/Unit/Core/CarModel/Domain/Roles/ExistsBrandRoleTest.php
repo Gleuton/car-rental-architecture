@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use App\Core\Brand\Domain\Exceptions\BrandDomainException;
 use App\Core\Brand\Domain\Repositories\BrandRepositoryInterface;
-use App\Core\CarModel\Domain\Roles\ExistsBrandRole;
+use App\Core\Car\Domain\Roles\ExistsBrandRole;
 
 beforeEach(function () {
     $this->repository = Mockery::mock(BrandRepositoryInterface::class);

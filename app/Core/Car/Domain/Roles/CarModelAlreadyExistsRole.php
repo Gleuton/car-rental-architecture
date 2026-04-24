@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Core\CarModel\Domain\Roles;
+namespace App\Core\Car\Domain\Roles;
 
-use App\Core\CarModel\Domain\Errors\CarModelError;
-use App\Core\CarModel\Domain\Exceptions\CarModelDomainException;
-use App\Core\CarModel\Domain\Repositories\CarModelRepositoryInterface;
+use App\Core\Car\Domain\Errors\CarModelError;
+use App\Core\Car\Domain\Exceptions\CarModelDomainException;
+use App\Core\Car\Domain\Repositories\CarModelRepositoryInterface;
 
 class CarModelAlreadyExistsRole
 {

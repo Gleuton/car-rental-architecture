@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Core\CarModel\Domain\Entity;
+namespace App\Core\Car\Domain\Entities;
 
-use App\Core\CarModel\Domain\Errors\CarModelError;
-use App\Core\CarModel\Domain\Exceptions\CarModelDomainException;
+use App\Core\Car\Domain\Errors\CarModelError;
+use App\Core\Car\Domain\Exceptions\CarModelDomainException;
 use Illuminate\Support\Str;
 
 class CarModel

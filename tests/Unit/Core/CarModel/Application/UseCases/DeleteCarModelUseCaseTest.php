@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use App\Core\CarModel\Application\DTOs\CarModelUuidDTO;
-use App\Core\CarModel\Application\UseCases\DeleteCarModelUseCase;
-use App\Core\CarModel\Domain\Entity\CarModel;
-use App\Core\CarModel\Domain\Repositories\CarModelRepositoryInterface;
+use App\Core\Car\Application\DTOs\CarModel\CarModelUuidDTO;
+use App\Core\Car\Application\UseCases\CarModel\DeleteCarModelUseCase;
+use App\Core\Car\Domain\Entities\CarModel;
+use App\Core\Car\Domain\Repositories\CarModelRepositoryInterface;
 use App\Core\Shared\Domain\Storage\FileStorageInterface;
 
 it('deletes a car model successfully', function () {

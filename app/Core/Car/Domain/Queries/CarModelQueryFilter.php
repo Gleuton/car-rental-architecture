@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Core\CarModel\Domain\Entity;
+namespace App\Core\Car\Domain\Queries;
 
-readonly class CarModelFilter
+readonly class CarModelQueryFilter
 {
     private function __construct(
         public ?string $search,

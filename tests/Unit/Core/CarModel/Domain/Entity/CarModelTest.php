@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use App\Core\CarModel\Domain\Entity\CarModel;
-use App\Core\CarModel\Domain\Exceptions\CarModelDomainException;
+use App\Core\Car\Domain\Entities\CarModel;
+use App\Core\Car\Domain\Exceptions\CarModelDomainException;
 use Illuminate\Support\Str;
 
 it('can create a CarModel instance', function () {

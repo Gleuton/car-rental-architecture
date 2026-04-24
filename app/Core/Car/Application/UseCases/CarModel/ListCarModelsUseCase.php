@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Core\CarModel\Application\UseCases;
+namespace App\Core\Car\Application\UseCases\CarModel;
 
-use App\Core\CarModel\Application\DTOs\FilterCarModelDTO;
-use App\Core\CarModel\Domain\Entity\CarModelCollection;
-use App\Core\CarModel\Domain\Entity\CarModelFilter;
-use App\Core\CarModel\Domain\Repositories\CarModelRepositoryInterface;
+use App\Core\Car\Application\DTOs\CarModel\FilterCarModelDTO;
+use App\Core\Car\Domain\Collection\CarModelCollection;
+use App\Core\Car\Domain\Queries\CarModelQueryFilter;
+use App\Core\Car\Domain\Repositories\CarModelRepositoryInterface;
 use App\Core\Shared\Application\Pagination\PaginatedResult;
 
 readonly class ListCarModelsUseCase
@@ -21,7 +21,7 @@ readonly class ListCarModelsUseCase
      */
     public function execute(FilterCarModelDTO $filters): PaginatedResult
     {
-        $carModelFilterDomain = CarModelFilter::create(
+        $carModelFilterDomain = CarModelQueryFilter::create(
             $filters->search,
             $filters->orderBy,
             $filters->direction,

@@ -6,7 +6,7 @@ namespace App\Core\Car\Domain\Roles;
 
 use App\Core\Car\Domain\Errors\CarError;
 use App\Core\Car\Domain\Exceptions\CarDomainException;
-use App\Core\CarModel\Domain\Repositories\CarModelRepositoryInterface;
+use App\Core\Car\Domain\Repositories\CarModelRepositoryInterface;
 
 class ExistsCarModelRole
 {
