@@ -19,12 +19,12 @@ it('can create a BrandCollection with valid items', function () {
 
 it('throws exception when adding invalid item to BrandCollection in constructor', function () {
     new BrandCollection(['not a brand']);
-})->throws(InvalidArgumentException::class, 'A BrandCollection só aceita instâncias de App\\Core\\Brand\\Domain\\Entity\\Brand.');
+})->throws(InvalidArgumentException::class, 'A BrandCollection só aceita instâncias de '.Brand::class);
 
 it('throws exception when using add with invalid item', function () {
     $collection = new BrandCollection();
     $collection->add('invalid');
-})->throws(InvalidArgumentException::class, 'A BrandCollection só aceita instâncias de App\\Core\\Brand\\Domain\\Entity\\Brand.');
+})->throws(InvalidArgumentException::class, 'A BrandCollection só aceita instâncias de '.Brand::class);
 
 it('can add a valid Brand to BrandCollection', function () {
     $collection = new BrandCollection();
