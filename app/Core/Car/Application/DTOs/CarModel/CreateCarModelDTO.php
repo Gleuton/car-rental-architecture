@@ -25,10 +25,10 @@ readonly class CreateCarModelDTO
             $request->input('brand_uuid'),
             $request->input('name'),
             $request->file('image'),
-            $request->input('doors_number'),
-            $request->input('seats_number'),
-            $request->input('airbags'),
-            $request->input('abs')
+            (int) $request->input('doors_number'),
+            (int) $request->input('seats_number'),
+            (bool) $request->input('airbags'),
+            (bool) $request->input('abs')
         );
     }
 }
