@@ -1,18 +1,18 @@
 <script setup>
-import {useBrandList} from '@modules/brand/composables/useBrandList.js';
-import {useBrandDetails} from '@modules/brand/composables/useBrandDetails.js';
-import {useBrandDelete} from '@modules/brand/composables/useBrandDelete.js';
-import {useBrandEdit} from "@modules/brand/composables/useBrandEdit.js";
-import {useBrandCreate} from "@modules/brand/composables/useBrandCreate.js";
+import {useBrandList} from '../composables/useBrandList.js';
+import {useBrandDetails} from '../composables/useBrandDetails.js';
+import {useBrandDelete} from '../composables/useBrandDelete.js';
+import {useBrandEdit} from "../composables/useBrandEdit.js";
+import {useBrandCreate} from "../composables/useBrandCreate.js";
 
-import SearchBrand from "@modules/brand/components/SearchBrand.vue";
-import TableBrands from '@modules/brand/components/TableBrands.vue';
-import PaginationBrand from '@modules/brand/components/PaginationBrand.vue';
+import SearchBrand from "../components/SearchBrand.vue";
+import TableBrands from '../components/TableBrands.vue';
+import PaginationBrand from '../components/PaginationBrand.vue';
 
-import BrandCreateModal from '@modules/brand/components/BrandCreateModal.vue';
-import BrandDeleteModal from '@modules/brand/components/BrandDeleteModal.vue';
-import BrandEditModal from "@modules/brand/components/BrandEditModal.vue";
-import BrandDetailsModal from "@modules/brand/components/BrandDetailsModal.vue";
+import BrandCreateModal from '../components/BrandCreateModal.vue';
+import BrandDeleteModal from '../components/BrandDeleteModal.vue';
+import BrandEditModal from "../components/BrandEditModal.vue";
+import BrandDetailsModal from "../components/BrandDetailsModal.vue";
 
 const {
     brandList,

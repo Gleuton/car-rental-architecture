@@ -6,7 +6,7 @@ const app = createApp({});
 import LoginComponent from '@modules/auth/pages/Login.vue';
 import HomeComponent from '@modules/home/pages/Home.vue';
 import BrandComponent from '@modules/brand/pages/Brand.vue';
-import CarModels from "./modules/car-models/pages/CarModels.vue";
+import CarModels from "@modules/car-models/pages/CarModels.vue";
 import ModalComponent from '@shared/components/Modal.vue';
 
 app.component('modal-component', ModalComponent);
