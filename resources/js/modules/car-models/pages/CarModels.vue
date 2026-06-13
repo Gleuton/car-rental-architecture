@@ -4,7 +4,6 @@ import {useCarModelCreate} from "../composables/useCarModelCreate.js";
 import CarModelCreateModal from "../components/CarModelCreateModal.vue";
 import {useBrandList} from '../../brand/composables/useBrandList.js';
 import {useModelList} from '../composables/useModelList.js';
-import {ref} from 'vue';
 
 import SearchModel from '../components/SearchModel.vue';
 import TableModels from '../components/TableModels.vue';
