@@ -1,8 +1,20 @@
 <script setup>
 
 import {useCarModelCreate} from "../composables/useCarModelCreate.js";
-import {useBrandList} from '../../brand/composables/useBrandList.js';
 import CarModelCreateModal from "../components/CarModelCreateModal.vue";
+import {useBrandList} from '../../brand/composables/useBrandList.js';
+import {useModelList} from '../composables/useModelList.js';
+import {ref} from 'vue';
+
+import SearchModel from '../components/SearchModel.vue';
+import TableModels from '../components/TableModels.vue';
+import PaginationModel from '../components/PaginationModel.vue';
+const {
+    modelList,
+    paginationModel,
+    loadModelList,
+} = useModelList();
+
 
 const {
     createFormPayload,
@@ -13,7 +25,7 @@ const {
     previewCreateImage,
     handleCreateFormImage,
 } = useCarModelCreate({
-    onSuccess: () => console.log('CarModel created successfully!'),
+    onSuccess: () => loadModelList(),
 });
 
 const {brandList} = useBrandList();
@@ -26,14 +38,18 @@ const {brandList} = useBrandList();
             <div class="row justify-content-center">
                 <div class="col-md-8">
                     <hr>
+                    <SearchModel :load-model-list="loadModelList" />
+                    <hr>
                     <div class="card">
-                        <div class="card-header">Marcas</div>
+                        <div class="card-header">Modelos</div>
 
                         <div class="card-body">
-
+                            <TableModels :models="modelList" :brands="brandList" />
                         </div>
 
                         <div class="card-footer d-flex justify-content-between align-items-center">
+                            <PaginationModel :load-model-list="loadModelList" :pagination="paginationModel" />
+
                             <CarModelCreateModal
                                 :form-payload="createFormPayload"
                                 :submit-form="submitCreateForm"
