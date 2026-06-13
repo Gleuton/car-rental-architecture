@@ -1,7 +1,7 @@
 <script setup>
 
 import {useCarModelCreate} from "../composables/useCarModelCreate.js";
-import {useBrandList} from '@modules/brand/composables/useBrandList.js';
+import {useBrandList} from '../../brand/composables/useBrandList.js';
 import CarModelCreateModal from "../components/CarModelCreateModal.vue";
 
 const {
