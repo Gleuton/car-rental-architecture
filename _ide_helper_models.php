@@ -38,10 +38,11 @@ namespace App\Models{
     use Illuminate\Support\Carbon;
 
     /**
-     * @property int $id
-     * @property int $car_model_id
+     * @property int $uuid
+     * @property int $car_model_uuid
      * @property string $license_plate
      * @property string $color
+     * @property CarModel $carModel
      * @property bool $is_available
      * @property int $km
      * @property Carbon|null $created_at
@@ -67,7 +68,8 @@ namespace App\Models{
 
     /**
      * @property int $id
-     * @property int $brand_id
+     * @property string $brand_uuid
+     * @property-read Brand $brand
      * @property string $uuid
      * @property string $name
      * @property string $image

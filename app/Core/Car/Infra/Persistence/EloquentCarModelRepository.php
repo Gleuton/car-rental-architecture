@@ -115,7 +115,7 @@ class EloquentCarModelRepository implements CarModelRepositoryInterface
             (bool) $carModel->airbags,
             (bool) $carModel->abs,
             $carModel->uuid,
-            $carModel->brand?->name,
+            $carModel->brand?->name
         );
     }
 
