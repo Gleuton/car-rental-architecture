@@ -44,7 +44,7 @@
                                 </a>
 
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="#">Carros</a>
+                                    <a class="dropdown-item" href="{{ route('web.car.index') }}">Carros</a>
                                     <a class="dropdown-item" href="{{ route('web.brands.index') }}">Marcas</a>
                                     <a class="dropdown-item" href="{{ route('web.car.models.index') }}">Modelos</a>
                                 </div>

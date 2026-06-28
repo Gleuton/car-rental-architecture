@@ -19,5 +19,4 @@ app.component('car-model-component', CarModels);
 //     app.component(path.split('/').pop().replace(/\.\w+$/, ''), definition.default);
 // });
 
-
 app.mount('#app');
