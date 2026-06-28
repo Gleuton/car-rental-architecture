@@ -37,6 +37,7 @@ it('can update name and brand in model car', function () {
     $response->assertStatus(200)
         ->assertJsonPath('data.uuid', $factoryModelCar->uuid)
         ->assertJsonPath('data.name', $newModelName)
+        ->assertJsonPath('data.brandUuid', $newBrand->uuid)
         ->assertJsonPath('data.brandName', $newBrand->name)
         ->assertJsonMissingPath('data.id');
 
@@ -148,6 +149,7 @@ it('can update all data in model car', function () {
     $response->assertStatus(200)
         ->assertJsonPath('data.uuid', $factoryModelCar->uuid)
         ->assertJsonPath('data.name', $carModelDetails['name'])
+        ->assertJsonPath('data.brandUuid', $newBrand->uuid)
         ->assertJsonPath('data.brandName', $newBrand->name)
         ->assertJsonMissingPath('data.id');
 

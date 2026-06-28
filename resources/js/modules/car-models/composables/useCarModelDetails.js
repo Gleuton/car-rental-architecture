@@ -5,6 +5,7 @@ export function useCarModelDetails() {
     const detailsModel = reactive({
         uuid: null,
         brandUuid: null,
+        brandName: '',
         name: '',
         image: null,
         img_url: '',
@@ -17,6 +18,7 @@ export function useCarModelDetails() {
     function resetDetailsInfo() {
         detailsModel.uuid = null;
         detailsModel.brandUuid = null;
+        detailsModel.brandName = '';
         detailsModel.name = '';
         detailsModel.image = null;
         detailsModel.img_url = '';
@@ -34,6 +36,7 @@ export function useCarModelDetails() {
                 const data = response.data.data;
                 detailsModel.uuid = data.uuid;
                 detailsModel.brandUuid = data.brandUuid;
+                detailsModel.brandName = data.brandName;
                 detailsModel.name = data.name;
                 detailsModel.image = data.image;
                 detailsModel.img_url = '/storage/' + data.image;

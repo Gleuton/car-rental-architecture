@@ -6,16 +6,7 @@ defineProps({
         type: Object,
         default: null,
     },
-    brands: {
-        type: Array,
-        default: () => [],
-    },
 });
-
-function brandNameFor(brands, uuid) {
-    const brand = (brands || []).find(b => b.uuid === uuid);
-    return brand ? brand.name : '';
-}
 </script>
 
 <template>
@@ -42,7 +33,7 @@ function brandNameFor(brands, uuid) {
                             type="text"
                             class="form-control"
                             id="model_brand_dtl"
-                            :value="brandNameFor(brands, detailsModel.brandUuid)"
+                            :value="detailsModel.brandName"
                             disabled
                         >
                     </div>

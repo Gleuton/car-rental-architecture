@@ -12,6 +12,7 @@ class CarModelResource
     {
         return [
             'uuid' => $carModel->uuid,
+            'brandUuid' => $carModel->brandUuid,
             'brandName' => $carModel->brandName(),
             'name' => $carModel->name,
             'image' => $carModel->image,

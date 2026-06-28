@@ -9,6 +9,7 @@ export function useCarModelEdit({onSuccess} = {}) {
     const editInfo = reactive({
         uuid: null,
         brandUuid: null,
+        brandName: '',
         name: '',
         img_url: '',
         image: null,
@@ -24,6 +25,8 @@ export function useCarModelEdit({onSuccess} = {}) {
 
     function resetEditInfo() {
         editInfo.image = null;
+        editInfo.brandName = '';
+        editInfo.brandUuid = null;
         previewEditImage.value = null;
         alertsEditForm.value = [];
 
@@ -53,6 +56,7 @@ export function useCarModelEdit({onSuccess} = {}) {
                 const data = response.data.data;
                 editInfo.uuid = data.uuid;
                 editInfo.brandUuid = data.brandUuid;
+                editInfo.brandName = data.brandName;
                 editInfo.name = data.name;
                 editInfo.img_url = '/storage/' + data.image;
                 editInfo.doorsNumber = data.doorsNumber;
@@ -69,7 +73,7 @@ export function useCarModelEdit({onSuccess} = {}) {
     function submitUpdate(model = {}) {
         const formData = new FormData();
         formData.append('name', model.name);
-        formData.append('brand_uuid', model.brandUuid);
+        formData.append('brand_uuid', model.brandUuid ?? '');
         formData.append('doors_number', model.doorsNumber);
         formData.append('seats_number', model.seatsNumber);
         formData.append('airbags', model.airbags ? '1' : '0');

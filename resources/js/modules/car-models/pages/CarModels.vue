@@ -26,19 +26,6 @@ const {
     resetDetailsInfo,
 } = useCarModelDetails();
 
-
-const {
-    createFormPayload,
-    submitCreateForm,
-    isSubmittingCreateForm,
-    resetCreateForm,
-    alertsCreateForm,
-    previewCreateImage,
-    handleCreateFormImage,
-} = useCarModelCreate({
-    onSuccess: () => loadModelList(),
-});
-
 const {brandList} = useBrandList();
 
 const {
@@ -50,6 +37,18 @@ const {
     previewEditImage,
     handleImageEditForm,
 } = useCarModelEdit({
+    onSuccess: () => loadModelList(),
+});
+
+const {
+    createFormPayload,
+    submitCreateForm,
+    isSubmittingCreateForm,
+    resetCreateForm,
+    alertsCreateForm,
+    previewCreateImage,
+    handleCreateFormImage,
+} = useCarModelCreate({
     onSuccess: () => loadModelList(),
 });
 
@@ -78,7 +77,6 @@ const {
                         <div class="card-body">
                             <TableModels
                                 :models="modelList"
-                                :brands="brandList"
                                 @details="getDetailsInfo"
                                 @edit="getEditInfo"
                                 @delete="getDeleteInfo"
@@ -107,7 +105,6 @@ const {
 
     <CarModelDetailsModal
         :details-model="detailsModel"
-        :brands="brandList"
         @close="resetDetailsInfo"
     />
     <CarModelEditModal
@@ -125,4 +122,3 @@ const {
         @close="resetDeleteInfo"
     />
 </template>
-
