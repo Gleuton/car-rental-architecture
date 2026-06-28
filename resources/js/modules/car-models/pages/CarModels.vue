@@ -2,8 +2,10 @@
 
 import {useCarModelCreate} from "../composables/useCarModelCreate.js";
 import {useCarModelDetails} from "../composables/useCarModelDetails.js";
+import {useCarModelEdit} from "../composables/useCarModelEdit.js";
 import CarModelCreateModal from "../components/CarModelCreateModal.vue";
 import CarModelDetailsModal from "../components/CarModelDetailsModal.vue";
+import CarModelEditModal from "../components/CarModelEditModal.vue";
 import {useBrandList} from '../../brand/composables/useBrandList.js';
 import {useModelList} from '../composables/useModelList.js';
 
@@ -37,6 +39,18 @@ const {
 
 const {brandList} = useBrandList();
 
+const {
+    editInfo,
+    getEditInfo,
+    submitUpdate,
+    resetEditInfo,
+    alertsEditForm,
+    previewEditImage,
+    handleImageEditForm,
+} = useCarModelEdit({
+    onSuccess: () => loadModelList(),
+});
+
 </script>
 
 <template>
@@ -55,6 +69,7 @@ const {brandList} = useBrandList();
                                 :models="modelList"
                                 :brands="brandList"
                                 @details="getDetailsInfo"
+                                @edit="getEditInfo"
                             />
                         </div>
 
@@ -82,6 +97,15 @@ const {brandList} = useBrandList();
         :details-model="detailsModel"
         :brands="brandList"
         @close="resetDetailsInfo"
+    />
+    <CarModelEditModal
+        :edit-info="editInfo"
+        :brands="brandList"
+        :alerts="alertsEditForm"
+        :preview-image="previewEditImage"
+        :handle-image="handleImageEditForm"
+        @confirm="submitUpdate"
+        @close="resetEditInfo"
     />
 </template>
 

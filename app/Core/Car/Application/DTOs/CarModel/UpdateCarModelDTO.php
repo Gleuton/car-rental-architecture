@@ -27,10 +27,10 @@ readonly class UpdateCarModelDTO
             $request->input('brand_uuid'),
             $request->input('name'),
             $request->file('image'),
-            $request->input('doors_number'),
-            $request->input('seats_number'),
-            $request->input('airbags'),
-            $request->input('abs')
+            $request->input('doors_number') !== null ? (int) $request->input('doors_number') : null,
+            $request->input('seats_number') !== null ? (int) $request->input('seats_number') : null,
+            $request->input('airbags') !== null ? (bool) $request->input('airbags') : null,
+            $request->input('abs') !== null ? (bool) $request->input('abs') : null,
         );
     }
 }
