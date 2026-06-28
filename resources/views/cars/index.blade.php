@@ -1,5 +1,5 @@
 @extends('layouts.app')
 
 @section('content')
-    <p>Foi</p>
+    <car-component></car-component>
 @endsection
