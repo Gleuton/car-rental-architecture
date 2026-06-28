@@ -3,9 +3,11 @@
 import {useCarModelCreate} from "../composables/useCarModelCreate.js";
 import {useCarModelDetails} from "../composables/useCarModelDetails.js";
 import {useCarModelEdit} from "../composables/useCarModelEdit.js";
+import {useCarModelDelete} from "../composables/useCarModelDelete.js";
 import CarModelCreateModal from "../components/CarModelCreateModal.vue";
 import CarModelDetailsModal from "../components/CarModelDetailsModal.vue";
 import CarModelEditModal from "../components/CarModelEditModal.vue";
+import CarModelDeleteModal from "../components/CarModelDeleteModal.vue";
 import {useBrandList} from '../../brand/composables/useBrandList.js';
 import {useModelList} from '../composables/useModelList.js';
 
@@ -51,6 +53,15 @@ const {
     onSuccess: () => loadModelList(),
 });
 
+const {
+    deleteInfo,
+    getDeleteInfo,
+    deleteSubmit,
+    resetDeleteInfo,
+} = useCarModelDelete({
+    onSuccess: () => loadModelList(),
+});
+
 </script>
 
 <template>
@@ -70,6 +81,7 @@ const {
                                 :brands="brandList"
                                 @details="getDetailsInfo"
                                 @edit="getEditInfo"
+                                @delete="getDeleteInfo"
                             />
                         </div>
 
@@ -106,6 +118,11 @@ const {
         :handle-image="handleImageEditForm"
         @confirm="submitUpdate"
         @close="resetEditInfo"
+    />
+    <CarModelDeleteModal
+        :delete-info="deleteInfo"
+        @confirm="deleteSubmit"
+        @close="resetDeleteInfo"
     />
 </template>
 
