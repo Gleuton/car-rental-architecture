@@ -14,21 +14,24 @@ const props = defineProps({
     <table class="table table-bordered table-hover">
         <thead class="table-dark text-center">
         <tr>
-            <th>Placa</th>
+            <th>Marca</th>
+            <th>Modelo</th>
             <th>Cor</th>
-            <th>Disponível</th>
+            <th>Placa</th>
             <th>KM</th>
+            <th>Disponível</th>
             <th>Ações</th>
         </tr>
         </thead>
         <tbody v-for="car in cars" :key="car.uuid">
         <tr>
-            <td>{{ car.licensePlate }}</td>
+            <td>{{ car.brandName }}</td>
+            <td>{{ car.carModelName }}</td>
             <td>{{ car.color }}</td>
-            <td>{{ car.isAvailable ? 'Sim' : 'Não' }}</td>
+            <td>{{ car.licensePlate }}</td>
             <td>{{ car.km }}</td>
+            <td>{{ car.isAvailable ? 'Sim' : 'Não' }}</td>
             <td class="text-center">
-
             </td>
         </tr>
         </tbody>
