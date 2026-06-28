@@ -1,7 +1,9 @@
 <script setup>
 
 import {useCarModelCreate} from "../composables/useCarModelCreate.js";
+import {useCarModelDetails} from "../composables/useCarModelDetails.js";
 import CarModelCreateModal from "../components/CarModelCreateModal.vue";
+import CarModelDetailsModal from "../components/CarModelDetailsModal.vue";
 import {useBrandList} from '../../brand/composables/useBrandList.js';
 import {useModelList} from '../composables/useModelList.js';
 
@@ -13,6 +15,12 @@ const {
     paginationModel,
     loadModelList,
 } = useModelList();
+
+const {
+    detailsModel,
+    getDetailsInfo,
+    resetDetailsInfo,
+} = useCarModelDetails();
 
 
 const {
@@ -43,7 +51,11 @@ const {brandList} = useBrandList();
                         <div class="card-header">Modelos</div>
 
                         <div class="card-body">
-                            <TableModels :models="modelList" :brands="brandList" />
+                            <TableModels
+                                :models="modelList"
+                                :brands="brandList"
+                                @details="getDetailsInfo"
+                            />
                         </div>
 
                         <div class="card-footer d-flex justify-content-between align-items-center">
@@ -65,5 +77,11 @@ const {brandList} = useBrandList();
             </div>
         </div>
     </div>
+
+    <CarModelDetailsModal
+        :details-model="detailsModel"
+        :brands="brandList"
+        @close="resetDetailsInfo"
+    />
 </template>
 
