@@ -10,6 +10,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
+/**
+ * @property Brand|null $brand
+ */
 class CarModel extends Model
 {
     use HasFactory;
