@@ -16,6 +16,7 @@ class CarModel
     private function __construct(
         public readonly string $uuid,
         public readonly string $brandUuid,
+        public readonly ?string $brandName,
         public readonly string $name,
         public readonly string $image,
         public readonly int $doorsNumber,
@@ -39,7 +40,7 @@ class CarModel
         bool $airbags,
         bool $abs
     ): self {
-        return new self((string) Str::uuid(), $brandUuid, $name, $image, $doorsNumber, $seatsNumber, $airbags, $abs);
+        return new self((string) Str::uuid(), $brandUuid, null, $name, $image, $doorsNumber, $seatsNumber, $airbags, $abs);
     }
 
     /**
@@ -54,8 +55,9 @@ class CarModel
         bool $airbags,
         bool $abs,
         ?string $uuid = null,
+        ?string $brandName = null,
     ): self {
-        return new self($uuid ?? (string) Str::uuid(), $brandUuid, $name, $image, $doorsNumber, $seatsNumber, $airbags, $abs);
+        return new self($uuid ?? (string) Str::uuid(), $brandUuid, $brandName, $name, $image, $doorsNumber, $seatsNumber, $airbags, $abs);
     }
 
     /**
@@ -80,6 +82,7 @@ class CarModel
         return new self(
             $this->uuid,
             $newBrandUuid,
+            $this->brandName,
             $newName,
             $image,
             $newDoorsNumber,
@@ -107,5 +110,10 @@ class CarModel
         if ($this->doorsNumber < 2 || $this->doorsNumber > 5) {
             throw new CarModelDomainException(CarModelError::DOORS_NUMBER);
         }
+    }
+
+    public function brandName(): ?string
+    {
+        return $this->brandName;
     }
 }

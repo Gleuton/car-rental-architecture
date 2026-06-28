@@ -17,7 +17,7 @@ it('can show a model car', function () {
 
     $response->assertStatus(200)
         ->assertJsonPath('data.uuid', fn ($uuid) => is_string($uuid))
-        ->assertJsonPath('data.brandUuid', $carModel->brand_uuid)
+        ->assertJsonPath('data.brandName', $carModel->brand->name)
         ->assertJsonPath('data.name', $carModel->name)
         ->assertJsonPath('data.image', $carModel->image)
         ->assertJsonPath('data.doorsNumber', $carModel->doors)

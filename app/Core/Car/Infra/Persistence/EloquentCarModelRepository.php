@@ -21,6 +21,7 @@ class EloquentCarModelRepository implements CarModelRepositoryInterface
     public function findByFilters(CarModelQueryFilter $filters): PaginatedResult
     {
         $paginator = EloquentCarModel::query()
+            ->with('brand')
             ->when(
                 $filters->search,
                 fn ($q) => $q->whereRaw('LOWER(name) LIKE ?', ['%'.mb_strtolower($filters->search).'%'])
@@ -51,7 +52,7 @@ class EloquentCarModelRepository implements CarModelRepositoryInterface
             'abs' => $carModel->abs,
         ]);
 
-        return $this->toDomainCarModel($eloquentCarModel);
+        return $this->toDomainCarModel($eloquentCarModel->load('brand'));
     }
 
     public function existsByNameAndBrandUuid(string $name, string $brandUuid): bool
@@ -71,7 +72,10 @@ class EloquentCarModelRepository implements CarModelRepositoryInterface
      */
     public function findByUuid(string $uuid): DomainCarModel
     {
-        $modelEloquent = EloquentCarModel::query()->where('uuid', $uuid)->firstOrFail();
+        $modelEloquent = EloquentCarModel::query()
+            ->with('brand')
+            ->where('uuid', $uuid)
+            ->firstOrFail();
 
         return $this->toDomainCarModel($modelEloquent);
     }
@@ -94,7 +98,7 @@ class EloquentCarModelRepository implements CarModelRepositoryInterface
             'uuid' => $carModel->uuid,
         ]);
 
-        return $this->toDomainCarModel($carModelEloquent);
+        return $this->toDomainCarModel($carModelEloquent->load('brand'));
     }
 
     /**
@@ -111,6 +115,7 @@ class EloquentCarModelRepository implements CarModelRepositoryInterface
             (bool) $carModel->airbags,
             (bool) $carModel->abs,
             $carModel->uuid,
+            $carModel->brand?->name,
         );
     }
 
