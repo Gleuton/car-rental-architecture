@@ -14,8 +14,8 @@ use Illuminate\Support\Str;
  * @property int $id
  * @property int $car_id
  * @property int $client_id
- * @property string $start_date
- * @property string $end_date
+ * @property Carbon $start_date
+ * @property Carbon $end_date
  * @property int $day_price_cents
  * @property int $initial_km
  * @property int $final_km

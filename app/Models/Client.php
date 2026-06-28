@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Database\Factories\ClientFactory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -45,7 +46,7 @@ class Client extends Model
         return 'uuid';
     }
 
-    protected static function newFactory()
+    protected static function newFactory(): ClientFactory|Factory
     {
         return ClientFactory::new();
     }

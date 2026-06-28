@@ -14,7 +14,7 @@ use Illuminate\Support\Str;
 /**
  * @property int $id
  * @property string $brand_uuid
- * @property-read Brand $brand
+ * @property-read Brand|null $brand
  * @property string $uuid
  * @property string $name
  * @property string $image
@@ -51,6 +51,7 @@ class CarModel extends Model
         return 'uuid';
     }
 
+    /** @return BelongsTo<Brand, CarModel> */
     public function brand(): BelongsTo
     {
         return $this->belongsTo(Brand::class, 'brand_uuid', 'uuid');

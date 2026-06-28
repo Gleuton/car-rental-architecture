@@ -11,11 +11,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
 
 /**
- * @property int $uuid
- * @property int $car_model_uuid
+ * @property string $uuid
+ * @property string $car_model_uuid
  * @property string $license_plate
  * @property string $color
- * @property CarModel $carModel
+ * @property-read CarModel|null $carModel
  * @property bool $is_available
  * @property int $km
  * @property Carbon $created_at
@@ -47,6 +47,7 @@ class Car extends Model
         return 'uuid';
     }
 
+    /** @return BelongsTo<CarModel, Car> */
     public function carModel(): BelongsTo
     {
         return $this->belongsTo(CarModel::class, 'car_model_uuid', 'uuid');
