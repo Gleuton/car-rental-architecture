@@ -28,7 +28,8 @@ it('can list cars one page', function () {
                     'licensePlate',
                     'color',
                     'km',
-                    'carModelUuid',
+                    'carModelName',
+                    'brandName',
                 ],
             ],
             'meta' => [
@@ -195,7 +196,8 @@ it('response contains all required car fields', function () {
                     'licensePlate',
                     'color',
                     'km',
-                    'carModelUuid',
+                    'carModelName',
+                    'brandName',
                 ],
             ],
         ]);

@@ -15,6 +15,8 @@ class Car
     private function __construct(
         public readonly string $uuid,
         public readonly string $carModelUuid,
+        public readonly ?string $carModelName,
+        public readonly ?string $brandName,
         private LicensePlate $licensePlate,
         private Color $color,
         private bool $available,
@@ -26,7 +28,16 @@ class Car
      */
     public static function new(string $carModelUuid, string $licensePlate, string $color, bool $isAvailable, int $km): self
     {
-        return new self((string) Str::uuid(), $carModelUuid, new LicensePlate($licensePlate), new Color($color), $isAvailable, new Mileage($km));
+        return new self(
+            (string) Str::uuid(),
+            $carModelUuid,
+            null,
+            null,
+            new LicensePlate($licensePlate),
+            new Color($color),
+            $isAvailable,
+            new Mileage($km)
+        );
     }
 
     /**
@@ -39,8 +50,19 @@ class Car
         bool $isAvailable,
         int $km,
         ?string $uuid = null,
+        ?string $carModelName = null,
+        ?string $brandName = null,
     ): self {
-        return new self($uuid ?? (string) Str::uuid(), $carModelUuid, new LicensePlate($licensePlate), new Color($color), $isAvailable, new Mileage($km));
+        return new self(
+            $uuid ?? (string) Str::uuid(),
+            $carModelUuid,
+            $carModelName,
+            $brandName,
+            new LicensePlate($licensePlate),
+            new Color($color),
+            $isAvailable,
+            new Mileage($km)
+        );
     }
 
     /**
@@ -95,5 +117,15 @@ class Car
     public function isAvailable(): bool
     {
         return $this->available;
+    }
+
+    public function carModelName(): ?string
+    {
+        return $this->carModelName;
+    }
+
+    public function brandName(): ?string
+    {
+        return $this->brandName;
     }
 }

@@ -17,7 +17,8 @@ class CarResource
             'licensePlate' => $car->licensePlate(),
             'color' => $car->color(),
             'isAvailable' => $car->isAvailable(),
-            'carModelUuid' => $car->carModelUuid,
+            'carModelName' => $car->carModelName(),
+            'brandName' => $car->brandName(),
             'km' => $car->km(),
         ];
     }

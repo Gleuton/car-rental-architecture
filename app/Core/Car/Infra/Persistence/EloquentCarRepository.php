@@ -25,7 +25,7 @@ class EloquentCarRepository implements CarRepositoryInterface
             'km' => $car->km(),
         ]);
 
-        return $this->toDomainCar($eloquentCar);
+        return $this->toDomainCar($eloquentCar->load('carModel.brand'));
     }
 
     public function existsByLicensePlate(string $licensePlate): bool
@@ -35,7 +35,10 @@ class EloquentCarRepository implements CarRepositoryInterface
 
     public function findByUuid(string $uuid): Car
     {
-        $eloquentCar = EloquentCar::query()->where('uuid', $uuid)->firstOrFail();
+        $eloquentCar = EloquentCar::query()
+            ->with('carModel.brand')
+            ->where('uuid', $uuid)
+            ->firstOrFail();
 
         return $this->toDomainCar($eloquentCar);
     }
@@ -45,7 +48,7 @@ class EloquentCarRepository implements CarRepositoryInterface
      */
     public function listCars(CarQueryFilter $filter): PaginatedResult
     {
-        $query = EloquentCar::query();
+        $query = EloquentCar::query()->with('carModel.brand');
 
         if ($filter->licensePlate !== null) {
             $query->where('license_plate', 'like', '%'.$filter->licensePlate.'%');
@@ -76,6 +79,8 @@ class EloquentCarRepository implements CarRepositoryInterface
             (bool) $eloquentCar->is_available,
             $eloquentCar->km,
             $eloquentCar->uuid,
+            $eloquentCar->carModel?->name,
+            $eloquentCar->carModel?->brand?->name,
         );
     }
 
@@ -91,6 +96,6 @@ class EloquentCarRepository implements CarRepositoryInterface
             'km' => $car->km(),
         ]);
 
-        return $this->toDomainCar($eloquentCar);
+        return $this->toDomainCar($eloquentCar->load('carModel.brand'));
     }
 }

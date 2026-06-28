@@ -25,9 +25,11 @@ it('can create a Car', function () {
     $response = $this->postJson('/api/cars', $data);
     $response->assertStatus(200);
     $response->assertJsonStructure([
-        'data' => ['uuid', 'licensePlate', 'color', 'km', 'carModelUuid'],
+        'data' => ['uuid', 'licensePlate', 'color', 'km', 'carModelName', 'brandName'],
     ]);
     $response->assertJsonPath('data.licensePlate', 'ABC-1234');
+    $response->assertJsonPath('data.carModelName', $carModel->name);
+    $response->assertJsonPath('data.brandName', $carModel->brand->name);
 
     $response->assertJsonPath('data.uuid', fn ($uuid) => Str::isUuid($uuid));
 
@@ -55,7 +57,8 @@ it('can create a Car using car_model_uuid', function () {
     ]);
 
     $response->assertStatus(200)
-        ->assertJsonPath('data.carModelUuid', $carModel->uuid)
+        ->assertJsonPath('data.carModelName', $carModel->name)
+        ->assertJsonPath('data.brandName', $carModel->brand->name)
         ->assertJsonPath('data.licensePlate', 'QWE-9876');
 
     $this->assertDatabaseHas('cars', [
