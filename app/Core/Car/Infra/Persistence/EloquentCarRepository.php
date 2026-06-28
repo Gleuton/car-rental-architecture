@@ -6,6 +6,7 @@ namespace App\Core\Car\Infra\Persistence;
 
 use App\Core\Car\Domain\Collection\CarCollection;
 use App\Core\Car\Domain\Entities\Car;
+use App\Core\Car\Domain\Exceptions\CarDomainException;
 use App\Core\Car\Domain\Queries\CarQueryFilter;
 use App\Core\Car\Domain\Repositories\CarRepositoryInterface;
 use App\Core\Shared\Application\Pagination\PaginatedResult;
@@ -14,6 +15,9 @@ use App\Models\Car as EloquentCar;
 
 class EloquentCarRepository implements CarRepositoryInterface
 {
+    /**
+     * @throws CarDomainException
+     */
     public function save(Car $car): Car
     {
         $eloquentCar = EloquentCar::create([
@@ -33,6 +37,9 @@ class EloquentCarRepository implements CarRepositoryInterface
         return EloquentCar::where('license_plate', $licensePlate)->exists();
     }
 
+    /**
+     * @throws CarDomainException
+     */
     public function findByUuid(string $uuid): Car
     {
         $eloquentCar = EloquentCar::query()
@@ -70,6 +77,9 @@ class EloquentCarRepository implements CarRepositoryInterface
         EloquentCar::query()->where('uuid', $uuid)->firstOrFail()->delete();
     }
 
+    /**
+     * @throws CarDomainException
+     */
     private function toDomainCar(EloquentCar $eloquentCar): Car
     {
         return Car::restore(
@@ -84,6 +94,9 @@ class EloquentCarRepository implements CarRepositoryInterface
         );
     }
 
+    /**
+     * @throws CarDomainException
+     */
     public function update(Car $car): Car
     {
         $eloquentCar = EloquentCar::query()->where('uuid', $car->uuid)->firstOrFail();

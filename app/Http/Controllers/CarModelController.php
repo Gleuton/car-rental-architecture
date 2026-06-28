@@ -40,15 +40,7 @@ class CarModelController extends Controller
 
         $carModels = $this->listCarModels->execute($filters);
 
-        return response()->json([
-            'data' => array_map(static fn ($carModel) => CarModelResource::toArray($carModel), $carModels->items->all()),
-            'meta' => [
-                'current_page' => $carModels->page,
-                'per_page' => $carModels->perPage,
-                'total' => $carModels->total,
-                'last_page' => $carModels->lastPage,
-            ],
-        ]);
+        return response()->json(CarModelResource::paginateToArray($carModels));
     }
 
     /**
