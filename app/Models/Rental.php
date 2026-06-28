@@ -4,11 +4,24 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
 
+/**
+ * @property int $id
+ * @property int $car_id
+ * @property int $client_id
+ * @property string $start_date
+ * @property string $end_date
+ * @property int $day_price_cents
+ * @property int $initial_km
+ * @property int $final_km
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ */
 class Rental extends Model
 {
     use HasFactory;

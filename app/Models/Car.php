@@ -4,11 +4,23 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
 
+/**
+ * @property int $uuid
+ * @property int $car_model_uuid
+ * @property string $license_plate
+ * @property string $color
+ * @property CarModel $carModel
+ * @property bool $is_available
+ * @property int $km
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ */
 class Car extends Model
 {
     use HasFactory;

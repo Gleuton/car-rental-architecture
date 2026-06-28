@@ -13,15 +13,7 @@ declare(strict_types=1);
  */
 
 namespace App\Models{
-    use Illuminate\Support\Carbon;
-
     /**
-     * @property int $id
-     * @property string $name
-     * @property string $image
-     * @property Carbon|null $created_at
-     * @property Carbon|null $updated_at
-     *
      * @method static \Illuminate\Database\Eloquent\Builder<static>|Brand newModelQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<static>|Brand newQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<static>|Brand query()
@@ -35,19 +27,8 @@ namespace App\Models{
 }
 
 namespace App\Models{
-    use Illuminate\Support\Carbon;
 
     /**
-     * @property int $uuid
-     * @property int $car_model_uuid
-     * @property string $license_plate
-     * @property string $color
-     * @property CarModel $carModel
-     * @property bool $is_available
-     * @property int $km
-     * @property Carbon|null $created_at
-     * @property Carbon|null $updated_at
-     *
      * @method static \Illuminate\Database\Eloquent\Builder<static>|Car newModelQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<static>|Car newQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<static>|Car query()
@@ -64,22 +45,8 @@ namespace App\Models{
 }
 
 namespace App\Models{
-    use Illuminate\Support\Carbon;
 
     /**
-     * @property int $id
-     * @property string $brand_uuid
-     * @property-read Brand $brand
-     * @property string $uuid
-     * @property string $name
-     * @property string $image
-     * @property int $doors
-     * @property int $seats
-     * @property bool $airbags
-     * @property bool $abs
-     * @property Carbon|null $created_at
-     * @property Carbon|null $updated_at
-     *
      * @method static \Illuminate\Database\Eloquent\Builder<static>|CarModel newModelQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<static>|CarModel newQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<static>|CarModel query()
@@ -98,14 +65,8 @@ namespace App\Models{
 }
 
 namespace App\Models{
-    use Illuminate\Support\Carbon;
 
     /**
-     * @property int $id
-     * @property string $name
-     * @property Carbon|null $created_at
-     * @property Carbon|null $updated_at
-     *
      * @method static \Illuminate\Database\Eloquent\Builder<static>|Client newModelQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<static>|Client newQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<static>|Client query()
@@ -118,20 +79,8 @@ namespace App\Models{
 }
 
 namespace App\Models{
-    use Illuminate\Support\Carbon;
 
     /**
-     * @property int $id
-     * @property int $car_id
-     * @property int $client_id
-     * @property string $start_date
-     * @property string $end_date
-     * @property int $day_price_cents
-     * @property int $initial_km
-     * @property int $final_km
-     * @property Carbon|null $created_at
-     * @property Carbon|null $updated_at
-     *
      * @method static \Illuminate\Database\Eloquent\Builder<static>|Rental newModelQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<static>|Rental newQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<static>|Rental query()
@@ -150,22 +99,8 @@ namespace App\Models{
 }
 
 namespace App\Models{
-    use Illuminate\Notifications\DatabaseNotification;
-    use Illuminate\Notifications\DatabaseNotificationCollection;
-    use Illuminate\Support\Carbon;
 
     /**
-     * @property int $id
-     * @property string $name
-     * @property string $email
-     * @property Carbon|null $email_verified_at
-     * @property string $password
-     * @property string|null $remember_token
-     * @property Carbon|null $created_at
-     * @property Carbon|null $updated_at
-     * @property-read DatabaseNotificationCollection<int, DatabaseNotification> $notifications
-     * @property-read int|null $notifications_count
-     *
      * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
      * @method static \Illuminate\Database\Eloquent\Builder<static>|User newModelQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<static>|User newQuery()
