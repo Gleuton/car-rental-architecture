@@ -7,13 +7,13 @@ import {useCarModelDelete} from "../composables/useCarModelDelete.js";
 import CarModelCreateModal from "../components/CarModelCreateModal.vue";
 import CarModelDetailsModal from "../components/CarModelDetailsModal.vue";
 import CarModelEditModal from "../components/CarModelEditModal.vue";
-import CarModelDeleteModal from "../components/CarModelDeleteModal.vue";
 import {useBrandList} from '../../brand/composables/useBrandList.js';
 import {useModelList} from '../composables/useModelList.js';
 
-import SearchModel from '../components/SearchModel.vue';
+import SearchInput from '@shared/components/SearchInput.vue';
+import Pagination from '@shared/components/Pagination.vue';
+import DeleteModal from '@shared/components/DeleteModal.vue';
 import TableModels from '../components/TableModels.vue';
-import PaginationModel from '../components/PaginationModel.vue';
 const {
     modelList,
     paginationModel,
@@ -69,7 +69,7 @@ const {
             <div class="row justify-content-center">
                 <div class="col-md-8">
                     <hr>
-                    <SearchModel :load-model-list="loadModelList" />
+                    <SearchInput :load-list="loadModelList" title="Busca de Modelos" label="Nome do Modelo" />
                     <hr>
                     <div class="card">
                         <div class="card-header">Modelos</div>
@@ -84,7 +84,7 @@ const {
                         </div>
 
                         <div class="card-footer d-flex justify-content-between align-items-center">
-                            <PaginationModel :load-model-list="loadModelList" :pagination="paginationModel" />
+                            <Pagination :load-list="loadModelList" :pagination="paginationModel" />
 
                             <CarModelCreateModal
                                 :form-payload="createFormPayload"
@@ -116,8 +116,11 @@ const {
         @confirm="submitUpdate"
         @close="resetEditInfo"
     />
-    <CarModelDeleteModal
+    <DeleteModal
         :delete-info="deleteInfo"
+        title="Deletar Modelo"
+        entity-label="o modelo"
+        modal-id="deleteModel"
         @confirm="deleteSubmit"
         @close="resetDeleteInfo"
     />
