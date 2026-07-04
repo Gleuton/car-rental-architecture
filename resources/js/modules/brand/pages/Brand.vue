@@ -5,14 +5,13 @@ import {useBrandDelete} from '../composables/useBrandDelete.js';
 import {useBrandEdit} from "../composables/useBrandEdit.js";
 import {useBrandCreate} from "../composables/useBrandCreate.js";
 
-import SearchBrand from "../components/SearchBrand.vue";
+import SearchInput from '@shared/components/SearchInput.vue';
+import Pagination from '@shared/components/Pagination.vue';
+import DeleteModal from '@shared/components/DeleteModal.vue';
 import TableBrands from '../components/TableBrands.vue';
-import PaginationBrand from '../components/PaginationBrand.vue';
-
 import BrandCreateModal from '../components/BrandCreateModal.vue';
-import BrandDeleteModal from '../components/BrandDeleteModal.vue';
-import BrandEditModal from "../components/BrandEditModal.vue";
-import BrandDetailsModal from "../components/BrandDetailsModal.vue";
+import BrandEditModal from '../components/BrandEditModal.vue';
+import BrandDetailsModal from '../components/BrandDetailsModal.vue';
 
 const {
     brandList,
@@ -65,7 +64,7 @@ const {
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <SearchBrand :load-brand-list="loadBrandList"/>
+                <SearchInput :load-list="loadBrandList" title="Busca de Marcas" label="Nome da Marca"/>
                 <hr>
                 <div class="card">
                     <div class="card-header">Marcas</div>
@@ -80,8 +79,8 @@ const {
                     </div>
 
                     <div class="card-footer d-flex justify-content-between align-items-center">
-                        <PaginationBrand
-                            :load-brand-list="loadBrandList"
+                        <Pagination
+                            :load-list="loadBrandList"
                             :pagination="paginationBrand"
                         />
                         <BrandCreateModal
@@ -110,8 +109,11 @@ const {
             @confirm="submitUpdate"
             @close="resetEditInfo"
         />
-        <BrandDeleteModal
+        <DeleteModal
             :delete-info="deleteInfo"
+            title="Deletar Marca"
+            entity-label="a marca"
+            modal-id="deleteBrand"
             @confirm="deleteSubmit"
             @close="resetDeleteInfo"
         />
