@@ -9,7 +9,7 @@ const CAR_MODEL_APP_CODE_MESSAGES = {
 };
 
 export function mapCarModelDomainError(data) {
-    if (!data || data.domain !== 'brand') {
+    if (!data || data.domain !== 'car-model') {
         return null;
     }
 
