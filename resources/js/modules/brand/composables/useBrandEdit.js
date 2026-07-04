@@ -1,9 +1,10 @@
-import {reactive, ref} from "vue";
-import {getBrandDetailsByUuid, putBrand} from "@modules/brand/services/brandApi.js";
-import {mapBrandApiError} from "@modules/brand/errors/brandApiErrorMapper.js";
-import {Modal} from "bootstrap";
+import { reactive, ref } from 'vue';
+import { getBrandDetailsByUuid, putBrand } from '@modules/brand/services/brandApi.js';
+import { mapBrandApiError } from '@modules/brand/errors/brandApiErrorMapper.js';
+import { Modal } from 'bootstrap';
+import { useImagePreview } from '@shared/composables/useImagePreview.js';
 
-export function useBrandEdit({onSuccess} = {}) {
+export function useBrandEdit({ onSuccess } = {}) {
     const runOnSuccess = onSuccess ?? (() => {});
     const editInfo = reactive({
         uuid: null,
@@ -12,44 +13,20 @@ export function useBrandEdit({onSuccess} = {}) {
         image: null,
     });
 
-    const previewEditImage = ref(null);
     const alertsEditForm = ref([]);
-    const fileEditInput = ref(null);
+
+    const {
+        previewImage: previewEditImage,
+        handleImage: handleImageEditForm,
+        resetImage: resetPreviewImage,
+    } = useImagePreview((file) => {
+        editInfo.image = file;
+    });
 
     function resetEditInfo() {
         editInfo.image = null;
-        previewEditImage.value = null;
         alertsEditForm.value = [];
-
-        if (fileEditInput.value) {
-            fileEditInput.value.value = '';
-        }
-    }
-
-    const handleImageEditForm = (event) => {
-        fileEditInput.value = event.target;
-        const file = fileEditInput.value.files[0];
-        if (file) {
-            editInfo.image = file;
-            previewEditImage.value = URL.createObjectURL(file);
-        }
-    }
-
-    function submitUpdate(brand = {}) {
-        const formData = new FormData();
-        formData.append('name', brand.name);
-
-        if (editInfo.image) {
-            formData.append('image', editInfo.image);
-        }
-
-        return putBrand(brand.uuid, formData).then(() => {
-            closeModal();
-            runOnSuccess();
-        }).catch((error) => {
-            console.error(error);
-            alertsEditForm.value = mapBrandApiError(error);
-        });
+        resetPreviewImage();
     }
 
     function closeModal() {
@@ -71,6 +48,24 @@ export function useBrandEdit({onSuccess} = {}) {
             });
     }
 
+    function submitUpdate(brand = {}) {
+        const formData = new FormData();
+        formData.append('name', brand.name);
+        if (editInfo.image) {
+            formData.append('image', editInfo.image);
+        }
+
+        return putBrand(brand.uuid, formData)
+            .then(() => {
+                closeModal();
+                runOnSuccess();
+            })
+            .catch((error) => {
+                console.error(error);
+                alertsEditForm.value = mapBrandApiError(error);
+            });
+    }
+
     return {
         editInfo,
         getEditInfo,
@@ -79,5 +74,5 @@ export function useBrandEdit({onSuccess} = {}) {
         alertsEditForm,
         previewEditImage,
         handleImageEditForm,
-    }
+    };
 }

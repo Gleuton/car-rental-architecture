@@ -1,9 +1,10 @@
-import {reactive, ref} from 'vue';
-import {Modal} from 'bootstrap';
-import {getModelCarDetailsByUuid, putModelCar} from '@modules/car-models/services/carModelApi.js';
-import {mapCarModelApiError} from '@modules/car-models/errors/carModelApiErrorMapper.js';
+import { reactive, ref } from 'vue';
+import { Modal } from 'bootstrap';
+import { getModelCarDetailsByUuid, putModelCar } from '@modules/car-models/services/carModelApi.js';
+import { mapCarModelApiError } from '@modules/car-models/errors/carModelApiErrorMapper.js';
+import { useImagePreview } from '@shared/composables/useImagePreview.js';
 
-export function useCarModelEdit({onSuccess} = {}) {
+export function useCarModelEdit({ onSuccess } = {}) {
     const runOnSuccess = onSuccess ?? (() => {});
 
     const editInfo = reactive({
@@ -19,30 +20,23 @@ export function useCarModelEdit({onSuccess} = {}) {
         abs: false,
     });
 
-    const previewEditImage = ref(null);
     const alertsEditForm = ref([]);
-    const fileEditInput = ref(null);
+
+    const {
+        previewImage: previewEditImage,
+        handleImage: handleImageEditForm,
+        resetImage: resetPreviewImage,
+    } = useImagePreview((file) => {
+        editInfo.image = file;
+    });
 
     function resetEditInfo() {
         editInfo.image = null;
         editInfo.brandName = '';
         editInfo.brandUuid = null;
-        previewEditImage.value = null;
         alertsEditForm.value = [];
-
-        if (fileEditInput.value) {
-            fileEditInput.value.value = '';
-        }
+        resetPreviewImage();
     }
-
-    const handleImageEditForm = (event) => {
-        fileEditInput.value = event.target;
-        const file = fileEditInput.value.files[0];
-        if (file) {
-            editInfo.image = file;
-            previewEditImage.value = URL.createObjectURL(file);
-        }
-    };
 
     function closeModal() {
         const modal = document.querySelector('.modal.show');
@@ -78,7 +72,6 @@ export function useCarModelEdit({onSuccess} = {}) {
         formData.append('seats_number', model.seatsNumber);
         formData.append('airbags', model.airbags ? '1' : '0');
         formData.append('abs', model.abs ? '1' : '0');
-
         if (editInfo.image) {
             formData.append('image', editInfo.image);
         }
