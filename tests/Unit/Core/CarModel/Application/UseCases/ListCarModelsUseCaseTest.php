@@ -14,6 +14,7 @@ it('lists car models successfully', function () {
     $request = Mockery::mock(IndexCarModelRequest::class);
 
     $request->shouldReceive('input')->with('search')->andReturn('Corolla');
+    $request->shouldReceive('input')->with('brand_uuid')->andReturn(null);
     $request->shouldReceive('input')->with('order_by')->andReturn('name');
     $request->shouldReceive('input')->with('direction')->andReturn('asc');
     $request->shouldReceive('input')->with('per_page')->andReturn('15');
@@ -56,6 +57,7 @@ it('lists car models successfully with page', function () {
     $request = Mockery::mock(IndexCarModelRequest::class);
 
     $request->shouldReceive('input')->with('search')->andReturn('Civic');
+    $request->shouldReceive('input')->with('brand_uuid')->andReturn(null);
     $request->shouldReceive('input')->with('order_by')->andReturn('name');
     $request->shouldReceive('input')->with('direction')->andReturn('desc');
     $request->shouldReceive('input')->with('per_page')->andReturn('10');
