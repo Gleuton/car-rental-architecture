@@ -21,6 +21,7 @@ class IndexCarModelRequest extends FormRequest
     {
         return [
             'search' => ['nullable', 'string', 'max:255'],
+            'brand_uuid' => ['nullable', 'uuid'],
             'order_by' => ['nullable', 'in:name,created_at'],
             'direction' => ['nullable', 'in:asc,desc'],
             'per_page' => ['nullable', 'integer', 'min:1', 'max:100'],

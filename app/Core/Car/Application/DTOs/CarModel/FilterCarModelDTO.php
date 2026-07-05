@@ -10,6 +10,7 @@ readonly class FilterCarModelDTO
 {
     private function __construct(
         public ?string $search,
+        public ?string $brandUuid,
         public string $orderBy,
         public string $direction,
         public int $perPage,
@@ -20,6 +21,7 @@ readonly class FilterCarModelDTO
     {
         return new self(
             search: $request->input('search'),
+            brandUuid: $request->input('brand_uuid'),
             orderBy: $request->input('order_by'),
             direction: $request->input('direction'),
             perPage: (int) $request->input('per_page'),

@@ -20,6 +20,8 @@ interface CarModelRepositoryInterface
      */
     public function findByFilters(CarModelQueryFilter $filters): PaginatedResult;
 
+    public function findByBrandUuid(string $brandUuid): CarModelCollection;
+
     public function existsByNameAndBrandUuid(string $name, string $brandUuid): bool;
 
     public function existsByUuid(string $uuid): bool;

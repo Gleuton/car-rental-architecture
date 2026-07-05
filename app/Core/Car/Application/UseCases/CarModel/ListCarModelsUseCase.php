@@ -23,6 +23,7 @@ readonly class ListCarModelsUseCase
     {
         $carModelFilterDomain = CarModelQueryFilter::create(
             $filters->search,
+            $filters->brandUuid,
             $filters->orderBy,
             $filters->direction,
             $filters->perPage,

@@ -26,6 +26,10 @@ class EloquentCarModelRepository implements CarModelRepositoryInterface
                 $filters->search,
                 fn ($q) => $q->whereRaw('LOWER(name) LIKE ?', ['%'.mb_strtolower($filters->search).'%'])
             )
+            ->when(
+                $filters->brandUuid,
+                fn ($q) => $q->where('brand_uuid', $filters->brandUuid)
+            )
             ->orderBy($filters->orderBy, $filters->direction)
             ->paginate($filters->perPage, ['*'], 'page', $filters->page);
 
@@ -34,6 +38,16 @@ class EloquentCarModelRepository implements CarModelRepositoryInterface
             fn (EloquentCarModel $model) => $this->toDomainCarModel($model),
             static fn (array $items): CarModelCollection => new CarModelCollection($items)
         );
+    }
+
+    public function findByBrandUuid(string $brandUuid): CarModelCollection
+    {
+        $carModels = EloquentCarModel::query()
+            ->with('brand')
+            ->where('brand_uuid', $brandUuid)
+            ->get();
+
+        return new CarModelCollection($carModels->map(fn (EloquentCarModel $model) => $this->toDomainCarModel($model))->toArray());
     }
 
     /**
