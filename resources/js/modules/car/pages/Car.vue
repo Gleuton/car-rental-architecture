@@ -1,10 +1,25 @@
 <script setup>
 import TableCars from "@modules/car/components/TableCars.vue";
-import {useCarList} from '../composables/useCarList.js';
+import {useCarList} from '@modules/car/composables/useCarList.js';
+import {useCarCreate} from "@modules/car/composables/useCarCreate.js";
+import CarCreateModal from "@modules/car/components/CarCreateModal.vue";
+import {useBrandList} from "@modules/brand/composables/useBrandList.js";
+import {useModelList} from "@modules/car-models/composables/useModelList.js";
 
 const {
     carList,
 } = useCarList();
+
+const {brandList} = useBrandList();
+const {modelList} = useModelList();
+
+const {
+    createFormPayload,
+    submitCreateForm,
+    isSubmittingCreateForm,
+    resetCreateForm,
+    alertsCreateForm,
+} = useCarCreate();
 
 
 </script>
@@ -20,6 +35,18 @@ const {
                     <div class="card-body">
                         <TableCars
                             :cars="carList"
+                        />
+                    </div>
+
+                    <div class="card-footer d-flex justify-content-between align-items-center">
+                        <CarCreateModal
+                            :form-payload="createFormPayload"
+                            :submit-form="submitCreateForm"
+                            :is-submitting="isSubmittingCreateForm"
+                            :reset-form="resetCreateForm"
+                            :alerts="alertsCreateForm"
+                            :brands="brandList"
+                            :models="modelList"
                         />
                     </div>
                 </div>
