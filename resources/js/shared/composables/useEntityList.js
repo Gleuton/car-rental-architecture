@@ -5,9 +5,9 @@ export function useEntityList(fetchFn) {
     const pagination = ref({});
     const currentSearch = ref('');
 
-    function loadList(page = 1, search = '') {
+    function loadList(page = 1, search = '', extraParams = {}) {
         currentSearch.value = search;
-        return fetchFn({ page, search })
+        return fetchFn({ page, search, ...extraParams })
             .then((response) => {
                 items.value = response.data.data;
                 pagination.value = response.data.meta;

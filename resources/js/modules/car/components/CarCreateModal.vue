@@ -1,6 +1,6 @@
 <script setup>
 
-import {ref} from "vue";
+import {watch} from "vue";
 
 const props = defineProps({
     formPayload:{
@@ -33,7 +33,11 @@ const props = defineProps({
     }
 });
 
-const brand_uuid = ref('');
+const brandUuid = defineModel('brandUuid', { default: '' });
+
+watch(brandUuid, () => {
+    props.formPayload.car_model_uuid = null;
+});
 
 </script>
 
@@ -57,7 +61,7 @@ const brand_uuid = ref('');
                     <label for="brand_select" class="form-label">Carro</label>
                     <select
                         id="brand_select"
-                        v-model="brand_uuid"
+                        v-model="brandUuid"
                         class="form-select"
                         required
                     >

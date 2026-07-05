@@ -1,4 +1,5 @@
 <script setup>
+import {ref, watch} from "vue";
 import TableCars from "@modules/car/components/TableCars.vue";
 import {useCarList} from '@modules/car/composables/useCarList.js';
 import {useCarCreate} from "@modules/car/composables/useCarCreate.js";
@@ -11,7 +12,13 @@ const {
 } = useCarList();
 
 const {brandList} = useBrandList();
-const {modelList} = useModelList();
+const {modelList, loadModelList} = useModelList();
+
+const selectedBrandUuid = ref('');
+
+watch(selectedBrandUuid, (brandUuid) => {
+    loadModelList(1, '', brandUuid);
+});
 
 const {
     createFormPayload,
@@ -40,6 +47,7 @@ const {
 
                     <div class="card-footer d-flex justify-content-between align-items-center">
                         <CarCreateModal
+                            v-model:brand-uuid="selectedBrandUuid"
                             :form-payload="createFormPayload"
                             :submit-form="submitCreateForm"
                             :is-submitting="isSubmittingCreateForm"
