@@ -3,10 +3,26 @@ import { clearStoredToken, getStoredToken, refreshStoredToken } from '@shared/se
 
 const httpClient = axios.create();
 
-function redirectToLogin() {
+let redirectInFlight = false;
+
+async function redirectToLogin() {
     clearStoredToken();
 
-    if (window.location.pathname !== '/login') {
+    if (redirectInFlight || window.location.pathname === '/login') {
+        return;
+    }
+    redirectInFlight = true;
+
+    try {
+        await axios.post('/logout', {}, {
+            timeout: 3000,
+            headers: {
+                Accept: 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+        });
+    } catch {
+    } finally {
         window.location.assign('/login');
     }
 }
@@ -46,7 +62,7 @@ httpClient.interceptors.response.use(
 
         if (!refreshedToken) {
             clearStoredToken();
-            redirectToLogin();
+            await redirectToLogin();
             return Promise.reject(error);
         }
 
