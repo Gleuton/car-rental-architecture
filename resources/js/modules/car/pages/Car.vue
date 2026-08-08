@@ -4,8 +4,10 @@ import TableCars from "@modules/car/components/TableCars.vue";
 import {useCarList} from '@modules/car/composables/useCarList.js';
 import {useCarCreate} from "@modules/car/composables/useCarCreate.js";
 import {useCarDetails} from "@modules/car/composables/useCarDetails.js";
+import {useCarEdit} from "@modules/car/composables/useCarEdit.js";
 import CarCreateModal from "@modules/car/components/CarCreateModal.vue";
 import CarDetailsModal from "@modules/car/components/CarDetailsModal.vue";
+import CarEditModal from "@modules/car/components/CarEditModal.vue";
 import {useBrandList} from "@modules/brand/composables/useBrandList.js";
 import {useModelList} from "@modules/car-models/composables/useModelList.js";
 
@@ -22,6 +24,16 @@ const {
     getDetailsInfo,
     resetDetailsInfo,
 } = useCarDetails();
+
+const {
+    editInfo,
+    getEditInfo,
+    submitUpdate,
+    resetEditInfo,
+    alertsEditForm,
+} = useCarEdit({
+    onSuccess: () => loadCarList(),
+});
 
 const selectedBrandUuid = ref('');
 
@@ -54,6 +66,7 @@ const {
                         <TableCars
                             :cars="carList"
                             @details="getDetailsInfo"
+                            @edit="getEditInfo"
                         />
                     </div>
 
@@ -77,6 +90,12 @@ const {
     <CarDetailsModal
         :details-car="detailsCar"
         @close="resetDetailsInfo"
+    />
+    <CarEditModal
+        :edit-info="editInfo"
+        :alerts="alertsEditForm"
+        @confirm="submitUpdate"
+        @close="resetEditInfo"
     />
 </template>
 

@@ -43,6 +43,13 @@ const props = defineProps({
                         data-bs-target="#detailsCar">
                         Detalhes
                     </button>
+                    <button
+                        type="button"
+                        class="btn btn-primary"
+                        @click="emit('edit', car.uuid)"
+                        data-bs-toggle="modal"
+                        data-bs-target="#editCar"
+                    >Editar</button>
                 </div>
             </td>
         </tr>
