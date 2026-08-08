@@ -1,5 +1,7 @@
 <script setup>
 
+const emit = defineEmits(['details', 'edit', 'delete']);
+
 const props = defineProps({
     cars: {
         type: Array,
@@ -32,6 +34,16 @@ const props = defineProps({
             <td>{{ car.km }}</td>
             <td>{{ car.isAvailable ? 'Sim' : 'Não' }}</td>
             <td class="text-center">
+                <div class="btn-group" role="group" aria-label="Grupo de botões">
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-toggle="modal"
+                        @click="emit('details', car.uuid)"
+                        data-bs-target="#detailsCar">
+                        Detalhes
+                    </button>
+                </div>
             </td>
         </tr>
         </tbody>
