@@ -1,7 +1,7 @@
 import { reactive, ref } from 'vue';
 import { Modal } from 'bootstrap';
 import { getCarDetailsByUuid, putCar } from '@modules/car/services/carApi.js';
-import { mapCarApiError } from '@modules/car/errors/carModelApiErrorMapper.js';
+import { mapCarApiError } from '@modules/car/errors/carApiErrorMapper.js';
 
 export function useCarEdit({ onSuccess } = {}) {
     const runOnSuccess = onSuccess ?? (() => {});

@@ -1,7 +1,7 @@
 import { reactive, ref } from 'vue';
 import { Modal } from 'bootstrap';
 import { createCar } from '@modules/car/services/carApi.js';
-import { mapCarApiError } from '@modules/car/errors/carModelApiErrorMapper.js';
+import { mapCarApiError } from '@modules/car/errors/carApiErrorMapper.js';
 
 export function useCarCreate({ onSuccess } = {}) {
     const createFormPayload = reactive({

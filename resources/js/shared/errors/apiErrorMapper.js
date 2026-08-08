@@ -8,6 +8,11 @@ const STATUS_MESSAGES = {
 const FIELD_LABELS = {
     name: 'Nome',
     image: 'Imagem',
+    car_model_uuid: 'Modelo',
+    license_plate: 'Placa',
+    color: 'Cor',
+    km: 'Quilometragem',
+    is_available: 'Disponibilidade',
 };
 
 const VALIDATION_KEY_MESSAGES = {
