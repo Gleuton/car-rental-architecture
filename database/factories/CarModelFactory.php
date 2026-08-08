@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
-use App\Core\Car\Domain\Entities\CarModel as DomainCarModel;
+use App\Core\Car\Domain\Entity\CarModel as DomainCarModel;
 use App\Models\Brand;
 use App\Models\CarModel;
 use Illuminate\Database\Eloquent\Factories\Factory;

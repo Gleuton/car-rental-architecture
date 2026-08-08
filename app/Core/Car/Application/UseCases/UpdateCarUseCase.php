@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Core\Car\Application\UseCases;
 
 use App\Core\Car\Application\DTOs\UpdateCarDto;
-use App\Core\Car\Domain\Entities\Car;
+use App\Core\Car\Domain\Entity\Car;
 use App\Core\Car\Domain\Exceptions\CarDomainException;
 use App\Core\Car\Domain\Repositories\CarRepositoryInterface;
 use App\Core\Car\Domain\Roles\CarAlreadyExistsRole;

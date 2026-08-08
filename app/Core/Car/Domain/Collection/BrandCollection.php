@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Core\Car\Domain\Collection;
 
-use App\Core\Car\Domain\Entities\Brand;
+use App\Core\Car\Domain\Entity\Brand;
 use App\Core\Shared\Domain\Collection\DomainCollectionInterface;
 use ArrayIterator;
 use InvalidArgumentException;

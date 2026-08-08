@@ -6,7 +6,7 @@ namespace App\Core\Car\Application\UseCases\Brand;
 
 use App\Core\Car\Application\DTOs\Brand\CreateBrandDTO;
 use App\Core\Car\Application\Services\BrandLogoService;
-use App\Core\Car\Domain\Entities\Brand as DomainBrand;
+use App\Core\Car\Domain\Entity\Brand as DomainBrand;
 use App\Core\Car\Domain\Exceptions\BrandDomainException;
 use App\Core\Car\Domain\Repositories\BrandRepositoryInterface;
 use App\Core\Car\Domain\Roles\UniqueBrandNameRule;

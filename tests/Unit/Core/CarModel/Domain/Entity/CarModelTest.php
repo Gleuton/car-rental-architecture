@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Core\Car\Domain\Entities\CarModel;
+use App\Core\Car\Domain\Entity\CarModel;
 use App\Core\Car\Domain\Exceptions\CarModelDomainException;
 use Illuminate\Support\Str;
 

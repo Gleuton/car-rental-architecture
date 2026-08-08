@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use App\Core\Car\Application\DTOs\UpdateCarDto;
 use App\Core\Car\Application\UseCases\UpdateCarUseCase;
-use App\Core\Car\Domain\Entities\Car as DomainCar;
+use App\Core\Car\Domain\Entity\Car as DomainCar;
 use App\Core\Car\Domain\Errors\CarError;
 use App\Core\Car\Domain\Exceptions\CarDomainException;
 use App\Core\Car\Domain\Repositories\CarRepositoryInterface;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use App\Core\Car\Application\DTOs\CarModel\CarModelUuidDTO;
 use App\Core\Car\Application\UseCases\CarModel\FindCarModelByUuidUseCase;
-use App\Core\Car\Domain\Entities\CarModel;
+use App\Core\Car\Domain\Entity\CarModel;
 use App\Core\Car\Domain\Repositories\CarModelRepositoryInterface;
 
 it('find Model Car successfully', function () {

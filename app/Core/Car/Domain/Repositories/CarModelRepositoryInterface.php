@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Core\Car\Domain\Repositories;
 
 use App\Core\Car\Domain\Collection\CarModelCollection;
-use App\Core\Car\Domain\Entities\CarModel;
+use App\Core\Car\Domain\Entity\CarModel;
 use App\Core\Car\Domain\Queries\CarModelQueryFilter;
 use App\Core\Shared\Application\Pagination\PaginatedResult;
 

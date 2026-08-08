@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Core\Car\Domain\Entities;
+namespace App\Core\Car\Domain\Entity;
 
 use App\Core\Car\Domain\Errors\CarModelError;
 use App\Core\Car\Domain\Exceptions\CarModelDomainException;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use App\Core\Car\Application\DTOs\CarModel\UpdateCarModelDTO;
 use App\Core\Car\Application\UseCases\CarModel\UpdateCarModelUseCase;
-use App\Core\Car\Domain\Entities\CarModel as DomainCarModel;
+use App\Core\Car\Domain\Entity\CarModel as DomainCarModel;
 use App\Core\Car\Domain\Errors\BrandError;
 use App\Core\Car\Domain\Errors\CarModelError;
 use App\Core\Car\Domain\Exceptions\BrandDomainException;

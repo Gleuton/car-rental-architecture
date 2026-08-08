@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Core\Car\Domain\Entities\Brand;
+use App\Core\Car\Domain\Entity\Brand;
 use App\Core\Car\Domain\Exceptions\BrandDomainException;
 use Illuminate\Support\Str;
 

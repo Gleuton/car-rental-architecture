@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Core\Car\Domain\Entities;
+namespace App\Core\Car\Domain\Entity;
 
 use App\Core\Car\Domain\Exceptions\BrandDomainException;
 use App\Core\Car\Domain\ValueObjects\Brand\BrandLogo;

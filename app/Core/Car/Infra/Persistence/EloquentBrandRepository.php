@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Core\Car\Infra\Persistence;
 
 use App\Core\Car\Domain\Collection\BrandCollection;
-use App\Core\Car\Domain\Entities\Brand as DomainBrand;
+use App\Core\Car\Domain\Entity\Brand as DomainBrand;
 use App\Core\Car\Domain\Exceptions\BrandDomainException;
 use App\Core\Car\Domain\Queries\BrandQueryFilter;
 use App\Core\Car\Domain\Repositories\BrandRepositoryInterface;

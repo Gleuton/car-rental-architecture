@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use App\Core\Car\Domain\Collection\BrandCollection;
-use App\Core\Car\Domain\Entities\Brand;
+use App\Core\Car\Domain\Entity\Brand;
 
 it('can create a BrandCollection with valid items', function () {
     $brands = [

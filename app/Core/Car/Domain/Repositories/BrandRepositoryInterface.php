@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Core\Car\Domain\Repositories;
 
 use App\Core\Car\Domain\Collection\BrandCollection;
-use App\Core\Car\Domain\Entities\Brand;
+use App\Core\Car\Domain\Entity\Brand;
 use App\Core\Car\Domain\Queries\BrandQueryFilter;
 use App\Core\Shared\Application\Pagination\PaginatedResult;
 

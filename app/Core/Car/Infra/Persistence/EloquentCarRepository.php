@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Core\Car\Infra\Persistence;
 
 use App\Core\Car\Domain\Collection\CarCollection;
-use App\Core\Car\Domain\Entities\Car;
+use App\Core\Car\Domain\Entity\Car;
 use App\Core\Car\Domain\Exceptions\CarDomainException;
 use App\Core\Car\Domain\Queries\CarQueryFilter;
 use App\Core\Car\Domain\Repositories\CarRepositoryInterface;
