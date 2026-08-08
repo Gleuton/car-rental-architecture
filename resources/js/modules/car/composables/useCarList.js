@@ -1,24 +1,8 @@
-import {onMounted, ref} from "vue";
-import {listCars} from '@modules/car/services/carApi.js';
+import { useEntityList } from '@shared/composables/useEntityList.js';
+import { listCars } from '@modules/car/services/carApi.js';
 
 export function useCarList() {
-    const carList = ref([]);
+    const { items: carList, pagination: paginationCar, currentSearch, loadList: loadCarList } = useEntityList(listCars);
 
-    function loadCarList(page = 1, licensePlate = '') {
-        return listCars({
-            page,
-            licensePlate,
-        }).then((response) => {
-            carList.value = response.data.data;
-        }).catch((error) => {
-            console.error(error);
-        });
-    }
-
-    onMounted(() => loadCarList());
-
-    return {
-        carList,
-        loadCarList,
-    };
+    return { carList, paginationCar, currentSearch, loadCarList };
 }
