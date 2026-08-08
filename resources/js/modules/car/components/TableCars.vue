@@ -50,6 +50,13 @@ const props = defineProps({
                         data-bs-toggle="modal"
                         data-bs-target="#editCar"
                     >Editar</button>
+                    <button
+                        type="button"
+                        class="btn btn-danger"
+                        @click="emit('delete', car.uuid)"
+                        data-bs-toggle="modal"
+                        data-bs-target="#deleteCar"
+                    >Excluir</button>
                 </div>
             </td>
         </tr>

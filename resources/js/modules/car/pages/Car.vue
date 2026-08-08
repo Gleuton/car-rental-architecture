@@ -5,9 +5,11 @@ import {useCarList} from '@modules/car/composables/useCarList.js';
 import {useCarCreate} from "@modules/car/composables/useCarCreate.js";
 import {useCarDetails} from "@modules/car/composables/useCarDetails.js";
 import {useCarEdit} from "@modules/car/composables/useCarEdit.js";
+import {useCarDelete} from "@modules/car/composables/useCarDelete.js";
 import CarCreateModal from "@modules/car/components/CarCreateModal.vue";
 import CarDetailsModal from "@modules/car/components/CarDetailsModal.vue";
 import CarEditModal from "@modules/car/components/CarEditModal.vue";
+import DeleteModal from '@shared/components/DeleteModal.vue';
 import {useBrandList} from "@modules/brand/composables/useBrandList.js";
 import {useModelList} from "@modules/car-models/composables/useModelList.js";
 
@@ -32,6 +34,15 @@ const {
     resetEditInfo,
     alertsEditForm,
 } = useCarEdit({
+    onSuccess: () => loadCarList(),
+});
+
+const {
+    deleteInfo,
+    getDeleteInfo,
+    deleteSubmit,
+    resetDeleteInfo,
+} = useCarDelete({
     onSuccess: () => loadCarList(),
 });
 
@@ -67,6 +78,7 @@ const {
                             :cars="carList"
                             @details="getDetailsInfo"
                             @edit="getEditInfo"
+                            @delete="getDeleteInfo"
                         />
                     </div>
 
@@ -96,6 +108,14 @@ const {
         :alerts="alertsEditForm"
         @confirm="submitUpdate"
         @close="resetEditInfo"
+    />
+    <DeleteModal
+        :delete-info="deleteInfo"
+        title="Deletar Carro"
+        entity-label="o carro de placa"
+        modal-id="deleteCar"
+        @confirm="deleteSubmit"
+        @close="resetDeleteInfo"
     />
 </template>
 
