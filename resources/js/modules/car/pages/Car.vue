@@ -9,6 +9,7 @@ import {useModelList} from "@modules/car-models/composables/useModelList.js";
 
 const {
     carList,
+    loadCarList,
 } = useCarList();
 
 const {brandList} = useBrandList();
@@ -26,7 +27,9 @@ const {
     isSubmittingCreateForm,
     resetCreateForm,
     alertsCreateForm,
-} = useCarCreate();
+} = useCarCreate({
+    onSuccess: () => loadCarList(),
+});
 
 
 </script>

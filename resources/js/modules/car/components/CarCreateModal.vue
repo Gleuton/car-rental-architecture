@@ -48,11 +48,11 @@ watch(brandUuid, () => {
         data-bs-target="#formCadModel"
         type="button"
     >
-        Cadastrar Modelo
+        Cadastrar Carro
     </button>
 
     <modal-component
-        title="Cadastrar Carros"
+        title="Cadastrar Carro"
         modalId="formCadModel"
     >
         <template #body>
@@ -108,6 +108,16 @@ watch(brandUuid, () => {
 
                 <div class="row g-3">
                     <div class="col-6">
+                        <label for="color" class="form-label">Cor</label>
+                        <input
+                            id="color"
+                            v-model="formPayload.color"
+                            type="text"
+                            class="form-control"
+                            required
+                        >
+                    </div>
+                    <div class="col-6">
                         <label for="km" class="form-label">km rodados</label>
                         <input
                             id="km"
@@ -118,6 +128,16 @@ watch(brandUuid, () => {
                             required
                         >
                     </div>
+                </div>
+
+                <div class="form-check mt-3">
+                    <input
+                        id="is_available"
+                        v-model="formPayload.is_available"
+                        type="checkbox"
+                        class="form-check-input"
+                    >
+                    <label for="is_available" class="form-check-label">Disponível</label>
                 </div>
             </form>
             <div
