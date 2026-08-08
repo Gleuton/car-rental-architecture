@@ -10,11 +10,14 @@ import CarCreateModal from "@modules/car/components/CarCreateModal.vue";
 import CarDetailsModal from "@modules/car/components/CarDetailsModal.vue";
 import CarEditModal from "@modules/car/components/CarEditModal.vue";
 import DeleteModal from '@shared/components/DeleteModal.vue';
+import SearchInput from '@shared/components/SearchInput.vue';
+import Pagination from '@shared/components/Pagination.vue';
 import {useBrandList} from "@modules/brand/composables/useBrandList.js";
 import {useModelList} from "@modules/car-models/composables/useModelList.js";
 
 const {
     carList,
+    paginationCar,
     loadCarList,
 } = useCarList();
 
@@ -68,31 +71,37 @@ const {
 <template>
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8">
-                <hr>
-                <div class="card">
-                    <div class="card-header">Carros</div>
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <hr>
+                    <SearchInput :load-list="loadCarList" title="Busca de Carros" label="Placa do Carro" />
+                    <hr>
+                    <div class="card">
+                        <div class="card-header">Carros</div>
 
-                    <div class="card-body">
-                        <TableCars
-                            :cars="carList"
-                            @details="getDetailsInfo"
-                            @edit="getEditInfo"
-                            @delete="getDeleteInfo"
-                        />
-                    </div>
+                        <div class="card-body">
+                            <TableCars
+                                :cars="carList"
+                                @details="getDetailsInfo"
+                                @edit="getEditInfo"
+                                @delete="getDeleteInfo"
+                            />
+                        </div>
 
-                    <div class="card-footer d-flex justify-content-between align-items-center">
-                        <CarCreateModal
-                            v-model:brand-uuid="selectedBrandUuid"
-                            :form-payload="createFormPayload"
-                            :submit-form="submitCreateForm"
-                            :is-submitting="isSubmittingCreateForm"
-                            :reset-form="resetCreateForm"
-                            :alerts="alertsCreateForm"
-                            :brands="brandList"
-                            :models="modelList"
-                        />
+                        <div class="card-footer d-flex justify-content-between align-items-center">
+                            <Pagination :load-list="loadCarList" :pagination="paginationCar" />
+
+                            <CarCreateModal
+                                v-model:brand-uuid="selectedBrandUuid"
+                                :form-payload="createFormPayload"
+                                :submit-form="submitCreateForm"
+                                :is-submitting="isSubmittingCreateForm"
+                                :reset-form="resetCreateForm"
+                                :alerts="alertsCreateForm"
+                                :brands="brandList"
+                                :models="modelList"
+                            />
+                        </div>
                     </div>
                 </div>
             </div>
