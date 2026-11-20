@@ -22,9 +22,9 @@ readonly class GetAuthenticatedUserUseCase
         }
 
         return new AuthenticatedUserDTO(
-            id: (int) $user->getAuthIdentifier(),
-            name: (string) data_get($user, 'name', ''),
-            email: (string) data_get($user, 'email', ''),
+            id: $user->id,
+            name: $user->name,
+            email: $user->email,
         );
     }
 }

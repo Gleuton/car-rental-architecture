@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 use App\Core\Car\Domain\Entity\CarModel;
 use App\Core\Car\Domain\Exceptions\CarModelDomainException;
+use App\Core\Shared\Domain\ValueObjects\Uuid;
 use Illuminate\Support\Str;
+
+const TEST_CAR_MODEL_ENTITY_UUID = '88888888-8888-4888-8888-888888888888';
 
 it('can create a CarModel instance', function () {
     $carModel = CarModel::new(
+        uuid: Uuid::fromString(TEST_CAR_MODEL_ENTITY_UUID),
         brandUuid: '11111111-1111-4111-8111-111111111111',
         name: 'Civic',
         image: 'civic.png',
@@ -18,7 +22,7 @@ it('can create a CarModel instance', function () {
     );
 
     expect($carModel->brandUuid)->toBe('11111111-1111-4111-8111-111111111111')
-        ->and(Str::isUuid($carModel->uuid))->toBeTrue()
+        ->and($carModel->uuid)->toBe(TEST_CAR_MODEL_ENTITY_UUID)
         ->and($carModel->name)->toBe('Civic')
         ->and($carModel->image)->toBe('civic.png')
         ->and($carModel->doorsNumber)->toBe(4)
@@ -52,6 +56,7 @@ it('can restore a CarModel instance with uuid', function () {
 
 it('throws exception when creating CarModel with seats number less than 2', function () {
     CarModel::new(
+        uuid: Uuid::fromString(TEST_CAR_MODEL_ENTITY_UUID),
         brandUuid: '11111111-1111-4111-8111-111111111111',
         name: 'Civic',
         image: 'civic.png',
@@ -64,6 +69,7 @@ it('throws exception when creating CarModel with seats number less than 2', func
 
 it('throws exception when creating CarModel with seats number greater than 7', function () {
     CarModel::new(
+        uuid: Uuid::fromString(TEST_CAR_MODEL_ENTITY_UUID),
         brandUuid: '11111111-1111-4111-8111-111111111111',
         name: 'Civic',
         image: 'civic.png',
@@ -76,6 +82,7 @@ it('throws exception when creating CarModel with seats number greater than 7', f
 
 it('throws exception when creating CarModel with doors number less than 2', function () {
     CarModel::new(
+        uuid: Uuid::fromString(TEST_CAR_MODEL_ENTITY_UUID),
         brandUuid: '11111111-1111-4111-8111-111111111111',
         name: 'Civic',
         image: 'civic.png',
@@ -88,6 +95,7 @@ it('throws exception when creating CarModel with doors number less than 2', func
 
 it('throws exception when creating CarModel with doors number greater than 5', function () {
     CarModel::new(
+        uuid: Uuid::fromString(TEST_CAR_MODEL_ENTITY_UUID),
         brandUuid: '11111111-1111-4111-8111-111111111111',
         name: 'Civic',
         image: 'civic.png',
@@ -100,6 +108,7 @@ it('throws exception when creating CarModel with doors number greater than 5', f
 
 it('allows creating CarModel with minimum valid values', function () {
     $carModel = CarModel::new(
+        uuid: Uuid::fromString(TEST_CAR_MODEL_ENTITY_UUID),
         brandUuid: '11111111-1111-4111-8111-111111111111',
         name: 'Compact',
         image: 'compact.png',
@@ -117,6 +126,7 @@ it('allows creating CarModel with minimum valid values', function () {
 
 it('allows creating CarModel with maximum valid values', function () {
     $carModel = CarModel::new(
+        uuid: Uuid::fromString(TEST_CAR_MODEL_ENTITY_UUID),
         brandUuid: '11111111-1111-4111-8111-111111111111',
         name: 'Van',
         image: 'van.png',
@@ -138,7 +148,8 @@ it('can update all fields of a CarModel', function () {
         doorsNumber: 4,
         seatsNumber: 5,
         airbags: true,
-        abs: true
+        abs: true,
+        uuid: TEST_CAR_MODEL_ENTITY_UUID,
     );
 
     $updated = $carModel->update(
@@ -169,7 +180,8 @@ it('can update CarModel partially keeping other fields', function () {
         doorsNumber: 4,
         seatsNumber: 5,
         airbags: true,
-        abs: true
+        abs: true,
+        uuid: TEST_CAR_MODEL_ENTITY_UUID,
     );
 
     $updated = $carModel->update(
@@ -200,7 +212,8 @@ it('throws exception when updating CarModel with invalid doors number', function
         doorsNumber: 4,
         seatsNumber: 5,
         airbags: true,
-        abs: true
+        abs: true,
+        uuid: TEST_CAR_MODEL_ENTITY_UUID,
     );
 
     $carModel->update(
@@ -222,7 +235,8 @@ it('throws exception when updating CarModel with invalid seats number', function
         doorsNumber: 4,
         seatsNumber: 5,
         airbags: true,
-        abs: true
+        abs: true,
+        uuid: TEST_CAR_MODEL_ENTITY_UUID,
     );
 
     $carModel->update(

@@ -10,6 +10,7 @@ use App\Core\Car\Domain\Exceptions\CarDomainException;
 use App\Core\Car\Domain\Repositories\CarRepositoryInterface;
 use App\Core\Car\Domain\Roles\CarAlreadyExistsRole;
 use App\Core\Car\Domain\Roles\ExistsCarModelRole;
+use App\Core\Shared\Domain\Identity\UuidGeneratorInterface;
 
 readonly class CreateCarUseCase
 {
@@ -17,6 +18,7 @@ readonly class CreateCarUseCase
         private CarRepositoryInterface $repository,
         private CarAlreadyExistsRole $carAlreadyExistsRole,
         private ExistsCarModelRole $existsCarModelRole,
+        private UuidGeneratorInterface $uuidGenerator,
     ) {}
 
     /**
@@ -28,6 +30,7 @@ readonly class CreateCarUseCase
         $this->existsCarModelRole->validate($dto->carModelUuid);
 
         $car = Car::new(
+            $this->uuidGenerator->generate(),
             $dto->carModelUuid,
             $dto->licensePlate,
             $dto->color,

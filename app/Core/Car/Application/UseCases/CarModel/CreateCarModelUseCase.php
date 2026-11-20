@@ -11,6 +11,7 @@ use App\Core\Car\Domain\Exceptions\CarModelDomainException;
 use App\Core\Car\Domain\Repositories\CarModelRepositoryInterface;
 use App\Core\Car\Domain\Roles\CarModelAlreadyExistsRole;
 use App\Core\Car\Domain\Roles\ExistsBrandRole;
+use App\Core\Shared\Domain\Identity\UuidGeneratorInterface;
 use App\Core\Shared\Domain\Storage\FileStorageInterface;
 use App\Core\Shared\Infra\Adapters\LaravelUploadedFileAdapter;
 
@@ -20,7 +21,8 @@ readonly class CreateCarModelUseCase
         private FileStorageInterface $storage,
         private CarModelRepositoryInterface $repository,
         private ExistsBrandRole $existeBrandRole,
-        private CarModelAlreadyExistsRole $carModelAlreadyRole
+        private CarModelAlreadyExistsRole $carModelAlreadyRole,
+        private UuidGeneratorInterface $uuidGenerator,
     ) {}
 
     /**
@@ -36,6 +38,7 @@ readonly class CreateCarModelUseCase
 
         try {
             $carModel = CarModel::new(
+                $this->uuidGenerator->generate(),
                 $dto->brandUuid,
                 $dto->name,
                 $imagePath,

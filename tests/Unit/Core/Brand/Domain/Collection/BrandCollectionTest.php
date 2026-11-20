@@ -5,10 +5,13 @@ declare(strict_types=1);
 use App\Core\Car\Domain\Collection\BrandCollection;
 use App\Core\Car\Domain\Entity\Brand;
 
+const TEST_FIAT_BRAND_UUID = 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb';
+const TEST_BMW_BRAND_UUID = 'cccccccc-cccc-4ccc-8ccc-cccccccccccc';
+
 it('can create a BrandCollection with valid items', function () {
     $brands = [
-        Brand::create('Fiat', 'fiat.png'),
-        Brand::create('BMW', 'BMW.png'),
+        Brand::restore('Fiat', 'fiat.png', TEST_FIAT_BRAND_UUID),
+        Brand::restore('BMW', 'BMW.png', TEST_BMW_BRAND_UUID),
     ];
 
     $collection = new BrandCollection($brands);
@@ -28,7 +31,7 @@ it('throws exception when using add with invalid item', function () {
 
 it('can add a valid Brand to BrandCollection', function () {
     $collection = new BrandCollection();
-    $brand = Brand::create('Fiat', 'fiat.png');
+    $brand = Brand::restore('Fiat', 'fiat.png', TEST_FIAT_BRAND_UUID);
     $collection->add($brand);
 
     expect($collection)->toHaveCount(1)
@@ -42,7 +45,7 @@ it('returns true for isEmpty when BrandCollection is empty', function () {
 });
 
 it('returns false for isEmpty when BrandCollection has items', function () {
-    $brand = Brand::create('Fiat', 'fiat.png');
+    $brand = Brand::restore('Fiat', 'fiat.png', TEST_FIAT_BRAND_UUID);
     $collection = new BrandCollection([$brand]);
 
     expect($collection->isEmpty())->toBeFalse();
@@ -50,8 +53,8 @@ it('returns false for isEmpty when BrandCollection has items', function () {
 
 it('can iterate over BrandCollection', function () {
     $brands = [
-        Brand::create('Fiat', 'fiat.png'),
-        Brand::create('BMW', 'bmw.png'),
+        Brand::restore('Fiat', 'fiat.png', TEST_FIAT_BRAND_UUID),
+        Brand::restore('BMW', 'bmw.png', TEST_BMW_BRAND_UUID),
     ];
     $collection = new BrandCollection($brands);
 

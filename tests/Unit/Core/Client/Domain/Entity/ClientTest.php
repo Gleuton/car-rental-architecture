@@ -4,57 +4,58 @@ declare(strict_types=1);
 
 use App\Core\Client\Domain\Entity\Client;
 use App\Core\Client\Domain\Exceptions\ClientDomainException;
-use Illuminate\Support\Str;
+use App\Core\Shared\Domain\ValueObjects\Uuid;
 
-it('can create a Client instance', function () {
-    $client = Client::new('John Doe');
+const TEST_CLIENT_UUID = '11111111-1111-4111-8111-111111111111';
+
+it('can create a Client instance with the given uuid', function () {
+    $client = Client::new(Uuid::fromString(TEST_CLIENT_UUID), 'John Doe');
 
     expect($client->name)->toBe('John Doe')
-        ->and(Str::isUuid($client->uuid))->toBeTrue();
+        ->and($client->uuid)->toBe(TEST_CLIENT_UUID);
 });
 
 it('can restore a Client instance with uuid', function () {
-    $uuid = (string) Str::uuid();
-    $client = Client::restore('John Doe', $uuid);
+    $client = Client::restore('John Doe', TEST_CLIENT_UUID);
 
     expect($client->name)->toBe('John Doe')
-        ->and($client->uuid)->toBe($uuid);
+        ->and($client->uuid)->toBe(TEST_CLIENT_UUID);
 });
 
 it('throws exception when creating a Client instance with empty name', function () {
-    Client::new('');
+    Client::new(Uuid::fromString(TEST_CLIENT_UUID), '');
 })->throws(ClientDomainException::class, 'Client name cannot be empty');
 
 it('throws exception when name has only whitespace', function () {
-    Client::new('   ');
+    Client::new(Uuid::fromString(TEST_CLIENT_UUID), '   ');
 })->throws(ClientDomainException::class, 'Client name cannot be empty');
 
 it('throws exception when creating a Client with name exceeding 255 characters', function () {
-    Client::new(str_repeat('a', 256));
+    Client::new(Uuid::fromString(TEST_CLIENT_UUID), str_repeat('a', 256));
 })->throws(ClientDomainException::class, 'Client name must not exceed 255 characters');
 
 it('can create a Client with name at max length', function () {
     $longName = str_repeat('a', 255);
-    $client = Client::new($longName);
+    $client = Client::new(Uuid::fromString(TEST_CLIENT_UUID), $longName);
 
     expect($client->name)->toBe($longName)
-        ->and(Str::isUuid($client->uuid))->toBeTrue();
+        ->and($client->uuid)->toBe(TEST_CLIENT_UUID);
 });
 
 it('can update client name keeping same uuid', function () {
-    $client = Client::restore('John Doe');
+    $client = Client::restore('John Doe', TEST_CLIENT_UUID);
 
     $updated = $client->update('John Updated');
 
     expect($updated->name)->toBe('John Updated')
-        ->and($updated->uuid)->toBe($client->uuid);
+        ->and($updated->uuid)->toBe(TEST_CLIENT_UUID);
 });
 
 it('keeps current name when update receives null', function () {
-    $client = Client::restore('John Doe');
+    $client = Client::restore('John Doe', TEST_CLIENT_UUID);
 
     $updated = $client->update(null);
 
     expect($updated->name)->toBe('John Doe')
-        ->and($updated->uuid)->toBe($client->uuid);
+        ->and($updated->uuid)->toBe(TEST_CLIENT_UUID);
 });

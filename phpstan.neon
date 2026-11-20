@@ -6,6 +6,7 @@ parameters:
 
     paths:
         - app/Core
+        - app/Support/PHPStan/Rules
 
     tmpDir: .phpstan/cache
 

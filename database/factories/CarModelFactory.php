@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
-use App\Core\Car\Domain\Entity\CarModel as DomainCarModel;
 use App\Models\Brand;
 use App\Models\CarModel;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -25,7 +24,7 @@ class CarModelFactory extends Factory
         $abs = $this->faker->boolean();
 
         return [
-            'uuid' => DomainCarModel::new($brand->uuid, $name, $image, $doors, $seats, $airbags, $abs)->uuid,
+            'uuid' => $this->faker->uuid(),
             'brand_uuid' => $brand->uuid,
             'name' => $name,
             'image' => $image,

@@ -8,7 +8,7 @@ use App\Core\Car\Domain\Exceptions\CarDomainException;
 use App\Core\Car\Domain\ValueObjects\Color;
 use App\Core\Car\Domain\ValueObjects\LicensePlate;
 use App\Core\Car\Domain\ValueObjects\Mileage;
-use Illuminate\Support\Str;
+use App\Core\Shared\Domain\ValueObjects\Uuid;
 
 class Car
 {
@@ -26,10 +26,10 @@ class Car
     /**
      * @throws CarDomainException
      */
-    public static function new(string $carModelUuid, string $licensePlate, string $color, bool $isAvailable, int $km): self
+    public static function new(Uuid $uuid, string $carModelUuid, string $licensePlate, string $color, bool $isAvailable, int $km): self
     {
         return new self(
-            (string) Str::uuid(),
+            $uuid->value,
             $carModelUuid,
             null,
             null,
@@ -49,12 +49,12 @@ class Car
         string $color,
         bool $isAvailable,
         int $km,
-        ?string $uuid = null,
+        string $uuid,
         ?string $carModelName = null,
         ?string $brandName = null,
     ): self {
         return new self(
-            $uuid ?? (string) Str::uuid(),
+            $uuid,
             $carModelUuid,
             $carModelName,
             $brandName,

@@ -6,7 +6,7 @@ namespace App\Core\Car\Domain\Entity;
 
 use App\Core\Car\Domain\Errors\CarModelError;
 use App\Core\Car\Domain\Exceptions\CarModelDomainException;
-use Illuminate\Support\Str;
+use App\Core\Shared\Domain\ValueObjects\Uuid;
 
 class CarModel
 {
@@ -32,6 +32,7 @@ class CarModel
      * @throws CarModelDomainException
      */
     public static function new(
+        Uuid $uuid,
         string $brandUuid,
         string $name,
         string $image,
@@ -40,7 +41,7 @@ class CarModel
         bool $airbags,
         bool $abs
     ): self {
-        return new self((string) Str::uuid(), $brandUuid, null, $name, $image, $doorsNumber, $seatsNumber, $airbags, $abs);
+        return new self($uuid->value, $brandUuid, null, $name, $image, $doorsNumber, $seatsNumber, $airbags, $abs);
     }
 
     /**
@@ -54,10 +55,10 @@ class CarModel
         int $seatsNumber,
         bool $airbags,
         bool $abs,
-        ?string $uuid = null,
+        string $uuid,
         ?string $brandName = null,
     ): self {
-        return new self($uuid ?? (string) Str::uuid(), $brandUuid, $brandName, $name, $image, $doorsNumber, $seatsNumber, $airbags, $abs);
+        return new self($uuid, $brandUuid, $brandName, $name, $image, $doorsNumber, $seatsNumber, $airbags, $abs);
     }
 
     /**

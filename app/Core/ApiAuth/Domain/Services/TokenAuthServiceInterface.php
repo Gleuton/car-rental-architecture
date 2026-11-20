@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Core\ApiAuth\Domain\Services;
 
-use Illuminate\Contracts\Auth\Authenticatable;
+use App\Core\ApiAuth\Domain\Entity\AuthenticatedUser;
 
 interface TokenAuthServiceInterface
 {
@@ -14,7 +14,7 @@ interface TokenAuthServiceInterface
 
     public function tokenTimeToLive(): int;
 
-    public function authenticatedUser(): ?Authenticatable;
+    public function authenticatedUser(): ?AuthenticatedUser;
 
     public function invalidateCurrentToken(): bool;
 }

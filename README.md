@@ -26,11 +26,13 @@ O projeto sofre propositalmente de **over-engineering**. Dado o contexto de um C
 
 A aplicação segue uma estrutura inspirada em camadas (Layered Architecture/Clean Architecture):
 
-- **App/Core**: Contém a lógica de negócio central, independente de frameworks.
-    - **Domain**: Entidades, interfaces de repositório, exceções de domínio e regras de negócio.
+- **App/Core/{Contexto}**: Contém a lógica de negócio central, organizada por contexto (`ApiAuth`, `Car`, `Client`, `Rental` e `Shared`). Cada contexto possui as camadas:
+    - **Domain**: Entidades, interfaces de repositório, exceções de domínio e regras de negócio. Independente de frameworks.
     - **Application**: Casos de uso (Use Cases) e DTOs.
     - **Infra**: Implementações concretas de repositórios, serviços externos e persistência (Eloquent).
 - **App/Http**: Camada de entrada (Controllers, Requests, Resources) que faz a ponte entre o mundo externo e a camada de aplicação.
+
+> A independência da camada **Domain** é verificada automaticamente pelo PHPStan através da regra customizada `app/Support/PHPStan/Rules/NoFrameworkInDomainRule.php`, que proíbe imports de `Illuminate\`, `App\Models\` e `App\Http\` em `app/Core/{Contexto}/Domain`.
 
 ## 🏁 Como Executar
 

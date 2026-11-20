@@ -10,8 +10,13 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 
+/**
+ * @implements Rule<Use_>
+ */
 final class NoFrameworkInDomainRule implements Rule
 {
+    private const string CONTEXT_DOMAIN_PATH_PATTERN = '#/app/Core/[^/]+/Domain/#';
+
     /** @var list<string> */
     private array $forbiddenPrefixes;
 
@@ -33,9 +38,7 @@ final class NoFrameworkInDomainRule implements Rule
 
     public function processNode(Node $node, Scope $scope): array
     {
-        $file = str_replace('\\', '/', $scope->getFile());
-
-        if (! str_contains($file, '/app/Core/Domain/')) {
+        if (! $this->isDomainFile($scope->getFile())) {
             return [];
         }
 
@@ -48,12 +51,19 @@ final class NoFrameworkInDomainRule implements Rule
                 if (str_starts_with($import, $prefix)) {
                     $errors[] = RuleErrorBuilder::message(
                         sprintf('❌ Domain layer cannot depend on framework class: %s', $import)
-                    )->build();
+                    )->identifier('architecture.domainFrameworkDependency')->build();
                     break;
                 }
             }
         }
 
         return $errors;
+    }
+
+    private function isDomainFile(string $file): bool
+    {
+        $normalizedPath = str_replace('\\', '/', $file);
+
+        return preg_match(self::CONTEXT_DOMAIN_PATH_PATTERN, $normalizedPath) === 1;
     }
 }

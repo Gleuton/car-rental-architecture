@@ -5,10 +5,14 @@ declare(strict_types=1);
 use App\Core\Rental\Domain\Entity\Rental;
 use App\Core\Rental\Domain\Errors\RentalError;
 use App\Core\Rental\Domain\Exceptions\RentalDomainException;
+use App\Core\Shared\Domain\ValueObjects\Uuid;
 use Illuminate\Support\Str;
+
+const TEST_RENTAL_UUID = '33333333-3333-4333-8333-333333333333';
 
 it('can create a Rental instance', function () {
     $rental = Rental::new(
+        uuid: Uuid::fromString(TEST_RENTAL_UUID),
         carUuid: (string) Str::uuid(),
         clientUuid: (string) Str::uuid(),
         dayPriceCents: 5000,
@@ -23,7 +27,7 @@ it('can create a Rental instance', function () {
         ->and($rental->endDate)->toBe('2026-03-19 10:00:00')
         ->and($rental->initialKm)->toBe(1000)
         ->and($rental->finalKm)->toBe(1500)
-        ->and(Str::isUuid($rental->uuid))->toBeTrue();
+        ->and($rental->uuid)->toBe(TEST_RENTAL_UUID);
 });
 
 it('can restore a Rental instance with uuid', function () {
@@ -49,6 +53,7 @@ it('can restore a Rental instance with uuid', function () {
 
 it('throws RentalDomainException when start date has invalid format', function () {
     Rental::new(
+        uuid: Uuid::fromString(TEST_RENTAL_UUID),
         carUuid: (string) Str::uuid(),
         clientUuid: (string) Str::uuid(),
         dayPriceCents: 5000,
@@ -65,6 +70,7 @@ it('throws RentalDomainException when start date has invalid format', function (
 
 it('throws RentalDomainException when end date has invalid format', function () {
     Rental::new(
+        uuid: Uuid::fromString(TEST_RENTAL_UUID),
         carUuid: (string) Str::uuid(),
         clientUuid: (string) Str::uuid(),
         dayPriceCents: 5000,
@@ -81,6 +87,7 @@ it('throws RentalDomainException when end date has invalid format', function () 
 
 it('throws RentalDomainException when date is semantically invalid', function () {
     Rental::new(
+        uuid: Uuid::fromString(TEST_RENTAL_UUID),
         carUuid: (string) Str::uuid(),
         clientUuid: (string) Str::uuid(),
         dayPriceCents: 5000,
@@ -97,6 +104,7 @@ it('throws RentalDomainException when date is semantically invalid', function ()
 
 it('throws RentalDomainException when end date is before start date', function () {
     Rental::new(
+        uuid: Uuid::fromString(TEST_RENTAL_UUID),
         carUuid: (string) Str::uuid(),
         clientUuid: (string) Str::uuid(),
         dayPriceCents: 5000,
@@ -113,6 +121,7 @@ it('throws RentalDomainException when end date is before start date', function (
 
 it('allows same date for start and end', function () {
     $rental = Rental::new(
+        uuid: Uuid::fromString(TEST_RENTAL_UUID),
         carUuid: (string) Str::uuid(),
         clientUuid: (string) Str::uuid(),
         dayPriceCents: 5000,
@@ -128,6 +137,7 @@ it('allows same date for start and end', function () {
 
 it('throws RentalDomainException when day price is negative', function () {
     Rental::new(
+        uuid: Uuid::fromString(TEST_RENTAL_UUID),
         carUuid: (string) Str::uuid(),
         clientUuid: (string) Str::uuid(),
         dayPriceCents: -1,
@@ -144,6 +154,7 @@ it('throws RentalDomainException when day price is negative', function () {
 
 it('throws RentalDomainException when initial km is negative', function () {
     Rental::new(
+        uuid: Uuid::fromString(TEST_RENTAL_UUID),
         carUuid: (string) Str::uuid(),
         clientUuid: (string) Str::uuid(),
         dayPriceCents: 5000,
@@ -160,6 +171,7 @@ it('throws RentalDomainException when initial km is negative', function () {
 
 it('throws RentalDomainException when final km is negative', function () {
     Rental::new(
+        uuid: Uuid::fromString(TEST_RENTAL_UUID),
         carUuid: (string) Str::uuid(),
         clientUuid: (string) Str::uuid(),
         dayPriceCents: 5000,
@@ -176,6 +188,7 @@ it('throws RentalDomainException when final km is negative', function () {
 
 it('throws RentalDomainException when final km is less than initial km', function () {
     Rental::new(
+        uuid: Uuid::fromString(TEST_RENTAL_UUID),
         carUuid: (string) Str::uuid(),
         clientUuid: (string) Str::uuid(),
         dayPriceCents: 5000,

@@ -10,6 +10,8 @@ use App\Core\Car\Domain\Exceptions\CarDomainException;
 use App\Core\Car\Domain\Repositories\CarRepositoryInterface;
 use App\Core\Car\Domain\Roles\CarAlreadyExistsRole;
 use App\Core\Car\Domain\Roles\ExistsCarModelRole;
+use App\Core\Shared\Domain\Identity\UuidGeneratorInterface;
+use App\Core\Shared\Domain\ValueObjects\Uuid;
 use App\Http\Requests\Car\StoreCarRequest;
 use App\Models\Brand;
 use App\Models\CarModel;
@@ -18,6 +20,8 @@ use Illuminate\Support\Str;
 use Tests\TestCase;
 
 uses(TestCase::class, RefreshDatabase::class);
+
+const TEST_CREATED_CAR_UUID = '77777777-7777-4777-8777-777777777777';
 
 function createPersistedCarModelForTests(): object
 {
@@ -50,11 +54,13 @@ beforeEach(function () {
     $this->repository = Mockery::mock(CarRepositoryInterface::class);
     $this->carAlreadyExistsRole = Mockery::mock(CarAlreadyExistsRole::class);
     $this->existsCarModelRole = Mockery::mock(ExistsCarModelRole::class);
+    $this->uuidGenerator = Mockery::mock(UuidGeneratorInterface::class);
 
     $this->useCase = new CreateCarUseCase(
         $this->repository,
         $this->carAlreadyExistsRole,
-        $this->existsCarModelRole
+        $this->existsCarModelRole,
+        $this->uuidGenerator,
     );
 });
 
@@ -82,13 +88,18 @@ it('creates a car successfully', function () {
         ->with($carModel->uuid)
         ->once();
 
+    $this->uuidGenerator->shouldReceive('generate')
+        ->once()
+        ->andReturn(Uuid::fromString(TEST_CREATED_CAR_UUID));
+
     $dto = CreateCarDTO::fromRequest($request);
 
     $this->repository->shouldReceive('save')
         ->once()
         ->with(
             Mockery::on(static function (DomainCar $car) use ($carModel, $licensePlate, $color, $km): bool {
-                return $car->carModelUuid === $carModel->uuid &&
+                return $car->uuid === TEST_CREATED_CAR_UUID &&
+                    $car->carModelUuid === $carModel->uuid &&
                     $car->licensePlate() === $licensePlate &&
                     $car->color() === $color &&
                     $car->isAvailable() === true &&
@@ -100,12 +111,14 @@ it('creates a car successfully', function () {
             $licensePlate,
             $color,
             true,
-            $km
+            $km,
+            TEST_CREATED_CAR_UUID,
         ));
 
     $result = $this->useCase->execute($dto);
 
-    expect($result->carModelUuid)->toBe($carModel->uuid)
+    expect($result->uuid)->toBe(TEST_CREATED_CAR_UUID)
+        ->and($result->carModelUuid)->toBe($carModel->uuid)
         ->and($result->licensePlate())->toBe($licensePlate)
         ->and($result->color())->toBe($color)
         ->and($result->isAvailable())->toBe(true)
@@ -159,6 +172,7 @@ it('validates license plate before creating car', function () {
     $this->existsCarModelRole->shouldNotReceive('validate');
 
     $this->repository->shouldNotReceive('save');
+    $this->uuidGenerator->shouldNotReceive('generate');
 
     $dto = CreateCarDTO::fromRequest($request);
 

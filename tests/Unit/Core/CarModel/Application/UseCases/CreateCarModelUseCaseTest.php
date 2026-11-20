@@ -12,23 +12,32 @@ use App\Core\Car\Domain\Exceptions\CarModelDomainException;
 use App\Core\Car\Domain\Repositories\CarModelRepositoryInterface;
 use App\Core\Car\Domain\Roles\CarModelAlreadyExistsRole;
 use App\Core\Car\Domain\Roles\ExistsBrandRole;
+use App\Core\Shared\Domain\Identity\UuidGeneratorInterface;
 use App\Core\Shared\Domain\Storage\DomainFile;
 use App\Core\Shared\Domain\Storage\FileStorageInterface;
 use App\Core\Shared\Domain\Storage\StoredFile;
+use App\Core\Shared\Domain\ValueObjects\Uuid;
 use App\Http\Requests\CarModel\StoreCarModelRequest;
 use Illuminate\Http\UploadedFile;
+
+const TEST_CREATED_CAR_MODEL_UUID = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
 
 beforeEach(function () {
     $this->repository = Mockery::mock(CarModelRepositoryInterface::class);
     $this->storage = Mockery::mock(FileStorageInterface::class);
     $this->existsBrand = Mockery::mock(ExistsBrandRole::class);
     $this->carModelAlreadyRole = Mockery::mock(CarModelAlreadyExistsRole::class);
+    $this->uuidGenerator = Mockery::mock(UuidGeneratorInterface::class);
+    $this->uuidGenerator->shouldReceive('generate')
+        ->andReturn(Uuid::fromString(TEST_CREATED_CAR_MODEL_UUID))
+        ->byDefault();
 
     $this->useCase = new CreateCarModelUseCase(
         $this->storage,
         $this->repository,
         $this->existsBrand,
-        $this->carModelAlreadyRole
+        $this->carModelAlreadyRole,
+        $this->uuidGenerator,
     );
 });
 
@@ -75,7 +84,8 @@ it('creates a car model successfully', function () {
         ->once()
         ->with(
             Mockery::on(static function (DomainCarModel $carModel): bool {
-                return $carModel->brandUuid === '11111111-1111-4111-8111-111111111111' &&
+                return $carModel->uuid === TEST_CREATED_CAR_MODEL_UUID &&
+                    $carModel->brandUuid === '11111111-1111-4111-8111-111111111111' &&
                     $carModel->name === 'Civic' &&
                     $carModel->image === 'car_models/civic_stored.png' &&
                     $carModel->doorsNumber === 4 &&
@@ -88,7 +98,8 @@ it('creates a car model successfully', function () {
 
     $result = $this->useCase->execute($dto);
 
-    expect($result->brandUuid)->toBe('11111111-1111-4111-8111-111111111111')
+    expect($result->uuid)->toBe(TEST_CREATED_CAR_MODEL_UUID)
+        ->and($result->brandUuid)->toBe('11111111-1111-4111-8111-111111111111')
         ->and($result->name)->toBe('Civic')
         ->and($result->image)->toBe('car_models/civic_stored.png')
         ->and($result->doorsNumber)->toBe(4)
@@ -117,6 +128,8 @@ it('creates a car model with invalid brand', function () {
         ->with($brandUuid)
         ->once()
         ->andThrow(new BrandDomainException(BrandError::NOT_FOUND));
+
+    $this->uuidGenerator->shouldNotReceive('generate');
 
     $dto = CreateCarModelDTO::fromRequest($request);
 
@@ -149,6 +162,8 @@ it('creates a car model when car model already exists', function () {
         ->with($name, $brandUuid)
         ->once()
         ->andThrow(new CarModelDomainException(CarModelError::ALREADY_EXISTS));
+
+    $this->uuidGenerator->shouldNotReceive('generate');
 
     $dto = CreateCarModelDTO::fromRequest($request);
 
