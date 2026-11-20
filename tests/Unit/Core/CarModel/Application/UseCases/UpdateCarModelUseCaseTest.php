@@ -18,6 +18,8 @@ use App\Core\Shared\Domain\Storage\StoredFile;
 use App\Http\Requests\CarModel\UpdateCarModelRequest;
 use Illuminate\Http\UploadedFile;
 
+const TEST_EXISTING_CAR_MODEL_UUID = '99999999-9999-4999-8999-999999999999';
+
 beforeEach(function () {
     $this->repository = Mockery::mock(CarModelRepositoryInterface::class);
     $this->storage = Mockery::mock(FileStorageInterface::class);
@@ -38,7 +40,8 @@ beforeEach(function () {
         doorsNumber: 4,
         seatsNumber: 5,
         airbags: true,
-        abs: true
+        abs: true,
+        uuid: TEST_EXISTING_CAR_MODEL_UUID,
     );
 });
 
