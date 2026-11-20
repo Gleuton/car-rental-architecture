@@ -27,6 +27,7 @@ it('updates a rental successfully', function () {
         '2026-03-05 08:00:00',
         1000,
         1500,
+        $uuid,
     );
 
     $repository = Mockery::mock(RentalRepositoryInterface::class);

@@ -6,8 +6,8 @@ namespace App\Core\Rental\Domain\Entity;
 
 use App\Core\Rental\Domain\Errors\RentalError;
 use App\Core\Rental\Domain\Exceptions\RentalDomainException;
+use App\Core\Shared\Domain\ValueObjects\Uuid;
 use DateTimeImmutable;
-use Illuminate\Support\Str;
 
 class Rental
 {
@@ -43,6 +43,7 @@ class Rental
      * @throws RentalDomainException
      */
     public static function new(
+        Uuid $uuid,
         string $carUuid,
         string $clientUuid,
         int $dayPriceCents,
@@ -52,7 +53,7 @@ class Rental
         int $finalKm,
     ): self {
         return new self(
-            (string) Str::uuid(),
+            $uuid->value,
             $carUuid,
             $clientUuid,
             $dayPriceCents,
@@ -73,10 +74,11 @@ class Rental
         string $startDate,
         string $endDate,
         int $initialKm,
-        int $finalKm, ?string $uuid = null,
+        int $finalKm,
+        string $uuid,
     ): self {
         return new self(
-            $uuid ?? (string) Str::uuid(),
+            $uuid,
             $carUuid,
             $clientUuid,
             $dayPriceCents,
