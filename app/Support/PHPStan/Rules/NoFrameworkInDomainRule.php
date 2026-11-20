@@ -10,6 +10,9 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 
+/**
+ * @implements Rule<Use_>
+ */
 final class NoFrameworkInDomainRule implements Rule
 {
     private const string CONTEXT_DOMAIN_PATH_PATTERN = '#/app/Core/[^/]+/Domain/#';
@@ -48,7 +51,7 @@ final class NoFrameworkInDomainRule implements Rule
                 if (str_starts_with($import, $prefix)) {
                     $errors[] = RuleErrorBuilder::message(
                         sprintf('❌ Domain layer cannot depend on framework class: %s', $import)
-                    )->build();
+                    )->identifier('architecture.domainFrameworkDependency')->build();
                     break;
                 }
             }
