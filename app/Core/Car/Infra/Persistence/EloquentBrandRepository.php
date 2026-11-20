@@ -10,6 +10,7 @@ use App\Core\Car\Domain\Exceptions\BrandDomainException;
 use App\Core\Car\Domain\Queries\BrandQueryFilter;
 use App\Core\Car\Domain\Repositories\BrandRepositoryInterface;
 use App\Core\Shared\Application\Pagination\PaginatedResult;
+use App\Core\Shared\Domain\Exceptions\SharedDomainException;
 use App\Core\Shared\Infra\Adapters\LaravelPaginatorAdapter;
 use App\Models\Brand as EloquentBrand;
 
@@ -91,11 +92,11 @@ class EloquentBrandRepository implements BrandRepositoryInterface
     }
 
     /**
-     * @throws BrandDomainException
+     * @throws BrandDomainException|SharedDomainException
      */
     private function toDomainBrand(EloquentBrand $model): DomainBrand
     {
-        return DomainBrand::create(
+        return DomainBrand::restore(
             $model->name,
             $model->image,
             $model->uuid,

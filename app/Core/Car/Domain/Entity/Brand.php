@@ -7,12 +7,13 @@ namespace App\Core\Car\Domain\Entity;
 use App\Core\Car\Domain\Exceptions\BrandDomainException;
 use App\Core\Car\Domain\ValueObjects\Brand\BrandLogo;
 use App\Core\Car\Domain\ValueObjects\Brand\BrandName;
-use App\Core\Car\Domain\ValueObjects\Brand\BrandUuid;
+use App\Core\Shared\Domain\Exceptions\SharedDomainException;
+use App\Core\Shared\Domain\ValueObjects\Uuid;
 
 class Brand
 {
     private function __construct(
-        private readonly BrandUuid $uuid,
+        private readonly Uuid $uuid,
         private BrandName $name,
         private BrandLogo $image
     ) {}
@@ -55,10 +56,22 @@ class Brand
     /**
      * @throws BrandDomainException
      */
-    public static function create(string $name, string $image, ?string $uuid = null): self
+    public static function new(Uuid $uuid, string $name, string $image): self
     {
         return new self(
-            new BrandUuid($uuid),
+            $uuid,
+            new BrandName($name),
+            new BrandLogo($image)
+        );
+    }
+
+    /**
+     * @throws BrandDomainException|SharedDomainException
+     */
+    public static function restore(string $name, string $image, string $uuid): self
+    {
+        return new self(
+            Uuid::fromString($uuid),
             new BrandName($name),
             new BrandLogo($image)
         );
