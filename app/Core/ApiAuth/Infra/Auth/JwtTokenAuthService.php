@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace App\Core\ApiAuth\Infra\Auth;
 
+use App\Core\ApiAuth\Domain\Entity\AuthenticatedUser;
 use App\Core\ApiAuth\Domain\Services\TokenAuthServiceInterface;
-use Illuminate\Contracts\Auth\Authenticatable;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Throwable;
 use Tymon\JWTAuth\JWTGuard;
@@ -54,17 +55,19 @@ class JwtTokenAuthService implements TokenAuthServiceInterface
         return (int) config('jwt.ttl', 60) * 60;
     }
 
-    public function authenticatedUser(): ?Authenticatable
+    public function authenticatedUser(): ?AuthenticatedUser
     {
-        $guard = $this->jwtGuard();
+        $user = $this->jwtGuard()?->user();
 
-        if ($guard === null) {
+        if (! $user instanceof User) {
             return null;
         }
 
-        $user = $guard->user();
-
-        return $user instanceof Authenticatable ? $user : null;
+        return new AuthenticatedUser(
+            id: (int) $user->getKey(),
+            name: $user->name,
+            email: $user->email,
+        );
     }
 
     public function invalidateCurrentToken(): bool
