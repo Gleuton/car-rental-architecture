@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 use App\Core\Car\Domain\Entity\Car;
 use App\Core\Car\Domain\Exceptions\CarDomainException;
-use Illuminate\Support\Str;
+use App\Core\Shared\Domain\ValueObjects\Uuid;
 
+const TEST_CAR_UUID = '11111111-1111-4111-8111-111111111111';
 const TEST_CAR_MODEL_UUID = '22222222-2222-4222-8222-222222222222';
 
 it('can create a Car instance', function () {
     $car = Car::new(
+        Uuid::fromString(TEST_CAR_UUID),
         TEST_CAR_MODEL_UUID,
         'ABC-1234',
         'Red',
@@ -22,7 +24,7 @@ it('can create a Car instance', function () {
         ->and($car->color())->toBe('Red')
         ->and($car->isAvailable())->toBeTrue()
         ->and($car->km())->toBe(10000)
-        ->and(Str::isUuid($car->uuid))->toBeTrue();
+        ->and($car->uuid)->toBe(TEST_CAR_UUID);
 });
 
 it('can restore a Car instance with uuid', function () {
@@ -31,7 +33,8 @@ it('can restore a Car instance with uuid', function () {
         'ABC-1234',
         'Red',
         true,
-        10000
+        10000,
+        TEST_CAR_UUID,
     );
 
     expect($car->carModelUuid)->toBe(TEST_CAR_MODEL_UUID)
@@ -39,11 +42,12 @@ it('can restore a Car instance with uuid', function () {
         ->and($car->color())->toBe('Red')
         ->and($car->isAvailable())->toBeTrue()
         ->and($car->km())->toBe(10000)
-        ->and(Str::isUuid($car->uuid))->toBeTrue();
+        ->and($car->uuid)->toBe(TEST_CAR_UUID);
 });
 
 it('can change license plate', function () {
     $car = Car::new(
+        Uuid::fromString(TEST_CAR_UUID),
         TEST_CAR_MODEL_UUID,
         'ABC-1234',
         'Red',
@@ -63,6 +67,7 @@ it('can change license plate', function () {
 
 it('can change color', function () {
     $car = Car::new(
+        Uuid::fromString(TEST_CAR_UUID),
         TEST_CAR_MODEL_UUID,
         'ABC-1234',
         'Red',
@@ -82,6 +87,7 @@ it('can change color', function () {
 
 it('can mark a car as unavailable', function () {
     $car = Car::new(
+        Uuid::fromString(TEST_CAR_UUID),
         TEST_CAR_MODEL_UUID,
         'ABC-1234',
         'Red',
@@ -97,6 +103,7 @@ it('can mark a car as unavailable', function () {
 
 it('can mark a car as available', function () {
     $car = Car::new(
+        Uuid::fromString(TEST_CAR_UUID),
         TEST_CAR_MODEL_UUID,
         'ABC-1234',
         'Red',
@@ -112,6 +119,7 @@ it('can mark a car as available', function () {
 
 it('throws exception when creating Car with empty license plate', function () {
     Car::new(
+        Uuid::fromString(TEST_CAR_UUID),
         TEST_CAR_MODEL_UUID,
         '',
         'Red',
@@ -122,6 +130,7 @@ it('throws exception when creating Car with empty license plate', function () {
 
 it('throws exception when creating Car with whitespace-only license plate', function () {
     Car::new(
+        Uuid::fromString(TEST_CAR_UUID),
         TEST_CAR_MODEL_UUID,
         '   ',
         'Red',
@@ -132,6 +141,7 @@ it('throws exception when creating Car with whitespace-only license plate', func
 
 it('throws exception when creating Car with license plate too short', function () {
     Car::new(
+        Uuid::fromString(TEST_CAR_UUID),
         TEST_CAR_MODEL_UUID,
         'ABC123',
         'Red',
@@ -142,6 +152,7 @@ it('throws exception when creating Car with license plate too short', function (
 
 it('throws exception when creating Car with license plate too long', function () {
     Car::new(
+        Uuid::fromString(TEST_CAR_UUID),
         TEST_CAR_MODEL_UUID,
         'ABC-1234567',
         'Red',
@@ -152,6 +163,7 @@ it('throws exception when creating Car with license plate too long', function ()
 
 it('accepts license plate with exactly 7 characters', function () {
     $car = Car::new(
+        Uuid::fromString(TEST_CAR_UUID),
         TEST_CAR_MODEL_UUID,
         'ABC1234',
         'Red',
@@ -164,6 +176,7 @@ it('accepts license plate with exactly 7 characters', function () {
 
 it('accepts license plate with exactly 10 characters', function () {
     $car = Car::new(
+        Uuid::fromString(TEST_CAR_UUID),
         TEST_CAR_MODEL_UUID,
         'ABC-123456',
         'Red',
@@ -176,6 +189,7 @@ it('accepts license plate with exactly 10 characters', function () {
 
 it('throws exception when creating Car with empty color', function () {
     Car::new(
+        Uuid::fromString(TEST_CAR_UUID),
         TEST_CAR_MODEL_UUID,
         'ABC-1234',
         '',
@@ -186,6 +200,7 @@ it('throws exception when creating Car with empty color', function () {
 
 it('throws exception when creating Car with whitespace-only color', function () {
     Car::new(
+        Uuid::fromString(TEST_CAR_UUID),
         TEST_CAR_MODEL_UUID,
         'ABC-1234',
         '   ',
@@ -196,6 +211,7 @@ it('throws exception when creating Car with whitespace-only color', function () 
 
 it('throws exception when creating Car with color too short', function () {
     Car::new(
+        Uuid::fromString(TEST_CAR_UUID),
         TEST_CAR_MODEL_UUID,
         'ABC-1234',
         'AB',
@@ -206,6 +222,7 @@ it('throws exception when creating Car with color too short', function () {
 
 it('throws exception when creating Car with color too long', function () {
     Car::new(
+        Uuid::fromString(TEST_CAR_UUID),
         TEST_CAR_MODEL_UUID,
         'ABC-1234',
         str_repeat('A', 51),
@@ -216,6 +233,7 @@ it('throws exception when creating Car with color too long', function () {
 
 it('accepts color with exactly 3 characters', function () {
     $car = Car::new(
+        Uuid::fromString(TEST_CAR_UUID),
         TEST_CAR_MODEL_UUID,
         'ABC-1234',
         'Red',
@@ -229,6 +247,7 @@ it('accepts color with exactly 3 characters', function () {
 it('accepts color with exactly 50 characters', function () {
     $color = str_repeat('A', 50);
     $car = Car::new(
+        Uuid::fromString(TEST_CAR_UUID),
         TEST_CAR_MODEL_UUID,
         'ABC-1234',
         $color,
@@ -241,6 +260,7 @@ it('accepts color with exactly 50 characters', function () {
 
 it('throws exception when creating Car with negative km', function () {
     Car::new(
+        Uuid::fromString(TEST_CAR_UUID),
         TEST_CAR_MODEL_UUID,
         'ABC-1234',
         'Red',
@@ -251,6 +271,7 @@ it('throws exception when creating Car with negative km', function () {
 
 it('accepts Car with zero km', function () {
     $car = Car::new(
+        Uuid::fromString(TEST_CAR_UUID),
         TEST_CAR_MODEL_UUID,
         'ABC-1234',
         'Red',
@@ -263,6 +284,7 @@ it('accepts Car with zero km', function () {
 
 it('accepts Car with positive km', function () {
     $car = Car::new(
+        Uuid::fromString(TEST_CAR_UUID),
         TEST_CAR_MODEL_UUID,
         'ABC-1234',
         'Red',
@@ -275,6 +297,7 @@ it('accepts Car with positive km', function () {
 
 it('validates license plate when changing license plate', function () {
     $car = Car::new(
+        Uuid::fromString(TEST_CAR_UUID),
         TEST_CAR_MODEL_UUID,
         'ABC-1234',
         'Red',
@@ -287,6 +310,7 @@ it('validates license plate when changing license plate', function () {
 
 it('validates color when changing color', function () {
     $car = Car::new(
+        Uuid::fromString(TEST_CAR_UUID),
         TEST_CAR_MODEL_UUID,
         'ABC-1234',
         'Red',

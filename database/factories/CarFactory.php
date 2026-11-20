@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
-use App\Core\Car\Domain\Entity\Car as DomainCar;
 use App\Models\Car;
 use App\Models\CarModel;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -24,7 +23,7 @@ class CarFactory extends Factory
         $km = $this->faker->numberBetween(1, 100);
 
         return [
-            'uuid' => DomainCar::new($carModel->uuid, $licensePlate, $color, $isAvailable, $km)->uuid,
+            'uuid' => $this->faker->uuid(),
             'car_model_uuid' => $carModel->uuid,
             'license_plate' => $licensePlate,
             'color' => $color,
