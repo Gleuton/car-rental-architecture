@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Core\Client\Domain\Entity;
 
 use App\Core\Client\Domain\Exceptions\ClientDomainException;
-use Illuminate\Support\Str;
+use App\Core\Shared\Domain\ValueObjects\Uuid;
 
 readonly class Client
 {
@@ -22,17 +22,17 @@ readonly class Client
     /**
      * @throws ClientDomainException
      */
-    public static function new(string $name): self
+    public static function new(Uuid $uuid, string $name): self
     {
-        return new self((string) Str::uuid(), $name);
+        return new self($uuid->value, $name);
     }
 
     /**
      * @throws ClientDomainException
      */
-    public static function restore(string $name, ?string $uuid = null): self
+    public static function restore(string $name, string $uuid): self
     {
-        return new self($uuid ?? (string) Str::uuid(), $name);
+        return new self($uuid, $name);
     }
 
     /**

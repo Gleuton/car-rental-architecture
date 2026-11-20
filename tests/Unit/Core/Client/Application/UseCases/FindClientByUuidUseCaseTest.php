@@ -14,7 +14,7 @@ it('finds a client by UUID successfully', function () {
 
     $repository = Mockery::mock(ClientRepositoryInterface::class);
 
-    $expectedClient = Client::restore('John Doe');
+    $expectedClient = Client::restore('John Doe', $uuid);
     $repository->shouldReceive('findByUuid')
         ->with($uuid)
         ->once()
